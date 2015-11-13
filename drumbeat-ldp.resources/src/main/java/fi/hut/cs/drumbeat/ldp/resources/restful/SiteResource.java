@@ -36,6 +36,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
@@ -45,13 +46,14 @@ import fi.hut.cs.drumbeat.ldp.resources.managers.AppManager;
 import fi.hut.cs.drumbeat.ldp.resources.managers.SiteManager;
 
 @Path("/sites")
-public class Sites {
+public class SiteResource {
 	
 	private static SiteManager siteManager;
 	
 	@SuppressWarnings("unchecked")
 	@GET
-	@Produces("application/ld+json")
+	@Produces(MediaType.APPLICATION_JSON)
+	//@Produces("application/ld+json")
 	public String listSites() {
 		
 		ResultSet results = getSiteManager().getAll();
@@ -70,7 +72,7 @@ public class Sites {
 	@SuppressWarnings("unchecked")
 	@Path("/{name}")
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String getInformation(@PathParam("name") String site_guid) {
 		return null;
 	}
