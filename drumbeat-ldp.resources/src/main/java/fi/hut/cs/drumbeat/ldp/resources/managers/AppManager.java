@@ -14,7 +14,7 @@ import fi.hut.cs.drumbeat.rdf.modelfactory.AbstractJenaModelFactory;
 
 public class AppManager {
 	
-	public static String WORKING_DIR = System.getProperty("user.dir");
+	public static String WORKING_DIR = "C:/DRUM/!github/drumbeat/drumbeat-ldp/drumbeat-ldp.resources/WebContent";
 	public static String WEB_INF_DIR = WORKING_DIR + "/WEB-INF";
 	public static String CONFIG_DIR = WEB_INF_DIR + "/config";	
 

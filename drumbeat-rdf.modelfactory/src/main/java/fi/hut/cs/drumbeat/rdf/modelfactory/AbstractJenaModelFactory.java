@@ -31,8 +31,8 @@ public abstract class AbstractJenaModelFactory {
 		Class<? extends AbstractJenaModelFactory> jenaModelFactoryClass =
 				Class.forName(className).asSubclass(AbstractJenaModelFactory.class);
 		
-		Constructor<? extends AbstractJenaModelFactory> constructor = jenaModelFactoryClass.getConstructor(String.class, Properties.class);
-		AbstractJenaModelFactory modelFactory = constructor.newInstance(name, properties);
+		Constructor<? extends AbstractJenaModelFactory> constructor = jenaModelFactoryClass.getConstructor(String.class, Properties.class, String.class);
+		AbstractJenaModelFactory modelFactory = constructor.newInstance(name, properties, propertyPrefix);
 		return modelFactory;
 		
 	}
