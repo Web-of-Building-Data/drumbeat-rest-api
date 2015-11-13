@@ -27,15 +27,12 @@ SOFTWARE.
  
  
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
-import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.hp.hpl.jena.query.ResultSet;
@@ -50,7 +47,6 @@ public class SiteResource {
 	
 	private static SiteManager siteManager;
 	
-	@SuppressWarnings("unchecked")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	//@Produces("application/ld+json")
@@ -69,7 +65,6 @@ public class SiteResource {
 	}
 
 	
-	@SuppressWarnings("unchecked")
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -78,10 +73,9 @@ public class SiteResource {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	@Path("/{name}")
 	@PUT
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void createSite(@PathParam("name") String site_name) {
 		System.out.println("Sites create name: "+site_name);
 		//createSite(site_name);
