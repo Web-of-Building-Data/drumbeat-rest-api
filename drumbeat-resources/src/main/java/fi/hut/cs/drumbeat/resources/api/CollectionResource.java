@@ -59,9 +59,9 @@ public class CollectionResource {
 //	private WebApplicationContext webApplicationContext;
 	
 	@GET
-	//@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	//@Produces("application/ld+json")
-	@Produces(MediaType.TEXT_HTML)
+//	@Produces(MediaType.TEXT_HTML)
 	public String listCollections() {		
 		
 //		StringWriter writer = new StringWriter();
