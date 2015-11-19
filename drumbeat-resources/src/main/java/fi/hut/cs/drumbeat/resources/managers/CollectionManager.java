@@ -7,6 +7,8 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import fi.hut.cs.drumbeat.resources.ontology.BuildingDataOntology;
+
 public class CollectionManager {
 	
 	private final Model model;	
