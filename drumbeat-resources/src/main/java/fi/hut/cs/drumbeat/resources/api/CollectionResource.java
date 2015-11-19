@@ -55,25 +55,11 @@ public class CollectionResource {
 	@Context
 	private ServletContext servletContext;
 	
-//	@Resource
-//	private WebApplicationContext webApplicationContext;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	//@Produces("application/ld+json")
-//	@Produces(MediaType.TEXT_HTML)
-	public String listCollections() {		
+	public String listCollectionsJSON() {		
 		
-//		StringWriter writer = new StringWriter();
-//		
-//		writer.write("App Deployed Directory path: " + servletContext.getRealPath("/") + "<br/>");
-//		writer.write("getContextPath(): " + servletContext.getContextPath() + "<br/>");
-//		writer.write("Apache Tomcat Server: " + servletContext.getServerInfo() + "<br/>");
-//		writer.write("Servlet API version: " + servletContext.getMajorVersion() + "." +servletContext.getMinorVersion() + "<br/>");
-//		writer.write("Tomcat Project Name: " + servletContext.getServletContextName());
-//		
-//		return writer.toString();
-
 		
 		ResultSet results = getCollectionManager(servletContext).getAll();
 		
