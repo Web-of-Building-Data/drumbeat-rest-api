@@ -41,6 +41,17 @@
 			<artifactId>jena-arq</artifactId>
 			<version>${jena.version}</version>
 		</dependency>
+		
+		<!-- Virtuoso -->
+		<!-- 
+		<dependency>
+			<groupId>virtuoso</groupId>
+			<artifactId>virtuoso-jena-driver</artifactId>
+			<version>virt_jena2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/../drumbeat-rdf.jena.provider.virtuoso/src/main/resources/virt_jena2.jar</systemPath>
+		</dependency>
+		 -->		
 
 		<!-- LDP4J -->
 		<!-- 

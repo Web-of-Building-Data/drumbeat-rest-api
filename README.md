@@ -1,8 +1,11 @@
 # drumbeat-rest-api
 
+Pre-required softwares: git, maven
+
+
 Step-by-step run the following commands:
 
-  mvn install:install-file -Dfile=lib/virt_jena2.jar -DgroupId=virtuoso -DartifactId=virtuoso-jena-driver -Dversion=virt_jena2 -Dpackaging=jar -DgeneratePom=true
+  git clone 
 
   cd drumbeat-rest-api
   mvn clean install
