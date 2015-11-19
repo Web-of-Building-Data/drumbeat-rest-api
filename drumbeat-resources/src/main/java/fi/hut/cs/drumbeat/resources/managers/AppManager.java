@@ -23,7 +23,6 @@ import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
 
 public class AppManager {
 	
-	//public static String WORKING_DIR = "C:/DRUM/!github/drumbeat/drumbeat-ldp/drumbeat-ldp.resources/WebContent";
 	public static String WORKING_DIR = "/";
 	public static String WEB_INF_DIR = WORKING_DIR + "/WEB-INF";
 	public static String CONFIG_DIR = WEB_INF_DIR + "/config";	
@@ -33,17 +32,7 @@ public class AppManager {
 
 	public static String JENA_PROVIDER_PREFIX = "jena.provider.";
 	
-	
-//	@Context
-//	private ServletContext context;
-
-//	@PostConstruct
-//	public void init() {
-//		System.out.println("Hello world");
-//		DOMConfigurator.configure(LOG4J_CONFIG_FILE_PATH);
-//		throw new RuntimeException("Hello!");
-//	}
-	
+		
 	
 	public static AbstractJenaProvider getJenaProvider(ServletContext servletContext) throws JenaProviderException, IOException {
 		

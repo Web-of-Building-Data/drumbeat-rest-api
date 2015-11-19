@@ -4,11 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.Properties;
 
 import com.hp.hpl.jena.rdf.model.Model;
-//import org.apache.jena.query.
-
-//import fi.hut.cs.drumbeat.common.config.ConfigurationItemEx;
-//import fi.hut.cs.drumbeat.common.string.StringUtils;
-
 
 public abstract class AbstractJenaProvider {
 	
@@ -178,52 +173,6 @@ public abstract class AbstractJenaProvider {
 	public abstract void release() throws JenaProviderException;
 	
 	
-	
-//	
-//	
-//	
-//	/**
-//	 * Creates a new Jena model (graph) by a name
-//	 * @param modelId - model name (can be null for the default model)
-//	 * @return the created model
-//	 * @throws Exception throws an exception when a model with the same name is existing
-//	 */
-//	public Model createModel(String modelId) throws Exception {
-//		return createModel(modelId, false);
-//	}
-//
-//	/**
-//	 * Creates a new Jena model (graph) by a name
-//	 * @param modelId - model name (can be null for the default model)
-//	 * @param override - flag indicating whether to override an existing model
-//	 * @return the created model
-//	 * @throws Exception
-//	 */
-//	public abstract Model createModel(String modelId, boolean override) throws Exception;
-//	
-//	/**
-//	 * Gets an existing Jena model or creates a new one (if autoCreate is true)
-//	 * @param modelId - model name (can be null for the default model)
-//	 * @param autoCreate - flag indicating whether to create a new model if there is no existing model
-//	 * @return the model
-//	 * @throws Exception
-//	 */
-//	public abstract Model getModel(String modelId, boolean autoCreate) throws Exception;
-//	
-//	/**
-//	 * Gets an existing Jena model or creates a new one (if autoCreate is true)
-//	 * @param modelId - model name (can be null for the default model)
-//	 * @param autoCreate - flag indicating whether to create a new model if there is no existing model
-//	 * @return the model
-//	 * @throws Exception
-//	 */
-//	public Model getModel(String modelId) throws Exception {
-//		return getModel(modelId, false);
-//	}
-	
-	
-//	
-//	public abstract Model getModel(String modelId) throws Exception;	
 	
 	
 }

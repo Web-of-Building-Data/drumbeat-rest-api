@@ -20,12 +20,6 @@ public class CollectionManager {
 	
 	public ResultSet getAll() {
 		
-//		final String queryString = String.format("SELECT ?collection ?name WHERE { ?collection a <%s>; <%s> ?name . } ",
-//				BuildingDataOntology.Collections.Collection,
-//				BuildingDataOntology.Collections.name);
-////		System.out.println(queryString);
-//		final Query query = QueryFactory.create(queryString);
-		
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
@@ -44,13 +38,6 @@ public class CollectionManager {
 	
 	
 	public Resource create(String name) {
-		
-//		Query query = QueryFactory.create("SELECT ?")
-		
-//		ResIterator it = model.listResourcesWithProperty(RDF.type, model.createResource(BuildingDataOntology.Collections.Collection)).filterKeep();
-//		if (it.hasNext()) {
-//			throw new IllegalAr
-//		}
 		
 		
 		return null;

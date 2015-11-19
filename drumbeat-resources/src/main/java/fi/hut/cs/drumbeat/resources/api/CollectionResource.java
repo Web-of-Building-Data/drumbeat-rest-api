@@ -101,7 +101,6 @@ public class CollectionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void createCollection(@PathParam("name") String collection_name) {
 		System.out.println("Collections create name: "+collection_name);
-		//createCollection(collection_name);
 	}
 	
 	
