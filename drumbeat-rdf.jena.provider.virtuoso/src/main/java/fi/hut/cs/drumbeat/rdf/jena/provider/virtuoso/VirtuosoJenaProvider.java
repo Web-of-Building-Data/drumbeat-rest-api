@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.rdf.modelfactory.virtuoso;
+package fi.hut.cs.drumbeat.rdf.jena.provider.virtuoso;
 
 import java.util.HashMap;
 import java.util.Map;

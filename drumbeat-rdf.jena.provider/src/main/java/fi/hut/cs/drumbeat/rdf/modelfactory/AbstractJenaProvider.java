@@ -26,8 +26,14 @@ public abstract class AbstractJenaProvider {
 	public static AbstractJenaProvider getFactory(String name, String className, Properties properties, String propertyPrefix) throws JenaProviderException
 	{
 		try {
+			if (className == null) {
+				throw new IllegalArgumentException("Jena provider class name is undefined");				
+			}
+			
+			Class<?> class1 = Class.forName(className); 
+			
 			Class<? extends AbstractJenaProvider> jenaModelFactoryClass =
-					Class.forName(className).asSubclass(AbstractJenaProvider.class);
+					class1.asSubclass(AbstractJenaProvider.class);
 			
 			Constructor<? extends AbstractJenaProvider> constructor = jenaModelFactoryClass.getConstructor(String.class, Properties.class, String.class);
 			AbstractJenaProvider modelFactory = constructor.newInstance(name, properties, propertyPrefix);

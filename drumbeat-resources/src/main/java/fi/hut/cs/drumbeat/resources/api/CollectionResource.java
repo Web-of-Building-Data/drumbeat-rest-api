@@ -27,17 +27,22 @@ SOFTWARE.
  
  
 import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.sun.jersey.server.impl.application.WebApplicationContext;
 
 import fi.hut.cs.drumbeat.resources.managers.AppManager;
 import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
@@ -47,12 +52,30 @@ public class CollectionResource {
 	
 	private static CollectionManager collectionManager;
 	
+	@Context
+	private ServletContext servletContext;
+	
+//	@Resource
+//	private WebApplicationContext webApplicationContext;
+	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	//@Produces(MediaType.APPLICATION_JSON)
 	//@Produces("application/ld+json")
-	public String listCollections() {
+	@Produces(MediaType.TEXT_HTML)
+	public String listCollections() {		
 		
-		ResultSet results = getCollectionManager().getAll();
+//		StringWriter writer = new StringWriter();
+//		
+//		writer.write("App Deployed Directory path: " + servletContext.getRealPath("/") + "<br/>");
+//		writer.write("getContextPath(): " + servletContext.getContextPath() + "<br/>");
+//		writer.write("Apache Tomcat Server: " + servletContext.getServerInfo() + "<br/>");
+//		writer.write("Servlet API version: " + servletContext.getMajorVersion() + "." +servletContext.getMinorVersion() + "<br/>");
+//		writer.write("Tomcat Project Name: " + servletContext.getServletContextName());
+//		
+//		return writer.toString();
+
+		
+		ResultSet results = getCollectionManager(servletContext).getAll();
 		
 		// write to a ByteArrayOutputStream
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -82,10 +105,10 @@ public class CollectionResource {
 	}
 	
 	
-	private static CollectionManager getCollectionManager() {
+	private static CollectionManager getCollectionManager(ServletContext servletContext) {
 		if (collectionManager == null) {
 			try {
-				Model model = AppManager.getJenaProvider().openDefaultModel();
+				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
 				collectionManager = new CollectionManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
