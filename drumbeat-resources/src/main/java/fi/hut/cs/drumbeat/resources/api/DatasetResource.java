@@ -44,7 +44,7 @@ import fi.hut.cs.drumbeat.resources.managers.AppManager;
 import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
 import fi.hut.cs.drumbeat.resources.managers.DatasetManager;
 
-@Path("/collections")
+@Path("/datasets")
 public class DatasetResource {
 
 	private static DatasetManager datasetManager;
@@ -54,7 +54,7 @@ public class DatasetResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON() {
+	public String listDatasetsJSON() {
 		String json=null;
 		try {
 
@@ -76,7 +76,7 @@ public class DatasetResource {
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollection(@PathParam("name") String dataset_guid) {
+	public String getDatasetJSON(@PathParam("name") String dataset_guid) {
 		try {
 			Resource dataset = getDatasetManager(servletContext).get(
 					dataset_guid);
@@ -89,7 +89,7 @@ public class DatasetResource {
 	@Path("/{name}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createCollection(@PathParam("name") String dataset_guid) {
+	public void createDatasetJSON(@PathParam("name") String dataset_guid) {
 		try {
 			getDatasetManager(servletContext).create(dataset_guid);
 			System.out.println("Dataset create name: " + dataset_guid);

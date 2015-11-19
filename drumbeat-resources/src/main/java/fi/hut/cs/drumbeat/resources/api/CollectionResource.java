@@ -75,7 +75,7 @@ public class CollectionResource {
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollection(@PathParam("name") String collection_guid) {
+	public String getCollectionJSON(@PathParam("name") String collection_guid) {
 		try {
 			Resource collection = getCollectionManager(servletContext).get(
 					collection_guid);
@@ -88,7 +88,7 @@ public class CollectionResource {
 	@Path("/{name}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createCollection(@PathParam("name") String collection_guid) {
+	public void createCollectionJSON(@PathParam("name") String collection_guid) {
 		try {
 			getCollectionManager(servletContext).create(collection_guid);
 			System.out.println("Collections create name: " + collection_guid);
