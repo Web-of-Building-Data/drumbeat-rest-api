@@ -42,11 +42,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.hut.cs.drumbeat.resources.managers.AppManager;
 import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
+import fi.hut.cs.drumbeat.resources.managers.DatasetManager;
 
 @Path("/collections")
-public class CollectionResource {
+public class DatasetResource {
 
-	private static CollectionManager collectionManager;
+	private static DatasetManager datasetManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -57,7 +58,7 @@ public class CollectionResource {
 		String json=null;
 		try {
 
-			ResultSet results = getCollectionManager(servletContext).listAll();
+			ResultSet results = getDatasetManager(servletContext).listAll();
 
 			// write to a ByteArrayOutputStream
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -75,10 +76,10 @@ public class CollectionResource {
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollection(@PathParam("name") String collection_guid) {
+	public String getCollection(@PathParam("name") String dataset_guid) {
 		try {
-			Resource collection = getCollectionManager(servletContext).get(
-					collection_guid);
+			Resource dataset = getDatasetManager(servletContext).get(
+					dataset_guid);
 		} catch (RuntimeException r) {
 
 		}
@@ -88,28 +89,28 @@ public class CollectionResource {
 	@Path("/{name}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createCollection(@PathParam("name") String collection_guid) {
+	public void createCollection(@PathParam("name") String dataset_guid) {
 		try {
-			getCollectionManager(servletContext).create(collection_guid);
-			System.out.println("Collections create name: " + collection_guid);
+			getDatasetManager(servletContext).create(dataset_guid);
+			System.out.println("Dataset create name: " + dataset_guid);
 		} catch (RuntimeException r) {
 
 		}
 	}
 
-	private static CollectionManager getCollectionManager(
+	private static DatasetManager getDatasetManager(
 			ServletContext servletContext) {
-		if (collectionManager == null) {
+		if (datasetManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext)
 						.openDefaultModel();
-				collectionManager = new CollectionManager(model);
+				datasetManager = new DatasetManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: "
 						+ e.getMessage(), e);
 			}
 		}
-		return collectionManager;
+		return datasetManager;
 
 	}
 

@@ -24,8 +24,6 @@ package fi.hut.cs.drumbeat.resources.api;
  SOFTWARE.
  */
 
-import java.io.ByteArrayOutputStream;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -35,81 +33,46 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.hut.cs.drumbeat.resources.managers.AppManager;
-import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
+import fi.hut.cs.drumbeat.resources.managers.ResourceManager;
 
-@Path("/collections")
-public class CollectionResource {
+@Path("/")
+public class Resource {
 
-	private static CollectionManager collectionManager;
+	private static ResourceManager resourceManager;
 
 	@Context
 	private ServletContext servletContext;
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON() {
-		String json=null;
-		try {
-
-			ResultSet results = getCollectionManager(servletContext).listAll();
-
-			// write to a ByteArrayOutputStream
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-			ResultSetFormatter.outputAsJSON(outputStream, results);
-			// and turn that into a String
-			json = new String(outputStream.toByteArray());
-			
-		} catch (RuntimeException r) {
-
-		}
-		return json;
-	}
-
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollection(@PathParam("name") String collection_guid) {
+	public String getResourceJSON(@PathParam("name") String resource_guid) {
 		try {
-			Resource collection = getCollectionManager(servletContext).get(
-					collection_guid);
+			com.hp.hpl.jena.rdf.model.Resource collection = getResourceManager(servletContext).get(resource_guid);
 		} catch (RuntimeException r) {
 
 		}
 		return null;
 	}
 
-	@Path("/{name}")
-	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	public void createCollection(@PathParam("name") String collection_guid) {
-		try {
-			getCollectionManager(servletContext).create(collection_guid);
-			System.out.println("Collections create name: " + collection_guid);
-		} catch (RuntimeException r) {
 
-		}
-	}
 
-	private static CollectionManager getCollectionManager(
+	private static ResourceManager getResourceManager(
 			ServletContext servletContext) {
-		if (collectionManager == null) {
+		if (resourceManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext)
 						.openDefaultModel();
-				collectionManager = new CollectionManager(model);
+				resourceManager = new ResourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: "
 						+ e.getMessage(), e);
 			}
 		}
-		return collectionManager;
+		return resourceManager;
 
 	}
 

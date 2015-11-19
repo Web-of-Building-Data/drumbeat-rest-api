@@ -9,11 +9,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.hut.cs.drumbeat.resources.ontology.BuildingDataOntology;
 
-public class CollectionManager {
+public class DatasetManager {
 	
 	private final Model model;	
 	
-	public CollectionManager(Model model) {
+	public DatasetManager(Model model) {
 		this.model = model;
 	}
 	
@@ -23,7 +23,7 @@ public class CollectionManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?collection ?name WHERE { ?collection a <%s>; <%s> ?name . } ",
+								String.format("SELECT ?dataset ?name WHERE { ?dataset a <%s>; <%s> ?name . } ",
 										BuildingDataOntology.Collections.Collection,
 										BuildingDataOntology.Collections.name)),
 						model);
