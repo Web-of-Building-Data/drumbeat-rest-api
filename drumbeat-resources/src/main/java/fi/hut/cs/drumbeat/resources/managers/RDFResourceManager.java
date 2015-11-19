@@ -3,11 +3,11 @@ package fi.hut.cs.drumbeat.resources.managers;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-public class ResourceManager {
+public class RDFResourceManager {
 	
 	private final Model model;	
 	
-	public ResourceManager(Model model) {
+	public RDFResourceManager(Model model) {
 		this.model = model;
 	}
 

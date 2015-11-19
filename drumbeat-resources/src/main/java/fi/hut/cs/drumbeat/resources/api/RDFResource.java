@@ -26,7 +26,6 @@ package fi.hut.cs.drumbeat.resources.api;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -34,14 +33,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.hut.cs.drumbeat.resources.managers.AppManager;
-import fi.hut.cs.drumbeat.resources.managers.ResourceManager;
+import fi.hut.cs.drumbeat.resources.managers.RDFResourceManager;
 
 @Path("/")
-public class Resource {
+public class RDFResource {
 
-	private static ResourceManager resourceManager;
+	private static RDFResourceManager resourceManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -51,7 +51,7 @@ public class Resource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getResourceJSON(@PathParam("name") String resource_guid) {
 		try {
-			com.hp.hpl.jena.rdf.model.Resource collection = getResourceManager(servletContext).get(resource_guid);
+			Resource collection = getResourceManager(servletContext).get(resource_guid);
 		} catch (RuntimeException r) {
 
 		}
@@ -60,13 +60,13 @@ public class Resource {
 
 
 
-	private static ResourceManager getResourceManager(
+	private static RDFResourceManager getResourceManager(
 			ServletContext servletContext) {
 		if (resourceManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext)
 						.openDefaultModel();
-				resourceManager = new ResourceManager(model);
+				resourceManager = new RDFResourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: "
 						+ e.getMessage(), e);
