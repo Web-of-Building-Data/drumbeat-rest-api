@@ -24,57 +24,76 @@
  *   Bundle      : ldp4j-application-examples-1.0.0-SNAPSHOT.jar
  * #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
  */
-package fi.hut.cs.drumbeat.test.ldp4j.persons;
+package fi.hut.cs.drumbeat.test.ldp4j.addressbook;
+
+import java.net.URI;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.ldp4j.application.data.DataSet;
+import org.ldp4j.application.data.DataSetHelper;
+import org.ldp4j.application.data.DataSetUtils;
+import org.ldp4j.application.data.ManagedIndividual;
+import org.ldp4j.application.data.ManagedIndividualId;
 import org.ldp4j.application.data.Name;
-import org.ldp4j.application.ext.annotations.IndirectContainer;
-import org.ldp4j.application.ext.annotations.MembershipRelation;
+import org.ldp4j.application.data.NamingScheme;
+import org.ldp4j.application.ext.annotations.BasicContainer;
 import org.ldp4j.application.session.ContainerSnapshot;
 import org.ldp4j.application.session.ResourceSnapshot;
 import org.ldp4j.application.session.WriteSession;
 import org.ldp4j.application.session.WriteSessionException;
 
-@IndirectContainer(
-	id = BookContainerHandler.ID, 
-	memberHandler = BookHandler.class,
-	membershipRelation=MembershipRelation.HAS_MEMBER,
-	membershipPredicate="http://www.ldp4j.org/vocabularies/example#hasBook",
-	insertedContentRelation = "http://www.ldp4j.org/vocabularies/example#bookshelf"
+@BasicContainer(
+	id = PersonContainerHandler.ID,
+	memberHandler = PersonHandler.class
 )
-public class BookContainerHandler extends InMemoryContainerHandler {
-	
-	public static final String ID="bookContainerTemplate";
-	private BookHandler handler;
+public class PersonContainerHandler extends InMemoryContainerHandler {
 
-	public BookContainerHandler() {
-		super("BookContainer");
+	public static final String ID="personContainerTemplate";
+
+	private PersonHandler handler;
+
+	private AtomicInteger id;
+
+	public PersonContainerHandler() {
+		super("PersonContainer");
+		this.id=new AtomicInteger();
 	}
 
-	public void setBookHandler(BookHandler handler) {
+	public void setHandler(PersonHandler handler) {
 		this.handler = handler;
 	}
-	
-	public BookHandler bookHandler() {
-		if(this.handler==null) {
-			throw new IllegalStateException("Handler not initialized yet");
-		}
-		return this.handler;
-	}
-	
+
 	@Override
 	public ResourceSnapshot create(ContainerSnapshot container, DataSet representation, WriteSession session) {
-		NameProvider nameProvider = nameProvider(container.name());
-		Name<?> nextName = nameProvider.nextMemberName();
+		Name<?> name=
+			NamingScheme.
+				getDefault().
+					name(id.incrementAndGet());
+
+		DataSetHelper helper=
+					DataSetUtils.newHelper(representation);
+
+		ManagedIndividual individual =
+			helper.
+				replace(
+					DataSetHelper.SELF,
+					ManagedIndividualId.createId(name,PersonHandler.ID),
+					ManagedIndividual.class);
+
+		individual.
+			addValue(
+				URI.create("http://www.example.org/vocab#creationDate"),
+				DataSetUtils.newLiteral(new Date()));
 		try {
-			bookHandler().add(nextName,representation);
-			ResourceSnapshot newMember = container.addMember(nextName);
+			this.handler.add(name, representation);
+			ResourceSnapshot member = container.addMember(name);
 			session.saveChanges();
-			return newMember;
+			return member;
 		} catch (WriteSessionException e) {
-			bookHandler().remove(nextName);
+			this.handler.remove(name);
 			throw new IllegalStateException("Could not create member",e);
 		}
 	}
-	
+
 }

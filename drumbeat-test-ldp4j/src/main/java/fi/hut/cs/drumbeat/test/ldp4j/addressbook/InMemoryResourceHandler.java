@@ -24,7 +24,7 @@
  *   Bundle      : ldp4j-application-examples-1.0.0-SNAPSHOT.jar
  * #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
  */
-package fi.hut.cs.drumbeat.test.ldp4j.persons;
+package fi.hut.cs.drumbeat.test.ldp4j.addressbook;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

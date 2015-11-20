@@ -6,6 +6,6 @@
 	<display-name>My LDP4j Application</display-name>
 	<context-param>
 		<param-name>ldp4jTargetApplication</param-name>
-		<param-value>fi.hut.cs.drumbeat.test.ldp4j.persons.MyApplication</param-value>
+		<param-value>fi.hut.cs.drumbeat.test.ldp4j.addressbook.MyApplication</param-value>
 	</context-param>
 </web-app>
