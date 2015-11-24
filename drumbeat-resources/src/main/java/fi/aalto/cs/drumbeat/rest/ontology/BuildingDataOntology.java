@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.resources.ontology;
+package fi.aalto.cs.drumbeat.rest.ontology;
 
 public class BuildingDataOntology {
 	

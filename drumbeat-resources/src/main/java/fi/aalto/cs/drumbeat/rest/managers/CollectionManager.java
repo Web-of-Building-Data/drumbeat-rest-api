@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.resources.managers;
+package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -11,7 +11,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
-import fi.hut.cs.drumbeat.resources.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
 The MIT License (MIT)

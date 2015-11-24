@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.resources.api;
+package fi.aalto.cs.drumbeat.rest.api;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
@@ -18,9 +18,9 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
-import fi.hut.cs.drumbeat.resources.managers.AppManager;
-import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
-import fi.hut.cs.drumbeat.resources.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.managers.AppManager;
+import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
 The MIT License (MIT)

@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.resources.managers;
+package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;

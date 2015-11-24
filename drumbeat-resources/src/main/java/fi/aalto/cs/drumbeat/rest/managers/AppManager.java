@@ -1,4 +1,4 @@
-package fi.hut.cs.drumbeat.resources.managers;
+package fi.aalto.cs.drumbeat.rest.managers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
