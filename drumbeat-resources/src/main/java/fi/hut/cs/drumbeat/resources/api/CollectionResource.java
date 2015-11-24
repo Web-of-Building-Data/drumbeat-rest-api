@@ -1,47 +1,51 @@
 package fi.hut.cs.drumbeat.resources.api;
 
-/*
- The MIT License (MIT)
-
- Copyright (c) 2015 Jyrki Oraskari
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
- */
-
-import java.io.ByteArrayOutputStream;
-
 import javax.servlet.ServletContext;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 import fi.hut.cs.drumbeat.resources.managers.AppManager;
 import fi.hut.cs.drumbeat.resources.managers.CollectionManager;
+import fi.hut.cs.drumbeat.resources.ontology.BuildingDataOntology;
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015 Jyrki Oraskari
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 
 @Path("/collections")
 public class CollectionResource {
@@ -56,15 +60,20 @@ public class CollectionResource {
 	public String listCollectionsJSON() {
 		String json=null;
 		try {
+			ResultSet rs = getCollectionManager(servletContext).listAll();
 
-			ResultSet results = getCollectionManager(servletContext).listAll();
-
-			// write to a ByteArrayOutputStream
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-			ResultSetFormatter.outputAsJSON(outputStream, results);
-			// and turn that into a String
-			json = new String(outputStream.toByteArray());
+			StringBuffer json_ld = new StringBuffer();
+            json_ld.append("[\n");
+            boolean first=true;
+            while (rs.hasNext()) {
+            	        if(!first)
+            	        	json_ld.append(",");	
+                        QuerySolution row = rs.nextSolution();
+                        json_ld.append("\n\"" + row.getResource("collection").getURI()+"\""); 
+                        first=false;
+            }
+            json_ld.append("\n]\n");
+            return json_ld.toString();
 			
 		} catch (RuntimeException r) {
 
@@ -72,31 +81,64 @@ public class CollectionResource {
 		return json;
 	}
 
-	@Path("/{name}")
+	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollectionJSON(@PathParam("name") String collection_guid) {
+	public String getCollectionResourceJSON(@PathParam("guid") String collection_guid) {
 		try {
-			Resource collection = getCollectionManager(servletContext).get(
-					collection_guid);
+			Resource collection = getCollectionManager(servletContext).getResource(collection_guid);
+			StringBuffer json_ld = new StringBuffer();
+            json_ld.append("\n\"@id\":"+BuildingDataOntology.Collections.Collection+"/"+collection_guid+",");
+            Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name); 
+            Resource name=collection.getPropertyResourceValue((Property) name_property);
+            if (name != null) {
+                json_ld.append("\n\"name\":"+name.getLocalName()+",");
+            }
+            json_ld.append("\n\"hasDataSources\":");
+            json_ld.append("[\n");
+              
+            ResultSet rs = getCollectionManager(servletContext).get(collection_guid);
+            boolean first=true;
+            while (rs.hasNext()) {
+            	        if(!first)
+            	        	json_ld.append(",");	
+                        QuerySolution row = rs.nextSolution();
+                        json_ld.append("\n\"" + row.getResource("ds").getURI()+"\""); 
+                        first=false;
+            }
+            json_ld.append("\n]\n");            
+            json_ld.append("\n}\n");
+            return json_ld.toString();
 		} catch (RuntimeException r) {
 
 		}
 		return null;
 	}
 
-	@Path("/{name}")
+	@Path("/{guid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createCollectionJSON(@PathParam("name") String collection_guid) {
+	public String createCollectionJSON(@PathParam("guid") String collection_guid, @QueryParam("name") String name) {
 		try {
-			getCollectionManager(servletContext).create(collection_guid);
-			System.out.println("Collections create name: " + collection_guid);
+			getCollectionManager(servletContext).create(collection_guid, name);
 		} catch (RuntimeException r) {
 
 		}
+		return "";
 	}
 
+	@Path("/{guid}")
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteCollectionJSON(@PathParam("guid") String collection_guid) {
+		try {
+			getCollectionManager(servletContext).delete(collection_guid);
+		} catch (RuntimeException r) {
+
+		}
+		return "";
+	}
+	
 	private static CollectionManager getCollectionManager(
 			ServletContext servletContext) {
 		if (collectionManager == null) {
