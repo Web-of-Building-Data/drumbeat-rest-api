@@ -1,6 +1,9 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
@@ -9,10 +12,11 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataVocabulary;
 
 /*
 The MIT License (MIT)
@@ -40,28 +44,34 @@ SOFTWARE.
 
 
 public class CollectionManager {
-	
+	private static final Logger logger = Logger.getLogger(CollectionManager .class);
 	private final Model model;	
 	
+	public Model getModel() {
+		return model;
+	}
+
 	public CollectionManager(Model model) {
 		this.model = model;
 	}
 	
 	public Model listAll() {
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("CONSTRUCT {?collection a <%s>} WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection,BuildingDataOntology.Collections.Collection)),
-						model);
-		
-		return queryExecution.execConstruct();
+		Query query = QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
+				+ "CONSTRUCT {?collection a lbdh:Collection}"
+				+ "WHERE {"
+				+ "?collection a lbdh:Collection ."
+				+ "}") ;
+		QueryExecution qexec = QueryExecutionFactory.create(query, model);
+		return qexec.execConstruct();		
 	}
 
+	//String.format("CONSTRUCT {?s a <%s>.} WHERE { ?s a  <%s>.} ",BuildingDataOntology.Collections.Collection,BuildingDataOntology.Collections.Collection)),
+	
 	public Model get(String guid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("CONSTRUCT {?S ?p ?o}  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
+								String.format("CONSTRUCT {<%s> ?p ?o .}  WHERE {<%s> ?p ?o .} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.Collection+"/"+guid)),
 						model);
 		return queryExecution.execConstruct();
 	}

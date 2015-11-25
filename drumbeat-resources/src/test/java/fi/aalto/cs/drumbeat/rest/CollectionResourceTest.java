@@ -1,14 +1,5 @@
 package fi.aalto.cs.drumbeat.rest;
 
-import static org.junit.Assert.assertEquals;
-
-import java.net.URISyntaxException;
-
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.junit.Test;
-
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
