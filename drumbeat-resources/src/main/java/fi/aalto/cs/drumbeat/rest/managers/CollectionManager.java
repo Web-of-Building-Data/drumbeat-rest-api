@@ -50,7 +50,7 @@ public class CollectionManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("CONSTRUCT {?collection a lbdh:Collection} WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection)),
+								String.format("CONSTRUCT {?collection a <%s>} WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection,BuildingDataOntology.Collections.Collection)),
 						model);
 		
 		return queryExecution.execConstruct();
