@@ -99,36 +99,6 @@ public class CollectionResource {
 		}
 	}
 
-
-	@Path("/i")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON_i() {
-		String json=null;
-		try {
-			ResultSet rs = getCollectionManager(servletContext).listAll_i();
-
-			StringBuffer json_ld = new StringBuffer();
-            json_ld.append("[\n");
-            boolean first=true;
-            while (rs.hasNext()) {
-            	        if(!first)
-            	        	json_ld.append(",");	
-                        QuerySolution row = rs.nextSolution();
-                        json_ld.append("\n\"" + row.getResource("collection").getURI()+"\""); 
-                        first=false;
-            }
-            json_ld.append("\n]\n");
-            return json_ld.toString();
-			
-		} catch (RuntimeException r) {
-
-		}
-		return json;
-	}
-
-
-	
 	@Path("/example")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -166,41 +136,6 @@ public class CollectionResource {
 		} catch (UnsupportedEncodingException e) {
 			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-	}
-	
-
-	@Path("/i/{guid}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollectionResourceJSON_i(@PathParam("guid") String collection_guid) {
-		try {
-			Resource collection = getCollectionManager(servletContext).getResource(collection_guid);
-			StringBuffer json_ld = new StringBuffer();
-            json_ld.append("\n\"@id\":"+BuildingDataOntology.Collections.Collection+"/"+collection_guid+",");
-            Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name); 
-            Resource name=collection.getPropertyResourceValue((Property) name_property);
-            if (name != null) {
-                json_ld.append("\n\"name\":"+name.getLocalName()+",");
-            }
-            json_ld.append("\n\"hasDataSources\":");
-            json_ld.append("[\n");
-              
-            ResultSet rs = getCollectionManager(servletContext).get_i(collection_guid);
-            boolean first=true;
-            while (rs.hasNext()) {
-            	        if(!first)
-            	        	json_ld.append(",");	
-                        QuerySolution row = rs.nextSolution();
-                        json_ld.append("\n\"" + row.getResource("ds").getURI()+"\""); 
-                        first=false;
-            }
-            json_ld.append("\n]\n");            
-            json_ld.append("\n}\n");
-            return json_ld.toString();
-		} catch (RuntimeException r) {
-
-		}
-		return null;
 	}
 
 	@Path("/{guid}")
