@@ -1,7 +1,7 @@
 # drumbeat-rest-api
 
 Pre-required softwares:
-* Java 1.8
+* Java SDK 1.8
 * git
 * maven
 
