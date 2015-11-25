@@ -1,8 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,18 +11,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
+import fi.aalto.cs.drumbeat.rest.managers.CollectionManager_Select;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -52,12 +46,10 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
  SOFTWARE.
  */
 
-@Path("/collections")
-public class CollectionResource {
+@Path("/collections_select")
+public class CollectionResource_Select {
 
-	// private static final Logger logger =
-	// Logger.getLogger(CollectionResource.class);
-	private static CollectionManager collectionManager;
+	private static CollectionManager_Select collectionmanager;
 
 	@Context
 	private ServletContext servletContext;
@@ -72,41 +64,9 @@ public class CollectionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listCollectionsJSON() {
-
-		try {
-			Model m = getCollectionManager(servletContext).listAll();
-
-			/*StringBuffer xx = new StringBuffer();
-			StmtIterator iter1 = m.listStatements();
-			if (!iter1.hasNext())
-				xx.append("NO triples\n");
-			while (iter1.hasNext()) {
-				Statement stmt = iter1.nextStatement(); // get next statement
-				xx.append("\n");
-				xx.append(">>>: " + stmt.toString());
-			}*/
-
-			JenaJSONLD.init();
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			m.write(os, "JSON-LD");
-			try {
-				return new String(os.toByteArray(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
-			}
-		} catch (Exception e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
-
-
-	@Path("/i")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON_i() {
 		String json=null;
 		try {
-			ResultSet rs = getCollectionManager(servletContext).listAll_i();
+			ResultSet rs = getCollectionManager(servletContext).listAll();
 
 			StringBuffer json_ld = new StringBuffer();
             json_ld.append("[\n");
@@ -128,48 +88,7 @@ public class CollectionResource {
 	}
 
 
-	
-	@Path("/example")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsSample() {
-		Model model = ModelFactory.createDefaultModel();
-		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
-		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/id1");
-		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection + "/id2");
-		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection + "/id3");
-		c1.addProperty(RDF.type, ctype);
-		c2.addProperty(RDF.type, ctype);
-		c3.addProperty(RDF.type, ctype);
-
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
-
 	@Path("/{guid}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollectionJSON(@PathParam("guid") String collection_guid) {
-		Model model = getCollectionManager(servletContext).get(collection_guid);
-
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
-	
-
-	@Path("/i/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCollectionResourceJSON_i(@PathParam("guid") String collection_guid) {
@@ -185,7 +104,7 @@ public class CollectionResource {
             json_ld.append("\n\"hasDataSources\":");
             json_ld.append("[\n");
               
-            ResultSet rs = getCollectionManager(servletContext).get_i(collection_guid);
+            ResultSet rs = getCollectionManager(servletContext).get(collection_guid);
             boolean first=true;
             while (rs.hasNext()) {
             	        if(!first)
@@ -198,9 +117,8 @@ public class CollectionResource {
             json_ld.append("\n}\n");
             return json_ld.toString();
 		} catch (RuntimeException r) {
-
+			return "{\"Return\":\"ERROR:" + r.getMessage()+ "\"}";
 		}
-		return null;
 	}
 
 	@Path("/{guid}")
@@ -228,16 +146,16 @@ public class CollectionResource {
 		return "{\"Return\":\"Done\"}";
 	}
 
-	private static CollectionManager getCollectionManager(ServletContext servletContext) {
-		if (collectionManager == null) {
+	private static CollectionManager_Select getCollectionManager(ServletContext servletContext) {
+		if (collectionmanager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
-				collectionManager = new CollectionManager(model);
+				collectionmanager = new CollectionManager_Select(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
 		}
-		return collectionManager;
+		return collectionmanager;
 
 	}
 

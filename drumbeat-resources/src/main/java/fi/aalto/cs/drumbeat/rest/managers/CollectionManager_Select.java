@@ -42,40 +42,16 @@ SOFTWARE.
 */
 
 
-public class CollectionManager {
-	private static final Logger logger = Logger.getLogger(CollectionManager .class);
+public class CollectionManager_Select {
+	private static final Logger logger = Logger.getLogger(CollectionManager_Select .class);
 	private final Model model;	
 	
 	public Model getModel() {
 		return model;
 	}
 
-	public CollectionManager(Model model) {
+	public CollectionManager_Select(Model model) {
 		this.model = model;
-	}
-	
-	public Model listAll() {
-		Query query = QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
-				+ "CONSTRUCT {?collection a lbdh:Collection}"
-				+ "WHERE {"
-				+ "?collection a lbdh:Collection ."
-				+ "}") ;
-		QueryExecution qexec = QueryExecutionFactory.create(query, model);
-		return qexec.execConstruct();		
-	}
-
-	//String.format("CONSTRUCT {?s a <%s>.} WHERE { ?s a  <%s>.} ",BuildingDataOntology.Collections.Collection,BuildingDataOntology.Collections.Collection)),
-	
-	
-
-	
-	public Model get(String guid) {
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("CONSTRUCT {<%s> ?p ?o .}  WHERE {<%s> ?p ?o .} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.Collection+"/"+guid)),
-						model);
-		return queryExecution.execConstruct();
 	}
 	
 
@@ -85,16 +61,6 @@ public class CollectionManager {
 			return r;
 		}
 		return null;
-	}
-	
-	public Model  listDataSources(String guid) {
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("CONSTRUCT {<%s> <%s> ?ds} WHERE {<%s> <%s> ?ds} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources,BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources)),
-						model);
-		
-		return queryExecution.execConstruct();
 	}
 	
 	public void create(String guid,String name) {
@@ -110,5 +76,41 @@ public class CollectionManager {
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
+	
+	
+	
+	
+	public ResultSet listAll() {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(
+								String.format("SELECT ?collection WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection)),
+						model);
+		
+		return queryExecution.execSelect();
+	}
+
+
+	public ResultSet get(String guid) {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
+						model);
+		return queryExecution.execSelect();
+	}
+	
+
+	
+	public ResultSet listDataSources(String guid) {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(
+								String.format("SELECT ?ds WHERE {<%s> <%p> ?ds} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources)),
+						model);
+		
+		return queryExecution.execSelect();
+	}
+
 
 }
