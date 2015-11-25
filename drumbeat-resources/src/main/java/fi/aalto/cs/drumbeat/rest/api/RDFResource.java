@@ -46,6 +46,14 @@ public class RDFResource {
 	@Context
 	private ServletContext servletContext;
 
+	@Path("/alive")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String isAlive() {		
+		return "{\"status\":\"LIVE\"}";
+	}
+
+	
 	@Path("/{name}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

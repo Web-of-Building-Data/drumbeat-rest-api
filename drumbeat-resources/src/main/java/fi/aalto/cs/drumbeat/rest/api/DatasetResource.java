@@ -52,6 +52,14 @@ public class DatasetResource {
 	@Context
 	private ServletContext servletContext;
 
+	@Path("/alive")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String isAlive() {		
+		return "{\"status\":\"LIVE\"}";
+	}
+
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listDatasetsJSON() {

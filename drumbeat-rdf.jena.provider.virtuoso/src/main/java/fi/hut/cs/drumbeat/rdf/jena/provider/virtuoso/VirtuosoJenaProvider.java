@@ -59,7 +59,10 @@ public class VirtuosoJenaProvider extends AbstractJenaProvider {
 				if (getPassword() == null) {
 					throw new IllegalArgumentException(String.format("Argument %s is undefined", ARGUMENT_PASSWORD));
 				}
-	
+	            logger.info("Graphname: "+graphName);
+	            logger.info("ServerUrl: "+getServerUrl());
+	            logger.info("UserName: "+getUserName());
+	            logger.info("Password: "+getPassword());
 				model = VirtModel.openDatabaseModel(graphName, getServerUrl(), getUserName(), getPassword());
 			} catch (Exception e) {
 				throw new JenaProviderException(e);

@@ -1,5 +1,8 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,12 +14,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
@@ -55,6 +61,14 @@ public class CollectionResource {
 	@Context
 	private ServletContext servletContext;
 
+	@Path("/alive")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String isAlive() {		
+		return "{\"status\":\"LIVE\"}";
+	}
+	
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listCollectionsJSON() {
@@ -81,6 +95,31 @@ public class CollectionResource {
 		return json;
 	}
 
+	@Path("/example")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listCollectionsSample() {
+		Model model = ModelFactory.createDefaultModel();
+		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
+		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection+"/id1");
+		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection+"/id2");
+		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection+"/id3");
+		c1.addProperty(RDF.type, ctype);
+		c2.addProperty(RDF.type, ctype);
+		c3.addProperty(RDF.type, ctype);
+		
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "JSON-LD");
+		try {
+			return new String(os.toByteArray(),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
