@@ -1,12 +1,22 @@
 # drumbeat-rest-api
 
-Pre-required softwares: git, maven
+Pre-required softwares:
+* Java 1.8
+* git
+* maven
 
 
 Step-by-step run the following commands:
 
-> git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
+1) Compiling virt-jena library
 
-> cd drumbeat-rest-api
+>git clone https://github.com/srdc/virt-jena.git
+>cd virt-jena
+>mvn clean install
+>cd ..
 
-> mvn clean install
+2) Compiling drumbeat-rest-api
+
+>git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
+>cd drumbeat-rest-api
+>mvn clean install
