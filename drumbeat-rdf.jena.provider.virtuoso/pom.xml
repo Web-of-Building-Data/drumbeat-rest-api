@@ -23,6 +23,7 @@
 		</dependency>
 
 		<!-- Virtuoso -->
+		<!-- 
 		<dependency>
 			<groupId>virtuoso</groupId>
 			<artifactId>virtuoso-jena-driver</artifactId>
@@ -30,7 +31,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/resources/virt_jena2.jar</systemPath>
 		</dependency>
-		<!-- 
+		 -->
 		<dependency>
 			<groupId>tr.com.srdc</groupId>
 			<artifactId>virt-jena</artifactId>
@@ -46,7 +47,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		 -->
 
 
 		<!-- Apache Jena -->

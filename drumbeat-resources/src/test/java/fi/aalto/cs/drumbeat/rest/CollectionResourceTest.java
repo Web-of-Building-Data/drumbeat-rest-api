@@ -21,14 +21,14 @@ public class CollectionResourceTest extends JerseyTest {
 		return new WebAppDescriptor.Builder().build();
 	}
  
-	@Test
-	public void listCollections() throws JSONException,
-			URISyntaxException {
-		WebResource webResource = client().resource("http://localhost:8080/");
-		JSONObject json = webResource.path("/collections")
-				.get(JSONObject.class);
-		assertEquals("12", json.get("id"));
-	}
+//	@Test
+//	public void listCollections() throws JSONException,
+//			URISyntaxException {
+//		WebResource webResource = client().resource("http://localhost:8080/");
+//		JSONObject json = webResource.path("/collections")
+//				.get(JSONObject.class);
+//		assertEquals("12", json.get("id"));
+//	}
  
 
 }
