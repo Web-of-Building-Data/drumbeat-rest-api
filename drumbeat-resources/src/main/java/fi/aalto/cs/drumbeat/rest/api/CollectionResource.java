@@ -78,9 +78,8 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			return "{\"Return\":\"ERROR:"+e.getMessage()+"\"}";
 		}
-		return null;
 	}
 
 	@Path("/example")
@@ -102,43 +101,24 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			return "{\"Return\":\"ERROR:"+e.getMessage()+"\"}";
 		}
-		return null;
 	}
 
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollectionResourceJSON(@PathParam("guid") String collection_guid) {
+	public String getCollectionJSON(@PathParam("guid") String collection_guid) {
+		Model model = getCollectionManager(servletContext).get(collection_guid);
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "JSON-LD");
 		try {
-			Resource collection = getCollectionManager(servletContext).getResource(collection_guid);
-			StringBuffer json_ld = new StringBuffer();
-			json_ld.append("\n\"@id\":" + BuildingDataOntology.Collections.Collection + "/" + collection_guid + ",");
-			Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name);
-			Resource name = collection.getPropertyResourceValue((Property) name_property);
-			if (name != null) {
-				json_ld.append("\n\"name\":" + name.getLocalName() + ",");
-			}
-			json_ld.append("\n\"hasDataSources\":");
-			json_ld.append("[\n");
-
-			ResultSet rs = getCollectionManager(servletContext).get(collection_guid);
-			boolean first = true;
-			while (rs.hasNext()) {
-				if (!first)
-					json_ld.append(",");
-				QuerySolution row = rs.nextSolution();
-				json_ld.append("\n\"" + row.getResource("ds").getURI() + "\"");
-				first = false;
-			}
-			json_ld.append("\n]\n");
-			json_ld.append("\n}\n");
-			return json_ld.toString();
-		} catch (RuntimeException r) {
-
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Return\":\"ERROR:"+e.getMessage()+"\"}";
 		}
-		return null;
 	}
 
 	@Path("/{guid}")
@@ -148,9 +128,9 @@ public class CollectionResource {
 		try {
 			getCollectionManager(servletContext).create(collection_guid, name);
 		} catch (RuntimeException r) {
-
+			return "{\"Return\":\"ERROR:"+r.getMessage()+"\"}";
 		}
-		return "";
+		return "{\"Return\":\"Done\"}";
 	}
 
 	@Path("/{guid}")
@@ -162,7 +142,7 @@ public class CollectionResource {
 		} catch (RuntimeException r) {
 
 		}
-		return "";
+		return "{\"Return\":\"Done\"}";
 	}
 
 	private static CollectionManager getCollectionManager(ServletContext servletContext) {

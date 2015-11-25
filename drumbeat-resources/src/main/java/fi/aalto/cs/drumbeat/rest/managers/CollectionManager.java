@@ -56,13 +56,13 @@ public class CollectionManager {
 		return queryExecution.execConstruct();
 	}
 
-	public ResultSet get(String guid) {
+	public Model get(String guid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
+								String.format("CONSTRUCT {?S ?p ?o}  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
 						model);
-		return queryExecution.execSelect();
+		return queryExecution.execConstruct();
 	}
 	
 
@@ -74,14 +74,14 @@ public class CollectionManager {
 		return null;
 	}
 	
-	public ResultSet listDataSources(String guid) {
+	public Model  listDataSources(String guid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?ds WHERE {<%s> <%p> ?ds} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources)),
+								String.format("CONSTRUCT {<%s> <%s> ?ds} WHERE {<%s> <%s> ?ds} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources,BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources)),
 						model);
 		
-		return queryExecution.execSelect();
+		return queryExecution.execConstruct();
 	}
 	
 	public void create(String guid,String name) {
