@@ -11,11 +11,6 @@ public class BuildingDataVocabulary {
 	
 	public static final String BASE_URL = "http://drumbeat.cs.hut.fi/owl/LDBHO#";
 	
-//	public static class Collections {
-//	}
-//
-//	public static class DataSource {
-//	}
 	
 	public static final Resource BimModel = DEFAULT_MODEL.createResource(BASE_URL + "BimModel");
 	public static final Resource Collection = DEFAULT_MODEL.createResource(BASE_URL + "Collection");

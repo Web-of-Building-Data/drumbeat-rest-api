@@ -29,29 +29,28 @@ import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
-The MIT License (MIT)
+ The MIT License (MIT)
 
-Copyright (c) 2015 Jyrki Oraskari
+ Copyright (c) 2015 Jyrki Oraskari
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 
 @Path("/collections")
 public class CollectionResource {
@@ -64,35 +63,24 @@ public class CollectionResource {
 	@Path("/alive")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String isAlive() {		
+	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
-	
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listCollectionsJSON() {
-		String json=null;
+		Model model = getCollectionManager(servletContext).listAll();
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "JSON-LD");
 		try {
-			ResultSet rs = getCollectionManager(servletContext).listAll();
-
-			StringBuffer json_ld = new StringBuffer();
-            json_ld.append("[\n");
-            boolean first=true;
-            while (rs.hasNext()) {
-            	        if(!first)
-            	        	json_ld.append(",");	
-                        QuerySolution row = rs.nextSolution();
-                        json_ld.append("\n\"" + row.getResource("collection").getURI()+"\""); 
-                        first=false;
-            }
-            json_ld.append("\n]\n");
-            return json_ld.toString();
-			
-		} catch (RuntimeException r) {
-
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		return json;
+		return null;
 	}
 
 	@Path("/example")
@@ -101,25 +89,24 @@ public class CollectionResource {
 	public String listCollectionsSample() {
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
-		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection+"/id1");
-		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection+"/id2");
-		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection+"/id3");
+		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/id1");
+		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection + "/id2");
+		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection + "/id3");
 		c1.addProperty(RDF.type, ctype);
 		c2.addProperty(RDF.type, ctype);
 		c3.addProperty(RDF.type, ctype);
-		
+
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "JSON-LD");
 		try {
-			return new String(os.toByteArray(),"UTF-8");
+			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
+
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -127,27 +114,27 @@ public class CollectionResource {
 		try {
 			Resource collection = getCollectionManager(servletContext).getResource(collection_guid);
 			StringBuffer json_ld = new StringBuffer();
-            json_ld.append("\n\"@id\":"+BuildingDataOntology.Collections.Collection+"/"+collection_guid+",");
-            Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name); 
-            Resource name=collection.getPropertyResourceValue((Property) name_property);
-            if (name != null) {
-                json_ld.append("\n\"name\":"+name.getLocalName()+",");
-            }
-            json_ld.append("\n\"hasDataSources\":");
-            json_ld.append("[\n");
-              
-            ResultSet rs = getCollectionManager(servletContext).get(collection_guid);
-            boolean first=true;
-            while (rs.hasNext()) {
-            	        if(!first)
-            	        	json_ld.append(",");	
-                        QuerySolution row = rs.nextSolution();
-                        json_ld.append("\n\"" + row.getResource("ds").getURI()+"\""); 
-                        first=false;
-            }
-            json_ld.append("\n]\n");            
-            json_ld.append("\n}\n");
-            return json_ld.toString();
+			json_ld.append("\n\"@id\":" + BuildingDataOntology.Collections.Collection + "/" + collection_guid + ",");
+			Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name);
+			Resource name = collection.getPropertyResourceValue((Property) name_property);
+			if (name != null) {
+				json_ld.append("\n\"name\":" + name.getLocalName() + ",");
+			}
+			json_ld.append("\n\"hasDataSources\":");
+			json_ld.append("[\n");
+
+			ResultSet rs = getCollectionManager(servletContext).get(collection_guid);
+			boolean first = true;
+			while (rs.hasNext()) {
+				if (!first)
+					json_ld.append(",");
+				QuerySolution row = rs.nextSolution();
+				json_ld.append("\n\"" + row.getResource("ds").getURI() + "\"");
+				first = false;
+			}
+			json_ld.append("\n]\n");
+			json_ld.append("\n}\n");
+			return json_ld.toString();
 		} catch (RuntimeException r) {
 
 		}
@@ -177,17 +164,14 @@ public class CollectionResource {
 		}
 		return "";
 	}
-	
-	private static CollectionManager getCollectionManager(
-			ServletContext servletContext) {
+
+	private static CollectionManager getCollectionManager(ServletContext servletContext) {
 		if (collectionManager == null) {
 			try {
-				Model model = AppManager.getJenaProvider(servletContext)
-						.openDefaultModel();
+				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
 				collectionManager = new CollectionManager(model);
 			} catch (Exception e) {
-				throw new RuntimeException("Could not get Jena model: "
-						+ e.getMessage(), e);
+				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
 		}
 		return collectionManager;

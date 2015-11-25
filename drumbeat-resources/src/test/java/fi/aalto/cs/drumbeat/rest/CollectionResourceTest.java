@@ -21,7 +21,8 @@ public class CollectionResourceTest extends JerseyTest {
 		return new WebAppDescriptor.Builder().build();
 	}
  
-	/*@Test
+	/*
+	@Test
 	public void testAlive() throws JSONException,
 			URISyntaxException {
 		WebResource webResource = client().resource("http://localhost:8080/r");
@@ -29,7 +30,16 @@ public class CollectionResourceTest extends JerseyTest {
 				.get(JSONObject.class);
 		assertEquals("LIVE", json.get("status"));
 	}
- 
+
+	@Test
+	public void listCollections() throws JSONException,
+			URISyntaxException {
+		WebResource webResource = client().resource("http://localhost:8080/");
+		JSONObject json = webResource.path("/collections")
+				.get(JSONObject.class);
+		assertEquals("12", json.get("id"));
+	}
+
 	@Test
 	public void testCreateCollection() throws JSONException,
 			URISyntaxException {
@@ -37,6 +47,7 @@ public class CollectionResourceTest extends JerseyTest {
 		JSONObject json = webResource.path("/collections/alive")
 				.get(JSONObject.class);
 		assertEquals("LIVE", json.get("status"));
-	}*/
+	}
+	*/
  
 }

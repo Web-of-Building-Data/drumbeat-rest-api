@@ -46,15 +46,14 @@ public class CollectionManager {
 		this.model = model;
 	}
 	
-	
-	public ResultSet listAll() {
+	public Model listAll() {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?collection WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection)),
+								String.format("CONSTRUCT {?collection a lbdh:Collection} WHERE { ?collection a <%s>} ",BuildingDataOntology.Collections.Collection)),
 						model);
 		
-		return queryExecution.execSelect();
+		return queryExecution.execConstruct();
 	}
 
 	public ResultSet get(String guid) {
