@@ -4,14 +4,15 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataVocabulary;
 
 /*
 The MIT License (MIT)
@@ -85,9 +86,11 @@ public class CollectionManager {
 	}
 	
 	public void create(String guid,String name) {
-		Resource r = ResourceFactory.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 
-        Resource name_property = ResourceFactory.createResource(BuildingDataOntology.Collections.name); 
-        r.addProperty((Property) name_property,name , XSDDatatype.XSDstring);
+		Resource r = model.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 
+		Resource c = model.createResource(BuildingDataOntology.Collections.Collection);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
+        r.addProperty(RDF.type,c);
+        r.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
 	public void delete(String guid) {

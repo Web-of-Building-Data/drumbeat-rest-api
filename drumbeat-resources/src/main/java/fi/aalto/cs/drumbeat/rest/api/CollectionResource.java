@@ -128,7 +128,8 @@ public class CollectionResource {
 		try {
 			getCollectionManager(servletContext).create(collection_guid, name);
 		} catch (RuntimeException r) {
-			return "{\"Return\":\"ERROR:"+r.getMessage()+"\"}";
+			r.printStackTrace();
+			return "{\"Return\":\"ERROR:"+r.getMessage()+" guid:"+collection_guid+" name:"+name+"\"}";
 		}
 		return "{\"Return\":\"Done\"}";
 	}

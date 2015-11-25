@@ -77,7 +77,7 @@ public abstract class AbstractJenaProvider {
 			String serverUrl,
 			String userName,
 			String password,
-			String defaultModelId,
+			String defaultGraphName,
 			Properties properties,
 			String propertyPrefix)
 	{
@@ -85,6 +85,7 @@ public abstract class AbstractJenaProvider {
 		this.serverUrl = serverUrl;
 		this.userName = userName;
 		this.password = password;
+		this.defaultGraphName=defaultGraphName;
 		this.properties = properties;
 		this.propertyPrefix = propertyPrefix;
 	}
