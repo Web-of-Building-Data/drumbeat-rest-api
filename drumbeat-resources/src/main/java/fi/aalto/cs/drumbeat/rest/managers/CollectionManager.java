@@ -3,16 +3,17 @@ package fi.aalto.cs.drumbeat.rest.managers;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
@@ -54,28 +55,47 @@ public class CollectionManager {
 		this.model = model;
 	}
 	
-	public Model listAll() {
-		Query query = QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
-				+ "CONSTRUCT {?collection a lbdh:Collection}"
-				+ "WHERE {"
-				+ "?collection a lbdh:Collection ."
-				+ "}") ;
-		QueryExecution qexec = QueryExecutionFactory.create(query, model);
-		return qexec.execConstruct();		
+	public boolean listAll(Model m) {
+		boolean ret=false;
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
+								+ "SELECT ?collection "
+								+ "WHERE {"
+								+ "?collection ?p lbdh:Collection ."
+								+ "}"
+								),
+						model);
+
+         ResultSet rs = queryExecution.execSelect();
+         Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection); 		
+         while (rs.hasNext()) {
+        	         ret=true;
+                     QuerySolution row = rs.nextSolution();                     
+                     Resource c = model.createResource(row.getResource("collection").getURI());
+                     m.add(m.createStatement(c,RDF.type,ctype));
+         }
+         return ret;
 	}
-
-	//String.format("CONSTRUCT {?s a <%s>.} WHERE { ?s a  <%s>.} ",BuildingDataOntology.Collections.Collection,BuildingDataOntology.Collections.Collection)),
 	
-	
-
-	
-	public Model get(String guid) {
+	public boolean get(String guid,Model m) {
+		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("CONSTRUCT {<%s> ?p ?o .}  WHERE {<%s> ?p ?o .} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.Collection+"/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
 						model);
-		return queryExecution.execConstruct();
+
+         ResultSet rs = queryExecution.execSelect();
+         Resource c = model.createResource(BuildingDataOntology.Collections.Collection+"/"+guid);        	 
+         while (rs.hasNext()) {
+        	         ret=true;
+                     QuerySolution row = rs.nextSolution();
+                     Property p = model.createProperty(row.getResource("p").getURI());
+                     RDFNode o = row.get("o");
+                     m.add(m.createStatement(c,p,o));
+         }
+         return ret;
 	}
 	
 
@@ -87,15 +107,6 @@ public class CollectionManager {
 		return null;
 	}
 	
-	public Model  listDataSources(String guid) {
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("CONSTRUCT {<%s> <%s> ?ds} WHERE {<%s> <%s> ?ds} ",BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources,BuildingDataOntology.Collections.Collection+"/"+guid,BuildingDataOntology.Collections.hasDataSources)),
-						model);
-		
-		return queryExecution.execConstruct();
-	}
 	
 	public void create(String guid,String name) {
 		Resource r = model.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 

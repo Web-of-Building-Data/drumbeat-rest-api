@@ -70,31 +70,22 @@ public class CollectionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listCollectionsJSON() {
-
+		Model m = ModelFactory.createDefaultModel();
+		
 		try {
-			Model m = getCollectionManager(servletContext).listAll();
-
-			StringBuffer xx = new StringBuffer();
-			StmtIterator iter1 = m.listStatements();
-			if (!iter1.hasNext())
-				xx.append("NO triples\n");
-			while (iter1.hasNext()) {
-				Statement stmt = iter1.nextStatement(); // get next statement
-				xx.append("\n");
-				xx.append(">>>: " + stmt.toString());
-			}
-			return xx.toString();
-/*
+			if(!getCollectionManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No collections\"}";
+			
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			m.write(os, "JSON-LD");
 			try {
 				return new String(os.toByteArray(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
-			}*/
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
 		} catch (Exception e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 		
 	}
@@ -118,7 +109,7 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
 
@@ -126,15 +117,17 @@ public class CollectionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCollectionJSON(@PathParam("guid") String collection_guid) {
-		Model model = getCollectionManager(servletContext).get(collection_guid);
+		Model m = ModelFactory.createDefaultModel();
+		if(!getCollectionManager(servletContext).get(collection_guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "JSON-LD");
+		m.write(os, "JSON-LD");
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Return\":\"ERROR:" + e.getMessage() + "\"}";
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
 
@@ -146,9 +139,9 @@ public class CollectionResource {
 			getCollectionManager(servletContext).create(collection_guid, name);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
-			return "{\"Return\":\"ERROR:" + r.getMessage() + " guid:" + collection_guid + " name:" + name + "\"}";
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + collection_guid + " name:" + name + "\"}";
 		}
-		return "{\"Return\":\"Done\"}";
+		return "{\"Status\":\"Done\"}";
 	}
 
 	@Path("/{guid}")
@@ -160,7 +153,7 @@ public class CollectionResource {
 		} catch (RuntimeException r) {
 
 		}
-		return "{\"Return\":\"Done\"}";
+		return "{\"Status\":\"Done\"}";
 	}
 
 	private static CollectionManager getCollectionManager(ServletContext servletContext) {
