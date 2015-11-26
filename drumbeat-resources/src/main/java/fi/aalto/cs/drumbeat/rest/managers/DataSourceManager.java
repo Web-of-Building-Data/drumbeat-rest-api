@@ -84,11 +84,11 @@ public class DataSourceManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",BuildingDataOntology.DataSources.DataSource+"/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"DataSource/"+guid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(BuildingDataOntology.DataSources.DataSource+"/"+guid);        	 
+         Resource c = model.createResource(AppManager.BASE_URL+"DataSource/"+guid);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -101,7 +101,7 @@ public class DataSourceManager {
 	
 
 	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(BuildingDataOntology.DataSources.DataSource+"/"+guid); 
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"DataSource/"+guid); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -110,7 +110,7 @@ public class DataSourceManager {
 	
 	
 	public void create(String guid,String name) {
-		Resource r = model.createResource(BuildingDataOntology.DataSources.DataSource+"/"+guid); 
+		Resource r = model.createResource(AppManager.BASE_URL+"DataSource/"+guid); 
 		Resource c = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
         r.addProperty(RDF.type,c);
@@ -118,7 +118,7 @@ public class DataSourceManager {
 	}
 	
 	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(BuildingDataOntology.DataSources.DataSource+"/"+guid); 
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"DataSource/"+guid); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}

@@ -83,7 +83,7 @@ public class CollectionManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",BuildingDataOntology.Collections.Collection+"/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"Collection/"+guid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
@@ -100,7 +100,7 @@ public class CollectionManager {
 	
 
 	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"Collection/"+guid); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -109,7 +109,7 @@ public class CollectionManager {
 	
 	
 	public void create(String guid,String name) {
-		Resource r = model.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 
+		Resource r = model.createResource(AppManager.BASE_URL+"Collection/"+guid); 
 		Resource c = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         r.addProperty(RDF.type,c);
@@ -117,7 +117,7 @@ public class CollectionManager {
 	}
 	
 	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(BuildingDataOntology.Collections.Collection+"/"+guid); 
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"Collection/"+guid); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
