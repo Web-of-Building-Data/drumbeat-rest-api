@@ -26,7 +26,6 @@
 			<groupId>${drumbeat.groupId}</groupId>
 			<artifactId>drumbeat-rdf.jena.provider.virtuoso</artifactId>
 			<version>${drumbeat.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Apache Jena Core -->

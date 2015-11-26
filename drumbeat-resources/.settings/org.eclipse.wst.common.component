@@ -9,9 +9,6 @@
         <dependent-module archiveName="drumbeat-rdf.jena.provider.virtuoso-0.4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-rdf.jena.provider.virtuoso/drumbeat-rdf.jena.provider.virtuoso">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="virt-jena-2.6.2-srdc.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/virt-jena/virt-jena">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/drumbeat-resources/target/classes"/>
         <property name="context-root" value="drumbeat-resources"/>
     </wb-module>

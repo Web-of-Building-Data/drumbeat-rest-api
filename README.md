@@ -8,17 +8,7 @@ Pre-required softwares:
 
 Step-by-step run the following commands:
 
-1) Compiling virt-jena library
-
->git clone https://github.com/srdc/virt-jena.git
-
->cd virt-jena
-
->mvn clean install
-
->cd ..
-
-2) Compiling drumbeat-rest-api
+1) Compiling drumbeat-rest-api
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
 
