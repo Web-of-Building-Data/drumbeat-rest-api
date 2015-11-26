@@ -23,7 +23,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
+import fi.aalto.cs.drumbeat.rest.managers.CollectionManager_Virtuoso;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -50,12 +50,12 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
  SOFTWARE.
  */
 
-@Path("/collections")
-public class CollectionResource {
+@Path("/collectionsVirtuoso")
+public class CollectionResource_Virtuoso {
 
 	// private static final Logger logger =
 	// Logger.getLogger(CollectionResource.class);
-	private static CollectionManager collectionManager;
+	private static CollectionManager_Virtuoso collectionManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -163,11 +163,11 @@ public class CollectionResource {
 		return "{\"Return\":\"Done\"}";
 	}
 
-	private static CollectionManager getCollectionManager(ServletContext servletContext) {
+	private static CollectionManager_Virtuoso getCollectionManager(ServletContext servletContext) {
 		if (collectionManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
-				collectionManager = new CollectionManager(model);
+				collectionManager = new CollectionManager_Virtuoso(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
