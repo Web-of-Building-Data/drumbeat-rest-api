@@ -10,6 +10,12 @@ public class BuildingDataOntology {
 		public static final String hasDataSources = BASE_URL + "hasDataSources";		
 	}
 
+	public static class DataSources {
+		public static final String DataSource = BASE_URL + "DataSource";
+		public static final String name = BASE_URL + "name";
+		public static final String hasDataSources = BASE_URL + "hasDataSets";		
+	}
+	
 	public static class Datasets {
 		public static final String Dataset = BASE_URL + "Dataset";
 		public static final String name = BASE_URL + "name";
