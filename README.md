@@ -12,6 +12,6 @@ Step-by-step run the following commands:
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
 
->cd drumbeat-rest-api
+>cd !drumbeat-rest-api-parent
 
 >mvn clean install
