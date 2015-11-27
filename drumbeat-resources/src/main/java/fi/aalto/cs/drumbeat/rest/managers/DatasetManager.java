@@ -44,15 +44,15 @@ SOFTWARE.
 */
 
 
-public class DatasetManager {
-	private static final Logger logger = Logger.getLogger(DatasetManager .class);
+public class DataSetManager {
+	private static final Logger logger = Logger.getLogger(DataSetManager .class);
 	private final Model model;	
 	
 	public Model getModel() {
 		return model;
 	}
 
-	public DatasetManager(Model model) {
+	public DataSetManager(Model model) {
 		this.model = model;
 	}
 	

@@ -23,7 +23,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
-import fi.aalto.cs.drumbeat.rest.managers.DatasetManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -51,9 +51,9 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
  */
 
 @Path("/datasets")
-public class DatasetResource {
+public class DataSetResource {
 
-	private static DatasetManager datasetManager;
+	private static DataSetManager datasetManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -145,76 +145,6 @@ public class DatasetResource {
 		
 	}
 	
-	private Model listSample()
-	{
-		Model model = ModelFactory.createDefaultModel();
-		Resource ctype = model.createResource(BuildingDataOntology.Datasets.Dataset);
-		Resource c1 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_1");
-		Resource c2 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_2");
-		Resource c3 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_3");
-		c1.addProperty(RDF.type, ctype);
-		c2.addProperty(RDF.type, ctype);
-		c3.addProperty(RDF.type, ctype);
-		return model;
-	}
-
-
-	@Path("/example")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String listSampleHTML() {
-		Model model=listSample();
-		return HTMLPrettyPrinting.prettyPrinting(model);
-	}
-
-	
-	@Path("/example")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listSampleJSON_LD() {
-		Model model=listSample();
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
-
-	
-	@Path("/example")
-	@GET
-	@Produces("text/turtle")
-	public String listSampleTurtle() {
-		Model model=listSample();
-				
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "TURTLE");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
-	
-	@Path("/example")
-	@GET
-	@Produces("application/rdf+xml")
-	public String listSampleRDF() {
-		Model model=listSample();
-		
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		model.write(os, "RDF/XML");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-	}
 	
 	@Path("/{guid}")
 	@GET
@@ -306,11 +236,11 @@ public class DatasetResource {
 	}
 	
 
-	private static DatasetManager getManager(ServletContext servletContext) {
+	private static DataSetManager getManager(ServletContext servletContext) {
 		if (datasetManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
-				datasetManager = new DatasetManager(model);
+				datasetManager = new DataSetManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
