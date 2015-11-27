@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rest.api;
+package fi.aalto.cs.drumbeat.rest.accessory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;

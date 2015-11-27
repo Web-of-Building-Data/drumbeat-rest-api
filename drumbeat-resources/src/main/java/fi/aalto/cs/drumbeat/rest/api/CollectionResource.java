@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
