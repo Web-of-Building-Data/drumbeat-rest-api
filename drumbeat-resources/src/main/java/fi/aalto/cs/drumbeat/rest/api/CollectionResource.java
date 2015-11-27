@@ -214,22 +214,22 @@ public class CollectionResource {
 		}
 	}
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("guid") String guid) {
+	public String getHTML(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(collectionname,m))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("guid") String guid) {
+	public String getJSON(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(collectionname,m))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -242,12 +242,12 @@ public class CollectionResource {
 		}
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("guid") String guid) {
+	public String getTURTLE(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(collectionname,m))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -260,12 +260,12 @@ public class CollectionResource {
 		}
 	}
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("guid") String guid) {
+	public String getRDF(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(collectionname,m))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -278,25 +278,25 @@ public class CollectionResource {
 		}
 	}
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@PathParam("guid") String guid, @QueryParam("name") String name) {
+	public String createJSON(@PathParam("collectionname") String collectionname) {
 		try {
-			getManager(servletContext).create(guid, name);
+			getManager(servletContext).create(collectionname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + guid + " name:" + name + "\"}";
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" + collectionname + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@PathParam("guid") String guid) {
+	public String deleteJSON(@PathParam("collectionname") String collectionname) {
 		try {
-			getManager(servletContext).delete(guid);
+			getManager(servletContext).delete(collectionname);
 		} catch (RuntimeException r) {
 
 		}

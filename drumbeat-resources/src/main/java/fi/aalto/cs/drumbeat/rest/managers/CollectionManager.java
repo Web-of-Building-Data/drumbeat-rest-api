@@ -78,16 +78,16 @@ public class CollectionManager {
          return ret;
 	}
 	
-	public boolean get(String guid,Model m) {
+	public boolean get(String name,Model m) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"Collection/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"collections/"+name)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(BuildingDataOntology.Collections.Collection+"/"+guid);        	 
+         Resource c = model.createResource(BuildingDataOntology.Collections.Collection+"/"+name);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -99,8 +99,8 @@ public class CollectionManager {
 	}
 	
 
-	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"Collection/"+guid); 
+	public Resource getResource(String name) {
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"collections/"+name); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -108,8 +108,8 @@ public class CollectionManager {
 	}
 	
 	
-	public void create(String guid,String name) {
-		Resource r = model.createResource(AppManager.BASE_URL+"Collection/"+guid); 
+	public void create(String name) {
+		Resource r = model.createResource(AppManager.BASE_URL+"collections/"+name); 
 		Resource c = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         r.addProperty(RDF.type,c);
@@ -117,7 +117,7 @@ public class CollectionManager {
 	}
 	
 	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"Collection/"+guid); 
+		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"collections/"+guid); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}

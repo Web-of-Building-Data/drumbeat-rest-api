@@ -2,6 +2,8 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 
 
+import javax.ws.rs.PathParam;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -56,14 +58,14 @@ public class DataSourceManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m) {
+	public boolean listAll(Model m,String collection) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+ "?datasource ?p lbdh:DataSource ."
+								+  "<"+AppManager.BASE_URL+"collections/"+collection+"> lbdh:hasDataSources ?datasource."								
 								+ "}"
 								),
 						model);
@@ -79,29 +81,29 @@ public class DataSourceManager {
          return ret;
 	}
 	
-	public boolean get(String guid,Model m) {
+	public boolean get(Model m,String collectionname,String datasourcename) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"datasources/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(AppManager.BASE_URL+"DataSource/"+guid);        	 
+         Resource ds = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
                      Property p = model.createProperty(row.getResource("p").getURI());
                      RDFNode o = row.get("o");
-                     m.add(m.createStatement(c,p,o));
+                     m.add(m.createStatement(ds,p,o));
          }
          return ret;
 	}
 	
 
-	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"datasources/"+guid); 
+	public Resource getResource(String collectionname,String datasourcename) {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -109,39 +111,19 @@ public class DataSourceManager {
 	}
 	
 	
-	public void create(String guid,String name) {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+guid); 
+	public void create(String collectionname,String datasourcename) {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
 		Resource c = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
         r.addProperty(RDF.type,c);
-        r.addProperty(name_property,name , XSDDatatype.XSDstring);
+        r.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"datasources/"+guid); 
+	public void delete(String collectionname,String datasourcename)  {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
-
-	
-//	public NodeIterator listAllByCollectionName(String collectionName) {
-//	model
-//		.listSubjectsWithProperty(RDF.type, BuildingDataVocabulary.Collection)
-//		.filterKeep(
-//			new Filter<Resource>() {
-//				@Override
-//				public boolean accept(Resource collectionResource) {
-//					RDFNode collectionNameNode = collectionResource.getProperty(BuildingDataVocabulary.name).getObject();
-//					assert(collectionNameNode != null && collectionNameNode.isLiteral());
-//					return collectionNameNode.asLiteral().getValue().equals(collectionName);
-//				}
-//			});
-//		
-//	
-//	
-////	Resource collectionResource = model.createResource(collectionUri);
-//	return model.listObjectsOfProperty(collectionResource, BuildingDataVocabulary.hasDataSource);
-//}
 
 }
 
