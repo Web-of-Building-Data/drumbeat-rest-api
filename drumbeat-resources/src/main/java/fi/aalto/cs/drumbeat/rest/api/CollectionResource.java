@@ -51,9 +51,6 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 @Path("/collections")
 public class CollectionResource {
-
-	// private static final Logger logger =
-	// Logger.getLogger(CollectionResource.class);
 	private static CollectionManager collectionManager;
 
 	@Context
@@ -150,9 +147,9 @@ public class CollectionResource {
 	{
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
-		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/id1");
-		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection + "/id2");
-		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection + "/id3");
+		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/nonexisting_sample_1");
+		Resource c2 = model.createResource(BuildingDataOntology.Collections.Collection + "/nonexisting_sample_2");
+		Resource c3 = model.createResource(BuildingDataOntology.Collections.Collection + "/nonexisting_sample_3");
 		c1.addProperty(RDF.type, ctype);
 		c2.addProperty(RDF.type, ctype);
 		c3.addProperty(RDF.type, ctype);

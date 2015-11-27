@@ -1,5 +1,31 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.ServletContext;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
+import com.github.jsonldjava.jena.JenaJSONLD;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
+
+import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.managers.AppManager;
+import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
+import fi.aalto.cs.drumbeat.rest.managers.DatasetManager;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+
 /*
  The MIT License (MIT)
 
@@ -24,25 +50,6 @@ package fi.aalto.cs.drumbeat.rest.api;
  SOFTWARE.
  */
 
-import java.io.ByteArrayOutputStream;
-
-import javax.servlet.ServletContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-
-import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.DatasetManager;
-
 @Path("/datasets")
 public class DatasetResource {
 
@@ -54,71 +61,261 @@ public class DatasetResource {
 	@Path("/alive")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String isAlive() {		
+	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listHTML() {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).listAll(m))
+			   return "<HTML><BODY>Status:\"No datasets\"</BODY></HTML>";
+
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listJSON_LD() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasets\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "JSON-LD");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+
+	@GET
+	@Produces("text/turtle")
+	public String listTurtle() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasets\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "TURTLE");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	@GET
+	@Produces("application/rdf+xml")
+	public String listRDF() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasets\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "RDF/XML");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	private Model listSample()
+	{
+		Model model = ModelFactory.createDefaultModel();
+		Resource ctype = model.createResource(BuildingDataOntology.Datasets.Dataset);
+		Resource c1 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_1");
+		Resource c2 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_2");
+		Resource c3 = model.createResource(BuildingDataOntology.Datasets.Dataset + "/nonexisting_sample_3");
+		c1.addProperty(RDF.type, ctype);
+		c2.addProperty(RDF.type, ctype);
+		c3.addProperty(RDF.type, ctype);
+		return model;
+	}
+
+
+	@Path("/example")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listSampleHTML() {
+		Model model=listSample();
+		return HTMLPrettyPrinting.prettyPrinting(model);
 	}
 
 	
+	@Path("/example")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listDatasetsJSON() {
-		String json=null;
+	public String listSampleJSON_LD() {
+		Model model=listSample();
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "JSON-LD");
 		try {
-
-			ResultSet results = getDatasetManager(servletContext).listAll();
-
-			// write to a ByteArrayOutputStream
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-			ResultSetFormatter.outputAsJSON(outputStream, results);
-			// and turn that into a String
-			json = new String(outputStream.toByteArray());
-			
-		} catch (RuntimeException r) {
-
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-		return json;
 	}
 
-	@Path("/{name}")
+	
+	@Path("/example")
+	@GET
+	@Produces("text/turtle")
+	public String listSampleTurtle() {
+		Model model=listSample();
+				
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/example")
+	@GET
+	@Produces("application/rdf+xml")
+	public String listSampleRDF() {
+		Model model=listSample();
+		
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getHTML(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
+
+	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDatasetJSON(@PathParam("name") String dataset_guid) {
-		try {
-			Resource dataset = getDatasetManager(servletContext).get(
-					dataset_guid);
-		} catch (RuntimeException r) {
+	public String getJSON(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
 
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "JSON-LD");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-		return null;
 	}
 
-	@Path("/{name}")
+	@Path("/{guid}")
+	@GET
+	@Produces("text/turtle")
+	public String getTURTLE(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces("application/rdf+xml")
+	public String getRDF(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createDatasetJSON(@PathParam("name") String dataset_guid) {
+	public String createJSON(@PathParam("guid") String guid, @QueryParam("name") String name) {
 		try {
-			getDatasetManager(servletContext).create(dataset_guid);
-			System.out.println("Dataset create name: " + dataset_guid);
+			getManager(servletContext).create(guid, name);
+		} catch (RuntimeException r) {
+			r.printStackTrace();
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + guid + " name:" + name + "\"}";
+		}
+		return "{\"Status\":\"Done\"}";
+	}
+
+	@Path("/{guid}")
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteJSON(@PathParam("guid") String guid) {
+		try {
+			getManager(servletContext).delete(guid);
 		} catch (RuntimeException r) {
 
 		}
+		return "{\"Status\":\"Done\"}";
 	}
+	
 
-	private static DatasetManager getDatasetManager(
-			ServletContext servletContext) {
+	private static DatasetManager getManager(ServletContext servletContext) {
 		if (datasetManager == null) {
 			try {
-				Model model = AppManager.getJenaProvider(servletContext)
-						.openDefaultModel();
+				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
 				datasetManager = new DatasetManager(model);
 			} catch (Exception e) {
-				throw new RuntimeException("Could not get Jena model: "
-						+ e.getMessage(), e);
+				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
 		}
 		return datasetManager;
-
 	}
 
 }

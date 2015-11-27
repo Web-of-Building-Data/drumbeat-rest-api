@@ -148,9 +148,9 @@ public class DataSourceResource {
 	{
 		Model model = ModelFactory.createDefaultModel();
 		Resource dtype = model.createResource(BuildingDataOntology.DataSources.DataSource);
-		Resource c1 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id1");
-		Resource c2 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id2");
-		Resource c3 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id3");
+		Resource c1 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/nonexisting_sample_1");
+		Resource c2 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/nonexisting_sample_2");
+		Resource c3 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/nonexisting_sample_3");
 		c1.addProperty(RDF.type, dtype);
 		c2.addProperty(RDF.type, dtype);
 		c3.addProperty(RDF.type, dtype);
