@@ -18,8 +18,6 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
@@ -69,19 +67,21 @@ public class CollectionResource {
 	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String listCollectionsHTML() {
+	public String listHTML() {
 		Model m = ModelFactory.createDefaultModel();
-		
+		if(!getManager(servletContext).listAll(m))
+			   return "<HTML><BODY>Status:\"No collections\"</BODY></HTML>";
+
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON_LD() {
+	public String listJSON_LD() {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getCollectionManager(servletContext).listAll(m))
+			if(!getManager(servletContext).listAll(m))
 			   return "{\"Status\":\"No collections\"}";
 			
 			JenaJSONLD.init();
@@ -101,11 +101,11 @@ public class CollectionResource {
 
 	@GET
 	@Produces("text/turtle")
-	public String listCollectionsTurtle() {
+	public String listTurtle() {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getCollectionManager(servletContext).listAll(m))
+			if(!getManager(servletContext).listAll(m))
 			   return "{\"Status\":\"No collections\"}";
 			
 			JenaJSONLD.init();
@@ -124,11 +124,11 @@ public class CollectionResource {
 	
 	@GET
 	@Produces("application/rdf+xml")
-	public String listCollectionsRDF() {
+	public String listRDF() {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getCollectionManager(servletContext).listAll(m))
+			if(!getManager(servletContext).listAll(m))
 			   return "{\"Status\":\"No collections\"}";
 			
 			JenaJSONLD.init();
@@ -145,7 +145,7 @@ public class CollectionResource {
 		
 	}
 	
-	private Model listCollectionsSample()
+	private Model listSample()
 	{
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
@@ -162,8 +162,8 @@ public class CollectionResource {
 	@Path("/example")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String listCollectionsSampleHTML() {
-		Model model=listCollectionsSample();
+	public String listSampleHTML() {
+		Model model=listSample();
 		return HTMLPrettyPrinting.prettyPrinting(model);
 	}
 
@@ -171,8 +171,8 @@ public class CollectionResource {
 	@Path("/example")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsSampleJSON_LD() {
-		Model model=listCollectionsSample();
+	public String listSampleJSON_LD() {
+		Model model=listSample();
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "JSON-LD");
@@ -187,8 +187,8 @@ public class CollectionResource {
 	@Path("/example")
 	@GET
 	@Produces("text/turtle")
-	public String listCollectionsSampleTurtle() {
-		Model model=listCollectionsSample();
+	public String listSampleTurtle() {
+		Model model=listSample();
 				
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -203,8 +203,8 @@ public class CollectionResource {
 	@Path("/example")
 	@GET
 	@Produces("application/rdf+xml")
-	public String listCollectionsSampleRDF() {
-		Model model=listCollectionsSample();
+	public String listSampleRDF() {
+		Model model=listSample();
 		
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -219,9 +219,9 @@ public class CollectionResource {
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getCollectionHTML(@PathParam("guid") String collection_guid) {
+	public String getHTML(@PathParam("guid") String guid) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getCollectionManager(servletContext).get(collection_guid,m))
+		if(!getManager(servletContext).get(guid,m))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
@@ -229,9 +229,9 @@ public class CollectionResource {
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCollectionJSON(@PathParam("guid") String collection_guid) {
+	public String getJSON(@PathParam("guid") String guid) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getCollectionManager(servletContext).get(collection_guid,m))
+		if(!getManager(servletContext).get(guid,m))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -245,14 +245,50 @@ public class CollectionResource {
 	}
 
 	@Path("/{guid}")
+	@GET
+	@Produces("text/turtle")
+	public String getTURTLE(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces("application/rdf+xml")
+	public String getRDF(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createCollectionJSON(@PathParam("guid") String collection_guid, @QueryParam("name") String name) {
+	public String createJSON(@PathParam("guid") String guid, @QueryParam("name") String name) {
 		try {
-			getCollectionManager(servletContext).create(collection_guid, name);
+			getManager(servletContext).create(guid, name);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + collection_guid + " name:" + name + "\"}";
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + guid + " name:" + name + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}
@@ -260,9 +296,9 @@ public class CollectionResource {
 	@Path("/{guid}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteCollectionJSON(@PathParam("guid") String collection_guid) {
+	public String deleteJSON(@PathParam("guid") String guid) {
 		try {
-			getCollectionManager(servletContext).delete(collection_guid);
+			getManager(servletContext).delete(guid);
 		} catch (RuntimeException r) {
 
 		}
@@ -270,7 +306,7 @@ public class CollectionResource {
 	}
 	
 
-	private static CollectionManager getCollectionManager(ServletContext servletContext) {
+	private static CollectionManager getManager(ServletContext servletContext) {
 		if (collectionManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();

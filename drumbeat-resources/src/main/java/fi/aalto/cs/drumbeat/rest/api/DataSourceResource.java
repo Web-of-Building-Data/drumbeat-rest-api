@@ -18,12 +18,9 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
@@ -65,15 +62,25 @@ public class DataSourceResource {
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
+	
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listHTML() {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).listAll(m))
+			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
+			
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listDataSourcesJSON() {
+	public String listJSON_LD() {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDataSourceManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No collections\"}";
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -88,14 +95,141 @@ public class DataSourceResource {
 		}
 		
 	}
+	
 
+	@GET
+	@Produces("text/turtle")
+	public String listTurtle() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasources\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "TURTLE");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	@GET
+	@Produces("application/rdf+xml")
+	public String listRDF() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No datasources\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "RDF/XML");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	private Model listSample()
+	{
+		Model model = ModelFactory.createDefaultModel();
+		Resource dtype = model.createResource(BuildingDataOntology.DataSources.DataSource);
+		Resource c1 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id1");
+		Resource c2 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id2");
+		Resource c3 = model.createResource(BuildingDataOntology.DataSources.DataSource + "/id3");
+		c1.addProperty(RDF.type, dtype);
+		c2.addProperty(RDF.type, dtype);
+		c3.addProperty(RDF.type, dtype);
+		return model;
+	}
+
+
+	@Path("/example")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listSampleHTML() {
+		Model model=listSample();
+		return HTMLPrettyPrinting.prettyPrinting(model);
+	}
+
+	
+	@Path("/example")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listSampleJSON_LD() {
+		Model model=listSample();
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "JSON-LD");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+
+	
+	@Path("/example")
+	@GET
+	@Produces("text/turtle")
+	public String listSampleTurtle() {
+		Model model=listSample();
+				
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/example")
+	@GET
+	@Produces("application/rdf+xml")
+	public String listSampleRDF() {
+		Model model=listSample();
+		
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getHTML(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
 
 	@Path("/{guid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDataSourceJSON(@PathParam("guid") String collection_guid) {
+	public String getJSON(@PathParam("guid") String guid) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSourceManager(servletContext).get(collection_guid,m))
+		if(!getManager(servletContext).get(guid,m))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -109,14 +243,50 @@ public class DataSourceResource {
 	}
 
 	@Path("/{guid}")
+	@GET
+	@Produces("text/turtle")
+	public String getTURTLE(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces("application/rdf+xml")
+	public String getRDF(@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).get(guid,m))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createDataSourceJSON(@PathParam("guid") String collection_guid, @QueryParam("name") String name) {
+	public String createJSON(@PathParam("guid") String guid, @QueryParam("name") String name) {
 		try {
-			getDataSourceManager(servletContext).create(collection_guid, name);
+			getManager(servletContext).create(guid, name);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + collection_guid + " name:" + name + "\"}";
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + guid + " name:" + name + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}
@@ -124,16 +294,17 @@ public class DataSourceResource {
 	@Path("/{guid}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteDataSourceJSON(@PathParam("guid") String collection_guid) {
+	public String deleteJSON(@PathParam("guid") String guid) {
 		try {
-			getDataSourceManager(servletContext).delete(collection_guid);
+			getManager(servletContext).delete(guid);
 		} catch (RuntimeException r) {
 
 		}
 		return "{\"Status\":\"Done\"}";
 	}
+	
 
-	private static DataSourceManager getDataSourceManager(ServletContext servletContext) {
+	private static DataSourceManager getManager(ServletContext servletContext) {
 		if (datasourceManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
@@ -143,7 +314,6 @@ public class DataSourceResource {
 			}
 		}
 		return datasourceManager;
-
 	}
 
 }
