@@ -13,7 +13,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
@@ -68,12 +67,12 @@ public class CollectionManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection); 		
+         Resource type = model.createResource(BuildingDataOntology.Collections.Collection); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
                      Resource c = model.createResource(row.getResource("collection").getURI());
-                     m.add(m.createStatement(c,RDF.type,ctype));
+                     m.add(m.createStatement(c,RDF.type,type));
          }
          return ret;
 	}
@@ -110,9 +109,9 @@ public class CollectionManager {
 	
 	public void create(String name) {
 		Resource r = model.createResource(AppManager.BASE_URL+"collections/"+name); 
-		Resource c = model.createResource(BuildingDataOntology.Collections.Collection);
+		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
-        r.addProperty(RDF.type,c);
+        r.addProperty(RDF.type,type);
         r.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	

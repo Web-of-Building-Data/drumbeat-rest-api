@@ -10,21 +10,16 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
  The MIT License (MIT)
@@ -53,7 +48,7 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 @Path("/datasets")
 public class DataSetResource {
 
-	private static DataSetManager datasetManager;
+	private static  DataSetManager datasetManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -65,24 +60,27 @@ public class DataSetResource {
 		return "{\"status\":\"LIVE\"}";
 	}
 	
+	
+	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String listHTML() {
+	public String listHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).listAll(m))
-			   return "<HTML><BODY>Status:\"No datasets\"</BODY></HTML>";
-
+		if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
+			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
+			
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
+	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listJSON_LD() {
+	public String listJSON_LD(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No datasets\"}";
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
+			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -99,14 +97,15 @@ public class DataSetResource {
 	}
 	
 
+	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces("text/turtle")
-	public String listTurtle() {
+	public String listTurtle(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No datasets\"}";
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
+			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -122,14 +121,15 @@ public class DataSetResource {
 		
 	}
 	
+	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String listRDF() {
+	public String listRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No datasets\"}";
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
+			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -146,22 +146,22 @@ public class DataSetResource {
 	}
 	
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("guid") String guid) {
+	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("guid") String guid) {
+	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -174,12 +174,12 @@ public class DataSetResource {
 		}
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("guid") String guid) {
+	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -192,12 +192,12 @@ public class DataSetResource {
 		}
 	}
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("guid") String guid) {
+	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -210,27 +210,29 @@ public class DataSetResource {
 		}
 	}
 	
-	@Path("/{guid}")
+	
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@PathParam("guid") String guid, @QueryParam("name") String name) {
+	public String createJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getManager(servletContext).create(guid, name);
+			getManager(servletContext).create(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " guid:" + guid + " name:" + name + "\"}";
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@PathParam("guid") String guid) {
+	public String deleteJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getManager(servletContext).delete(guid);
+			getManager(servletContext).delete(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
-
+			r.printStackTrace();
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}

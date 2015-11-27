@@ -56,52 +56,52 @@ public class DataSetManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m) {
+	public boolean listAll(Model m,String collectionname,String datasourcename) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
-								+ "WHERE {"
-								+ "?dataset ?p lbdh:DataSet ."
+								+ "WHERE {"								
+								+  "<"+AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ctype = model.createResource(BuildingDataOntology.Datasets.Dataset); 		
+         Resource type = model.createResource(BuildingDataOntology.Datasets.Dataset); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
                      Resource c = model.createResource(row.getResource("dataset").getURI());
-                     m.add(m.createStatement(c,RDF.type,ctype));
+                     m.add(m.createStatement(c,RDF.type,type));
          }
          return ret;
 	}
 	
-	public boolean get(String guid,Model m) {
+	public boolean get(Model m,String collectionname,String datasourcename,String datasetname) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"datasets/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(AppManager.BASE_URL+"datasets/"+guid);        	 
+         Resource ds = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
                      Property p = model.createProperty(row.getResource("p").getURI());
                      RDFNode o = row.get("o");
-                     m.add(m.createStatement(c,p,o));
+                     m.add(m.createStatement(ds,p,o));
          }
          return ret;
 	}
 	
 
-	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"datasets/"+guid); 
+	public Resource getResource(String collectionname,String datasourcename,String datasetname) {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -109,20 +109,19 @@ public class DataSetManager {
 	}
 	
 	
-	public void create(String guid,String name) {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+guid); 
-		Resource c = model.createResource(BuildingDataOntology.Datasets.Dataset);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Datasets.name);
-        r.addProperty(RDF.type,c);
-        r.addProperty(name_property,name , XSDDatatype.XSDstring);
+	public void create(String collectionname,String datasourcename,String datasetname) {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
+        r.addProperty(RDF.type,type);
+        r.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"datasets/"+guid); 
+	public void delete(String collectionname,String datasourcename,String datasetname)  {
+		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
-
 
 }
 

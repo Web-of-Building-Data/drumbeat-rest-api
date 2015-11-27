@@ -156,7 +156,7 @@ public class DataSourceResource {
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {

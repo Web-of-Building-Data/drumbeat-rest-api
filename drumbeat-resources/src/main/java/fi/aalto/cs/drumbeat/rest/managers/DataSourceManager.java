@@ -2,8 +2,6 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 
 
-import javax.ws.rs.PathParam;
-
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -71,12 +69,12 @@ public class DataSourceManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ctype = model.createResource(BuildingDataOntology.DataSources.DataSource); 		
+         Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
                      Resource c = model.createResource(row.getResource("datasource").getURI());
-                     m.add(m.createStatement(c,RDF.type,ctype));
+                     m.add(m.createStatement(c,RDF.type,type));
          }
          return ret;
 	}
@@ -113,9 +111,9 @@ public class DataSourceManager {
 	
 	public void create(String collectionname,String datasourcename) {
 		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
-		Resource c = model.createResource(BuildingDataOntology.DataSources.DataSource);
+		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        r.addProperty(RDF.type,c);
+        r.addProperty(RDF.type,type);
         r.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
