@@ -66,10 +66,18 @@ public class CollectionResource {
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
+	
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listCollectionsHTML() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsJSON() {
+	public String listCollectionsJSON_LD() {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
@@ -89,11 +97,56 @@ public class CollectionResource {
 		}
 		
 	}
+	
 
-	@Path("/example")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listCollectionsSample() {
+	@Produces("text/turtle")
+	public String listCollectionsTurtle() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getCollectionManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No collections\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "TURTLE");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	@GET
+	@Produces("application/rdf+xml")
+	public String listCollectionsRDF() {
+		Model m = ModelFactory.createDefaultModel();
+		
+		try {
+			if(!getCollectionManager(servletContext).listAll(m))
+			   return "{\"Status\":\"No collections\"}";
+			
+			JenaJSONLD.init();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			m.write(os, "RDF/XML");
+			try {
+				return new String(os.toByteArray(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			}
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+		
+	}
+	
+	private Model listCollectionsSample()
+	{
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
 		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/id1");
@@ -102,7 +155,24 @@ public class CollectionResource {
 		c1.addProperty(RDF.type, ctype);
 		c2.addProperty(RDF.type, ctype);
 		c3.addProperty(RDF.type, ctype);
+		return model;
+	}
 
+
+	@Path("/example")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String listCollectionsSampleHTML() {
+		Model model=listCollectionsSample();
+		return HTMLPrettyPrinting.prettyPrinting(model);
+	}
+
+	
+	@Path("/example")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listCollectionsSampleJSON_LD() {
+		Model model=listCollectionsSample();
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "JSON-LD");
@@ -111,6 +181,49 @@ public class CollectionResource {
 		} catch (UnsupportedEncodingException e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
+	}
+
+	
+	@Path("/example")
+	@GET
+	@Produces("text/turtle")
+	public String listCollectionsSampleTurtle() {
+		Model model=listCollectionsSample();
+				
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/example")
+	@GET
+	@Produces("application/rdf+xml")
+	public String listCollectionsSampleRDF() {
+		Model model=listCollectionsSample();
+		
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		model.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+	
+	@Path("/{guid}")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getCollectionHTML(@PathParam("guid") String collection_guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getCollectionManager(servletContext).get(collection_guid,m))
+			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
 	@Path("/{guid}")
@@ -155,6 +268,7 @@ public class CollectionResource {
 		}
 		return "{\"Status\":\"Done\"}";
 	}
+	
 
 	private static CollectionManager getCollectionManager(ServletContext servletContext) {
 		if (collectionManager == null) {
@@ -166,7 +280,6 @@ public class CollectionResource {
 			}
 		}
 		return collectionManager;
-
 	}
 
 }
