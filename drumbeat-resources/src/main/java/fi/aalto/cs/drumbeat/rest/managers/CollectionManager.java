@@ -108,17 +108,17 @@ public class CollectionManager {
 	
 	
 	public void create(String name) {
-		Resource r = model.createResource(AppManager.BASE_URL+"collections/"+name); 
+		Resource collection = model.createResource(AppManager.BASE_URL+"collections/"+name); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
-        r.addProperty(RDF.type,type);
-        r.addProperty(name_property,name , XSDDatatype.XSDstring);
+        collection.addProperty(RDF.type,type);
+        collection.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"collections/"+guid); 
-		model.removeAll(r, null, null );
-		model.removeAll(null, null, r);
+	public void delete(String name) {
+		Resource collection = ResourceFactory.createResource(AppManager.BASE_URL+"collections/"+name); 
+		model.removeAll(collection, null, null );
+		model.removeAll(null, null, collection);
 	}
 
 }

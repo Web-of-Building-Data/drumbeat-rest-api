@@ -110,17 +110,25 @@ public class DataSourceManager {
 	
 	
 	public void create(String collectionname,String datasourcename) {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
+		Resource collection = model.createResource(AppManager.BASE_URL+"collections/"+collectionname); 
+		Resource datasource = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename);
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
+
+        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
+        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.isDataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        r.addProperty(RDF.type,type);
-        r.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
+
+		collection.addProperty(hasDataSources, datasource);
+		datasource.addProperty(isDataSource, collection);
+		
+        datasource.addProperty(RDF.type,type);
+        datasource.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
 	public void delete(String collectionname,String datasourcename)  {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
-		model.removeAll(r, null, null );
-		model.removeAll(null, null, r);
+		Resource datasource = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
+		model.removeAll(datasource, null, null );
+		model.removeAll(null, null, datasource);
 	}
 
 }

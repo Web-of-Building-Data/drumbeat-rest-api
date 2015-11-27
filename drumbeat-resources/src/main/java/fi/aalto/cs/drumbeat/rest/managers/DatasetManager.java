@@ -110,11 +110,19 @@ public class DataSetManager {
 	
 	
 	public void create(String collectionname,String datasourcename,String datasetname) {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource datasource = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename);
+		Resource dataset = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        r.addProperty(RDF.type,type);
-        r.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
+        Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSets);
+        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.Datasets.isDataSet);
+   
+        datasource.addProperty(hasDataSets, dataset);
+        dataset.addProperty(isDataSet, datasource);
+        
+        dataset.addProperty(RDF.type,type);
+        dataset.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
 	public void delete(String collectionname,String datasourcename,String datasetname)  {
