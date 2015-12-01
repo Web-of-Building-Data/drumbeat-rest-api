@@ -97,7 +97,7 @@ public class DataSetResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
+		if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 			
 		return HTMLPrettyPrinting.prettyPrinting(m);	
@@ -110,7 +110,7 @@ public class DataSetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -135,7 +135,7 @@ public class DataSetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -159,7 +159,7 @@ public class DataSetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -182,7 +182,7 @@ public class DataSetResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
@@ -192,7 +192,7 @@ public class DataSetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -210,7 +210,7 @@ public class DataSetResource {
 	@Produces("text/turtle")
 	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -228,7 +228,7 @@ public class DataSetResource {
 	@Produces("application/rdf+xml")
 	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -247,7 +247,7 @@ public class DataSetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getDataSetManager(servletContext).create(collectionname, datasourcename,datasetname);
+			getManager(servletContext).create(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
 			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
@@ -260,28 +260,12 @@ public class DataSetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getDataSetManager(servletContext).delete(collectionname, datasourcename,datasetname);
+			getManager(servletContext).delete(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
 			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
-	}
-	
-
-	private static DataSetManager getDataSetManager(
-			ServletContext servletContext) {
-		if (dataSetManager == null) {
-			try {
-				Model model = ApplicationConfig.getJenaProvider()
-						.openDefaultModel();
-				dataSetManager = new DataSetManager(model);
-			} catch (Exception e) {
-				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
-			}
-		}
-		return dataSetManager;
-
 	}
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importServerFile")
@@ -398,5 +382,22 @@ public class DataSetResource {
 		}
 	}
 	
+
+
+	private static DataSetManager getManager(
+			ServletContext servletContext) {
+		if (dataSetManager == null) {
+			try {
+				Model model = ApplicationConfig.getJenaProvider()
+						.openDefaultModel();
+				dataSetManager = new DataSetManager(model);
+			} catch (Exception e) {
+				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
+			}
+		}
+		return dataSetManager;
+
+	}
 	
+
 }
