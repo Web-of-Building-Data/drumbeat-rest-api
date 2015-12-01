@@ -9,6 +9,12 @@
         <dependent-module archiveName="drumbeat-rdf.jena.provider.virtuoso-0.4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-rdf.jena.provider.virtuoso/drumbeat-rdf.jena.provider.virtuoso">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="drumbeat-ifc.convert.ifc2ld.cli-0.1.0-RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-ifc.convert.ifc2ld.cli/drumbeat-ifc.convert.ifc2ld.cli">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="drumbeat-rdf.modelfactory-0.1.0-RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/drumbeat-rdf.modelfactory/drumbeat-rdf.modelfactory">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/drumbeat-resources/target/classes"/>
         <property name="context-root" value="drumbeat-resources"/>
     </wb-module>
