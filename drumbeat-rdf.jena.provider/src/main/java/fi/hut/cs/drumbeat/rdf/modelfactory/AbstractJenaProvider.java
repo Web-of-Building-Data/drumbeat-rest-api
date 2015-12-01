@@ -151,6 +151,18 @@ public abstract class AbstractJenaProvider {
 	}
 	
 	/**
+	 * Initialises resources 
+	 */	
+	public void init() throws JenaProviderException {		
+	}
+	
+	/**
+	 * Releases resources (connections, cached data and so on) 
+	 */	
+	public void release() throws JenaProviderException {		
+	}
+
+	/**
 	 * Returns a Jena model instance for the default graph
 	 * @param graphName
 	 * @return
@@ -166,14 +178,6 @@ public abstract class AbstractJenaProvider {
 	 * @return
 	 */
 	public abstract Model openModel(String graphName) throws JenaProviderException;
-	
-	/**
-	 * Closes connections and clears cached data 
-	 * @return
-	 */	
-	public abstract void release() throws JenaProviderException;
-	
-	
 	
 	
 }

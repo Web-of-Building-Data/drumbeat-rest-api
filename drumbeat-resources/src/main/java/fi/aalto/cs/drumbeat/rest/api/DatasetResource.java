@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import java.io.ByteArrayInputStream;
+
 /*
  The MIT License (MIT)
 
@@ -25,15 +27,31 @@ package fi.aalto.cs.drumbeat.rest.api;
  */
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+//import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
@@ -41,12 +59,17 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.rest.managers.AppManager;
-import fi.aalto.cs.drumbeat.rest.managers.DatasetManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
+import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 
 @Path("/datasets")
-public class DatasetResource {
+public class DataSetResource {
+	
+	private static final String DATASET_NAME_FORMAT = "%s_%s_%s";
 
-	private static DatasetManager datasetManager;
+	private static final Logger logger = Logger.getLogger(DataSetResource.class);
+	
+	private static DataSetManager dataSetManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -105,20 +128,135 @@ public class DatasetResource {
 		}
 	}
 
-	private static DatasetManager getDatasetManager(
+	private static DataSetManager getDatasetManager(
 			ServletContext servletContext) {
-		if (datasetManager == null) {
+		if (dataSetManager == null) {
 			try {
 				Model model = AppManager.getJenaProvider(servletContext)
 						.openDefaultModel();
-				datasetManager = new DatasetManager(model);
+				dataSetManager = new DataSetManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: "
 						+ e.getMessage(), e);
 			}
 		}
-		return datasetManager;
+		return dataSetManager;
 
 	}
+	
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importServerFile")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response importServerFile(
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("filePath") String filePath)
+	{
+		try {
+			
+			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
+			
+			String message = String.format("ImportServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath);			
+			logger.info(message);
 
+			InputStream inputStream = new FileInputStream(filePath);
+			DataSetManager dataSetManager = new DataSetManager(null);			
+			Model jenaModel = AppManager.getJenaProvider(servletContext).openModel(dataSetName);			
+			dataSetManager.importData(servletContext, inputStream, jenaModel);
+			
+			return Response.ok(message).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Response.serverError().entity(e).build();
+		}
+	}
+	
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importUrl")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response importUrl(
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("url") String url)
+	{
+		try {
+			
+			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
+			
+			String message = String.format("ImportUrl: DataSet=%s, Url=%s", dataSetName, url);			
+			logger.info(message);
+
+			InputStream inputStream = new URL(url).openStream();
+			DataSetManager dataSetManager = new DataSetManager(null);			
+			Model jenaModel = AppManager.getJenaProvider(servletContext).openModel(dataSetName);			
+			dataSetManager.importData(servletContext, inputStream, jenaModel);
+			
+			return Response.ok(message).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Response.serverError().entity(e).build();
+		}
+	}
+
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importContent")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response importContent(
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("content") String content)
+	{
+		try {
+			
+			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
+			
+			String message = String.format("ImportContent: DataSet=%s, Content=%s", dataSetName, content);			
+			logger.info(message);
+
+			InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+			DataSetManager dataSetManager = new DataSetManager(null);			
+			Model jenaModel = AppManager.getJenaProvider(servletContext).openModel(dataSetName);			
+			dataSetManager.importData(servletContext, inputStream, jenaModel);
+			
+			return Response.ok(message).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Response.serverError().entity(e).build();
+		}
+	}
+
+	
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importClientFile")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response importClientFile(
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("file") InputStream inputStream,
+	        @FormDataParam("file") FormDataContentDisposition fileDetail)
+	{
+		try {
+			
+			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
+			
+			String message = String.format("ImportContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName());			
+			logger.info(message);
+
+			DataSetManager dataSetManager = new DataSetManager(null);			
+			Model jenaModel = AppManager.getJenaProvider(servletContext).openModel(dataSetName);			
+			dataSetManager.importData(servletContext, inputStream, jenaModel);
+			
+			return Response.ok(message).build();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Response.serverError().entity(e).build();
+		}
+	}
+	
+	
 }
