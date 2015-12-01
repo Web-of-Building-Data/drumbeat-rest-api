@@ -52,8 +52,8 @@ SOFTWARE.
 */
 
 
-public class DatasetManager {
-//	private static final Logger logger = Logger.getLogger(DatasetManager.class);
+public class DataSetManager {
+//	private static final Logger logger = Logger.getLogger(DataSetManager.class);
 	private static boolean ifcSchemaLoaded; 
 
 	private final Model model;	
@@ -62,7 +62,7 @@ public class DatasetManager {
 		return model;
 	}
 
-	public DatasetManager(Model model) {
+	public DataSetManager(Model model) {
 		this.model = model;
 	}
 	
@@ -79,7 +79,7 @@ public class DatasetManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource type = model.createResource(BuildingDataOntology.Datasets.Dataset); 		
+         Resource type = model.createResource(BuildingDataOntology.DataSets.DataSet); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
@@ -126,7 +126,7 @@ public class DatasetManager {
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
         Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSets);
-        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.Datasets.isDataSet);
+        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSets.isDataSet);
    
         datasource.addProperty(hasDataSets, dataset);
         dataset.addProperty(isDataSet, datasource);
@@ -143,7 +143,7 @@ public class DatasetManager {
 	
 	public void importData(ServletContext servletContext, InputStream inputStream, Model jenaModel) throws Exception
 	{		
-		synchronized (DatasetManager.class) {
+		synchronized (DataSetManager.class) {
 			if (!ifcSchemaLoaded) {
 				ConfigurationDocument.load(ApplicationConfig.Paths.IFC2LD_CONFIG_FILE_PATH);				
 				Ifc2RdfExporter.parseSchemas(ApplicationConfig.Paths.IFC_SCHEMA_FOLDER_PATH);

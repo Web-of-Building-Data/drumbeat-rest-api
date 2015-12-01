@@ -17,8 +17,8 @@ public class BuildingDataOntology {
 		public static final String hasDataSets = BASE_URL + "hasDataSets";		
 	}
 	
-	public static class Datasets {
-		public static final String Dataset = BASE_URL + "Dataset";
+	public static class DataSets {
+		public static final String DataSet = BASE_URL + "DataSet";
 		public static final String isDataSet = BASE_URL + "isDataSet";		
 		public static final String name = BASE_URL + "name";
 	}

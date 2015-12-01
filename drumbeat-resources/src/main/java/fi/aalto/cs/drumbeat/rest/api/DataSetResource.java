@@ -19,7 +19,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.managers.DatasetManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 
 /*
  The MIT License (MIT)
@@ -73,13 +73,13 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/datasets")
-public class DatasetResource {
+public class DataSetResource {
 	
 	private static final String DATASET_NAME_FORMAT = "%s_%s_%s";
 
-	private static final Logger logger = Logger.getLogger(DatasetResource.class);
+	private static final Logger logger = Logger.getLogger(DataSetResource.class);
 	
-	private static DatasetManager dataSetManager;
+	private static DataSetManager dataSetManager;
 
 	@Context
 	private ServletContext servletContext;
@@ -97,7 +97,7 @@ public class DatasetResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDatasetManager(servletContext).listAll(m,collectionname,datasourcename))
+		if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 			
 		return HTMLPrettyPrinting.prettyPrinting(m);	
@@ -110,7 +110,7 @@ public class DatasetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDatasetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -135,7 +135,7 @@ public class DatasetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDatasetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -159,7 +159,7 @@ public class DatasetResource {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
-			if(!getDatasetManager(servletContext).listAll(m,collectionname,datasourcename))
+			if(!getDataSetManager(servletContext).listAll(m,collectionname,datasourcename))
 			   return "{\"Status\":\"No datasources\"}";
 			
 			JenaJSONLD.init();
@@ -182,7 +182,7 @@ public class DatasetResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDatasetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
@@ -192,7 +192,7 @@ public class DatasetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDatasetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -210,7 +210,7 @@ public class DatasetResource {
 	@Produces("text/turtle")
 	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDatasetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -228,7 +228,7 @@ public class DatasetResource {
 	@Produces("application/rdf+xml")
 	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getDatasetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
+		if(!getDataSetManager(servletContext).get(m,collectionname, datasourcename, datasetname))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -247,7 +247,7 @@ public class DatasetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getDatasetManager(servletContext).create(collectionname, datasourcename,datasetname);
+			getDataSetManager(servletContext).create(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
 			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
@@ -260,7 +260,7 @@ public class DatasetResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("datasetname") String datasetname) {
 		try {
-			getDatasetManager(servletContext).delete(collectionname, datasourcename,datasetname);
+			getDataSetManager(servletContext).delete(collectionname, datasourcename,datasetname);
 		} catch (RuntimeException r) {
 			r.printStackTrace();
 			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" +  collectionname+ " datasourcename:" + datasourcename+ " datasetname:" + datasetname + "\"}";
@@ -269,13 +269,13 @@ public class DatasetResource {
 	}
 	
 
-	private static DatasetManager getDatasetManager(
+	private static DataSetManager getDataSetManager(
 			ServletContext servletContext) {
 		if (dataSetManager == null) {
 			try {
 				Model model = ApplicationConfig.getJenaProvider()
 						.openDefaultModel();
-				dataSetManager = new DatasetManager(model);
+				dataSetManager = new DataSetManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
@@ -297,11 +297,11 @@ public class DatasetResource {
 			
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
 			
-			String message = String.format("ImportServerFile: Dataset=%s, ServerFilePath=%s", dataSetName, filePath);			
+			String message = String.format("ImportServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath);			
 			logger.info(message);
 
 			InputStream inputStream = new FileInputStream(filePath);
-			DatasetManager dataSetManager = new DatasetManager(null);			
+			DataSetManager dataSetManager = new DataSetManager(null);			
 			Model jenaModel = ApplicationConfig.getJenaProvider().openModel(dataSetName);			
 			dataSetManager.importData(servletContext, inputStream, jenaModel);
 			
@@ -325,11 +325,11 @@ public class DatasetResource {
 			
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
 			
-			String message = String.format("ImportUrl: Dataset=%s, Url=%s", dataSetName, url);			
+			String message = String.format("ImportUrl: DataSet=%s, Url=%s", dataSetName, url);			
 			logger.info(message);
 
 			InputStream inputStream = new URL(url).openStream();
-			DatasetManager dataSetManager = new DatasetManager(null);			
+			DataSetManager dataSetManager = new DataSetManager(null);			
 			Model jenaModel = ApplicationConfig.getJenaProvider().openModel(dataSetName);			
 			dataSetManager.importData(servletContext, inputStream, jenaModel);
 			
@@ -353,11 +353,11 @@ public class DatasetResource {
 			
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
 			
-			String message = String.format("ImportContent: Dataset=%s, Content=%s", dataSetName, content);			
+			String message = String.format("ImportContent: DataSet=%s, Content=%s", dataSetName, content);			
 			logger.info(message);
 
 			InputStream inputStream = new ByteArrayInputStream(content.getBytes());
-			DatasetManager dataSetManager = new DatasetManager(null);			
+			DataSetManager dataSetManager = new DataSetManager(null);			
 			Model jenaModel = ApplicationConfig.getJenaProvider().openModel(dataSetName);			
 			dataSetManager.importData(servletContext, inputStream, jenaModel);
 			
@@ -384,10 +384,10 @@ public class DatasetResource {
 			
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
 			
-			String message = String.format("ImportContent: Dataset=%s, FileName=%s", dataSetName, fileDetail.getFileName());			
+			String message = String.format("ImportContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName());			
 			logger.info(message);
 
-			DatasetManager dataSetManager = new DatasetManager(null);			
+			DataSetManager dataSetManager = new DataSetManager(null);			
 			Model jenaModel = ApplicationConfig.getJenaProvider().openModel(dataSetName);			
 			dataSetManager.importData(servletContext, inputStream, jenaModel);
 			
