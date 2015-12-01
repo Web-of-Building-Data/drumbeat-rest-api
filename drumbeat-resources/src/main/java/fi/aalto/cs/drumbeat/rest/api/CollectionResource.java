@@ -20,7 +20,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.managers.AppManager;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
@@ -306,7 +305,7 @@ public class CollectionResource {
 	private static CollectionManager getManager(ServletContext servletContext) {
 		if (collectionManager == null) {
 			try {
-				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
+				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
 				collectionManager = new CollectionManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

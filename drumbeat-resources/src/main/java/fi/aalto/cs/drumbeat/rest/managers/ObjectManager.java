@@ -13,6 +13,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
+import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -57,7 +58,7 @@ public class ObjectManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"Collection/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"Collection/"+guid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
@@ -74,7 +75,7 @@ public class ObjectManager {
 	
 
 	public Resource getResource(String guid) {
-		Resource r = ResourceFactory.createResource(AppManager.BASE_URL+"Collection/"+guid); 
+		Resource r = ResourceFactory.createResource(ApplicationConfig.getBaseUrl()+"Collection/"+guid); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}

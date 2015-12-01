@@ -18,7 +18,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.managers.AppManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 
 /*
@@ -241,7 +240,7 @@ public class DataSourceResource {
 	private static DataSourceManager getManager(ServletContext servletContext) {
 		if (datasourceManager == null) {
 			try {
-				Model model = AppManager.getJenaProvider(servletContext).openDefaultModel();
+				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
 				datasourceManager = new DataSourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

@@ -1,6 +1,8 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import java.io.InputStream;
 
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 
@@ -17,7 +19,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
+import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
+import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
+import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.util.Ifc2RdfExportUtil;
+import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
+import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
+import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
 
 /*
 The MIT License (MIT)
@@ -44,15 +54,17 @@ SOFTWARE.
 */
 
 
-public class DataSetManager {
-	private static final Logger logger = Logger.getLogger(DataSetManager .class);
+public class DatasetManager {
+//	private static final Logger logger = Logger.getLogger(DatasetManager.class);
+	private static boolean ifcSchemaLoaded; 
+
 	private final Model model;	
 	
 	public Model getModel() {
 		return model;
 	}
 
-	public DataSetManager(Model model) {
+	public DatasetManager(Model model) {
 		this.model = model;
 	}
 	
@@ -63,7 +75,7 @@ public class DataSetManager {
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
@@ -84,11 +96,11 @@ public class DataSetManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename); 
+         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -101,7 +113,7 @@ public class DataSetManager {
 	
 
 	public Resource getResource(String collectionname,String datasourcename,String datasetname) {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -110,8 +122,8 @@ public class DataSetManager {
 	
 	
 	public void create(String collectionname,String datasourcename,String datasetname) {
-		Resource datasource = model.createResource(AppManager.BASE_URL+"datasources/"+collectionname+"/"+datasourcename);
-		Resource dataset = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
+		Resource dataset = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
@@ -126,10 +138,31 @@ public class DataSetManager {
 	}
 	
 	public void delete(String collectionname,String datasourcename,String datasetname)  {
-		Resource r = model.createResource(AppManager.BASE_URL+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
+	
+	public void importData(ServletContext servletContext, InputStream inputStream, Model jenaModel) throws Exception
+	{		
+		synchronized (DatasetManager.class) {
+			if (!ifcSchemaLoaded) {
+				ConfigurationDocument.load(ApplicationConfig.Paths.IFC2LD_CONFIG_FILE_PATH);				
+				Ifc2RdfExporter.parseSchemas(ApplicationConfig.Paths.IFC_SCHEMA_FOLDER_PATH);
+			}			
+		}
+		
+		IfcModel ifcModel = IfcModelParser.parse(inputStream);
+
+		ComplexProcessorConfiguration groundingConfiguration = IfcModelAnalyser.getDefaultGroundingRuleSets();
+		
+		// ground nodes in the model
+		IfcModelAnalyser modelAnalyser = new IfcModelAnalyser(ifcModel);			
+		modelAnalyser.groundNodes(groundingConfiguration);
+		
+		Ifc2RdfExportUtil.exportModelToJenaModel(jenaModel, ifcModel);
+	}	
+	
 
 }
 
