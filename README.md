@@ -12,7 +12,7 @@ Step-by-step run the following commands:
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-ifc2ld.git
 
->#if you are working with develop branch
+if you are working with develop branch
 >git checkout develop
 
 >cd !drumbeat-ifc2ld-parent
@@ -23,7 +23,7 @@ Step-by-step run the following commands:
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-jena.git
 
->#if you are working with develop branch
+if you are working with develop branch
 > git checkout develop
 
 >cd !drumbeat-jena
@@ -35,7 +35,7 @@ Step-by-step run the following commands:
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
 
->#if you are working with develop branch
+if you are working with develop branch
 >git checkout development
 
 >cd !drumbeat-rest-api-parent
