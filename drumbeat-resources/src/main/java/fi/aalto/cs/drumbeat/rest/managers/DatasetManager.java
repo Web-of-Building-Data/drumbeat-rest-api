@@ -4,8 +4,6 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
