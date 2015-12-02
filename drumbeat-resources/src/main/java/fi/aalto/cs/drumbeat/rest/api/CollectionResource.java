@@ -296,7 +296,8 @@ public class CollectionResource {
 		try {
 			getManager(servletContext).delete(collectionname);
 		} catch (RuntimeException r) {
-
+			r.printStackTrace();
+			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" + collectionname + "\"}";
 		}
 		return "{\"Status\":\"Done\"}";
 	}

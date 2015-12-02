@@ -52,18 +52,18 @@ public class HTMLPrettyPrinting {
 			html_src.append("<TR>");
 			// Subject
 			html_src.append("<TD>");
-			html_src.append("<A HREF=\"" + stmt.getSubject().getURI() + "\">" +stmt.getSubject().getLocalName()+"</A>");
+			html_src.append("<A HREF=\"" + stmt.getSubject().getURI() + "\">" +stmt.getSubject().getURI()+"</A>");
 			html_src.append("</TD>");
 			
 			// Predicate
 			html_src.append("<TD>");
-			html_src.append("<A HREF=\"" + stmt.getPredicate().getURI() + "\">" +stmt.getPredicate().getLocalName()+"</A>");
+			html_src.append("<A HREF=\"" + stmt.getPredicate().getURI() + "\">" +stmt.getPredicate().getURI()+"</A>");
 			html_src.append("</TD>");
 			
 			// object
 			html_src.append("<TD>");
-			if(stmt.getPredicate().isURIResource())
-			  html_src.append("<A HREF=\"" + ((Resource)stmt.getObject()).getURI() + "\">" +((Resource)stmt.getObject()).getLocalName()+"</A>");
+			if(stmt.getObject().isURIResource())
+			  html_src.append("<A HREF=\"" + ((Resource)stmt.getObject()).getURI() + "\">" +((Resource)stmt.getObject()).getURI()+"</A>");
 			else
 			  html_src.append(stmt.getObject());	
 			html_src.append("</TD>");

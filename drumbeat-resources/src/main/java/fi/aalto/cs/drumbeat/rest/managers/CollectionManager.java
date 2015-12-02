@@ -13,6 +13,9 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
+import com.hp.hpl.jena.update.GraphStore;
+import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
@@ -57,6 +60,8 @@ public class CollectionManager {
 	
 	public boolean listAll(Model m) {
 		boolean ret=false;
+		try
+		{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
@@ -75,7 +80,12 @@ public class CollectionManager {
                      Resource c = model.createResource(row.getResource("collection").getURI());
                      m.add(m.createStatement(c,RDF.type,type));
          }
-         return ret;
+		}
+		catch (Exception e)
+		{
+		  return false;	
+		}
+        return ret;
 	}
 	
 	public boolean get(String name,Model m) {
@@ -87,7 +97,7 @@ public class CollectionManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(BuildingDataOntology.Collections.Collection+"/"+name);        	 
+         Resource c = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -108,10 +118,15 @@ public class CollectionManager {
         collection.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String name) {
-		Resource collection = ResourceFactory.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name); 
-		model.removeAll(collection, null, null );
-		model.removeAll(null, null, collection);
+	public void delete(String collectionname) {
+		String item=ApplicationConfig.getBaseUrl()+"collections/"+collectionname;
+		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
+		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
+		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
+		UpdateAction.parseExecute(update1, gs);
+		UpdateAction.parseExecute(update2, gs);
 	}
+
+
 
 }

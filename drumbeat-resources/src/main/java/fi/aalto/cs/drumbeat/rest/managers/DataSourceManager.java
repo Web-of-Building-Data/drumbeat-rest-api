@@ -15,6 +15,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
+import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
@@ -118,11 +120,16 @@ public class DataSourceManager {
         datasource.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String collectionname,String datasourcename)  {
-		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
-		model.removeAll(datasource, null, null );
-		model.removeAll(null, null, datasource);
+	public void delete(String collectionname,String datasourcename) {
+		String item=ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename;
+		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
+		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
+		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
+		UpdateAction.parseExecute(update1, gs);
+		UpdateAction.parseExecute(update2, gs);
 	}
+	
+
 
 }
 

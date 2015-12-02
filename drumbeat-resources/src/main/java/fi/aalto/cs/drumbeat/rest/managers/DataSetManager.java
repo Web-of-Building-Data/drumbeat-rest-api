@@ -15,6 +15,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
+import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
@@ -135,11 +137,15 @@ public class DataSetManager {
         dataset.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String collectionname,String datasourcename,String datasetname)  {
-		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
-		model.removeAll(r, null, null );
-		model.removeAll(null, null, r);
+	public void delete(String collectionname,String datasourcename,String datasetname) {
+		String item=ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname;
+		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
+		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
+		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
+		UpdateAction.parseExecute(update1, gs);
+		UpdateAction.parseExecute(update2, gs);
 	}
+	
 	
 	public void importData(ServletContext servletContext, InputStream inputStream, Model jenaModel) throws Exception
 	{		
