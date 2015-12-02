@@ -11,9 +11,11 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
 The MIT License (MIT)
@@ -40,44 +42,24 @@ SOFTWARE.
 */
 
 
-public class ObjectManager {
-	private static final Logger logger = Logger.getLogger(ObjectManager .class);
+public class ValueManager {
+	private static final Logger logger = Logger.getLogger(ValueManager .class);
 	private final Model model;	
 	
 	public Model getModel() {
 		return model;
 	}
 
-	public ObjectManager(Model model) {
+	public ValueManager(Model model) {
 		this.model = model;
 	}
-	
-	public boolean get(Model m,String collectionname,String datasourcename,String guid) {
-		boolean ret=false;
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid)),
-						model);
 
-         ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
-         while (rs.hasNext()) {
-        	         ret=true;
-                     QuerySolution row = rs.nextSolution();
-                     Property p = model.createProperty(row.getResource("p").getURI());
-                     RDFNode o = row.get("o");
-                     m.add(m.createStatement(ds,p,o));
-         }
-         return ret;
-	}
-	
-	public boolean getType(Model m,String collectionname,String datasourcename,String guid) {
+	public boolean get(Model m,String collectionname,String datasourcename,String guid,String property) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,RDF.type)),
+								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,BuildingDataOntology.BASE_URL+property)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
