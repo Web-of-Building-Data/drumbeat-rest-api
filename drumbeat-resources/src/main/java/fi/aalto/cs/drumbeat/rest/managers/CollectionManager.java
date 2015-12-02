@@ -99,19 +99,11 @@ public class CollectionManager {
 	}
 	
 
-	public Resource getResource(String name) {
-		Resource r = ResourceFactory.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name); 
-		if (model.contains( r, null, (RDFNode) null )) {
-			return r;
-		}
-		return null;
-	}
-	
-	
+
 	public void create(String name) {
 		Resource collection = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.property_name);
         collection.addProperty(RDF.type,type);
         collection.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}

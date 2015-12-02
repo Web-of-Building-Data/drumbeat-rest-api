@@ -70,7 +70,7 @@ public class DataSourceManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource); 		
+         Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
@@ -101,23 +101,15 @@ public class DataSourceManager {
 	}
 	
 
-	public Resource getResource(String collectionname,String datasourcename) {
-		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
-		if (model.contains( r, null, (RDFNode) null )) {
-			return r;
-		}
-		return null;
-	}
-	
 	
 	public void create(String collectionname,String datasourcename) {
 		Resource collection = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+collectionname); 
 		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
-		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
+		Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource);
 
-        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
-        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.isDataSource);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
+        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.property_hasDataSources);
+        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_isDataSource);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_name);
 
 		collection.addProperty(hasDataSources, datasource);
 		datasource.addProperty(isDataSource, collection);

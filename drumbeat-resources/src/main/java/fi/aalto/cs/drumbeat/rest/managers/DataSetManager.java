@@ -79,7 +79,7 @@ public class DataSetManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource type = model.createResource(BuildingDataOntology.DataSets.DataSet); 		
+         Resource type = model.createResource(BuildingDataOntology.DataSets.class_DataSet); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
@@ -123,10 +123,10 @@ public class DataSetManager {
 		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
 		Resource dataset = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 
-		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
+		Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSets);
-        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSets.isDataSet);
+        Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_hasDataSets);
+        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSets.property_isDataSet);
    
         datasource.addProperty(hasDataSets, dataset);
         dataset.addProperty(isDataSet, datasource);

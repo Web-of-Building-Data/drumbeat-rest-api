@@ -5,3 +5,7 @@
 /Servers*/
 /target/
 *.log
+*.class
+drumbeat-rdf.jena.provider.virtuoso/target/*
+drumbeat-rdf.jena.provider/target/*
+drumbeat-resources/.settings/org.eclipse.wst.common.component

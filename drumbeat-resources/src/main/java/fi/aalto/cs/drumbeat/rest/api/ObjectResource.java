@@ -56,23 +56,22 @@ public class ObjectResource {
 		return "{\"status\":\"LIVE\"}";
 	}
 	
-	
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("guid") String guid) {
+	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{guid}")
-	@GET
+	@Path("/{collectionname}/{datasourcename}/{guid}")
+	@GET	
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("guid") String guid) {
+	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -85,12 +84,12 @@ public class ObjectResource {
 		}
 	}
 
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("guid") String guid) {
+	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -102,13 +101,14 @@ public class ObjectResource {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
+		
 	
-	@Path("/{guid}")
+	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("guid") String guid) {
+	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(guid,m))
+		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 
 		JenaJSONLD.init();
@@ -121,7 +121,138 @@ public class ObjectResource {
 		}
 	}
 	
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getTypeHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
 
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@GET	
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTypeJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "JSON-LD");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@GET
+	@Produces("text/turtle")
+	public String getTypeTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+		
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@GET
+	@Produces("application/rdf+xml")
+	public String getTypeRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		return HTMLPrettyPrinting.prettyPrinting(m);	
+	}
+
+	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
+	@GET	
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "JSON-LD");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+
+	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
+	@GET
+	@Produces("text/turtle")
+	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "TURTLE");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+		
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
+	@GET
+	@Produces("application/rdf+xml")
+	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		Model m = ModelFactory.createDefaultModel();
+		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
+			   return "{\"Status\":\"The ID does not exists\"}";
+
+		JenaJSONLD.init();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		m.write(os, "RDF/XML");
+		try {
+			return new String(os.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+		}
+	}
+
+	
 	private static ObjectManager getManager(ServletContext servletContext) {
 		if (objectManager == null) {
 			try {
