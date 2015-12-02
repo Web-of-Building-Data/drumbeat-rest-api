@@ -124,7 +124,7 @@ public class DataSetManager {
 		Resource dataset = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_name);
         Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_hasDataSets);
         Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSets.property_isDataSet);
    
