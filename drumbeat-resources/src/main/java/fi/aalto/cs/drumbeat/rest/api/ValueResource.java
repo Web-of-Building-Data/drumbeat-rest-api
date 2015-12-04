@@ -61,8 +61,13 @@ public class ValueResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		Model m = ModelFactory.createDefaultModel();
+		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
+
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
@@ -71,8 +76,12 @@ public class ValueResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		Model m = ModelFactory.createDefaultModel();
+		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
 			return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -89,8 +98,12 @@ public class ValueResource {
 	@Produces("text/turtle")
 	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		Model m = ModelFactory.createDefaultModel();
+		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
 			   return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -108,8 +121,12 @@ public class ValueResource {
 	@Produces("application/rdf+xml")
 	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		Model m = ModelFactory.createDefaultModel();
+		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
 			   return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();

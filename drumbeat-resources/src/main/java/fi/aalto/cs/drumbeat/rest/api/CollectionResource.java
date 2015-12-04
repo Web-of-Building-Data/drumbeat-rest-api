@@ -60,26 +60,34 @@ public class CollectionResource {
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
-	
+
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML() {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).listAll(m))
-			   return "<HTML><BODY>Status:\"No collections\"</BODY></HTML>";
+		try {
+			if (!getManager(servletContext).listAll(m))
+				return "<HTML><BODY>Status:\"No collections\"</BODY></HTML>";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listJSON_LD() {
 		Model m = ModelFactory.createDefaultModel();
-		
+
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No collections\"}";
-			
+			try {
+				if (!getManager(servletContext).listAll(m))
+					return "{\"Status\":\"No collections\"}";
+			} catch (Exception e) {
+				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			}
+
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			m.write(os, "JSON-LD");
@@ -91,19 +99,22 @@ public class CollectionResource {
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-		
+
 	}
-	
 
 	@GET
 	@Produces("text/turtle")
 	public String listTurtle() {
 		Model m = ModelFactory.createDefaultModel();
-		
+
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No collections\"}";
-			
+			try{
+			if (!getManager(servletContext).listAll(m))
+				return "{\"Status\":\"No collections\"}";
+			} catch (Exception e) {
+				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			}
+
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			m.write(os, "TURTLE");
@@ -115,18 +126,22 @@ public class CollectionResource {
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-		
+
 	}
-	
+
 	@GET
 	@Produces("application/rdf+xml")
 	public String listRDF() {
 		Model m = ModelFactory.createDefaultModel();
-		
+
 		try {
-			if(!getManager(servletContext).listAll(m))
-			   return "{\"Status\":\"No collections\"}";
-			
+			try{
+			if (!getManager(servletContext).listAll(m))
+				return "{\"Status\":\"No collections\"}";
+			} catch (Exception e) {
+				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			}
+
 			JenaJSONLD.init();
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			m.write(os, "RDF/XML");
@@ -138,11 +153,10 @@ public class CollectionResource {
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
-		
+
 	}
-	
-	private Model listSample()
-	{
+
+	private Model listSample() {
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
 		Resource c1 = model.createResource(BuildingDataOntology.Collections.Collection + "/nonexisting_sample_1");
@@ -154,21 +168,19 @@ public class CollectionResource {
 		return model;
 	}
 
-
 	@Path("/example")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String listSampleHTML() {
-		Model model=listSample();
+		Model model = listSample();
 		return HTMLPrettyPrinting.prettyPrinting(model);
 	}
 
-	
 	@Path("/example")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listSampleJSON_LD() {
-		Model model=listSample();
+		Model model = listSample();
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "JSON-LD");
@@ -179,13 +191,12 @@ public class CollectionResource {
 		}
 	}
 
-	
 	@Path("/example")
 	@GET
 	@Produces("text/turtle")
 	public String listSampleTurtle() {
-		Model model=listSample();
-				
+		Model model = listSample();
+
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "TURTLE");
@@ -195,13 +206,13 @@ public class CollectionResource {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	@Path("/example")
 	@GET
 	@Produces("application/rdf+xml")
 	public String listSampleRDF() {
-		Model model=listSample();
-		
+		Model model = listSample();
+
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		model.write(os, "RDF/XML");
@@ -211,15 +222,20 @@ public class CollectionResource {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	@Path("/{collectionname}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(collectionname,m))
-			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		try{
+		if (!getManager(servletContext).get(collectionname, m))
+			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
+
+		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
 	@Path("/{collectionname}")
@@ -227,8 +243,12 @@ public class CollectionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(collectionname,m))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try{
+		if (!getManager(servletContext).get(collectionname, m))
+			return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -245,8 +265,12 @@ public class CollectionResource {
 	@Produces("text/turtle")
 	public String getTURTLE(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(collectionname,m))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try{
+		if (!getManager(servletContext).get(collectionname, m))
+			return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -257,14 +281,18 @@ public class CollectionResource {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	@Path("/{collectionname}")
 	@GET
 	@Produces("application/rdf+xml")
 	public String getRDF(@PathParam("collectionname") String collectionname) {
 		Model m = ModelFactory.createDefaultModel();
-		if(!getManager(servletContext).get(collectionname,m))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try{
+		if (!getManager(servletContext).get(collectionname, m))
+			return "{\"Status\":\"The ID does not exists\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+		}
 
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -275,17 +303,17 @@ public class CollectionResource {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	@Path("/{collectionname}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@PathParam("collectionname") String collectionname) {
 		try {
 			getManager(servletContext).create(collectionname);
-		} catch (RuntimeException r) {
-			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" + collectionname + "\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
+
 		return "{\"Status\":\"Done\"}";
 	}
 
@@ -295,13 +323,12 @@ public class CollectionResource {
 	public String deleteJSON(@PathParam("collectionname") String collectionname) {
 		try {
 			getManager(servletContext).delete(collectionname);
-		} catch (RuntimeException r) {
-			r.printStackTrace();
-			return "{\"Status\":\"ERROR:" + r.getMessage() + " collectionname:" + collectionname + "\"}";
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
+
 		return "{\"Status\":\"Done\"}";
 	}
-	
 
 	private static CollectionManager getManager(ServletContext servletContext) {
 		if (collectionManager == null) {
