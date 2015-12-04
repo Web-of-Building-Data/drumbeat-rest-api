@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -59,7 +60,8 @@ public class ValueResource {
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -74,7 +76,8 @@ public class ValueResource {
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET	
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -96,7 +99,8 @@ public class ValueResource {
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -119,7 +123,8 @@ public class ValueResource {
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))

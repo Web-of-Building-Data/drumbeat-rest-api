@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -182,7 +183,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
 			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
@@ -192,7 +194,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
@@ -214,7 +217,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
@@ -237,7 +241,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
@@ -259,7 +264,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionname, datasourcename, datasetname);
 		} catch (Exception e) {
@@ -272,7 +278,8 @@ public class DataSetResource {
 	@Path("/{collectionname}/{datasourcename}/{datasetname}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionname, datasourcename, datasetname);
 		} catch (Exception e) {
@@ -285,8 +292,9 @@ public class DataSetResource {
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importServerFile")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response importServerFile(@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
+	public Response importServerFile(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
 			@FormDataParam("filePath") String filePath) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
@@ -309,7 +317,8 @@ public class DataSetResource {
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importUrl")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response importUrl(@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("url") String url) {
+	public Response importUrl(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("url") String url) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
@@ -332,8 +341,9 @@ public class DataSetResource {
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/importContent")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response importContent(@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
+	public Response importContent(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
 			@FormDataParam("content") String content) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
@@ -357,8 +367,9 @@ public class DataSetResource {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response importClientFile(@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
+	public Response importClientFile(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId,
 			@FormDataParam("file") InputStream inputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 
 			String dataSetName = String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
@@ -382,8 +393,8 @@ public class DataSetResource {
 	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
-
+	public Response uploadFile(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		String filePath = SERVER_UPLOAD_LOCATION_FOLDER + contentDispositionHeader.getFileName();
 		try {
 			OutputStream outpuStream = new FileOutputStream(new File(filePath));

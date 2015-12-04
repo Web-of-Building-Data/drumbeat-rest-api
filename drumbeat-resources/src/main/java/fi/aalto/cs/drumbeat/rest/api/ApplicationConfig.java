@@ -2,9 +2,12 @@ package fi.aalto.cs.drumbeat.rest.api;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Context;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -63,6 +66,19 @@ public class ApplicationConfig extends ResourceConfig {
 		return getConfigurationProperties().getProperty(Params.WEB_API_BASE_URL);
 	}
 	
+	public static void setBaseUrl(@Context HttpServletRequest httpRequest) {
+		try
+		{
+		  URL url= new URL(httpRequest.getRequestURI());
+		  getConfigurationProperties().setProperty(Params.WEB_API_BASE_URL,url.getProtocol()+url.getAuthority()+"/");
+		}
+		 catch (Exception e) {
+			 // Nothing bad happends
+		  ;
+		}
+
+		
+	}
 	
 	public static AbstractJenaProvider getJenaProvider() throws JenaProviderException, IOException {
 		

@@ -2,8 +2,10 @@ package fi.aalto.cs.drumbeat.rest.api;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -61,9 +63,28 @@ public class CollectionResource {
 		return "{\"status\":\"LIVE\"}";
 	}
 
+	@Path("/url")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getURL(@Context HttpServletRequest httpRequest) {		
+		String ret="";
+		try
+		{
+		  URL url= new URL(httpRequest.getRequestURI());
+		  ret=url.getProtocol()+url.getAuthority()+"/";
+		}
+		 catch (Exception e) {
+				return "{\"Status\":\"ERROR: "+e.getMessage()+" \"}";
+			}
+		
+		return "{\"requested url beginning\":"+ret+"\"}";
+	}
+
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML() {
+		
+		
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).listAll(m))
@@ -226,7 +247,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("collectionname") String collectionname) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionname, m))
@@ -241,7 +263,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("collectionname") String collectionname) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionname, m))
@@ -263,7 +286,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("collectionname") String collectionname) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionname, m))
@@ -285,7 +309,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("collectionname") String collectionname) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionname, m))
@@ -307,7 +332,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@PathParam("collectionname") String collectionname) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionname);
 		} catch (Exception e) {
@@ -320,7 +346,8 @@ public class CollectionResource {
 	@Path("/{collectionname}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@PathParam("collectionname") String collectionname) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionname);
 		} catch (Exception e) {

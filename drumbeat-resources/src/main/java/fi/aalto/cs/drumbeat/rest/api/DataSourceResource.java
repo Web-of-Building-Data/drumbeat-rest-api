@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -166,7 +167,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -181,7 +183,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -203,7 +206,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -225,7 +229,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -248,7 +253,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionname, datasourcename);
 		} catch (Exception e) {
@@ -261,7 +267,8 @@ public class DataSourceResource {
 	@Path("/{collectionname}/{datasourcename}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionname, datasourcename);
 		} catch (Exception e) {

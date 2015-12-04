@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -55,29 +56,31 @@ public class ObjectResource {
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
-	
+
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
-			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		try {
+			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
+				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
-return HTMLPrettyPrinting.prettyPrinting(m);	
+		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}")
-	@GET	
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -95,11 +98,12 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -113,16 +117,16 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-		
-	
+
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -136,30 +140,32 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getTypeHTML(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+	public String getTypeHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
-			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+		try {
+			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
+				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
-	@GET	
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getTypeJSON(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+	public String getTypeJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -177,11 +183,12 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
 	@Produces("text/turtle")
-	public String getTypeTURTLE(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid)  {
+	public String getTypeTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -195,16 +202,16 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-		
-	
+
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getTypeRDF(@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid) {
+	public String getTypeRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		ApplicationConfig.setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager(servletContext).getType(m,collectionname, datasourcename, guid))
-			   return "{\"Status\":\"The ID does not exists\"}";
+		try {
+			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
+				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -218,7 +225,7 @@ return HTMLPrettyPrinting.prettyPrinting(m);
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
 	}
-	
+
 	private static ObjectManager getManager(ServletContext servletContext) {
 		if (manager == null) {
 			try {
