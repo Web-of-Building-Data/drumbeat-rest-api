@@ -22,9 +22,15 @@ public class DrumbeatTest extends JerseyTest {
 		return application;
 	}
 	
-	public static TestApplication getApplication() {
+	protected static TestApplication getApplication() {
 		return application;
 	}
+	
+	protected boolean doTest() {
+		return true;
+	}
+	
+	
 	
 /////**
 ////* Get the method name for a depth in call stack. <br />

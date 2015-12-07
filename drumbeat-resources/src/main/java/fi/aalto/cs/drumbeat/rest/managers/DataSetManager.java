@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import java.io.InputStream;
 
+
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataVocabulary;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.ifc.common.IfcException;
@@ -31,6 +33,8 @@ import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.util.Ifc2RdfExportUtil;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
+
+import static fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.*;
 
 /*
 The MIT License (MIT)
@@ -144,6 +148,36 @@ public class DataSetManager {
 		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
+	}
+	
+	public boolean exists(String collectionId, String dataSourceId, String dataSetId) {
+		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		
+		String collectionUri = Collections.formatUrl(collectionId);
+		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
+		String dataSetUri = DataSets.formatUrl(collectionId, dataSourceId, dataSetId);
+		
+		String queryString =
+				String.format(
+					"PREFIX ldbho: <%s> \n" +
+					"ASK { \n" + 
+					"<%s> a ldbho:Collection ; ldbho:hasDataSource <%s> . \n" +
+					"<%s> a ldbho:DataSource ; ldbho:hasDataSet <%s> . \n" +
+					"<%s> a ldbho:DataSet . }",
+					BuildingDataVocabulary.BASE_URL,
+					collectionUri,
+					dataSourceUri,
+					dataSourceUri,
+					dataSetUri,
+					dataSetUri
+					);
+		
+		QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(queryString),
+						model);
+		
+		return queryExecution.execAsk();
 	}
 	
 	public Model uploadIfcData(InputStream inputStream, Model jenaModel) throws Exception

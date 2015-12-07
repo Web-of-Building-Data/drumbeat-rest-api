@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.rest.application;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.ws.rs.ApplicationPath;
 
@@ -40,14 +41,25 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		public static final String PACKAGE_RESOURCES = CollectionResource.class.getPackage().getName();
 	}
 	
+	
 	private static DrumbeatApplication instance;
 
+	public static DrumbeatApplication getInstance() {
+		return instance;
+	}	
+	
+
+	
 	private static final Logger logger = Logger.getLogger(DrumbeatApplication.class);
+	private static AbstractJenaProvider jenaProvider;
+	private final int applicationId;
 	private Properties configurationProperties;
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
 
 	protected DrumbeatApplication(String workingFolderPath) {
+		
+		applicationId = new Random().nextInt();
 		
 		instance = this;
 		
@@ -76,8 +88,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		logger.info("Web API started");
 	}
 	
-	public static DrumbeatApplication getInstance() {
-		return instance;
+	public int getApplicationId() {
+		return applicationId;
 	}
 	
 	public Properties getConfigurationProperties() {
@@ -88,12 +100,18 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI);
 	}
 	
+	public String getBaseUri(String path) {
+		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI) + path;
+	}
 	
 	public AbstractJenaProvider getJenaProvider() throws JenaProviderException, IOException {
 		
-		String providerName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
-		String providerClassName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS);
-		return AbstractJenaProvider.getFactory(providerName, providerClassName, getConfigurationProperties(), Params.JENA_PROVIDER_PREFIX);
+		if (jenaProvider == null) {		
+			String providerName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
+			String providerClassName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS);
+			jenaProvider = AbstractJenaProvider.getFactory(providerName, providerClassName, getConfigurationProperties(), Params.JENA_PROVIDER_PREFIX);
+		}
+		return jenaProvider;
 		
 	}
 	

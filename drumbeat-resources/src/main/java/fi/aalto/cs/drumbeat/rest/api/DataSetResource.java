@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -276,36 +277,6 @@ public class DataSetResource {
 		return "{\"Status\":\"Done\"}";
 	}
 	
-	@SuppressWarnings("serial")
-	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadServerFile1")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, String> uploadServerFile1(
-			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
-			@PathParam("dataSetId") String dataSetId,
-			@FormParam("filePath") String filePath)
-	{
-		return new HashMap<String,String>() {{
-			put("status", "done");
-		}};
-		
-//		Form form = new Form();
-//		form.param("status", "done");
-//		
-//		Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_JSON);
-//		
-//		return Response
-//				.ok()
-//				.entity(entity)
-//				.build();
-		
-//		return Response
-//				.ok("{\"status\":\"done\"}")
-//				.build();		
-	}
-	
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadServerFile")
 	@POST
@@ -411,17 +382,16 @@ public class DataSetResource {
 	{	
 		
 		try {
-			DataSetManager dataSetManager = new DataSetManager(null);			
+			DataSetManager dataSetManager = new DataSetManager(DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel());			
 
 			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
-//			Model defaultModel = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
-//			if (!dataSetManager.get(defaultModel, collectionId, dataSourceId, dataSetId)) {
-//				return
-//					Response
-//						.status(Response.Status.NOT_FOUND)
-//						.entity(String.format("Data set not found: collectionId=%s, dataSourceId=%s, dataSetId=%s", collectionId, dataSourceId, dataSetId))
-//						.build();
-//			}			
+			if (!dataSetManager.exists(collectionId, dataSourceId, dataSetId)) {
+				return
+					Response
+						.status(Response.Status.NOT_FOUND)
+						.entity(String.format("Data set not found: collectionId=%s, dataSourceId=%s, dataSetId=%s", collectionId, dataSourceId, dataSetId))
+						.build();
+			}			
 
 			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(dataSetName);
 			
