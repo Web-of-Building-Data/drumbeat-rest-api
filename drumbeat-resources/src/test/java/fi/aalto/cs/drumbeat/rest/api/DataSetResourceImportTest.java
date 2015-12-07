@@ -13,6 +13,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.jena.riot.Lang;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,8 +30,10 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 	
 	private static final boolean DO_TEST = true;
 	
-	private static final String DATA_SET_NAME_CORRECT = "c1/structural/v1";
-	private static final String DATA_SET_NAME_INCORRECT = "c1/structural/v123";
+	private static final String DATA_SET_NAME_CORRECT_1 = "c1/structural/v1";
+	private static final String DATA_SET_NAME_CORRECT_2 = "c1/structural/v2";
+	private static final String DATA_SET_NAME_CORRECT_3 = "c1/structural/v3";
+	private static final String DATA_SET_NAME_WRONG = "c1/structural/v123";
 	
 	@Override
 	protected boolean doTest() {
@@ -84,7 +87,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		
 		try {		
 			result =
-				target("datasets/" + DATA_SET_NAME_CORRECT + "/uploadServerFile")
+				target("datasets/" + DATA_SET_NAME_CORRECT_1 + "/uploadServerFile")
 					.request(MediaType.APPLICATION_JSON)
 					.post(
 							Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
@@ -116,7 +119,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		int statusCode;
 		
 		try {		
-			target("datasets/" + DATA_SET_NAME_INCORRECT + "/uploadServerFile")
+			target("datasets/" + DATA_SET_NAME_CORRECT_1 + "/uploadServerFile")
 				.request(MediaType.APPLICATION_JSON)
 				.post(
 						Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
@@ -147,7 +150,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		int statusCode;
 		
 		try {		
-			target("datasets/" + DATA_SET_NAME_INCORRECT + "/uploadServerFile")
+			target("datasets/" + DATA_SET_NAME_WRONG + "/uploadServerFile")
 				.request(MediaType.APPLICATION_JSON)
 				.post(
 						Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
@@ -159,6 +162,43 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		}
 		
 		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), statusCode);
+	}
+	
+	
+	@Test
+	public void test_uploadServerFile_rdf_correctDataSet_correctFile() throws JenaProviderException, IOException {
+		if (!doTest()) {
+			return;
+		}
+		
+		File testModelFilePath = new File(getApplication().getRealPath(TestApplication.TEST_RDF_MODEL_FILE_PATH));
+		assertTrue(testModelFilePath.exists());		
+		
+		Form form = new Form();
+		form.param("dataType", DataSetResource.DATA_TYPE_RDF);
+		form.param("dataFormat", Lang.TURTLE.toString());
+		form.param("filePath", testModelFilePath.getAbsolutePath());
+		
+		Model model = getApplication().getJenaProvider().openDefaultModel();
+		assertNotEquals(0L, model.size());
+		
+		Map<String, String> result = null;
+		
+		try {		
+			result =
+				target("datasets/" + DATA_SET_NAME_CORRECT_2 + "/uploadServerFile")
+					.request(MediaType.APPLICATION_JSON)
+					.post(
+							Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+							new GenericType<Map<String,String>>(){});
+		} catch (WebApplicationException e) {
+			Response response = e.getResponse();
+			logger.error(e.getMessage());
+			assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		}
+		
+		assertEquals(0L, Long.parseLong((String)result.get("oldSize")));
+		assertNotEquals(0L, Long.parseLong(result.get("newSize")));
 	}	
 	
 }

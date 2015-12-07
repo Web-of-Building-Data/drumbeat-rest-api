@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -33,6 +35,7 @@ import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.util.Ifc2RdfExportUtil;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
+import fi.hut.cs.drumbeat.rdf.RdfUtils;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.*;
 
@@ -182,7 +185,7 @@ public class DataSetManager {
 	
 	public Model uploadIfcData(InputStream inputStream, Model jenaModel) throws Exception
 	{		
-		logger.info("Exporting model to Jena");
+		logger.info("Uploading IFC model");
 		try {			
 			// loading schemas and config files
 			synchronized (DataSetManager.class) {
@@ -207,16 +210,32 @@ public class DataSetManager {
 			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, jenaModel);
 			jenaModel = modelExporter.export();
-			logger.info("Exporting model has been completed successfully");
+			logger.info("Uploading IFC model completed successfully");
 			return jenaModel;
 			
 		} catch (Exception e) {
-			logger.error("Exporting failed", e);
+			logger.error("Uploading IFC model failed", e);
 			throw e;			
 		}
 	}
 	
 	
+	public Model uploadRdfData(InputStream inputStream, Lang rdfLang, Model jenaModel) throws Exception
+	{		
+		logger.info("Uploading RDF model");
+		try {			
+			// export model
+			logger.debug("exporting model");
+			RDFDataMgr.read(jenaModel, inputStream, rdfLang);
+			
+			logger.info("Uploading RDF model completed successfully");
+			return jenaModel;
+			
+		} catch (Exception e) {
+			logger.error("Uploading RDF model failed", e);
+			throw e;			
+		}
+	}	
 
 }
 

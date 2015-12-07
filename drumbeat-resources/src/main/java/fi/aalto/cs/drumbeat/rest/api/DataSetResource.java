@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.jena.riot.Lang;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -287,6 +288,7 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
+			@FormParam("dataFormat") String dataFormat,
 			@FormParam("filePath") String filePath)
 	{
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
@@ -303,7 +305,7 @@ public class DataSetResource {
 						.build();
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, inputStream);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 	
 	
@@ -316,6 +318,7 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
+			@FormParam("dataFormat") String dataFormat,
 			@FormParam("url") String url)
 	{
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
@@ -332,7 +335,7 @@ public class DataSetResource {
 						.build();
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, inputStream);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadContent")
@@ -343,14 +346,15 @@ public class DataSetResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
-			@FormParam("dataType") String dataType,			
+			@FormParam("dataType") String dataType,
+			@FormParam("dataFormat") String dataFormat,			
 			@FormParam("content") String content)
 	{
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
 		
 		InputStream inputStream = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, inputStream);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 
 	
@@ -362,14 +366,15 @@ public class DataSetResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
-			@FormDataParam("dataType") String dataType,			
+			@FormDataParam("dataType") String dataType,
+			@FormDataParam("dataFormat") String dataFormat,
 			@FormDataParam("file") InputStream inputStream,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail)
 	{
 		
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, inputStream);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 	
 	
@@ -378,6 +383,7 @@ public class DataSetResource {
 			String dataSourceId,
 			String dataSetId,
 			String dataType,
+			String dataFormat,
 			InputStream inputStream)
 	{	
 		
@@ -401,6 +407,9 @@ public class DataSetResource {
 			
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
 				jenaModel = dataSetManager.uploadIfcData(inputStream, jenaModel);				
+			} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
+				// TODO: convert dataFormat string to Lang
+				jenaModel = dataSetManager.uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
 			} else {
 				return
 						Response
