@@ -1,0 +1,28 @@
+<http://localhost:8080/collections/c1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#HasDataSources> "http://localhost:8080/datasources/c1/mep" .
+<http://localhost:8080/collections/c1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#HasDataSources> "http://localhost:8080/datasources/c1/statusevents" .
+<http://localhost:8080/collections/c1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#HasDataSources> "http://localhost:8080/datasources/c1/structural" .
+<http://localhost:8080/collections/c1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "Collection1" .
+<http://localhost:8080/collections/c1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> .
+<http://localhost:8080/collections/site2> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "Site2" .
+<http://localhost:8080/collections/site2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> .
+<http://localhost:8080/collections/z345> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "Zoo-345" .
+<http://localhost:8080/collections/z345> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> .
+<http://localhost:8080/datasources/c1/mep> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#inCollection> "http://localhost:8080/collections/c1" .
+<http://localhost:8080/datasources/c1/mep> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "C1 MEP" .
+<http://localhost:8080/datasources/c1/mep> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> .
+<http://localhost:8080/datasources/c1/statusevents> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#inCollection> "http://localhost:8080/collections/c1" .
+<http://localhost:8080/datasources/c1/statusevents> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "C1 Status Events" .
+<http://localhost:8080/datasources/c1/statusevents> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> .
+<http://localhost:8080/datasources/c1/structural/v1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#inDataSource> "http://localhost:8080/datasources/c1/structural" .
+<http://localhost:8080/datasources/c1/structural/v1> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "C1 Structural v.1" .
+<http://localhost:8080/datasources/c1/structural/v1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Dataset> .
+<http://localhost:8080/datasources/c1/structural/v2> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#creationTime> "2015-10-15-10:30^^xsd:dateTime" .
+<http://localhost:8080/datasources/c1/structural/v2> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#inDataSource> "http://localhost:8080/datasources/c1/structural" .
+<http://localhost:8080/datasources/c1/structural/v2> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "C1 Structural v.2" .
+<http://localhost:8080/datasources/c1/structural/v2> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#replaces> "http://localhost:8080/datasources/c1/structural/v1" .
+<http://localhost:8080/datasources/c1/structural/v2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Dataset> .
+<http://localhost:8080/datasources/c1/structural> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#hasDatasets> "http://localhost:8080/datasources/c1/structural/v1" .
+<http://localhost:8080/datasources/c1/structural> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#hasDatasets> "http://localhost:8080/datasources/c1/structural/v2" .
+<http://localhost:8080/datasources/c1/structural> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#inCollection> "http://localhost:8080/collections/c1" .
+<http://localhost:8080/datasources/c1/structural> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#name> "C1 Structural Model" .
+<http://localhost:8080/datasources/c1/structural> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> .

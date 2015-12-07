@@ -4,6 +4,8 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -17,10 +19,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
+import fi.hut.cs.drumbeat.ifc.common.IfcException;
+import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
+import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.util.Ifc2RdfExportUtil;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
@@ -53,7 +58,7 @@ SOFTWARE.
 
 
 public class DataSetManager {
-//	private static final Logger logger = Logger.getLogger(DataSetManager.class);
+	private static final Logger logger = Logger.getLogger(DataSetManager.class);
 	private static boolean ifcSchemaLoaded; 
 
 	private final Model model;	
@@ -73,7 +78,7 @@ public class DataSetManager {
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
@@ -94,11 +99,11 @@ public class DataSetManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -111,7 +116,7 @@ public class DataSetManager {
 	
 
 	public Resource getResource(String collectionname,String datasourcename,String datasetname) {
-		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -120,8 +125,8 @@ public class DataSetManager {
 	
 	
 	public void create(String collectionname,String datasourcename,String datasetname) {
-		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
-		Resource dataset = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename);
+		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
@@ -136,30 +141,47 @@ public class DataSetManager {
 	}
 	
 	public void delete(String collectionname,String datasourcename,String datasetname)  {
-		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
 		model.removeAll(r, null, null );
 		model.removeAll(null, null, r);
 	}
 	
-	public void importData(ServletContext servletContext, InputStream inputStream, Model jenaModel) throws Exception
+	public Model uploadIfcData(InputStream inputStream, Model jenaModel) throws Exception
 	{		
-		synchronized (DataSetManager.class) {
-			if (!ifcSchemaLoaded) {
-				ConfigurationDocument.load(ApplicationConfig.Paths.IFC2LD_CONFIG_FILE_PATH);				
-				Ifc2RdfExporter.parseSchemas(ApplicationConfig.Paths.IFC_SCHEMA_FOLDER_PATH);
-			}			
-		}
-		
-		IfcModel ifcModel = IfcModelParser.parse(inputStream);
+		logger.info("Exporting model to Jena");
+		try {			
+			// loading schemas and config files
+			synchronized (DataSetManager.class) {
+				if (!ifcSchemaLoaded) {
+					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
+					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+				}			
+			}
+			
+			// parse model
+			logger.debug("Parsing model");
+			IfcModel ifcModel = IfcModelParser.parse(inputStream);			
 
-		ComplexProcessorConfiguration groundingConfiguration = IfcModelAnalyser.getDefaultGroundingRuleSets();
-		
-		// ground nodes in the model
-		IfcModelAnalyser modelAnalyser = new IfcModelAnalyser(ifcModel);			
-		modelAnalyser.groundNodes(groundingConfiguration);
-		
-		Ifc2RdfExportUtil.exportModelToJenaModel(jenaModel, ifcModel);
-	}	
+			// ground nodes in the model
+			logger.debug("Grounding nodes");
+			IfcModelAnalyser modelAnalyser = new IfcModelAnalyser(ifcModel);			
+			ComplexProcessorConfiguration groundingConfiguration = IfcModelAnalyser.getDefaultGroundingRuleSets();		
+			modelAnalyser.groundNodes(groundingConfiguration);
+
+			// export model
+			logger.debug("exporting model");
+			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
+			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, jenaModel);
+			jenaModel = modelExporter.export();
+			logger.info("Exporting model has been completed successfully");
+			return jenaModel;
+			
+		} catch (Exception e) {
+			logger.error("Exporting failed", e);
+			throw e;			
+		}
+	}
+	
 	
 
 }

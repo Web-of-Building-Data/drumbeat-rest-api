@@ -12,12 +12,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 
 /*
@@ -240,7 +242,7 @@ public class DataSourceResource {
 	private static DataSourceManager getManager(ServletContext servletContext) {
 		if (datasourceManager == null) {
 			try {
-				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
+				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
 				datasourceManager = new DataSourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -64,7 +64,7 @@ public class DataSourceManager {
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+  "<"+ApplicationConfig.getBaseUrl()+"collections/"+collection+"> lbdh:hasDataSources ?datasource."								
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection+"> lbdh:hasDataSources ?datasource."								
 								+ "}"
 								),
 						model);
@@ -85,11 +85,11 @@ public class DataSourceManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -102,7 +102,7 @@ public class DataSourceManager {
 	
 
 	public Resource getResource(String collectionname,String datasourcename) {
-		Resource r = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
+		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -111,8 +111,8 @@ public class DataSourceManager {
 	
 	
 	public void create(String collectionname,String datasourcename) {
-		Resource collection = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+collectionname); 
-		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
+		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionname); 
+		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename);
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
 
         Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
@@ -127,7 +127,7 @@ public class DataSourceManager {
 	}
 	
 	public void delete(String collectionname,String datasourcename)  {
-		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
+		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
 		model.removeAll(datasource, null, null );
 		model.removeAll(null, null, datasource);
 	}
