@@ -2,10 +2,13 @@ package fi.aalto.cs.drumbeat.rest.application;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Context;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -99,6 +102,21 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	public String getBaseUri() {
 		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI);
 	}
+	
+	public void setBaseUrl(@Context HttpServletRequest httpRequest) {
+		try
+		{
+		  URL url= new URL(httpRequest.getRequestURI());
+		  getConfigurationProperties().setProperty(
+				  Params.WEB_BASE_URI,
+				  url.getProtocol() + url.getAuthority() + "/");
+		}
+		 catch (Exception e) {
+			 // Nothing bad happends
+		}		
+	}
+	
+	
 	
 	public String getBaseUri(String path) {
 		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI) + path;

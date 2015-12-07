@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ValueManager;
 
 /*
@@ -61,7 +62,7 @@ public class ValueResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -77,7 +78,7 @@ public class ValueResource {
 	@GET	
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -100,7 +101,7 @@ public class ValueResource {
 	@GET
 	@Produces("text/turtle")
 	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -124,7 +125,7 @@ public class ValueResource {
 	@GET
 	@Produces("application/rdf+xml")
 	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
@@ -147,7 +148,7 @@ public class ValueResource {
 	private static ValueManager getManager(ServletContext servletContext) {
 		if (manager == null) {
 			try {
-				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
+				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
 				manager = new ValueManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

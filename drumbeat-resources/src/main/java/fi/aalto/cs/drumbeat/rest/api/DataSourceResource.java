@@ -170,7 +170,7 @@ public class DataSourceResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -186,7 +186,7 @@ public class DataSourceResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -209,7 +209,7 @@ public class DataSourceResource {
 	@GET
 	@Produces("text/turtle")
 	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -232,7 +232,7 @@ public class DataSourceResource {
 	@GET
 	@Produces("application/rdf+xml")
 	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager(servletContext).get(m,collectionname, datasourcename))
@@ -256,7 +256,7 @@ public class DataSourceResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionname, datasourcename);
 		} catch (Exception e) {
@@ -270,7 +270,7 @@ public class DataSourceResource {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionname, datasourcename);
 		} catch (Exception e) {

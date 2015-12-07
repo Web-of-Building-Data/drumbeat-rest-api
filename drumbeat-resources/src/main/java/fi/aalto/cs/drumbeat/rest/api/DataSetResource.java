@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,7 +201,7 @@ public class DataSetResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
 			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
@@ -211,7 +212,7 @@ public class DataSetResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
@@ -234,7 +235,7 @@ public class DataSetResource {
 	@GET
 	@Produces("text/turtle")
 	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
@@ -258,7 +259,7 @@ public class DataSetResource {
 	@GET
 	@Produces("application/rdf+xml")
 	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
@@ -281,7 +282,7 @@ public class DataSetResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionname, datasourcename, datasetname);
 		} catch (Exception e) {
@@ -295,7 +296,7 @@ public class DataSetResource {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionname, datasourcename, datasetname);
 		} catch (Exception e) {
@@ -348,7 +349,7 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("url") String url)
 	{
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
@@ -484,7 +485,7 @@ public class DataSetResource {
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String filePath = SERVER_UPLOAD_LOCATION_FOLDER + contentDispositionHeader.getFileName();
 		try {
 			OutputStream outpuStream = new FileOutputStream(new File(filePath));

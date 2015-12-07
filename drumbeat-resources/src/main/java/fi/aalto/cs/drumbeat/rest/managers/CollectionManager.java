@@ -97,7 +97,7 @@ public class CollectionManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name);        	 
+         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -113,13 +113,13 @@ public class CollectionManager {
 	public void create(String name) {
 		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.property_name);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         collection.addProperty(RDF.type,type);
         collection.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
 	public void delete(String collectionname) {
-		String item=ApplicationConfig.getBaseUrl()+"collections/"+collectionname;
+		String item=DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionname;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 

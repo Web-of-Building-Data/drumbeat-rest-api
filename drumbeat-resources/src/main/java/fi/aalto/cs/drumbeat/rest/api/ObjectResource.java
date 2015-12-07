@@ -62,7 +62,7 @@ public class ObjectResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
@@ -77,7 +77,7 @@ public class ObjectResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
@@ -100,7 +100,7 @@ public class ObjectResource {
 	@GET
 	@Produces("text/turtle")
 	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
@@ -123,7 +123,7 @@ public class ObjectResource {
 	@GET
 	@Produces("application/rdf+xml")
 	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
@@ -146,7 +146,7 @@ public class ObjectResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getTypeHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
@@ -162,7 +162,7 @@ public class ObjectResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getTypeJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
@@ -185,7 +185,7 @@ public class ObjectResource {
 	@GET
 	@Produces("text/turtle")
 	public String getTypeTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
@@ -208,7 +208,7 @@ public class ObjectResource {
 	@GET
 	@Produces("application/rdf+xml")
 	public String getTypeRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		ApplicationConfig.setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
@@ -230,7 +230,7 @@ public class ObjectResource {
 	private static ObjectManager getManager(ServletContext servletContext) {
 		if (manager == null) {
 			try {
-				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
+				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
 				manager = new ObjectManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

@@ -72,7 +72,7 @@ public class DataSourceManager {
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource); 		
+         Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource); 		
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
@@ -105,13 +105,13 @@ public class DataSourceManager {
 
 	
 	public void create(String collectionname,String datasourcename) {
-		Resource collection = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+collectionname); 
-		Resource datasource = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename);
-		Resource type = model.createResource(BuildingDataOntology.DataSources.class_DataSource);
+		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionname); 
+		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename);
+		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
 
-        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.property_hasDataSources);
-        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_isDataSource);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.property_name);
+        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
+        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.isDataSource);
+        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
 
 		collection.addProperty(hasDataSources, datasource);
 		datasource.addProperty(isDataSource, collection);
@@ -121,7 +121,7 @@ public class DataSourceManager {
 	}
 	
 	public void delete(String collectionname,String datasourcename) {
-		String item=ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename;
+		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 

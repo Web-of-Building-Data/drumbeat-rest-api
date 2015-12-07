@@ -58,11 +58,11 @@ public class ObjectManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -78,11 +78,11 @@ public class ObjectManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,RDF.type)),
+								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,RDF.type)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     

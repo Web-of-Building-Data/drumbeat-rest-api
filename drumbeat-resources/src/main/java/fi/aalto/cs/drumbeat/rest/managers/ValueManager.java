@@ -14,7 +14,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -59,11 +59,11 @@ public class ValueManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,BuildingDataOntology.BASE_URL+property)),
+								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,BuildingDataOntology.BASE_URL+property)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();                     
