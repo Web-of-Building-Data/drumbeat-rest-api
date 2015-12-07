@@ -3,8 +3,6 @@ package fi.aalto.cs.drumbeat.rest.managers;
 import java.io.InputStream;
 
 
-import javax.servlet.ServletContext;
-
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
@@ -29,15 +27,12 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataVocabulary;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
-import fi.hut.cs.drumbeat.ifc.common.IfcException;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.util.Ifc2RdfExportUtil;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
-import fi.hut.cs.drumbeat.rdf.RdfUtils;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.*;
 
@@ -160,9 +155,6 @@ public class DataSetManager {
 	
 	
 	public boolean exists(String collectionId, String dataSourceId, String dataSetId) {
-		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
-
-		
 		String collectionUri = Collections.formatUrl(collectionId);
 		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
 		String dataSetUri = DataSets.formatUrl(collectionId, dataSourceId, dataSetId);
@@ -215,6 +207,8 @@ public class DataSetManager {
 			// export model
 			logger.debug("exporting model");
 			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
+			conversionContext.setModelNamespaceUriFormat(DrumbeatApplication.getInstance().getBaseUri());
+			
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, jenaModel);
 			jenaModel = modelExporter.export();
 			logger.info("Uploading IFC model completed successfully");
