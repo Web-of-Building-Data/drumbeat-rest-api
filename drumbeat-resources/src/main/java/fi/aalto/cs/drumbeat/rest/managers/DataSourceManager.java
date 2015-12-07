@@ -19,7 +19,7 @@ import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -66,7 +66,7 @@ public class DataSourceManager {
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+  "<"+ApplicationConfig.getBaseUrl()+"collections/"+collection+"> lbdh:hasDataSources ?datasource."								
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection+"> lbdh:hasDataSources ?datasource."								
 								+ "}"
 								),
 						model);
@@ -87,11 +87,11 @@ public class DataSourceManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(ApplicationConfig.getBaseUrl()+"datasources/"+collectionname+"/"+datasourcename); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();

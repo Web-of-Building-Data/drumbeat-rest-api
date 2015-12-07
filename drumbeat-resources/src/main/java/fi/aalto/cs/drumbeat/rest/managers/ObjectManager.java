@@ -13,7 +13,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
 The MIT License (MIT)

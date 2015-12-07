@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 
 /*

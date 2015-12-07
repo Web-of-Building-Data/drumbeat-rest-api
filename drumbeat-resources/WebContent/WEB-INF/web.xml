@@ -17,7 +17,7 @@
 		</init-param>
 		<init-param>
             <param-name>javax.ws.rs.Application</param-name>
-            <param-value>fi.aalto.cs.drumbeat.rest.api.ApplicationConfig</param-value>
+            <param-value>fi.aalto.cs.drumbeat.rest.application.WebApplication</param-value>
         </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

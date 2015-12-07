@@ -18,7 +18,7 @@ import com.hp.hpl.jena.update.GraphStore;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.api.ApplicationConfig;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -93,7 +93,7 @@ public class CollectionManager {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",ApplicationConfig.getBaseUrl()+"collections/"+name)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
@@ -111,7 +111,7 @@ public class CollectionManager {
 
 
 	public void create(String name) {
-		Resource collection = model.createResource(ApplicationConfig.getBaseUrl()+"collections/"+name); 
+		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.property_name);
         collection.addProperty(RDF.type,type);

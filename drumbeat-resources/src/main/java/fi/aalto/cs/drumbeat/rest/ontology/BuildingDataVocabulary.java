@@ -9,7 +9,7 @@ public class BuildingDataVocabulary {
 	
 	public static final Model DEFAULT_MODEL = ModelFactory.createDefaultModel();
 	
-	public static final String BASE_URL = "http://drumbeat.cs.hut.fi/owl/LDBHO#";
+	public static final String BASE_URL = "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#";
 	
 	
 	public static final Resource BimModel = DEFAULT_MODEL.createResource(BASE_URL + "BimModel");

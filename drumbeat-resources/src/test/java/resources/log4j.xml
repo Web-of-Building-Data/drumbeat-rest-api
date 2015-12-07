@@ -79,10 +79,6 @@
 		<level value="debug"/>
 		<appender-ref ref="FILE_COMMON"/>
 	</logger>
-	<logger name="fi.aalto.cs.drumbeat.rest" additivity="false">
-		<level value="debug"/>
-		<appender-ref ref="FILE_COMMON"/>
-	</logger>
 	
 	
 	<root>
