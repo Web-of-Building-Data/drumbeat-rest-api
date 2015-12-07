@@ -106,10 +106,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	public void setBaseUrl(@Context HttpServletRequest httpRequest) {
 		try
 		{
-		  URL url= new URL(httpRequest.getRequestURI());
+		  String url = "http://" + httpRequest.getLocalAddr() + ":" + httpRequest.getLocalPort() + "/";
 		  getConfigurationProperties().setProperty(
 				  Params.WEB_BASE_URI,
-				  url.getProtocol() + url.getAuthority() + "/");
+				  url);
 		}
 		 catch (Exception e) {
 			 // Nothing bad happends

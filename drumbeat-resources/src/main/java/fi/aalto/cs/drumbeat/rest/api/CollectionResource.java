@@ -67,20 +67,20 @@ public class CollectionResource {
 	@Path("/url")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getURL(@Context HttpServletRequest httpRequest) {		
-		String ret="";
-		try
-		{
-		  URL url= new URL(httpRequest.getRequestURI());
-		  ret=url.getProtocol()+url.getAuthority()+"/";
+	public String getURL(@Context HttpServletRequest httpRequest) {
+		String ret = "";
+		try {
+
+			ret = "http://" + httpRequest.getLocalAddr() + ":" + httpRequest.getLocalPort() + "/";
+
+		} catch (Exception e) {
+			return "{\"Status\":\"ERROR in URL \"}";
 		}
-		 catch (Exception e) {
-				return "{\"Status\":\"ERROR: "+e.getMessage()+" \"}";
-			}
-		
-		return "{\"requested url beginning\":"+ret+"\"}";
+
+		return "{\"requested url beginning\":" + ret + "\"}";
 	}
 
+	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML() {
