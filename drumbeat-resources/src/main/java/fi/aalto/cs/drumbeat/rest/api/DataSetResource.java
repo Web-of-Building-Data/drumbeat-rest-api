@@ -311,7 +311,7 @@ public class DataSetResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadServerFile(
+	public Map<String, Object> uploadServerFile(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -325,12 +325,13 @@ public class DataSetResource {
 		InputStream inputStream;
 		try {
 			inputStream = new FileInputStream(filePath);
-		} catch (FileNotFoundException e) {			
-			return
-					Response
-						.status(Response.Status.NOT_FOUND)
-						.entity(e.getMessage())
-						.build();
+		} catch (FileNotFoundException e) {
+			throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
+//			return
+//					Response
+//						.status(Response.Status.NOT_FOUND)
+//						.entity(e.getMessage())
+//						.build();
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -340,8 +341,8 @@ public class DataSetResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadUrl(
-			@Context HttpServletRequest httpRequest,
+	public Map<String, Object> uploadUrl(
+//			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -349,7 +350,7 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("url") String url)
 	{
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+//		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
@@ -357,11 +358,12 @@ public class DataSetResource {
 		try {
 			inputStream = new URL(url).openStream();
 		} catch (IOException e) {			
-			return
-					Response
-						.serverError()
-						.entity(e.getMessage())
-						.build();
+			throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
+//			return
+//					Response
+//						.serverError()
+//						.entity(e.getMessage())
+//						.build();
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -370,7 +372,7 @@ public class DataSetResource {
 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadContent(
+	public Map<String, Object> uploadContent(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -390,7 +392,7 @@ public class DataSetResource {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response uploadClientFile(
+	public Map<String, Object> uploadClientFile(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -406,7 +408,7 @@ public class DataSetResource {
 	}
 	
 	
-	private Response internalUploadDataSet(
+	private Map<String, Object> internalUploadDataSet(
 			String collectionId,
 			String dataSourceId,
 			String dataSetId,
@@ -420,12 +422,10 @@ public class DataSetResource {
 
 			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
 			if (!dataSetManager.exists(collectionId, dataSourceId, dataSetId)) {
-				return
-					Response
-						.status(Response.Status.NOT_FOUND)
-						.entity(String.format("Data set not found: collectionId=%s, dataSourceId=%s, dataSetId=%s", collectionId, dataSourceId, dataSetId))
-						.build();
-			}			
+				throw new WebApplicationException(
+						String.format("Data set not found: collectionId=%s, dataSourceId=%s, dataSetId=%s", collectionId, dataSourceId, dataSetId),
+						Response.Status.NOT_FOUND);				
+			}
 
 			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(dataSetName);
 			
@@ -439,26 +439,38 @@ public class DataSetResource {
 				// TODO: convert dataFormat string to Lang
 				jenaModel = dataSetManager.uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
 			} else {
-				return
-						Response
-						.status(Response.Status.NOT_FOUND)
-						.entity(String.format("Unknown data type=%s", dataType))
-						.build();
+				throw new WebApplicationException(
+						String.format("Unknown data type=%s", dataType),
+						Response.Status.BAD_REQUEST);
+				
+//				return
+//						Response
+//						.status(Response.Status.NOT_FOUND)
+//						.entity(String.format("Unknown data type=%s", dataType))
+//						.build();
 			}
 			
-			responseEntity.put("newSize", jenaModel.size());			
-
-			return Response
-					.ok(responseEntity, MediaType.APPLICATION_JSON)
-					.build();
+			responseEntity.put("newSize", jenaModel.size());
 			
+			return responseEntity;
+
+//			return Response
+//					.ok(responseEntity, MediaType.APPLICATION_JSON)
+//					.build();
+			
+		} catch (WebApplicationException wae) {
+			throw wae;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			
-			return Response
-					.serverError()
-					.entity(e.getMessage())
-					.build();			
+			throw new WebApplicationException(
+					String.format("Unexpected error: %s", e.getMessage()),
+					Response.Status.BAD_REQUEST);
+
+//			return Response
+//					.serverError()
+//					.entity(e.getMessage())
+//					.build();			
 		} finally {
 			try {
 				inputStream.close();

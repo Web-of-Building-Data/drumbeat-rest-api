@@ -1,0 +1,3165 @@
+{
+  "@graph" : [ {
+    "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#",
+    "@type" : "owl:Ontology",
+    "comment" : "OWL profile: [OWL2_DL].\r\n\t\tConversion options: {ConvertBooleansTo=fi.hut.cs.drumbeat.common.params.StringParam@501edcf1\r\n\t\t\t ConvertCollectionsTo=fi.hut.cs.drumbeat.common.params.StringParam@78b729e6\r\n\t\t\t ConvertDoublesTo=fi.hut.cs.drumbeat.common.params.StringParam@6b4a4e18\r\n\t\t\t ConvertEnumsTo=fi.hut.cs.drumbeat.common.params.StringParam@27c86f2d\r\n\t\t\t ExportDebugInfo=fi.hut.cs.drumbeat.common.params.BooleanParam@197d671\r\n\t\t\t ExportPropertyDomainsAndRanges=fi.hut.cs.drumbeat.common.params.StringParam@402e37bc\r\n\t\t\t IgnoreExpressSchema=fi.hut.cs.drumbeat.common.params.BooleanParam@79ad8b2f\r\n\t\t\t IgnoreIfcSchema=fi.hut.cs.drumbeat.common.params.BooleanParam@1df82230\r\n\t\t\t NameAllBlankNodes=fi.hut.cs.drumbeat.common.params.BooleanParam@22635ba0\r\n\t\t\t UseLongAttributeName=fi.hut.cs.drumbeat.common.params.BooleanParam@13c10b87}",
+    "versionInfo" : "v1.0 2015/11/25 16:17:56"
+  }, {
+    "@id" : "ifc:hasDatetime_java.util.GregorianCalendar%5Btime%3D1217620436000%2CareFieldsSet%3Dtrue%2CareAllFieldsSet%3Dtrue%2Clenient%3Dtrue%2Czone%3Dsun.util.calendar.ZoneInfo%5Bid%3D%22Europe%2FHelsinki%22%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2Ctransitions%3D118%2ClastRule%3Djava.util.SimpleTimeZone%5Bid%3DEurope%2FHelsinki%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2CstartYear%3D0%2CstartMode%3D2%2CstartMonth%3D2%2CstartDay%3D-1%2CstartDayOfWeek%3D1%2CstartTime%3D3600000%2CstartTimeMode%3D2%2CendMode%3D2%2CendMonth%3D9%2CendDay%3D-1%2CendDayOfWeek%3D1%2CendTime%3D3600000%2CendTimeMode%3D2%5D%5D%2CfirstDayOfWeek%3D2%2CminimalDaysInFirstWeek%3D4%2CERA%3D1%2CYEAR%3D2008%2CMONTH%3D7%2CWEEK_OF_YEAR%3D31%2CWEEK_OF_MONTH%3D0%2CDAY_OF_MONTH%3D1%2CDAY_OF_YEAR%3D214%2CDAY_OF_WEEK%3D6%2CDAY_OF_WEEK_IN_MONTH%3D1%2CAM_PM%3D1%2CHOUR%3D10%2CHOUR_OF_DAY%3D22%2CMINUTE%3D53%2CSECOND%3D56%2CMILLISECOND%3D0%2CZONE_OFFSET%3D7200000%2CDST_OFFSET%3D3600000%5D",
+    "@type" : "ifc:IfcTimeStamp",
+    "hasDatetime" : "2008-08-01T19:53:56Z"
+  }, {
+    "@id" : "ifc:hasInteger_0",
+    "@type" : "expr:INTEGER",
+    "hasInteger" : "0"
+  }, {
+    "@id" : "ifc:hasInteger_24",
+    "@type" : "expr:INTEGER",
+    "hasInteger" : "24"
+  }, {
+    "@id" : "ifc:hasInteger_25",
+    "@type" : "expr:INTEGER",
+    "hasInteger" : "25"
+  }, {
+    "@id" : "ifc:hasInteger_28",
+    "@type" : "expr:INTEGER",
+    "hasInteger" : "28"
+  }, {
+    "@id" : "ifc:hasInteger_3",
+    "@type" : "ifc:IfcDimensionCount",
+    "hasInteger" : "3"
+  }, {
+    "@id" : "ifc:hasInteger_54",
+    "@type" : "expr:INTEGER",
+    "hasInteger" : "54"
+  }, {
+    "@id" : "ifc:hasLogical_false",
+    "@type" : "ifc:IfcBoolean",
+    "hasLogical" : "expr:false"
+  }, {
+    "@id" : "ifc:hasLogical_true",
+    "@type" : "ifc:IfcBoolean",
+    "hasLogical" : "expr:true"
+  }, {
+    "@id" : "ifc:hasReal_-0.15",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.0",
+    "@type" : [ "expr:REAL", "ifc:IfcLengthMeasure" ],
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.01745",
+    "@type" : "ifc:IfcPlaneAngleMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.1",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.15",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.24",
+    "@type" : "ifc:IfcReal",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.25",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.3",
+    "@type" : [ "ifc:IfcPositiveLengthMeasure", "ifc:IfcLengthMeasure" ],
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.7",
+    "@type" : "ifc:IfcReal",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.75",
+    "@type" : [ "ifc:IfcPositiveLengthMeasure", "ifc:IfcLengthMeasure" ],
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_0.9",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_1.0",
+    "@type" : "expr:REAL",
+    "hasReal" : "1"
+  }, {
+    "@id" : "ifc:hasReal_1.0E-5",
+    "@type" : "expr:REAL",
+    "hasReal" : "0"
+  }, {
+    "@id" : "ifc:hasReal_1.4",
+    "@type" : [ "ifc:IfcLengthMeasure", "ifc:IfcPositiveLengthMeasure" ],
+    "hasReal" : "1"
+  }, {
+    "@id" : "ifc:hasReal_1.5",
+    "@type" : "ifc:IfcAreaMeasure",
+    "hasReal" : "1"
+  }, {
+    "@id" : "ifc:hasReal_10.45",
+    "@type" : "ifc:IfcAreaMeasure",
+    "hasReal" : "10"
+  }, {
+    "@id" : "ifc:hasReal_11.5",
+    "@type" : "ifc:IfcAreaMeasure",
+    "hasReal" : "11"
+  }, {
+    "@id" : "ifc:hasReal_2.3",
+    "@type" : [ "ifc:IfcLengthMeasure", "ifc:IfcPositiveLengthMeasure" ],
+    "hasReal" : "2"
+  }, {
+    "@id" : "ifc:hasReal_3.135",
+    "@type" : "ifc:IfcVolumeMeasure",
+    "hasReal" : "3"
+  }, {
+    "@id" : "ifc:hasReal_3.45",
+    "@type" : "ifc:IfcVolumeMeasure",
+    "hasReal" : "3"
+  }, {
+    "@id" : "ifc:hasReal_5.0",
+    "@type" : "ifc:IfcLengthMeasure",
+    "hasReal" : "5"
+  }, {
+    "@id" : "ifc:hasString_",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : ""
+  }, {
+    "@id" : "ifc:hasString_0.10",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "0.10"
+  }, {
+    "@id" : "ifc:hasString_0C87kaqBXF%24xpGmTZ7zxN%24",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0C87kaqBXF$xpGmTZ7zxN$"
+  }, {
+    "@id" : "ifc:hasString_0FmgI0DRX49OXL_%24Wa2P1E",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0FmgI0DRX49OXL_$Wa2P1E"
+  }, {
+    "@id" : "ifc:hasString_0LV8Pid0X3IA3jJLVDPidY",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0LV8Pid0X3IA3jJLVDPidY"
+  }, {
+    "@id" : "ifc:hasString_0YvctVUKr0kugbFTf53O9L",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0YvctVUKr0kugbFTf53O9L"
+  }, {
+    "@id" : "ifc:hasString_0bB_7AP5v5OBZ90TDvo0Fo",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0bB_7AP5v5OBZ90TDvo0Fo"
+  }, {
+    "@id" : "ifc:hasString_0cpLgxVi9Ew8B08wF2Ql1w",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0cpLgxVi9Ew8B08wF2Ql1w"
+  }, {
+    "@id" : "ifc:hasString_0fhz_bHU54xB%24tXHjHPUZl",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0fhz_bHU54xB$tXHjHPUZl"
+  }, {
+    "@id" : "ifc:hasString_0yf_M5JZv9QQXly4dq_zvI",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "0yf_M5JZv9QQXly4dq_zvI"
+  }, {
+    "@id" : "ifc:hasString_10m6qcXSj0Iu4RVOK1omPJ",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "10m6qcXSj0Iu4RVOK1omPJ"
+  }, {
+    "@id" : "ifc:hasString_18RtPv6efDwuUOMduCZ7rH",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "18RtPv6efDwuUOMduCZ7rH"
+  }, {
+    "@id" : "ifc:hasString_1CDlLMVMv1qw1giUXpQgxI",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "1CDlLMVMv1qw1giUXpQgxI"
+  }, {
+    "@id" : "ifc:hasString_1Nl_BIjGLBke9u_6U3IWlW",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "1Nl_BIjGLBke9u_6U3IWlW"
+  }, {
+    "@id" : "ifc:hasString_2168U9nPH5xB3UpDx_uK11",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2168U9nPH5xB3UpDx_uK11"
+  }, {
+    "@id" : "ifc:hasString_2LcE70iQb51PEZynawyvuT",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2LcE70iQb51PEZynawyvuT"
+  }, {
+    "@id" : "ifc:hasString_2O_dMuDnr1Ahv28oR6ZVpr",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2O_dMuDnr1Ahv28oR6ZVpr"
+  }, {
+    "@id" : "ifc:hasString_2UEO1blXL9sPmb1AMeW7Ax",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2UEO1blXL9sPmb1AMeW7Ax"
+  }, {
+    "@id" : "ifc:hasString_2fHMxamlj5DvGvEKfCk8nj",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2fHMxamlj5DvGvEKfCk8nj"
+  }, {
+    "@id" : "ifc:hasString_2yDPSWYWf319fWaWWvPxwA",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2yDPSWYWf319fWaWWvPxwA"
+  }, {
+    "@id" : "ifc:hasString_2zeggBjk9A5wcc3k9CYqdL",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "2zeggBjk9A5wcc3k9CYqdL"
+  }, {
+    "@id" : "ifc:hasString_3IxFuNHRvBDfMT6_FiWPEz",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "3IxFuNHRvBDfMT6_FiWPEz"
+  }, {
+    "@id" : "ifc:hasString_3JuhmQJDj9xPnAnWoNb94X",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "3JuhmQJDj9xPnAnWoNb94X"
+  }, {
+    "@id" : "ifc:hasString_3lR5koIT51Kwudkm5eIoTu",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "3lR5koIT51Kwudkm5eIoTu"
+  }, {
+    "@id" : "ifc:hasString_3rNg_N55v4CRBpQVbZJoHB",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "3rNg_N55v4CRBpQVbZJoHB"
+  }, {
+    "@id" : "ifc:hasString_3vB2YO%24MX4xv5uCqZZG05x",
+    "@type" : "ifc:IfcGloballyUniqueId",
+    "expr:hasString" : "3vB2YO$MX4xv5uCqZZG05x"
+  }, {
+    "@id" : "ifc:hasString_AcousticRating",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "AcousticRating"
+  }, {
+    "@id" : "ifc:hasString_Axis",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Axis"
+  }, {
+    "@id" : "ifc:hasString_BaseQuantities",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "BaseQuantities"
+  }, {
+    "@id" : "ifc:hasString_Body",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Body"
+  }, {
+    "@id" : "ifc:hasString_Bonsma",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Bonsma"
+  }, {
+    "@id" : "ifc:hasString_BuildingContainer",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "BuildingContainer"
+  }, {
+    "@id" : "ifc:hasString_BuildingContainer+for+BuildigStories",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "BuildingContainer for BuildigStories"
+  }, {
+    "@id" : "ifc:hasString_Combustible",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "Combustible"
+  }, {
+    "@id" : "ifc:hasString_Compartmentation",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "Compartmentation"
+  }, {
+    "@id" : "ifc:hasString_Contents+of+Building+Storey",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Contents of Building Storey"
+  }, {
+    "@id" : "ifc:hasString_Curve2D",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Curve2D"
+  }, {
+    "@id" : "ifc:hasString_DEGREE",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "DEGREE"
+  }, {
+    "@id" : "ifc:hasString_Default+Building",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Default Building"
+  }, {
+    "@id" : "ifc:hasString_Default+Building+Storey",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Default Building Storey"
+  }, {
+    "@id" : "ifc:hasString_Default+Project",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Default Project"
+  }, {
+    "@id" : "ifc:hasString_Default+Site",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Default Site"
+  }, {
+    "@id" : "ifc:hasString_Depth",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "Depth"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Default+Building",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Default Building"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Default+Building+Storey",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Default Building Storey"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Default+Project",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Default Project"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Default+Site",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Default Site"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Opening",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Opening"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Wall",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Wall"
+  }, {
+    "@id" : "ifc:hasString_Description+of+Window",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "Description of Window"
+  }, {
+    "@id" : "ifc:hasString_ExtendToStructure",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "ExtendToStructure"
+  }, {
+    "@id" : "ifc:hasString_FireExit",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "FireExit"
+  }, {
+    "@id" : "ifc:hasString_FireRating",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "FireRating"
+  }, {
+    "@id" : "ifc:hasString_GlazingAresFraction",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "GlazingAresFraction"
+  }, {
+    "@id" : "ifc:hasString_GrossFootprintArea",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "GrossFootprintArea"
+  }, {
+    "@id" : "ifc:hasString_GrossSideArea",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "GrossSideArea"
+  }, {
+    "@id" : "ifc:hasString_GrossVolume",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "GrossVolume"
+  }, {
+    "@id" : "ifc:hasString_HandicapAccessible",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "HandicapAccessible"
+  }, {
+    "@id" : "ifc:hasString_Height",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "Height"
+  }, {
+    "@id" : "ifc:hasString_ID001",
+    "@type" : "ifc:IfcIdentifier",
+    "expr:hasString" : "ID001"
+  }, {
+    "@id" : "ifc:hasString_Infiltration",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "Infiltration"
+  }, {
+    "@id" : "ifc:hasString_IsExternal",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "IsExternal"
+  }, {
+    "@id" : "ifc:hasString_Lenght",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "Lenght"
+  }, {
+    "@id" : "ifc:hasString_LoadBearing",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "LoadBearing"
+  }, {
+    "@id" : "ifc:hasString_Model",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Model"
+  }, {
+    "@id" : "ifc:hasString_Name+of+the+material+used+for+the+wall",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Name of the material used for the wall"
+  }, {
+    "@id" : "ifc:hasString_NetSideArea",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "NetSideArea"
+  }, {
+    "@id" : "ifc:hasString_NetVolume",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "NetVolume"
+  }, {
+    "@id" : "ifc:hasString_Opening+Element+xyz",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Opening Element xyz"
+  }, {
+    "@id" : "ifc:hasString_Peter",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Peter"
+  }, {
+    "@id" : "ifc:hasString_ProjectContainer",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "ProjectContainer"
+  }, {
+    "@id" : "ifc:hasString_ProjectContainer+for+Sites",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "ProjectContainer for Sites"
+  }, {
+    "@id" : "ifc:hasString_Pset_WallCommon",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Pset_WallCommon"
+  }, {
+    "@id" : "ifc:hasString_Pset_WindowCommon",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Pset_WindowCommon"
+  }, {
+    "@id" : "ifc:hasString_Reference",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "Reference"
+  }, {
+    "@id" : "ifc:hasString_SecurityRating",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "SecurityRating"
+  }, {
+    "@id" : "ifc:hasString_SelfClosing",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "SelfClosing"
+  }, {
+    "@id" : "ifc:hasString_SiteContainer",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "SiteContainer"
+  }, {
+    "@id" : "ifc:hasString_SiteContainer+For+Buildings",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "SiteContainer For Buildings"
+  }, {
+    "@id" : "ifc:hasString_SmokeStop",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "SmokeStop"
+  }, {
+    "@id" : "ifc:hasString_SurfaceSpreadOfFlame",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "SurfaceSpreadOfFlame"
+  }, {
+    "@id" : "ifc:hasString_SweptSolid",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "SweptSolid"
+  }, {
+    "@id" : "ifc:hasString_TA+1001",
+    "@type" : "ifc:IfcIdentifier",
+    "expr:hasString" : "TA 1001"
+  }, {
+    "@id" : "ifc:hasString_TNO",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "TNO"
+  }, {
+    "@id" : "ifc:hasString_TNO+Building+Innovation",
+    "@type" : "ifc:IfcText",
+    "expr:hasString" : "TNO Building Innovation"
+  }, {
+    "@id" : "ifc:hasString_Test+Application",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Test Application"
+  }, {
+    "@id" : "ifc:hasString_ThermalTransmittance",
+    "@type" : [ "ifc:IfcIdentifier", "ifc:IfcText" ],
+    "expr:hasString" : "ThermalTransmittance"
+  }, {
+    "@id" : "ifc:hasString_Wall+xyz",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Wall xyz"
+  }, {
+    "@id" : "ifc:hasString_Width",
+    "@type" : [ "ifc:IfcLabel", "ifc:IfcText" ],
+    "expr:hasString" : "Width"
+  }, {
+    "@id" : "ifc:hasString_Window+xyz",
+    "@type" : "ifc:IfcLabel",
+    "expr:hasString" : "Window xyz"
+  }, {
+    "@id" : "model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF",
+    "@type" : "ifc:IfcBuildingStorey",
+    "compositionType_IfcSpatialStructureElement" : "ifc:ELEMENT",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Default+Building+Storey",
+    "elevation_IfcBuildingStorey" : "ifc:hasReal_0.0",
+    "globalId_IfcRoot" : "ifc:hasString_0C87kaqBXF%24xpGmTZ7zxN%24",
+    "name_IfcRoot" : "ifc:hasString_Default+Building+Storey",
+    "objectPlacement_IfcProduct" : "model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF_1",
+    "ownerHistory_IfcRoot" : "model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF_2"
+  }, {
+    "@id" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E",
+    "@type" : "ifc:IfcRelDefinesByProperties",
+    "globalId_IfcRoot" : "ifc:hasString_0FmgI0DRX49OXL_%24Wa2P1E",
+    "ownerHistory_IfcRoot" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_1",
+    "relatedObjects_IfcRelDefines" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2",
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2"
+  }, {
+    "@id" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2",
+    "@type" : "ifc:IfcObject_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2_slot_1"
+  }, {
+    "@id" : "model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2"
+  }, {
+    "@id" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2",
+    "@type" : "ifc:IfcWindow",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Window",
+    "globalId_IfcRoot" : "ifc:hasString_0LV8Pid0X3IA3jJLVDPidY",
+    "name_IfcRoot" : "ifc:hasString_Window+xyz",
+    "objectPlacement_IfcProduct" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_1",
+    "overallHeight_IfcWindow" : "ifc:hasReal_1.4",
+    "overallWidth_IfcWindow" : "ifc:hasReal_0.75",
+    "ownerHistory_IfcRoot" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_2",
+    "representation_IfcProduct" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_3"
+  }, {
+    "@id" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255",
+    "@type" : "ifc:IfcProject",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Default+Project",
+    "globalId_IfcRoot" : "ifc:hasString_0YvctVUKr0kugbFTf53O9L",
+    "name_IfcRoot" : "ifc:hasString_Default+Project",
+    "ownerHistory_IfcRoot" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_1",
+    "representationContexts_IfcProject" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2",
+    "unitsInContext_IfcProject" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_3"
+  }, {
+    "@id" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2",
+    "@type" : "ifc:IfcRepresentationContext_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_slot_1"
+  }, {
+    "@id" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_1"
+  }, {
+    "@id" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2",
+    "@type" : "ifc:IfcElementQuantity",
+    "globalId_IfcRoot" : "ifc:hasString_0bB_7AP5v5OBZ90TDvo0Fo",
+    "name_IfcRoot" : "ifc:hasString_BaseQuantities",
+    "ownerHistory_IfcRoot" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_1",
+    "quantities_IfcElementQuantity" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2"
+  }, {
+    "@id" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2",
+    "@type" : "ifc:IfcPhysicalQuantity_Set",
+    "isOrdered" : "expr:false",
+    "size" : "2",
+    "slot" : [ "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_2", "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_1" ]
+  }, {
+    "@id" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_1"
+  }, {
+    "@id" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_2"
+  }, {
+    "@id" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A",
+    "@type" : "ifc:IfcRelDefinesByProperties",
+    "globalId_IfcRoot" : "ifc:hasString_0cpLgxVi9Ew8B08wF2Ql1w",
+    "ownerHistory_IfcRoot" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_1",
+    "relatedObjects_IfcRelDefines" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2",
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653"
+  }, {
+    "@id" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2",
+    "@type" : "ifc:IfcObject_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2_slot_1"
+  }, {
+    "@id" : "model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF",
+    "@type" : "ifc:IfcPropertySet",
+    "globalId_IfcRoot" : "ifc:hasString_0fhz_bHU54xB%24tXHjHPUZl",
+    "hasProperties_IfcPropertySet" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1",
+    "name_IfcRoot" : "ifc:hasString_Pset_WindowCommon",
+    "ownerHistory_IfcRoot" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_2"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1",
+    "@type" : "ifc:IfcProperty_Set",
+    "isOrdered" : "expr:false",
+    "size" : "12",
+    "slot" : [ "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_6", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_12", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_3", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_9", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_1", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_4", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_2", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_10", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_11", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_7", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_8", "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_5" ]
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_1"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_10",
+    "index" : "10",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_10"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_11",
+    "index" : "11",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_11"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_12",
+    "index" : "12",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_12"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_2"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_3",
+    "index" : "3",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_3"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_4",
+    "index" : "4",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_4"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_5",
+    "index" : "5",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_5"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_6",
+    "index" : "6",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_6"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_7",
+    "index" : "7",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_7"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_8",
+    "index" : "8",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_8"
+  }, {
+    "@id" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_9",
+    "index" : "9",
+    "item" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_9"
+  }, {
+    "@id" : "model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52",
+    "@type" : "ifc:IfcBuilding",
+    "compositionType_IfcSpatialStructureElement" : "ifc:ELEMENT",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Default+Building",
+    "globalId_IfcRoot" : "ifc:hasString_0yf_M5JZv9QQXly4dq_zvI",
+    "name_IfcRoot" : "ifc:hasString_Default+Building",
+    "objectPlacement_IfcProduct" : "model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52_1",
+    "ownerHistory_IfcRoot" : "model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52_2"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653",
+    "@type" : "ifc:IfcElementQuantity",
+    "globalId_IfcRoot" : "ifc:hasString_10m6qcXSj0Iu4RVOK1omPJ",
+    "name_IfcRoot" : "ifc:hasString_BaseQuantities",
+    "ownerHistory_IfcRoot" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_1",
+    "quantities_IfcElementQuantity" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2",
+    "@type" : "ifc:IfcPhysicalQuantity_Set",
+    "isOrdered" : "expr:false",
+    "size" : "8",
+    "slot" : [ "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_8", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_5", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_1", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_7", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_2", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_4", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_6", "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_3" ]
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_1"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_2"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_3",
+    "index" : "3",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_3"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_4",
+    "index" : "4",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_4"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_5",
+    "index" : "5",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_5"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_6",
+    "index" : "6",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_6"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_7",
+    "index" : "7",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_7"
+  }, {
+    "@id" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_8",
+    "index" : "8",
+    "item" : "model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_8"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51",
+    "@type" : "ifc:IfcPropertySet",
+    "globalId_IfcRoot" : "ifc:hasString_18RtPv6efDwuUOMduCZ7rH",
+    "hasProperties_IfcPropertySet" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1",
+    "name_IfcRoot" : "ifc:hasString_Pset_WallCommon",
+    "ownerHistory_IfcRoot" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_2"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1",
+    "@type" : "ifc:IfcProperty_Set",
+    "isOrdered" : "expr:false",
+    "size" : "10",
+    "slot" : [ "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_10", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_3", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_2", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_1", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_7", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_6", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_9", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_5", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_8", "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_4" ]
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_1"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_10",
+    "index" : "10",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_10"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_2"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_3",
+    "index" : "3",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_3"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_4",
+    "index" : "4",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_4"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_5",
+    "index" : "5",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_5"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_6",
+    "index" : "6",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_6"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_7",
+    "index" : "7",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_7"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_8",
+    "index" : "8",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_8"
+  }, {
+    "@id" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_9",
+    "index" : "9",
+    "item" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_9"
+  }, {
+    "@id" : "model:GUID_4C36F556-7D6E-41D3-A06A-B1E8736AAED2",
+    "@type" : "ifc:IfcRelFillsElement",
+    "globalId_IfcRoot" : "ifc:hasString_1CDlLMVMv1qw1giUXpQgxI",
+    "ownerHistory_IfcRoot" : "model:GUID_4C36F556-7D6E-41D3-A06A-B1E8736AAED2_1",
+    "relatedBuildingElement_IfcRelFillsElement" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2",
+    "relatingOpeningElement_IfcRelFillsElement" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D"
+  }, {
+    "@id" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0",
+    "@type" : "ifc:IfcRelAggregates",
+    "description_IfcRoot" : "ifc:hasString_ProjectContainer+for+Sites",
+    "globalId_IfcRoot" : "ifc:hasString_1Nl_BIjGLBke9u_6U3IWlW",
+    "name_IfcRoot" : "ifc:hasString_ProjectContainer",
+    "ownerHistory_IfcRoot" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_1",
+    "relatedObjects_IfcRelDecomposes" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2",
+    "relatingObject_IfcRelDecomposes" : "model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255"
+  }, {
+    "@id" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2",
+    "@type" : "ifc:IfcObjectDefinition_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2_slot_1"
+  }, {
+    "@id" : "model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B"
+  }, {
+    "@id" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041",
+    "@type" : "ifc:IfcRelAggregates",
+    "description_IfcRoot" : "ifc:hasString_BuildingContainer+for+BuildigStories",
+    "globalId_IfcRoot" : "ifc:hasString_2168U9nPH5xB3UpDx_uK11",
+    "name_IfcRoot" : "ifc:hasString_BuildingContainer",
+    "ownerHistory_IfcRoot" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_1",
+    "relatedObjects_IfcRelDecomposes" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2",
+    "relatingObject_IfcRelDecomposes" : "model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52"
+  }, {
+    "@id" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2",
+    "@type" : "ifc:IfcObjectDefinition_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2_slot_1"
+  }, {
+    "@id" : "model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF"
+  }, {
+    "@id" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D",
+    "@type" : "ifc:IfcOpeningElement",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Opening",
+    "globalId_IfcRoot" : "ifc:hasString_2LcE70iQb51PEZynawyvuT",
+    "name_IfcRoot" : "ifc:hasString_Opening+Element+xyz",
+    "objectPlacement_IfcProduct" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_1",
+    "ownerHistory_IfcRoot" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_2",
+    "representation_IfcProduct" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_3"
+  }, {
+    "@id" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5",
+    "@type" : "ifc:IfcRelContainedInSpatialStructure",
+    "description_IfcRoot" : "ifc:hasString_Contents+of+Building+Storey",
+    "globalId_IfcRoot" : "ifc:hasString_2O_dMuDnr1Ahv28oR6ZVpr",
+    "name_IfcRoot" : "ifc:hasString_Default+Building",
+    "ownerHistory_IfcRoot" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_1",
+    "relatedElements_IfcRelContainedInSpatialStructure" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2",
+    "relatingStructure_IfcRelContainedInSpatialStructure" : "model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF"
+  }, {
+    "@id" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2",
+    "@type" : "ifc:IfcProduct_Set",
+    "isOrdered" : "expr:false",
+    "size" : "2",
+    "slot" : [ "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_2", "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_1" ]
+  }, {
+    "@id" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B"
+  }, {
+    "@id" : "model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2"
+  }, {
+    "@id" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB",
+    "@type" : "ifc:IfcRelDefinesByProperties",
+    "globalId_IfcRoot" : "ifc:hasString_2UEO1blXL9sPmb1AMeW7Ax",
+    "ownerHistory_IfcRoot" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_1",
+    "relatedObjects_IfcRelDefines" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2",
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A"
+  }, {
+    "@id" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2",
+    "@type" : "ifc:IfcObject_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2_slot_1"
+  }, {
+    "@id" : "model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D"
+  }, {
+    "@id" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D",
+    "@type" : "ifc:IfcRelDefinesByProperties",
+    "globalId_IfcRoot" : "ifc:hasString_2fHMxamlj5DvGvEKfCk8nj",
+    "ownerHistory_IfcRoot" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_1",
+    "relatedObjects_IfcRelDefines" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2",
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : "model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF"
+  }, {
+    "@id" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2",
+    "@type" : "ifc:IfcObject_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2_slot_1"
+  }, {
+    "@id" : "model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2"
+  }, {
+    "@id" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A",
+    "@type" : "ifc:IfcElementQuantity",
+    "globalId_IfcRoot" : "ifc:hasString_2yDPSWYWf319fWaWWvPxwA",
+    "name_IfcRoot" : "ifc:hasString_BaseQuantities",
+    "ownerHistory_IfcRoot" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_1",
+    "quantities_IfcElementQuantity" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2"
+  }, {
+    "@id" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2",
+    "@type" : "ifc:IfcPhysicalQuantity_Set",
+    "isOrdered" : "expr:false",
+    "size" : "3",
+    "slot" : [ "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_3", "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_2", "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_1" ]
+  }, {
+    "@id" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_1"
+  }, {
+    "@id" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_2",
+    "index" : "2",
+    "item" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_2"
+  }, {
+    "@id" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_3",
+    "index" : "3",
+    "item" : "model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_3"
+  }, {
+    "@id" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5",
+    "@type" : "ifc:IfcRelAssociatesMaterial",
+    "globalId_IfcRoot" : "ifc:hasString_2zeggBjk9A5wcc3k9CYqdL",
+    "ownerHistory_IfcRoot" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_1",
+    "relatedObjects_IfcRelAssociates" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2",
+    "relatingMaterial_IfcRelAssociatesMaterial" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_3"
+  }, {
+    "@id" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2",
+    "@type" : "ifc:IfcRoot_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2_slot_1"
+  }, {
+    "@id" : "model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B"
+  }, {
+    "@id" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD",
+    "@type" : "ifc:IfcRelDefinesByProperties",
+    "globalId_IfcRoot" : "ifc:hasString_3IxFuNHRvBDfMT6_FiWPEz",
+    "ownerHistory_IfcRoot" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_1",
+    "relatedObjects_IfcRelDefines" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2",
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : "model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51"
+  }, {
+    "@id" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2",
+    "@type" : "ifc:IfcObject_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2_slot_1"
+  }, {
+    "@id" : "model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B"
+  }, {
+    "@id" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121",
+    "@type" : "ifc:IfcRelAggregates",
+    "description_IfcRoot" : "ifc:hasString_SiteContainer+For+Buildings",
+    "globalId_IfcRoot" : "ifc:hasString_3JuhmQJDj9xPnAnWoNb94X",
+    "name_IfcRoot" : "ifc:hasString_SiteContainer",
+    "ownerHistory_IfcRoot" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_1",
+    "relatedObjects_IfcRelDecomposes" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2",
+    "relatingObject_IfcRelDecomposes" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B"
+  }, {
+    "@id" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2",
+    "@type" : "ifc:IfcObjectDefinition_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2_slot_1"
+  }, {
+    "@id" : "model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2_slot_1",
+    "index" : "1",
+    "item" : "model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52"
+  }, {
+    "@id" : "model:GUID_EF6C5BB2-49D1-4153-AE27-BB01684B2778",
+    "@type" : "ifc:IfcRelVoidsElement",
+    "globalId_IfcRoot" : "ifc:hasString_3lR5koIT51Kwudkm5eIoTu",
+    "ownerHistory_IfcRoot" : "model:GUID_EF6C5BB2-49D1-4153-AE27-BB01684B2778_1",
+    "relatedOpeningElement_IfcRelVoidsElement" : "model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D",
+    "relatingBuildingElement_IfcRelVoidsElement" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B",
+    "@type" : "ifc:IfcSite",
+    "compositionType_IfcSpatialStructureElement" : "ifc:ELEMENT",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Default+Site",
+    "globalId_IfcRoot" : "ifc:hasString_3rNg_N55v4CRBpQVbZJoHB",
+    "name_IfcRoot" : "ifc:hasString_Default+Site",
+    "objectPlacement_IfcProduct" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_1",
+    "ownerHistory_IfcRoot" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_2",
+    "refLatitude_IfcSite" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7",
+    "refLongitude_IfcSite" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7",
+    "@type" : "ifc:IfcCompoundPlaneAngleMeasure",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_3", "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_2", "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_1" ]
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasInteger_24"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasInteger_28"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasInteger_0"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8",
+    "@type" : "ifc:IfcCompoundPlaneAngleMeasure",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_3", "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_2", "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_1" ]
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasInteger_54"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasInteger_25"
+  }, {
+    "@id" : "model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasInteger_0"
+  }, {
+    "@id" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B",
+    "@type" : "ifc:IfcWallStandardCase",
+    "description_IfcRoot" : "ifc:hasString_Description+of+Wall",
+    "globalId_IfcRoot" : "ifc:hasString_3vB2YO%24MX4xv5uCqZZG05x",
+    "name_IfcRoot" : "ifc:hasString_Wall+xyz",
+    "objectPlacement_IfcProduct" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_1",
+    "ownerHistory_IfcRoot" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_2",
+    "representation_IfcProduct" : "model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_3"
+  }, {
+    "@id" : "model:_LINE_10",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:CUBIC_METRE",
+    "unitType_IfcNamedUnit" : "ifc:VOLUMEUNIT"
+  }, {
+    "@id" : "model:_LINE_100",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_100_1"
+  }, {
+    "@id" : "model:_LINE_100_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_100_1_slot_3", "model:_LINE_100_1_slot_2", "model:_LINE_100_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_100_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.9"
+  }, {
+    "@id" : "model:_LINE_100_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_100_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.25"
+  }, {
+    "@id" : "model:_LINE_101",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_101_1"
+  }, {
+    "@id" : "model:_LINE_101_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_101_1_slot_3", "model:_LINE_101_1_slot_2", "model:_LINE_101_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_101_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_101_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_101_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_102",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_102_1"
+  }, {
+    "@id" : "model:_LINE_102_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_102_1_slot_3", "model:_LINE_102_1_slot_2", "model:_LINE_102_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_102_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_102_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_102_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_103",
+    "@type" : "ifc:IfcProductDefinitionShape",
+    "representations_IfcProductRepresentation" : "model:_LINE_103_1"
+  }, {
+    "@id" : "model:_LINE_103_1",
+    "@type" : "ifc:IfcRepresentation_List",
+    "isOrdered" : "expr:true",
+    "size" : "1",
+    "slot" : "model:_LINE_103_1_slot_1"
+  }, {
+    "@id" : "model:_LINE_103_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_103_1_1"
+  }, {
+    "@id" : "model:_LINE_105",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Depth",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_0.3",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Depth"
+  }, {
+    "@id" : "model:_LINE_106",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Height",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_1.4",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Height"
+  }, {
+    "@id" : "model:_LINE_107",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Width",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_0.75",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Width"
+  }, {
+    "@id" : "model:_LINE_11",
+    "@type" : "ifc:IfcConversionBasedUnit",
+    "conversionFactor_IfcConversionBasedUnit" : "model:_LINE_11_1",
+    "dimensions_IfcNamedUnit" : "model:_LINE_11_2",
+    "name_IfcConversionBasedUnit" : "ifc:hasString_DEGREE",
+    "unitType_IfcNamedUnit" : "ifc:PLANEANGLEUNIT"
+  }, {
+    "@id" : "model:_LINE_110",
+    "@type" : "ifc:IfcShapeRepresentation",
+    "contextOfItems_IfcRepresentation" : "model:_LINE_110_1",
+    "items_IfcRepresentation" : "model:_LINE_110_2",
+    "representationIdentifier_IfcRepresentation" : "ifc:hasString_Body",
+    "representationType_IfcRepresentation" : "ifc:hasString_SweptSolid"
+  }, {
+    "@id" : "model:_LINE_110_2",
+    "@type" : "ifc:IfcRepresentationItem_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:_LINE_110_2_slot_1"
+  }, {
+    "@id" : "model:_LINE_110_2_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_110_2_1"
+  }, {
+    "@id" : "model:_LINE_111",
+    "@type" : "ifc:IfcExtrudedAreaSolid",
+    "depth_IfcExtrudedAreaSolid" : "ifc:hasReal_1.4",
+    "extrudedDirection_IfcExtrudedAreaSolid" : "model:_LINE_111_1",
+    "position_IfcSweptAreaSolid" : "model:_LINE_111_2",
+    "sweptArea_IfcSweptAreaSolid" : "model:_LINE_111_3"
+  }, {
+    "@id" : "model:_LINE_112",
+    "@type" : "ifc:IfcArbitraryClosedProfileDef",
+    "outerCurve_IfcArbitraryClosedProfileDef" : "model:_LINE_112_1",
+    "profileType_IfcProfileDef" : "ifc:AREA"
+  }, {
+    "@id" : "model:_LINE_113",
+    "@type" : "ifc:IfcPolyline",
+    "points_IfcPolyline" : "model:_LINE_113_1"
+  }, {
+    "@id" : "model:_LINE_113_1",
+    "@type" : "ifc:IfcCartesianPoint_List",
+    "isOrdered" : "expr:true",
+    "size" : "5",
+    "slot" : [ "model:_LINE_113_1_slot_5", "model:_LINE_113_1_slot_4", "model:_LINE_113_1_slot_3", "model:_LINE_113_1_slot_2", "model:_LINE_113_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_113_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_113_1_1"
+  }, {
+    "@id" : "model:_LINE_113_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_113_1_2"
+  }, {
+    "@id" : "model:_LINE_113_1_slot_3",
+    "index" : "3",
+    "item" : "model:_LINE_113_1_3"
+  }, {
+    "@id" : "model:_LINE_113_1_slot_4",
+    "index" : "4",
+    "item" : "model:_LINE_113_1_4"
+  }, {
+    "@id" : "model:_LINE_113_1_slot_5",
+    "index" : "5",
+    "item" : "model:_LINE_113_1_5"
+  }, {
+    "@id" : "model:_LINE_114",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_114_1"
+  }, {
+    "@id" : "model:_LINE_114_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_114_1_slot_2", "model:_LINE_114_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_114_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_114_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_115",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_115_1"
+  }, {
+    "@id" : "model:_LINE_115_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_115_1_slot_2", "model:_LINE_115_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_115_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_115_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.3"
+  }, {
+    "@id" : "model:_LINE_116",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_116_1"
+  }, {
+    "@id" : "model:_LINE_116_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_116_1_slot_2", "model:_LINE_116_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_116_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.75"
+  }, {
+    "@id" : "model:_LINE_116_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.3"
+  }, {
+    "@id" : "model:_LINE_117",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_117_1"
+  }, {
+    "@id" : "model:_LINE_117_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_117_1_slot_2", "model:_LINE_117_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_117_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.75"
+  }, {
+    "@id" : "model:_LINE_117_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_118",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_118_1"
+  }, {
+    "@id" : "model:_LINE_118_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_118_1_slot_2", "model:_LINE_118_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_118_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_118_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_119",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_119_1",
+    "location_IfcPlacement" : "model:_LINE_119_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_119_3"
+  }, {
+    "@id" : "model:_LINE_12",
+    "@type" : "ifc:IfcDimensionalExponents",
+    "amountOfSubstanceExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "electricCurrentExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "lengthExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "luminousIntensityExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "massExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "thermodynamicTemperatureExponent_IfcDimensionalExponents" : "ifc:hasInteger_0",
+    "timeExponent_IfcDimensionalExponents" : "ifc:hasInteger_0"
+  }, {
+    "@id" : "model:_LINE_120",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_120_1"
+  }, {
+    "@id" : "model:_LINE_120_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_120_1_slot_3", "model:_LINE_120_1_slot_2", "model:_LINE_120_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_120_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_120_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_120_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_121",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_121_1"
+  }, {
+    "@id" : "model:_LINE_121_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_121_1_slot_3", "model:_LINE_121_1_slot_2", "model:_LINE_121_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_121_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_121_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_121_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_122",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_122_1"
+  }, {
+    "@id" : "model:_LINE_122_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_122_1_slot_3", "model:_LINE_122_1_slot_2", "model:_LINE_122_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_122_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_122_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_122_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_123",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_123_1"
+  }, {
+    "@id" : "model:_LINE_123_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_123_1_slot_3", "model:_LINE_123_1_slot_2", "model:_LINE_123_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_123_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_123_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_123_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_125",
+    "@type" : "ifc:IfcLocalPlacement",
+    "placementRelTo_IfcLocalPlacement" : "model:_LINE_125_1",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_125_2"
+  }, {
+    "@id" : "model:_LINE_126",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_126_1",
+    "location_IfcPlacement" : "model:_LINE_126_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_126_3"
+  }, {
+    "@id" : "model:_LINE_127",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_127_1"
+  }, {
+    "@id" : "model:_LINE_127_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_127_1_slot_3", "model:_LINE_127_1_slot_2", "model:_LINE_127_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_127_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_127_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.1"
+  }, {
+    "@id" : "model:_LINE_127_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_128",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_128_1"
+  }, {
+    "@id" : "model:_LINE_128_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_128_1_slot_3", "model:_LINE_128_1_slot_2", "model:_LINE_128_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_128_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_128_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_128_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_129",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_129_1"
+  }, {
+    "@id" : "model:_LINE_129_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_129_1_slot_3", "model:_LINE_129_1_slot_2", "model:_LINE_129_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_129_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_129_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_129_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_13",
+    "@type" : "ifc:IfcMeasureWithUnit",
+    "unitComponent_IfcMeasureWithUnit" : "model:_LINE_13_1",
+    "valueComponent_IfcMeasureWithUnit" : "ifc:hasReal_0.01745"
+  }, {
+    "@id" : "model:_LINE_130",
+    "@type" : "ifc:IfcProductDefinitionShape",
+    "representations_IfcProductRepresentation" : "model:_LINE_130_1"
+  }, {
+    "@id" : "model:_LINE_130_1",
+    "@type" : "ifc:IfcRepresentation_List",
+    "isOrdered" : "expr:true",
+    "size" : "1",
+    "slot" : "model:_LINE_130_1_slot_1"
+  }, {
+    "@id" : "model:_LINE_130_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_130_1_1"
+  }, {
+    "@id" : "model:_LINE_133",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_Reference",
+    "name_IfcProperty" : "ifc:hasString_Reference",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_134",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_FireRating",
+    "name_IfcProperty" : "ifc:hasString_FireRating",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_135",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_AcousticRating",
+    "name_IfcProperty" : "ifc:hasString_AcousticRating",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_136",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_SecurityRating",
+    "name_IfcProperty" : "ifc:hasString_SecurityRating",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_137",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_IsExternal",
+    "name_IfcProperty" : "ifc:hasString_IsExternal",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_true"
+  }, {
+    "@id" : "model:_LINE_138",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_Infiltration",
+    "name_IfcProperty" : "ifc:hasString_Infiltration",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_139",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_ThermalTransmittance",
+    "name_IfcProperty" : "ifc:hasString_ThermalTransmittance",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasReal_0.24"
+  }, {
+    "@id" : "model:_LINE_14",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:RADIAN",
+    "unitType_IfcNamedUnit" : "ifc:PLANEANGLEUNIT"
+  }, {
+    "@id" : "model:_LINE_140",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_GlazingAresFraction",
+    "name_IfcProperty" : "ifc:hasString_GlazingAresFraction",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasReal_0.7"
+  }, {
+    "@id" : "model:_LINE_141",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_HandicapAccessible",
+    "name_IfcProperty" : "ifc:hasString_HandicapAccessible",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_142",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_FireExit",
+    "name_IfcProperty" : "ifc:hasString_FireExit",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_143",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_SelfClosing",
+    "name_IfcProperty" : "ifc:hasString_SelfClosing",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_144",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_SmokeStop",
+    "name_IfcProperty" : "ifc:hasString_SmokeStop",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_147",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Height",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_1.4",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Height"
+  }, {
+    "@id" : "model:_LINE_148",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Width",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_0.75",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Width"
+  }, {
+    "@id" : "model:_LINE_15",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:STERADIAN",
+    "unitType_IfcNamedUnit" : "ifc:SOLIDANGLEUNIT"
+  }, {
+    "@id" : "model:_LINE_150",
+    "@type" : "ifc:IfcShapeRepresentation",
+    "contextOfItems_IfcRepresentation" : "model:_LINE_150_1",
+    "items_IfcRepresentation" : "model:_LINE_150_2",
+    "representationIdentifier_IfcRepresentation" : "ifc:hasString_Body",
+    "representationType_IfcRepresentation" : "ifc:hasString_SweptSolid"
+  }, {
+    "@id" : "model:_LINE_150_2",
+    "@type" : "ifc:IfcRepresentationItem_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:_LINE_150_2_slot_1"
+  }, {
+    "@id" : "model:_LINE_150_2_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_150_2_1"
+  }, {
+    "@id" : "model:_LINE_151",
+    "@type" : "ifc:IfcExtrudedAreaSolid",
+    "depth_IfcExtrudedAreaSolid" : "ifc:hasReal_1.4",
+    "extrudedDirection_IfcExtrudedAreaSolid" : "model:_LINE_151_1",
+    "position_IfcSweptAreaSolid" : "model:_LINE_151_2",
+    "sweptArea_IfcSweptAreaSolid" : "model:_LINE_151_3"
+  }, {
+    "@id" : "model:_LINE_152",
+    "@type" : "ifc:IfcArbitraryClosedProfileDef",
+    "outerCurve_IfcArbitraryClosedProfileDef" : "model:_LINE_152_1",
+    "profileType_IfcProfileDef" : "ifc:AREA"
+  }, {
+    "@id" : "model:_LINE_153",
+    "@type" : "ifc:IfcPolyline",
+    "points_IfcPolyline" : "model:_LINE_153_1"
+  }, {
+    "@id" : "model:_LINE_153_1",
+    "@type" : "ifc:IfcCartesianPoint_List",
+    "isOrdered" : "expr:true",
+    "size" : "5",
+    "slot" : [ "model:_LINE_153_1_slot_5", "model:_LINE_153_1_slot_4", "model:_LINE_153_1_slot_3", "model:_LINE_153_1_slot_2", "model:_LINE_153_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_153_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_153_1_1"
+  }, {
+    "@id" : "model:_LINE_153_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_153_1_2"
+  }, {
+    "@id" : "model:_LINE_153_1_slot_3",
+    "index" : "3",
+    "item" : "model:_LINE_153_1_3"
+  }, {
+    "@id" : "model:_LINE_153_1_slot_4",
+    "index" : "4",
+    "item" : "model:_LINE_153_1_4"
+  }, {
+    "@id" : "model:_LINE_153_1_slot_5",
+    "index" : "5",
+    "item" : "model:_LINE_153_1_5"
+  }, {
+    "@id" : "model:_LINE_154",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_154_1"
+  }, {
+    "@id" : "model:_LINE_154_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_154_1_slot_2", "model:_LINE_154_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_154_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_154_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_155",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_155_1"
+  }, {
+    "@id" : "model:_LINE_155_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_155_1_slot_2", "model:_LINE_155_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_155_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_155_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.1"
+  }, {
+    "@id" : "model:_LINE_156",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_156_1"
+  }, {
+    "@id" : "model:_LINE_156_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_156_1_slot_2", "model:_LINE_156_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_156_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.75"
+  }, {
+    "@id" : "model:_LINE_156_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.1"
+  }, {
+    "@id" : "model:_LINE_157",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_157_1"
+  }, {
+    "@id" : "model:_LINE_157_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_157_1_slot_2", "model:_LINE_157_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_157_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.75"
+  }, {
+    "@id" : "model:_LINE_157_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_158",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_158_1"
+  }, {
+    "@id" : "model:_LINE_158_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_158_1_slot_2", "model:_LINE_158_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_158_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_158_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_159",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_159_1",
+    "location_IfcPlacement" : "model:_LINE_159_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_159_3"
+  }, {
+    "@id" : "model:_LINE_16",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:GRAM",
+    "unitType_IfcNamedUnit" : "ifc:MASSUNIT"
+  }, {
+    "@id" : "model:_LINE_160",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_160_1"
+  }, {
+    "@id" : "model:_LINE_160_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_160_1_slot_3", "model:_LINE_160_1_slot_2", "model:_LINE_160_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_160_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_160_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_160_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_161",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_161_1"
+  }, {
+    "@id" : "model:_LINE_161_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_161_1_slot_3", "model:_LINE_161_1_slot_2", "model:_LINE_161_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_161_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_161_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_161_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_162",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_162_1"
+  }, {
+    "@id" : "model:_LINE_162_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_162_1_slot_3", "model:_LINE_162_1_slot_2", "model:_LINE_162_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_162_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_162_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_162_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_163",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_163_1"
+  }, {
+    "@id" : "model:_LINE_163_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_163_1_slot_3", "model:_LINE_163_1_slot_2", "model:_LINE_163_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_163_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_163_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_163_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_17",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:SECOND",
+    "unitType_IfcNamedUnit" : "ifc:TIMEUNIT"
+  }, {
+    "@id" : "model:_LINE_18",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:DEGREE_CELSIUS",
+    "unitType_IfcNamedUnit" : "ifc:THERMODYNAMICTEMPERATUREUNIT"
+  }, {
+    "@id" : "model:_LINE_19",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:LUMEN",
+    "unitType_IfcNamedUnit" : "ifc:LUMINOUSINTENSITYUNIT"
+  }, {
+    "@id" : "model:_LINE_2",
+    "@type" : "ifc:IfcOwnerHistory",
+    "changeAction_IfcOwnerHistory" : "ifc:ADDED",
+    "creationDate_IfcOwnerHistory" : "ifc:hasDatetime_java.util.GregorianCalendar%5Btime%3D1217620436000%2CareFieldsSet%3Dtrue%2CareAllFieldsSet%3Dtrue%2Clenient%3Dtrue%2Czone%3Dsun.util.calendar.ZoneInfo%5Bid%3D%22Europe%2FHelsinki%22%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2Ctransitions%3D118%2ClastRule%3Djava.util.SimpleTimeZone%5Bid%3DEurope%2FHelsinki%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2CstartYear%3D0%2CstartMode%3D2%2CstartMonth%3D2%2CstartDay%3D-1%2CstartDayOfWeek%3D1%2CstartTime%3D3600000%2CstartTimeMode%3D2%2CendMode%3D2%2CendMonth%3D9%2CendDay%3D-1%2CendDayOfWeek%3D1%2CendTime%3D3600000%2CendTimeMode%3D2%5D%5D%2CfirstDayOfWeek%3D2%2CminimalDaysInFirstWeek%3D4%2CERA%3D1%2CYEAR%3D2008%2CMONTH%3D7%2CWEEK_OF_YEAR%3D31%2CWEEK_OF_MONTH%3D0%2CDAY_OF_MONTH%3D1%2CDAY_OF_YEAR%3D214%2CDAY_OF_WEEK%3D6%2CDAY_OF_WEEK_IN_MONTH%3D1%2CAM_PM%3D1%2CHOUR%3D10%2CHOUR_OF_DAY%3D22%2CMINUTE%3D53%2CSECOND%3D56%2CMILLISECOND%3D0%2CZONE_OFFSET%3D7200000%2CDST_OFFSET%3D3600000%5D",
+    "owningApplication_IfcOwnerHistory" : "model:_LINE_2_1",
+    "owningUser_IfcOwnerHistory" : "model:_LINE_2_2"
+  }, {
+    "@id" : "model:_LINE_20",
+    "@type" : "ifc:IfcGeometricRepresentationContext",
+    "contextType_IfcRepresentationContext" : "ifc:hasString_Model",
+    "coordinateSpaceDimension_IfcGeometricRepresentationContext" : "ifc:hasInteger_3",
+    "precision_IfcGeometricRepresentationContext" : "ifc:hasReal_1.0E-5",
+    "worldCoordinateSystem_IfcGeometricRepresentationContext" : "model:_LINE_20_1"
+  }, {
+    "@id" : "model:_LINE_21",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "location_IfcPlacement" : "model:_LINE_21_1"
+  }, {
+    "@id" : "model:_LINE_22",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_22_1"
+  }, {
+    "@id" : "model:_LINE_22_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_22_1_slot_3", "model:_LINE_22_1_slot_2", "model:_LINE_22_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_22_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_22_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_22_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_24",
+    "@type" : "ifc:IfcLocalPlacement",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_24_1"
+  }, {
+    "@id" : "model:_LINE_25",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_25_1",
+    "location_IfcPlacement" : "model:_LINE_25_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_25_3"
+  }, {
+    "@id" : "model:_LINE_26",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_26_1"
+  }, {
+    "@id" : "model:_LINE_26_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_26_1_slot_3", "model:_LINE_26_1_slot_2", "model:_LINE_26_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_26_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_26_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_26_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_27",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_27_1"
+  }, {
+    "@id" : "model:_LINE_27_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_27_1_slot_3", "model:_LINE_27_1_slot_2", "model:_LINE_27_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_27_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_27_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_27_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_28",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_28_1"
+  }, {
+    "@id" : "model:_LINE_28_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_28_1_slot_3", "model:_LINE_28_1_slot_2", "model:_LINE_28_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_28_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_28_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_28_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_3",
+    "@type" : "ifc:IfcPersonAndOrganization",
+    "theOrganization_IfcPersonAndOrganization" : "model:_LINE_3_1",
+    "thePerson_IfcPersonAndOrganization" : "model:_LINE_3_2"
+  }, {
+    "@id" : "model:_LINE_30",
+    "@type" : "ifc:IfcLocalPlacement",
+    "placementRelTo_IfcLocalPlacement" : "model:_LINE_30_1",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_30_2"
+  }, {
+    "@id" : "model:_LINE_31",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_31_1",
+    "location_IfcPlacement" : "model:_LINE_31_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_31_3"
+  }, {
+    "@id" : "model:_LINE_32",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_32_1"
+  }, {
+    "@id" : "model:_LINE_32_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_32_1_slot_3", "model:_LINE_32_1_slot_2", "model:_LINE_32_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_32_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_32_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_32_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_33",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_33_1"
+  }, {
+    "@id" : "model:_LINE_33_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_33_1_slot_3", "model:_LINE_33_1_slot_2", "model:_LINE_33_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_33_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_33_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_33_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_34",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_34_1"
+  }, {
+    "@id" : "model:_LINE_34_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_34_1_slot_3", "model:_LINE_34_1_slot_2", "model:_LINE_34_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_34_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_34_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_34_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_36",
+    "@type" : "ifc:IfcLocalPlacement",
+    "placementRelTo_IfcLocalPlacement" : "model:_LINE_36_1",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_36_2"
+  }, {
+    "@id" : "model:_LINE_37",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_37_1",
+    "location_IfcPlacement" : "model:_LINE_37_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_37_3"
+  }, {
+    "@id" : "model:_LINE_38",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_38_1"
+  }, {
+    "@id" : "model:_LINE_38_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_38_1_slot_3", "model:_LINE_38_1_slot_2", "model:_LINE_38_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_38_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_38_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_38_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_39",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_39_1"
+  }, {
+    "@id" : "model:_LINE_39_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_39_1_slot_3", "model:_LINE_39_1_slot_2", "model:_LINE_39_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_39_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_39_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_39_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_4",
+    "@type" : "ifc:IfcPerson",
+    "familyName_IfcPerson" : "ifc:hasString_Bonsma",
+    "givenName_IfcPerson" : "ifc:hasString_Peter",
+    "id_IfcPerson" : "ifc:hasString_ID001"
+  }, {
+    "@id" : "model:_LINE_40",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_40_1"
+  }, {
+    "@id" : "model:_LINE_40_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_40_1_slot_3", "model:_LINE_40_1_slot_2", "model:_LINE_40_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_40_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_40_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_40_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_46",
+    "@type" : "ifc:IfcLocalPlacement",
+    "placementRelTo_IfcLocalPlacement" : "model:_LINE_46_1",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_46_2"
+  }, {
+    "@id" : "model:_LINE_47",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_47_1",
+    "location_IfcPlacement" : "model:_LINE_47_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_47_3"
+  }, {
+    "@id" : "model:_LINE_48",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_48_1"
+  }, {
+    "@id" : "model:_LINE_48_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_48_1_slot_3", "model:_LINE_48_1_slot_2", "model:_LINE_48_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_48_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_48_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_48_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_49",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_49_1"
+  }, {
+    "@id" : "model:_LINE_49_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_49_1_slot_3", "model:_LINE_49_1_slot_2", "model:_LINE_49_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_49_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_49_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_49_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_5",
+    "@type" : "ifc:IfcOrganization",
+    "description_IfcOrganization" : "ifc:hasString_TNO+Building+Innovation",
+    "name_IfcOrganization" : "ifc:hasString_TNO"
+  }, {
+    "@id" : "model:_LINE_50",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_50_1"
+  }, {
+    "@id" : "model:_LINE_50_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_50_1_slot_3", "model:_LINE_50_1_slot_2", "model:_LINE_50_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_50_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_50_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_50_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_51",
+    "@type" : "ifc:IfcProductDefinitionShape",
+    "representations_IfcProductRepresentation" : "model:_LINE_51_1"
+  }, {
+    "@id" : "model:_LINE_51_1",
+    "@type" : "ifc:IfcRepresentation_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_51_1_slot_2", "model:_LINE_51_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_51_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_51_1_1"
+  }, {
+    "@id" : "model:_LINE_51_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_51_1_2"
+  }, {
+    "@id" : "model:_LINE_53",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_Reference",
+    "name_IfcProperty" : "ifc:hasString_Reference",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_54",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_AcousticRating",
+    "name_IfcProperty" : "ifc:hasString_AcousticRating",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_55",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_FireRating",
+    "name_IfcProperty" : "ifc:hasString_FireRating",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_56",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_Combustible",
+    "name_IfcProperty" : "ifc:hasString_Combustible",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_57",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_SurfaceSpreadOfFlame",
+    "name_IfcProperty" : "ifc:hasString_SurfaceSpreadOfFlame",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasString_"
+  }, {
+    "@id" : "model:_LINE_58",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_ThermalTransmittance",
+    "name_IfcProperty" : "ifc:hasString_ThermalTransmittance",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasReal_0.24"
+  }, {
+    "@id" : "model:_LINE_59",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_IsExternal",
+    "name_IfcProperty" : "ifc:hasString_IsExternal",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_true"
+  }, {
+    "@id" : "model:_LINE_6",
+    "@type" : "ifc:IfcApplication",
+    "applicationDeveloper_IfcApplication" : "model:_LINE_6_1",
+    "applicationFullName_IfcApplication" : "ifc:hasString_Test+Application",
+    "applicationIdentifier_IfcApplication" : "ifc:hasString_TA+1001",
+    "version_IfcApplication" : "ifc:hasString_0.10"
+  }, {
+    "@id" : "model:_LINE_60",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_ExtendToStructure",
+    "name_IfcProperty" : "ifc:hasString_ExtendToStructure",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_61",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_LoadBearing",
+    "name_IfcProperty" : "ifc:hasString_LoadBearing",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_62",
+    "@type" : "ifc:IfcPropertySingleValue",
+    "description_IfcProperty" : "ifc:hasString_Compartmentation",
+    "name_IfcProperty" : "ifc:hasString_Compartmentation",
+    "nominalValue_IfcPropertySingleValue" : "ifc:hasLogical_false"
+  }, {
+    "@id" : "model:_LINE_65",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Width",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_0.3",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Width"
+  }, {
+    "@id" : "model:_LINE_66",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Lenght",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_5.0",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Lenght"
+  }, {
+    "@id" : "model:_LINE_67",
+    "@type" : "ifc:IfcQuantityArea",
+    "areaValue_IfcQuantityArea" : "ifc:hasReal_11.5",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_GrossSideArea",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_GrossSideArea"
+  }, {
+    "@id" : "model:_LINE_68",
+    "@type" : "ifc:IfcQuantityArea",
+    "areaValue_IfcQuantityArea" : "ifc:hasReal_10.45",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_NetSideArea",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_NetSideArea"
+  }, {
+    "@id" : "model:_LINE_69",
+    "@type" : "ifc:IfcQuantityVolume",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_GrossVolume",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_GrossVolume",
+    "volumeValue_IfcQuantityVolume" : "ifc:hasReal_3.45"
+  }, {
+    "@id" : "model:_LINE_7",
+    "@type" : "ifc:IfcUnitAssignment",
+    "units_IfcUnitAssignment" : "model:_LINE_7_1"
+  }, {
+    "@id" : "model:_LINE_70",
+    "@type" : "ifc:IfcQuantityVolume",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_NetVolume",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_NetVolume",
+    "volumeValue_IfcQuantityVolume" : "ifc:hasReal_3.135"
+  }, {
+    "@id" : "model:_LINE_71",
+    "@type" : "ifc:IfcQuantityLength",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_Height",
+    "lengthValue_IfcQuantityLength" : "ifc:hasReal_2.3",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_Height"
+  }, {
+    "@id" : "model:_LINE_72",
+    "@type" : "ifc:IfcQuantityArea",
+    "areaValue_IfcQuantityArea" : "ifc:hasReal_1.5",
+    "description_IfcPhysicalQuantity" : "ifc:hasString_GrossFootprintArea",
+    "name_IfcPhysicalQuantity" : "ifc:hasString_GrossFootprintArea"
+  }, {
+    "@id" : "model:_LINE_75",
+    "@type" : "ifc:IfcMaterialLayerSetUsage",
+    "directionSense_IfcMaterialLayerSetUsage" : "ifc:POSITIVE",
+    "forLayerSet_IfcMaterialLayerSetUsage" : "model:_LINE_75_1",
+    "layerSetDirection_IfcMaterialLayerSetUsage" : "ifc:AXIS2",
+    "offsetFromReferenceLine_IfcMaterialLayerSetUsage" : "ifc:hasReal_-0.15"
+  }, {
+    "@id" : "model:_LINE_76",
+    "@type" : "ifc:IfcMaterialLayerSet",
+    "materialLayers_IfcMaterialLayerSet" : "model:_LINE_76_1"
+  }, {
+    "@id" : "model:_LINE_76_1",
+    "@type" : "ifc:IfcMaterialLayer_List",
+    "isOrdered" : "expr:true",
+    "size" : "1",
+    "slot" : "model:_LINE_76_1_slot_1"
+  }, {
+    "@id" : "model:_LINE_76_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_76_1_1"
+  }, {
+    "@id" : "model:_LINE_77",
+    "@type" : "ifc:IfcMaterialLayer",
+    "layerThickness_IfcMaterialLayer" : "ifc:hasReal_0.3",
+    "material_IfcMaterialLayer" : "model:_LINE_77_1"
+  }, {
+    "@id" : "model:_LINE_78",
+    "@type" : "ifc:IfcMaterial",
+    "name_IfcMaterial" : "ifc:hasString_Name+of+the+material+used+for+the+wall"
+  }, {
+    "@id" : "model:_LINE_79",
+    "@type" : "ifc:IfcShapeRepresentation",
+    "contextOfItems_IfcRepresentation" : "model:_LINE_79_1",
+    "items_IfcRepresentation" : "model:_LINE_79_2",
+    "representationIdentifier_IfcRepresentation" : "ifc:hasString_Axis",
+    "representationType_IfcRepresentation" : "ifc:hasString_Curve2D"
+  }, {
+    "@id" : "model:_LINE_79_2",
+    "@type" : "ifc:IfcRepresentationItem_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:_LINE_79_2_slot_1"
+  }, {
+    "@id" : "model:_LINE_79_2_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_79_2_1"
+  }, {
+    "@id" : "model:_LINE_7_1",
+    "@type" : "ifc:IfcUnit_Set",
+    "isOrdered" : "expr:false",
+    "size" : "9",
+    "slot" : [ "model:_LINE_7_1_slot_5", "model:_LINE_7_1_slot_2", "model:_LINE_7_1_slot_8", "model:_LINE_7_1_slot_4", "model:_LINE_7_1_slot_1", "model:_LINE_7_1_slot_7", "model:_LINE_7_1_slot_3", "model:_LINE_7_1_slot_6", "model:_LINE_7_1_slot_9" ]
+  }, {
+    "@id" : "model:_LINE_7_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_7_1_1"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_7_1_2"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_3",
+    "index" : "3",
+    "item" : "model:_LINE_7_1_3"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_4",
+    "index" : "4",
+    "item" : "model:_LINE_7_1_4"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_5",
+    "index" : "5",
+    "item" : "model:_LINE_7_1_5"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_6",
+    "index" : "6",
+    "item" : "model:_LINE_7_1_6"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_7",
+    "index" : "7",
+    "item" : "model:_LINE_7_1_7"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_8",
+    "index" : "8",
+    "item" : "model:_LINE_7_1_8"
+  }, {
+    "@id" : "model:_LINE_7_1_slot_9",
+    "index" : "9",
+    "item" : "model:_LINE_7_1_9"
+  }, {
+    "@id" : "model:_LINE_8",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:METRE",
+    "unitType_IfcNamedUnit" : "ifc:LENGTHUNIT"
+  }, {
+    "@id" : "model:_LINE_80",
+    "@type" : "ifc:IfcPolyline",
+    "points_IfcPolyline" : "model:_LINE_80_1"
+  }, {
+    "@id" : "model:_LINE_80_1",
+    "@type" : "ifc:IfcCartesianPoint_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_80_1_slot_2", "model:_LINE_80_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_80_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_80_1_1"
+  }, {
+    "@id" : "model:_LINE_80_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_80_1_2"
+  }, {
+    "@id" : "model:_LINE_81",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_81_1"
+  }, {
+    "@id" : "model:_LINE_81_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_81_1_slot_2", "model:_LINE_81_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_81_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_81_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.15"
+  }, {
+    "@id" : "model:_LINE_82",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_82_1"
+  }, {
+    "@id" : "model:_LINE_82_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_82_1_slot_2", "model:_LINE_82_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_82_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_5.0"
+  }, {
+    "@id" : "model:_LINE_82_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.15"
+  }, {
+    "@id" : "model:_LINE_83",
+    "@type" : "ifc:IfcShapeRepresentation",
+    "contextOfItems_IfcRepresentation" : "model:_LINE_83_1",
+    "items_IfcRepresentation" : "model:_LINE_83_2",
+    "representationIdentifier_IfcRepresentation" : "ifc:hasString_Body",
+    "representationType_IfcRepresentation" : "ifc:hasString_SweptSolid"
+  }, {
+    "@id" : "model:_LINE_83_2",
+    "@type" : "ifc:IfcRepresentationItem_Set",
+    "isOrdered" : "expr:false",
+    "size" : "1",
+    "slot" : "model:_LINE_83_2_slot_1"
+  }, {
+    "@id" : "model:_LINE_83_2_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_83_2_1"
+  }, {
+    "@id" : "model:_LINE_84",
+    "@type" : "ifc:IfcExtrudedAreaSolid",
+    "depth_IfcExtrudedAreaSolid" : "ifc:hasReal_2.3",
+    "extrudedDirection_IfcExtrudedAreaSolid" : "model:_LINE_84_1",
+    "position_IfcSweptAreaSolid" : "model:_LINE_84_2",
+    "sweptArea_IfcSweptAreaSolid" : "model:_LINE_84_3"
+  }, {
+    "@id" : "model:_LINE_85",
+    "@type" : "ifc:IfcArbitraryClosedProfileDef",
+    "outerCurve_IfcArbitraryClosedProfileDef" : "model:_LINE_85_1",
+    "profileType_IfcProfileDef" : "ifc:AREA"
+  }, {
+    "@id" : "model:_LINE_86",
+    "@type" : "ifc:IfcPolyline",
+    "points_IfcPolyline" : "model:_LINE_86_1"
+  }, {
+    "@id" : "model:_LINE_86_1",
+    "@type" : "ifc:IfcCartesianPoint_List",
+    "isOrdered" : "expr:true",
+    "size" : "5",
+    "slot" : [ "model:_LINE_86_1_slot_5", "model:_LINE_86_1_slot_4", "model:_LINE_86_1_slot_3", "model:_LINE_86_1_slot_2", "model:_LINE_86_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_86_1_slot_1",
+    "index" : "1",
+    "item" : "model:_LINE_86_1_1"
+  }, {
+    "@id" : "model:_LINE_86_1_slot_2",
+    "index" : "2",
+    "item" : "model:_LINE_86_1_2"
+  }, {
+    "@id" : "model:_LINE_86_1_slot_3",
+    "index" : "3",
+    "item" : "model:_LINE_86_1_3"
+  }, {
+    "@id" : "model:_LINE_86_1_slot_4",
+    "index" : "4",
+    "item" : "model:_LINE_86_1_4"
+  }, {
+    "@id" : "model:_LINE_86_1_slot_5",
+    "index" : "5",
+    "item" : "model:_LINE_86_1_5"
+  }, {
+    "@id" : "model:_LINE_87",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_87_1"
+  }, {
+    "@id" : "model:_LINE_87_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_87_1_slot_2", "model:_LINE_87_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_87_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_87_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_88",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_88_1"
+  }, {
+    "@id" : "model:_LINE_88_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_88_1_slot_2", "model:_LINE_88_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_88_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_88_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.3"
+  }, {
+    "@id" : "model:_LINE_89",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_89_1"
+  }, {
+    "@id" : "model:_LINE_89_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_89_1_slot_2", "model:_LINE_89_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_89_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_5.0"
+  }, {
+    "@id" : "model:_LINE_89_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.3"
+  }, {
+    "@id" : "model:_LINE_9",
+    "@type" : "ifc:IfcSIUnit",
+    "name_IfcSIUnit" : "ifc:SQUARE_METRE",
+    "unitType_IfcNamedUnit" : "ifc:AREAUNIT"
+  }, {
+    "@id" : "model:_LINE_90",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_90_1"
+  }, {
+    "@id" : "model:_LINE_90_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_90_1_slot_2", "model:_LINE_90_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_90_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_5.0"
+  }, {
+    "@id" : "model:_LINE_90_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_91",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_91_1"
+  }, {
+    "@id" : "model:_LINE_91_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "2",
+    "slot" : [ "model:_LINE_91_1_slot_2", "model:_LINE_91_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_91_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_91_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_92",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_92_1",
+    "location_IfcPlacement" : "model:_LINE_92_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_92_3"
+  }, {
+    "@id" : "model:_LINE_93",
+    "@type" : "ifc:IfcCartesianPoint",
+    "coordinates_IfcCartesianPoint" : "model:_LINE_93_1"
+  }, {
+    "@id" : "model:_LINE_93_1",
+    "@type" : "ifc:IfcLengthMeasure_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_93_1_slot_3", "model:_LINE_93_1_slot_2", "model:_LINE_93_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_93_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_93_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_93_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_94",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_94_1"
+  }, {
+    "@id" : "model:_LINE_94_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_94_1_slot_3", "model:_LINE_94_1_slot_2", "model:_LINE_94_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_94_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_94_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_94_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_95",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_95_1"
+  }, {
+    "@id" : "model:_LINE_95_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_95_1_slot_3", "model:_LINE_95_1_slot_2", "model:_LINE_95_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_95_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_95_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_95_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_96",
+    "@type" : "ifc:IfcDirection",
+    "directionRatios_IfcDirection" : "model:_LINE_96_1"
+  }, {
+    "@id" : "model:_LINE_96_1",
+    "@type" : "ifc:REAL_List",
+    "isOrdered" : "expr:true",
+    "size" : "3",
+    "slot" : [ "model:_LINE_96_1_slot_3", "model:_LINE_96_1_slot_2", "model:_LINE_96_1_slot_1" ]
+  }, {
+    "@id" : "model:_LINE_96_1_slot_1",
+    "index" : "1",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_96_1_slot_2",
+    "index" : "2",
+    "item" : "ifc:hasReal_0.0"
+  }, {
+    "@id" : "model:_LINE_96_1_slot_3",
+    "index" : "3",
+    "item" : "ifc:hasReal_1.0"
+  }, {
+    "@id" : "model:_LINE_98",
+    "@type" : "ifc:IfcLocalPlacement",
+    "placementRelTo_IfcLocalPlacement" : "model:_LINE_98_1",
+    "relativePlacement_IfcLocalPlacement" : "model:_LINE_98_2"
+  }, {
+    "@id" : "model:_LINE_99",
+    "@type" : "ifc:IfcAxis2Placement3D",
+    "axis_IfcAxis2Placement3D" : "model:_LINE_99_1",
+    "location_IfcPlacement" : "model:_LINE_99_2",
+    "refDirection_IfcAxis2Placement3D" : "model:_LINE_99_3"
+  } ],
+  "@context" : {
+    "item" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#item",
+      "@type" : "@id"
+    },
+    "index" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#index",
+      "@type" : "http://www.w3.org/2001/XMLSchema#int"
+    },
+    "slot" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#slot",
+      "@type" : "@id"
+    },
+    "isOrdered" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#isOrdered",
+      "@type" : "@id"
+    },
+    "size" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#size",
+      "@type" : "http://www.w3.org/2001/XMLSchema#int"
+    },
+    "refDirection_IfcAxis2Placement3D" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#refDirection_IfcAxis2Placement3D",
+      "@type" : "@id"
+    },
+    "location_IfcPlacement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#location_IfcPlacement",
+      "@type" : "@id"
+    },
+    "axis_IfcAxis2Placement3D" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#axis_IfcAxis2Placement3D",
+      "@type" : "@id"
+    },
+    "hasString" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#hasString",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "points_IfcPolyline" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#points_IfcPolyline",
+      "@type" : "@id"
+    },
+    "nominalValue_IfcPropertySingleValue" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#nominalValue_IfcPropertySingleValue",
+      "@type" : "@id"
+    },
+    "name_IfcProperty" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcProperty",
+      "@type" : "@id"
+    },
+    "description_IfcProperty" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#description_IfcProperty",
+      "@type" : "@id"
+    },
+    "directionRatios_IfcDirection" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#directionRatios_IfcDirection",
+      "@type" : "@id"
+    },
+    "hasReal" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#hasReal",
+      "@type" : "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "coordinates_IfcCartesianPoint" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#coordinates_IfcCartesianPoint",
+      "@type" : "@id"
+    },
+    "name_IfcPhysicalQuantity" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcPhysicalQuantity",
+      "@type" : "@id"
+    },
+    "lengthValue_IfcQuantityLength" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#lengthValue_IfcQuantityLength",
+      "@type" : "@id"
+    },
+    "description_IfcPhysicalQuantity" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#description_IfcPhysicalQuantity",
+      "@type" : "@id"
+    },
+    "unitType_IfcNamedUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#unitType_IfcNamedUnit",
+      "@type" : "@id"
+    },
+    "name_IfcSIUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcSIUnit",
+      "@type" : "@id"
+    },
+    "relativePlacement_IfcLocalPlacement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relativePlacement_IfcLocalPlacement",
+      "@type" : "@id"
+    },
+    "placementRelTo_IfcLocalPlacement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#placementRelTo_IfcLocalPlacement",
+      "@type" : "@id"
+    },
+    "areaValue_IfcQuantityArea" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#areaValue_IfcQuantityArea",
+      "@type" : "@id"
+    },
+    "hasInteger" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#hasInteger",
+      "@type" : "http://www.w3.org/2001/XMLSchema#long"
+    },
+    "name_IfcRoot" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcRoot",
+      "@type" : "@id"
+    },
+    "globalId_IfcRoot" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#globalId_IfcRoot",
+      "@type" : "@id"
+    },
+    "description_IfcRoot" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#description_IfcRoot",
+      "@type" : "@id"
+    },
+    "compositionType_IfcSpatialStructureElement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#compositionType_IfcSpatialStructureElement",
+      "@type" : "@id"
+    },
+    "ownerHistory_IfcRoot" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#ownerHistory_IfcRoot",
+      "@type" : "@id"
+    },
+    "objectPlacement_IfcProduct" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#objectPlacement_IfcProduct",
+      "@type" : "@id"
+    },
+    "relatingObject_IfcRelDecomposes" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingObject_IfcRelDecomposes",
+      "@type" : "@id"
+    },
+    "relatedObjects_IfcRelDecomposes" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedObjects_IfcRelDecomposes",
+      "@type" : "@id"
+    },
+    "representations_IfcProductRepresentation" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#representations_IfcProductRepresentation",
+      "@type" : "@id"
+    },
+    "relatingPropertyDefinition_IfcRelDefinesByProperties" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingPropertyDefinition_IfcRelDefinesByProperties",
+      "@type" : "@id"
+    },
+    "relatedObjects_IfcRelDefines" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedObjects_IfcRelDefines",
+      "@type" : "@id"
+    },
+    "units_IfcUnitAssignment" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#units_IfcUnitAssignment",
+      "@type" : "@id"
+    },
+    "relatingBuildingElement_IfcRelVoidsElement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingBuildingElement_IfcRelVoidsElement",
+      "@type" : "@id"
+    },
+    "relatedOpeningElement_IfcRelVoidsElement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedOpeningElement_IfcRelVoidsElement",
+      "@type" : "@id"
+    },
+    "hasProperties_IfcPropertySet" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#hasProperties_IfcPropertySet",
+      "@type" : "@id"
+    },
+    "profileType_IfcProfileDef" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#profileType_IfcProfileDef",
+      "@type" : "@id"
+    },
+    "outerCurve_IfcArbitraryClosedProfileDef" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#outerCurve_IfcArbitraryClosedProfileDef",
+      "@type" : "@id"
+    },
+    "comment" : "http://www.w3.org/2000/01/rdf-schema#comment",
+    "versionInfo" : "http://www.w3.org/2002/07/owl#versionInfo",
+    "offsetFromReferenceLine_IfcMaterialLayerSetUsage" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#offsetFromReferenceLine_IfcMaterialLayerSetUsage",
+      "@type" : "@id"
+    },
+    "layerSetDirection_IfcMaterialLayerSetUsage" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#layerSetDirection_IfcMaterialLayerSetUsage",
+      "@type" : "@id"
+    },
+    "directionSense_IfcMaterialLayerSetUsage" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#directionSense_IfcMaterialLayerSetUsage",
+      "@type" : "@id"
+    },
+    "forLayerSet_IfcMaterialLayerSetUsage" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#forLayerSet_IfcMaterialLayerSetUsage",
+      "@type" : "@id"
+    },
+    "creationDate_IfcOwnerHistory" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#creationDate_IfcOwnerHistory",
+      "@type" : "@id"
+    },
+    "changeAction_IfcOwnerHistory" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#changeAction_IfcOwnerHistory",
+      "@type" : "@id"
+    },
+    "owningUser_IfcOwnerHistory" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#owningUser_IfcOwnerHistory",
+      "@type" : "@id"
+    },
+    "owningApplication_IfcOwnerHistory" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#owningApplication_IfcOwnerHistory",
+      "@type" : "@id"
+    },
+    "elevation_IfcBuildingStorey" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#elevation_IfcBuildingStorey",
+      "@type" : "@id"
+    },
+    "overallWidth_IfcWindow" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#overallWidth_IfcWindow",
+      "@type" : "@id"
+    },
+    "overallHeight_IfcWindow" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#overallHeight_IfcWindow",
+      "@type" : "@id"
+    },
+    "representation_IfcProduct" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#representation_IfcProduct",
+      "@type" : "@id"
+    },
+    "volumeValue_IfcQuantityVolume" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#volumeValue_IfcQuantityVolume",
+      "@type" : "@id"
+    },
+    "hasLogical" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#hasLogical",
+      "@type" : "@id"
+    },
+    "hasDatetime" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#hasDatetime",
+      "@type" : "http://www.w3.org/2001/XMLSchema#dateTime"
+    },
+    "materialLayers_IfcMaterialLayerSet" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#materialLayers_IfcMaterialLayerSet",
+      "@type" : "@id"
+    },
+    "thePerson_IfcPersonAndOrganization" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#thePerson_IfcPersonAndOrganization",
+      "@type" : "@id"
+    },
+    "theOrganization_IfcPersonAndOrganization" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#theOrganization_IfcPersonAndOrganization",
+      "@type" : "@id"
+    },
+    "representationType_IfcRepresentation" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#representationType_IfcRepresentation",
+      "@type" : "@id"
+    },
+    "representationIdentifier_IfcRepresentation" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#representationIdentifier_IfcRepresentation",
+      "@type" : "@id"
+    },
+    "items_IfcRepresentation" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#items_IfcRepresentation",
+      "@type" : "@id"
+    },
+    "contextOfItems_IfcRepresentation" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#contextOfItems_IfcRepresentation",
+      "@type" : "@id"
+    },
+    "name_IfcConversionBasedUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcConversionBasedUnit",
+      "@type" : "@id"
+    },
+    "dimensions_IfcNamedUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#dimensions_IfcNamedUnit",
+      "@type" : "@id"
+    },
+    "conversionFactor_IfcConversionBasedUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#conversionFactor_IfcConversionBasedUnit",
+      "@type" : "@id"
+    },
+    "layerThickness_IfcMaterialLayer" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#layerThickness_IfcMaterialLayer",
+      "@type" : "@id"
+    },
+    "material_IfcMaterialLayer" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#material_IfcMaterialLayer",
+      "@type" : "@id"
+    },
+    "id_IfcPerson" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#id_IfcPerson",
+      "@type" : "@id"
+    },
+    "givenName_IfcPerson" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#givenName_IfcPerson",
+      "@type" : "@id"
+    },
+    "familyName_IfcPerson" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#familyName_IfcPerson",
+      "@type" : "@id"
+    },
+    "depth_IfcExtrudedAreaSolid" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#depth_IfcExtrudedAreaSolid",
+      "@type" : "@id"
+    },
+    "sweptArea_IfcSweptAreaSolid" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#sweptArea_IfcSweptAreaSolid",
+      "@type" : "@id"
+    },
+    "position_IfcSweptAreaSolid" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#position_IfcSweptAreaSolid",
+      "@type" : "@id"
+    },
+    "extrudedDirection_IfcExtrudedAreaSolid" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#extrudedDirection_IfcExtrudedAreaSolid",
+      "@type" : "@id"
+    },
+    "quantities_IfcElementQuantity" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#quantities_IfcElementQuantity",
+      "@type" : "@id"
+    },
+    "timeExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#timeExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "thermodynamicTemperatureExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#thermodynamicTemperatureExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "massExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#massExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "luminousIntensityExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#luminousIntensityExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "lengthExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#lengthExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "electricCurrentExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#electricCurrentExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "amountOfSubstanceExponent_IfcDimensionalExponents" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#amountOfSubstanceExponent_IfcDimensionalExponents",
+      "@type" : "@id"
+    },
+    "unitsInContext_IfcProject" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#unitsInContext_IfcProject",
+      "@type" : "@id"
+    },
+    "representationContexts_IfcProject" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#representationContexts_IfcProject",
+      "@type" : "@id"
+    },
+    "name_IfcMaterial" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcMaterial",
+      "@type" : "@id"
+    },
+    "relatingMaterial_IfcRelAssociatesMaterial" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingMaterial_IfcRelAssociatesMaterial",
+      "@type" : "@id"
+    },
+    "relatedObjects_IfcRelAssociates" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedObjects_IfcRelAssociates",
+      "@type" : "@id"
+    },
+    "name_IfcOrganization" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#name_IfcOrganization",
+      "@type" : "@id"
+    },
+    "description_IfcOrganization" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#description_IfcOrganization",
+      "@type" : "@id"
+    },
+    "refLongitude_IfcSite" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#refLongitude_IfcSite",
+      "@type" : "@id"
+    },
+    "refLatitude_IfcSite" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#refLatitude_IfcSite",
+      "@type" : "@id"
+    },
+    "relatingOpeningElement_IfcRelFillsElement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingOpeningElement_IfcRelFillsElement",
+      "@type" : "@id"
+    },
+    "relatedBuildingElement_IfcRelFillsElement" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedBuildingElement_IfcRelFillsElement",
+      "@type" : "@id"
+    },
+    "valueComponent_IfcMeasureWithUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#valueComponent_IfcMeasureWithUnit",
+      "@type" : "@id"
+    },
+    "unitComponent_IfcMeasureWithUnit" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#unitComponent_IfcMeasureWithUnit",
+      "@type" : "@id"
+    },
+    "relatingStructure_IfcRelContainedInSpatialStructure" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatingStructure_IfcRelContainedInSpatialStructure",
+      "@type" : "@id"
+    },
+    "relatedElements_IfcRelContainedInSpatialStructure" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#relatedElements_IfcRelContainedInSpatialStructure",
+      "@type" : "@id"
+    },
+    "version_IfcApplication" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#version_IfcApplication",
+      "@type" : "@id"
+    },
+    "applicationIdentifier_IfcApplication" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#applicationIdentifier_IfcApplication",
+      "@type" : "@id"
+    },
+    "applicationFullName_IfcApplication" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#applicationFullName_IfcApplication",
+      "@type" : "@id"
+    },
+    "applicationDeveloper_IfcApplication" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#applicationDeveloper_IfcApplication",
+      "@type" : "@id"
+    },
+    "precision_IfcGeometricRepresentationContext" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#precision_IfcGeometricRepresentationContext",
+      "@type" : "@id"
+    },
+    "coordinateSpaceDimension_IfcGeometricRepresentationContext" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#coordinateSpaceDimension_IfcGeometricRepresentationContext",
+      "@type" : "@id"
+    },
+    "contextType_IfcRepresentationContext" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#contextType_IfcRepresentationContext",
+      "@type" : "@id"
+    },
+    "worldCoordinateSystem_IfcGeometricRepresentationContext" : {
+      "@id" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#worldCoordinateSystem_IfcGeometricRepresentationContext",
+      "@type" : "@id"
+    },
+    "owl" : "http://www.w3.org/2002/07/owl#",
+    "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "ifc" : "http://drumbeat.cs.hut.fi/owl/IFC2X3#",
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+    "expr" : "http://drumbeat.cs.hut.fi/owl/EXPRESS#",
+    "model" : "http://drumbeat.cs.hut.fi/tomcat/marmotta/resource/"
+  }
+}

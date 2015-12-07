@@ -190,6 +190,7 @@ public class DataSetManager {
 				if (!ifcSchemaLoaded) {
 					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
 					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+					ifcSchemaLoaded = true;
 				}			
 			}
 			

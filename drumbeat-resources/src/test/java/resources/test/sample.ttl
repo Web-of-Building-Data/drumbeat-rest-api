@@ -1,0 +1,2687 @@
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ifc:   <http://drumbeat.cs.hut.fi/owl/IFC2X3#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix expr:  <http://drumbeat.cs.hut.fi/owl/EXPRESS#> .
+@prefix model: <http://drumbeat.cs.hut.fi/tomcat/marmotta/resource/> .
+
+model:_LINE_157_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_130_1  a    ifc:IfcRepresentation_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_130_1_slot_1 .
+
+model:_LINE_51_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_51_1_1 .
+
+model:_LINE_92  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_92_1 ;
+        ifc:location_IfcPlacement     model:_LINE_92_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_92_3 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_TNO+Building+Innovation>
+        a               ifc:IfcText ;
+        expr:hasString  "TNO Building Innovation"^^xsd:string .
+
+model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_F92C2898-FD68-44EF-9178-3348E340017B .
+
+model:_LINE_153  a              ifc:IfcPolyline ;
+        ifc:points_IfcPolyline  model:_LINE_153_1 .
+
+model:_LINE_101_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_62  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_Compartmentation ;
+        ifc:name_IfcProperty         ifc:hasString_Compartmentation ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_123  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_123_1 .
+
+ifc:hasString_Body  a   ifc:IfcLabel ;
+        expr:hasString  "Body"^^xsd:string .
+
+model:_LINE_28_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_153_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:_LINE_153_1_5 .
+
+ifc:hasReal_0.25  a   ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Site>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Default Site"^^xsd:string .
+
+model:_LINE_32  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_32_1 .
+
+ifc:hasReal_5.0  a    ifc:IfcLengthMeasure ;
+        expr:hasReal  "5"^^xsd:decimal .
+
+ifc:hasString_NetSideArea
+        a               ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "NetSideArea"^^xsd:string .
+
+model:_LINE_7_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:_LINE_7_1_5 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_5 .
+
+ifc:hasString_SecurityRating
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "SecurityRating"^^xsd:string .
+
+model:_LINE_129_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_161_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_161_1_slot_3 , model:_LINE_161_1_slot_2 , model:_LINE_161_1_slot_1 .
+
+ifc:hasString_Depth  a  ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "Depth"^^xsd:string .
+
+model:_LINE_80_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_80_1_2 .
+
+model:_LINE_49_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_49_1_slot_3 , model:_LINE_49_1_slot_2 , model:_LINE_49_1_slot_1 .
+
+model:_LINE_135  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_AcousticRating ;
+        ifc:name_IfcProperty         ifc:hasString_AcousticRating ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:_LINE_160_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_4 .
+
+model:_LINE_83_2  a     ifc:IfcRepresentationItem_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_83_2_slot_1 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_2 .
+
+model:_LINE_105  a                    ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Depth ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_0.3 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Depth .
+
+ifc:hasString_Model  a  ifc:IfcLabel ;
+        expr:hasString  "Model"^^xsd:string .
+
+model:_LINE_14  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:RADIAN ;
+        ifc:unitType_IfcNamedUnit  ifc:PLANEANGLEUNIT .
+
+ifc:hasString_SweptSolid
+        a               ifc:IfcLabel ;
+        expr:hasString  "SweptSolid"^^xsd:string .
+
+model:_LINE_39_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_163_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_86  a               ifc:IfcPolyline ;
+        ifc:points_IfcPolyline  model:_LINE_86_1 .
+
+model:_LINE_147  a                    ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Height ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_1.4 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Height .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasInteger_54 .
+
+model:_LINE_40_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_34_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_56  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_Combustible ;
+        ifc:name_IfcProperty         ifc:hasString_Combustible ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_120_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_117  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_117_1 .
+
+model:_LINE_91_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_86_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:_LINE_86_1_4 .
+
+model:_LINE_114_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_22_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8
+        a               ifc:IfcCompoundPlaneAngleMeasure ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_3 , model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_2 , model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_1 .
+
+model:_LINE_26  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_26_1 .
+
+model:_LINE_156_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_156_1_slot_2 , model:_LINE_156_1_slot_1 .
+
+model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_1 .
+
+ifc:hasReal_-0.15  a  ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_113_1  a    ifc:IfcCartesianPoint_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "5"^^xsd:int ;
+        expr:slot       model:_LINE_113_1_slot_5 , model:_LINE_113_1_slot_4 , model:_LINE_113_1_slot_3 , model:_LINE_113_1_slot_2 , model:_LINE_113_1_slot_1 .
+
+model:_LINE_98  a  ifc:IfcLocalPlacement ;
+        ifc:placementRelTo_IfcLocalPlacement
+                model:_LINE_98_1 ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_98_2 .
+
+model:_LINE_159  a                    ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_159_1 ;
+        ifc:location_IfcPlacement     model:_LINE_159_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_159_3 .
+
+model:_LINE_161_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_117_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_94_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_68  a                      ifc:IfcQuantityArea ;
+        ifc:areaValue_IfcQuantityArea  ifc:hasReal_10.45 ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_NetSideArea ;
+        ifc:name_IfcPhysicalQuantity   ifc:hasString_NetSideArea .
+
+ifc:hasInteger_54  a     expr:INTEGER ;
+        expr:hasInteger  "54"^^xsd:long .
+
+model:_LINE_129  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_129_1 .
+
+model:_LINE_88_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.3 .
+
+model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52
+        a                               ifc:IfcBuilding ;
+        ifc:compositionType_IfcSpatialStructureElement
+                ifc:ELEMENT ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Building> ;
+        ifc:globalId_IfcRoot            ifc:hasString_0yf_M5JZv9QQXly4dq_zvI ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Building> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52_1 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52_2 .
+
+ifc:hasString_Bonsma  a  ifc:IfcLabel ;
+        expr:hasString  "Bonsma"^^xsd:string .
+
+model:_LINE_38  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_38_1 .
+
+ifc:hasInteger_24  a     expr:INTEGER ;
+        expr:hasInteger  "24"^^xsd:long .
+
+model:_LINE_113_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:_LINE_113_1_5 .
+
+model:_LINE_160  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_160_1 .
+
+ifc:hasString_3lR5koIT51Kwudkm5eIoTu
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "3lR5koIT51Kwudkm5eIoTu"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Project>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Default Project"^^xsd:string .
+
+model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0
+        a                         ifc:IfcRelAggregates ;
+        ifc:description_IfcRoot   <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_ProjectContainer+for+Sites> ;
+        ifc:globalId_IfcRoot      ifc:hasString_1Nl_BIjGLBke9u_6U3IWlW ;
+        ifc:name_IfcRoot          ifc:hasString_ProjectContainer ;
+        ifc:ownerHistory_IfcRoot  model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_1 ;
+        ifc:relatedObjects_IfcRelDecomposes
+                model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2 ;
+        ifc:relatingObject_IfcRelDecomposes
+                model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255 .
+
+model:_LINE_101_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_101_1_slot_3 , model:_LINE_101_1_slot_2 , model:_LINE_101_1_slot_1 .
+
+model:_LINE_130  a  ifc:IfcProductDefinitionShape ;
+        ifc:representations_IfcProductRepresentation
+                model:_LINE_130_1 .
+
+model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D
+        a                         ifc:IfcRelDefinesByProperties ;
+        ifc:globalId_IfcRoot      ifc:hasString_2fHMxamlj5DvGvEKfCk8nj ;
+        ifc:ownerHistory_IfcRoot  model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_1 ;
+        ifc:relatedObjects_IfcRelDefines
+                model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2 ;
+        ifc:relatingPropertyDefinition_IfcRelDefinesByProperties
+                model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF .
+
+model:_LINE_100_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_96_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_27_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_100  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_100_1 .
+
+model:_LINE_7  a                     ifc:IfcUnitAssignment ;
+        ifc:units_IfcUnitAssignment  model:_LINE_7_1 .
+
+model:_LINE_80_1  a     ifc:IfcCartesianPoint_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_80_1_slot_2 , model:_LINE_80_1_slot_1 .
+
+model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_1 .
+
+model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_1 .
+
+model:_LINE_83_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_83_2_1 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_8
+        expr:index  "8"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_8 .
+
+ifc:hasReal_3.135  a  ifc:IfcVolumeMeasure ;
+        expr:hasReal  "3"^^xsd:decimal .
+
+model:_LINE_48_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasReal_0.0  a    expr:REAL , ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_128_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_81  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_81_1 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Building>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Default Building"^^xsd:string .
+
+model:GUID_EF6C5BB2-49D1-4153-AE27-BB01684B2778
+        a                         ifc:IfcRelVoidsElement ;
+        ifc:globalId_IfcRoot      ifc:hasString_3lR5koIT51Kwudkm5eIoTu ;
+        ifc:ownerHistory_IfcRoot  model:GUID_EF6C5BB2-49D1-4153-AE27-BB01684B2778_1 ;
+        ifc:relatedOpeningElement_IfcRelVoidsElement
+                model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D ;
+        ifc:relatingBuildingElement_IfcRelVoidsElement
+                model:GUID_F92C2898-FD68-44EF-9178-3348E340017B .
+
+model:_LINE_142  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_FireExit ;
+        ifc:name_IfcProperty         ifc:hasString_FireExit ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_154_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_87_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_87_1_slot_2 , model:_LINE_87_1_slot_1 .
+
+model:_LINE_51  a  ifc:IfcProductDefinitionShape ;
+        ifc:representations_IfcProductRepresentation
+                model:_LINE_51_1 .
+
+ifc:hasString_HandicapAccessible
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "HandicapAccessible"^^xsd:string .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF
+        a                         ifc:IfcPropertySet ;
+        ifc:globalId_IfcRoot      <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0fhz_bHU54xB%24tXHjHPUZl> ;
+        ifc:hasProperties_IfcPropertySet
+                model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1 ;
+        ifc:name_IfcRoot          ifc:hasString_Pset_WindowCommon ;
+        ifc:ownerHistory_IfcRoot  model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_2 .
+
+model:_LINE_112  a                     ifc:IfcArbitraryClosedProfileDef ;
+        ifc:outerCurve_IfcArbitraryClosedProfileDef
+                model:_LINE_112_1 ;
+        ifc:profileType_IfcProfileDef  ifc:AREA .
+
+model:_LINE_123_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_21  a                  ifc:IfcAxis2Placement3D ;
+        ifc:location_IfcPlacement  model:_LINE_21_1 .
+
+ifc:hasInteger_3  a      ifc:IfcDimensionCount ;
+        expr:hasInteger  "3"^^xsd:long .
+
+model:_LINE_82_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.15 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_ProjectContainer+for+Sites>
+        a               ifc:IfcText ;
+        expr:hasString  "ProjectContainer for Sites"^^xsd:string .
+
+model:_LINE_163_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_163_1_slot_3 , model:_LINE_163_1_slot_2 , model:_LINE_163_1_slot_1 .
+
+model:_LINE_76_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_76_1_1 .
+
+model:_LINE_51_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_51_1_2 .
+
+model:_LINE_93  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_93_1 .
+
+model:_LINE_120_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_120_1_slot_3 , model:_LINE_120_1_slot_2 , model:_LINE_120_1_slot_1 .
+
+model:_LINE_162_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_154  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_154_1 .
+
+model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2
+        a               ifc:IfcObject_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2_slot_1 .
+
+ifc:hasString_Width  a  ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "Width"^^xsd:string .
+
+ifc:hasString_Lenght  a  ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "Lenght"^^xsd:string .
+
+model:_LINE_28_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_33_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_32_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_32_1_slot_3 , model:_LINE_32_1_slot_2 , model:_LINE_32_1_slot_1 .
+
+ifc:hasString_3IxFuNHRvBDfMT6_FiWPEz
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "3IxFuNHRvBDfMT6_FiWPEz"^^xsd:string .
+
+model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_F92C2898-FD68-44EF-9178-3348E340017B .
+
+model:_LINE_33  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_33_1 .
+
+model:_LINE_90_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_5.0 .
+
+model:_LINE_127_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_127_1_slot_3 , model:_LINE_127_1_slot_2 , model:_LINE_127_1_slot_1 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_6
+        expr:index  "6"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_6 .
+
+model:_LINE_7_1_slot_6
+        expr:index  "6"^^xsd:int ;
+        expr:item   model:_LINE_7_1_6 .
+
+ifc:    a                owl:Ontology ;
+        rdfs:comment     "OWL profile: [OWL2_DL].\r\n\t\tConversion options: {ConvertBooleansTo=fi.hut.cs.drumbeat.common.params.StringParam@2a32de6c\r\n\t\t\t ConvertCollectionsTo=fi.hut.cs.drumbeat.common.params.StringParam@7692d9cc\r\n\t\t\t ConvertDoublesTo=fi.hut.cs.drumbeat.common.params.StringParam@75f32542\r\n\t\t\t ConvertEnumsTo=fi.hut.cs.drumbeat.common.params.StringParam@7f1302d6\r\n\t\t\t ExportDebugInfo=fi.hut.cs.drumbeat.common.params.BooleanParam@43ee72e6\r\n\t\t\t ExportPropertyDomainsAndRanges=fi.hut.cs.drumbeat.common.params.StringParam@23529fee\r\n\t\t\t IgnoreExpressSchema=fi.hut.cs.drumbeat.common.params.BooleanParam@4fe767f3\r\n\t\t\t IgnoreIfcSchema=fi.hut.cs.drumbeat.common.params.BooleanParam@2805c96b\r\n\t\t\t NameAllBlankNodes=fi.hut.cs.drumbeat.common.params.BooleanParam@184cf7cf\r\n\t\t\t UseLongAttributeName=fi.hut.cs.drumbeat.common.params.BooleanParam@2fd6b6c7}" ;
+        owl:versionInfo  "v1.0 2015/11/27 01:56:46" .
+
+ifc:hasString_SelfClosing
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "SelfClosing"^^xsd:string .
+
+model:_LINE_136  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_SecurityRating ;
+        ifc:name_IfcProperty         ifc:hasString_SecurityRating ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+ifc:hasString_0YvctVUKr0kugbFTf53O9L
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0YvctVUKr0kugbFTf53O9L"^^xsd:string .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_5 .
+
+model:_LINE_160_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_39_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_39_1_slot_3 , model:_LINE_39_1_slot_2 , model:_LINE_39_1_slot_1 .
+
+model:_LINE_75  a  ifc:IfcMaterialLayerSetUsage ;
+        ifc:directionSense_IfcMaterialLayerSetUsage
+                ifc:POSITIVE ;
+        ifc:forLayerSet_IfcMaterialLayerSetUsage
+                model:_LINE_75_1 ;
+        ifc:layerSetDirection_IfcMaterialLayerSetUsage
+                ifc:AXIS2 ;
+        ifc:offsetFromReferenceLine_IfcMaterialLayerSetUsage
+                ifc:hasReal_-0.15 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_SiteContainer+For+Buildings>
+        a               ifc:IfcText ;
+        expr:hasString  "SiteContainer For Buildings"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Building>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Default Building"^^xsd:string .
+
+model:_LINE_2  a                        ifc:IfcOwnerHistory ;
+        ifc:changeAction_IfcOwnerHistory
+                ifc:ADDED ;
+        ifc:creationDate_IfcOwnerHistory
+                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasDatetime_java.util.GregorianCalendar%5Btime%3D1217620436000%2CareFieldsSet%3Dtrue%2CareAllFieldsSet%3Dtrue%2Clenient%3Dtrue%2Czone%3Dsun.util.calendar.ZoneInfo%5Bid%3D%22Europe%2FHelsinki%22%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2Ctransitions%3D118%2ClastRule%3Djava.util.SimpleTimeZone%5Bid%3DEurope%2FHelsinki%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2CstartYear%3D0%2CstartMode%3D2%2CstartMonth%3D2%2CstartDay%3D-1%2CstartDayOfWeek%3D1%2CstartTime%3D3600000%2CstartTimeMode%3D2%2CendMode%3D2%2CendMonth%3D9%2CendDay%3D-1%2CendDayOfWeek%3D1%2CendTime%3D3600000%2CendTimeMode%3D2%5D%5D%2CfirstDayOfWeek%3D2%2CminimalDaysInFirstWeek%3D4%2CERA%3D1%2CYEAR%3D2008%2CMONTH%3D7%2CWEEK_OF_YEAR%3D31%2CWEEK_OF_MONTH%3D0%2CDAY_OF_MONTH%3D1%2CDAY_OF_YEAR%3D214%2CDAY_OF_WEEK%3D6%2CDAY_OF_WEEK_IN_MONTH%3D1%2CAM_PM%3D1%2CHOUR%3D10%2CHOUR_OF_DAY%3D22%2CMINUTE%3D53%2CSECOND%3D56%2CMILLISECOND%3D0%2CZONE_OFFSET%3D7200000%2CDST_OFFSET%3D3600000%5D> ;
+        ifc:owningApplication_IfcOwnerHistory
+                model:_LINE_2_1 ;
+        ifc:owningUser_IfcOwnerHistory  model:_LINE_2_2 .
+
+model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF
+        a                               ifc:IfcBuildingStorey ;
+        ifc:compositionType_IfcSpatialStructureElement
+                ifc:ELEMENT ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Building+Storey> ;
+        ifc:elevation_IfcBuildingStorey
+                ifc:hasReal_0.0 ;
+        ifc:globalId_IfcRoot            <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0C87kaqBXF%24xpGmTZ7zxN%24> ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Building+Storey> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF_1 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF_2 .
+
+model:_LINE_116_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.75 .
+
+ifc:hasString_18RtPv6efDwuUOMduCZ7rH
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "18RtPv6efDwuUOMduCZ7rH"^^xsd:string .
+
+model:_LINE_87_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_3 .
+
+model:_LINE_106  a                    ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Height ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_1.4 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Height .
+
+model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF .
+
+model:_LINE_158_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_158_1_slot_2 , model:_LINE_158_1_slot_1 .
+
+model:_LINE_15  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:STERADIAN ;
+        ifc:unitType_IfcNamedUnit  ifc:SOLIDANGLEUNIT .
+
+model:_LINE_115_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_115_1_slot_2 , model:_LINE_115_1_slot_1 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2
+        a               ifc:IfcPhysicalQuantity_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "8"^^xsd:int ;
+        expr:slot       model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_8 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_5 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_1 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_7 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_2 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_4 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_6 , model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_3 .
+
+model:_LINE_39_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+ifc:hasString_IsExternal
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "IsExternal"^^xsd:string .
+
+model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52 .
+
+model:_LINE_163_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2
+        a                               ifc:IfcWindow ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Window> ;
+        ifc:globalId_IfcRoot            ifc:hasString_0LV8Pid0X3IA3jJLVDPidY ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Window+xyz> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_1 ;
+        ifc:overallHeight_IfcWindow     ifc:hasReal_1.4 ;
+        ifc:overallWidth_IfcWindow      ifc:hasReal_0.75 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_2 ;
+        ifc:representation_IfcProduct   model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2_3 .
+
+ifc:hasString_2LcE70iQb51PEZynawyvuT
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2LcE70iQb51PEZynawyvuT"^^xsd:string .
+
+model:_LINE_87  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_87_1 .
+
+model:_LINE_148  a                    ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Width ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_0.75 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Width .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasInteger_25 .
+
+model:_LINE_27_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_27_1_slot_3 , model:_LINE_27_1_slot_2 , model:_LINE_27_1_slot_1 .
+
+ifc:hasReal_10.45  a  ifc:IfcAreaMeasure ;
+        expr:hasReal  "10"^^xsd:decimal .
+
+model:_LINE_94_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_94_1_slot_3 , model:_LINE_94_1_slot_2 , model:_LINE_94_1_slot_1 .
+
+model:_LINE_34_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_51_1  a     ifc:IfcRepresentation_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_51_1_slot_2 , model:_LINE_51_1_slot_1 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Contents+of+Building+Storey>
+        a               ifc:IfcText ;
+        expr:hasString  "Contents of Building Storey"^^xsd:string .
+
+model:_LINE_57  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_SurfaceSpreadOfFlame ;
+        ifc:name_IfcProperty         ifc:hasString_SurfaceSpreadOfFlame ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:_LINE_120_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_118  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_118_1 .
+
+ifc:hasString_FireExit
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "FireExit"^^xsd:string .
+
+model:_LINE_86_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:_LINE_86_1_5 .
+
+model:_LINE_114_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_22_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_27  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_27_1 .
+
+model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_2 .
+
+model:_LINE_103_1  a    ifc:IfcRepresentation_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_103_1_slot_1 .
+
+model:_LINE_127_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_99  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_99_1 ;
+        ifc:location_IfcPlacement     model:_LINE_99_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_99_3 .
+
+model:_LINE_153_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_153_1_1 .
+
+model:_LINE_122_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_69  a                     ifc:IfcQuantityVolume ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_GrossVolume ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_GrossVolume ;
+        ifc:volumeValue_IfcQuantityVolume
+                ifc:hasReal_3.45 .
+
+ifc:hasString_3rNg_N55v4CRBpQVbZJoHB
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "3rNg_N55v4CRBpQVbZJoHB"^^xsd:string .
+
+model:_LINE_82_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_82_1_slot_2 , model:_LINE_82_1_slot_1 .
+
+model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB
+        a                         ifc:IfcRelDefinesByProperties ;
+        ifc:globalId_IfcRoot      ifc:hasString_2UEO1blXL9sPmb1AMeW7Ax ;
+        ifc:ownerHistory_IfcRoot  model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_1 ;
+        ifc:relatedObjects_IfcRelDefines
+                model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2 ;
+        ifc:relatingPropertyDefinition_IfcRelDefinesByProperties
+                model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A .
+
+model:_LINE_93_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_1 .
+
+model:_LINE_39  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_39_1 .
+
+model:_LINE_7_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_7_1_1 .
+
+ifc:hasInteger_25  a     expr:INTEGER ;
+        expr:hasInteger  "25"^^xsd:long .
+
+model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041
+        a                         ifc:IfcRelAggregates ;
+        ifc:description_IfcRoot   <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_BuildingContainer+for+BuildigStories> ;
+        ifc:globalId_IfcRoot      ifc:hasString_2168U9nPH5xB3UpDx_uK11 ;
+        ifc:name_IfcRoot          ifc:hasString_BuildingContainer ;
+        ifc:ownerHistory_IfcRoot  model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_1 ;
+        ifc:relatedObjects_IfcRelDecomposes
+                model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2 ;
+        ifc:relatingObject_IfcRelDecomposes
+                model:GUID_3CA7E585-4E3E-4969-A86F-F049F4FBDE52 .
+
+ifc:hasString_GrossVolume
+        a               ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "GrossVolume"^^xsd:string .
+
+model:_LINE_161  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_161_1 .
+
+model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2
+        a               ifc:IfcObject_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2_slot_1 .
+
+model:_LINE_50_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:GUID_F92C2898-FD68-44EF-9178-3348E340017B
+        a                               ifc:IfcWallStandardCase ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Wall> ;
+        ifc:globalId_IfcRoot            <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_3vB2YO%24MX4xv5uCqZZG05x> ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Wall+xyz> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_1 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_2 ;
+        ifc:representation_IfcProduct   model:GUID_F92C2898-FD68-44EF-9178-3348E340017B_3 .
+
+model:_LINE_70  a                     ifc:IfcQuantityVolume ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_NetVolume ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_NetVolume ;
+        ifc:volumeValue_IfcQuantityVolume
+                ifc:hasReal_3.135 .
+
+model:_LINE_100_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.25 .
+
+model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2
+        a               ifc:IfcRepresentationContext_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2_slot_1 .
+
+ifc:hasReal_1.0E-5  a  expr:REAL ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_89_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_89_1_slot_2 , model:_LINE_89_1_slot_1 .
+
+model:_LINE_96_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_40  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_40_1 .
+
+model:_LINE_27_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_101  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_101_1 .
+
+model:_LINE_8  a                   ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:METRE ;
+        ifc:unitType_IfcNamedUnit  ifc:LENGTHUNIT .
+
+model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_2 .
+
+model:_LINE_10  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:CUBIC_METRE ;
+        ifc:unitType_IfcNamedUnit  ifc:VOLUMEUNIT .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_9
+        expr:index  "9"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_9 .
+
+ifc:hasReal_0.1  a    ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2
+        a               ifc:IfcRoot_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2_slot_1 .
+
+model:_LINE_122_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_122_1_slot_3 , model:_LINE_122_1_slot_2 , model:_LINE_122_1_slot_1 .
+
+ifc:hasReal_0.75  a   ifc:IfcPositiveLengthMeasure , ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_128_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_82  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_82_1 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1
+        a               ifc:IfcProperty_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "12"^^xsd:int ;
+        expr:slot       model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_6 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_12 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_3 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_9 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_1 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_4 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_2 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_10 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_11 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_7 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_8 , model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_5 .
+
+model:_LINE_102_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_143  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_SelfClosing ;
+        ifc:name_IfcProperty         ifc:hasString_SelfClosing ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D .
+
+ifc:hasString_Height  a  ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "Height"^^xsd:string .
+
+model:_LINE_34_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_34_1_slot_3 , model:_LINE_34_1_slot_2 , model:_LINE_34_1_slot_1 .
+
+model:_LINE_113  a              ifc:IfcPolyline ;
+        ifc:points_IfcPolyline  model:_LINE_113_1 .
+
+model:_LINE_123_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+ifc:hasString_Combustible
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "Combustible"^^xsd:string .
+
+ifc:hasReal_0.15  a   ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_22  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_22_1 .
+
+model:_LINE_129_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_129_1_slot_3 , model:_LINE_129_1_slot_2 , model:_LINE_129_1_slot_1 .
+
+ifc:hasString_ID001  a  ifc:IfcIdentifier ;
+        expr:hasString  "ID001"^^xsd:string .
+
+model:_LINE_153_1  a    ifc:IfcCartesianPoint_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "5"^^xsd:int ;
+        expr:slot       model:_LINE_153_1_slot_5 , model:_LINE_153_1_slot_4 , model:_LINE_153_1_slot_3 , model:_LINE_153_1_slot_2 , model:_LINE_153_1_slot_1 .
+
+model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2
+        a               ifc:IfcObjectDefinition_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_81188789-C594-45EC-B0DE-CCDEFEE14041_2_slot_1 .
+
+model:_LINE_94  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_94_1 .
+
+model:_LINE_162_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_155  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_155_1 .
+
+model:_LINE_156_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.75 .
+
+ifc:hasString_BaseQuantities
+        a               ifc:IfcLabel ;
+        expr:hasString  "BaseQuantities"^^xsd:string .
+
+ifc:hasLogical_false  a  ifc:IfcBoolean ;
+        expr:hasLogical  expr:false .
+
+model:_LINE_89_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_5.0 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_10
+        expr:index  "10"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_10 .
+
+model:_LINE_125  a  ifc:IfcLocalPlacement ;
+        ifc:placementRelTo_IfcLocalPlacement
+                model:_LINE_125_1 ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_125_2 .
+
+ifc:hasString_GrossFootprintArea
+        a               ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "GrossFootprintArea"^^xsd:string .
+
+model:_LINE_33_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_22_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_22_1_slot_3 , model:_LINE_22_1_slot_2 , model:_LINE_22_1_slot_1 .
+
+ifc:hasString_ProjectContainer
+        a               ifc:IfcLabel ;
+        expr:hasString  "ProjectContainer"^^xsd:string .
+
+model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2 .
+
+model:_LINE_34  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_34_1 .
+
+model:_LINE_90_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_113_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_113_1_1 .
+
+ifc:hasString_LoadBearing
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "LoadBearing"^^xsd:string .
+
+model:_LINE_117_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_117_1_slot_2 , model:_LINE_117_1_slot_1 .
+
+model:_LINE_7_1_slot_7
+        expr:index  "7"^^xsd:int ;
+        expr:item   model:_LINE_7_1_7 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_7
+        expr:index  "7"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_7 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasDatetime_java.util.GregorianCalendar%5Btime%3D1217620436000%2CareFieldsSet%3Dtrue%2CareAllFieldsSet%3Dtrue%2Clenient%3Dtrue%2Czone%3Dsun.util.calendar.ZoneInfo%5Bid%3D%22Europe%2FHelsinki%22%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2Ctransitions%3D118%2ClastRule%3Djava.util.SimpleTimeZone%5Bid%3DEurope%2FHelsinki%2Coffset%3D7200000%2CdstSavings%3D3600000%2CuseDaylight%3Dtrue%2CstartYear%3D0%2CstartMode%3D2%2CstartMonth%3D2%2CstartDay%3D-1%2CstartDayOfWeek%3D1%2CstartTime%3D3600000%2CstartTimeMode%3D2%2CendMode%3D2%2CendMonth%3D9%2CendDay%3D-1%2CendDayOfWeek%3D1%2CendTime%3D3600000%2CendTimeMode%3D2%5D%5D%2CfirstDayOfWeek%3D2%2CminimalDaysInFirstWeek%3D4%2CERA%3D1%2CYEAR%3D2008%2CMONTH%3D7%2CWEEK_OF_YEAR%3D31%2CWEEK_OF_MONTH%3D0%2CDAY_OF_MONTH%3D1%2CDAY_OF_YEAR%3D214%2CDAY_OF_WEEK%3D6%2CDAY_OF_WEEK_IN_MONTH%3D1%2CAM_PM%3D1%2CHOUR%3D10%2CHOUR_OF_DAY%3D22%2CMINUTE%3D53%2CSECOND%3D56%2CMILLISECOND%3D0%2CZONE_OFFSET%3D7200000%2CDST_OFFSET%3D3600000%5D>
+        a                 ifc:IfcTimeStamp ;
+        expr:hasDatetime  "2008-08-01T19:53:56Z"^^xsd:dateTime .
+
+model:_LINE_137  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_IsExternal ;
+        ifc:name_IfcProperty         ifc:hasString_IsExternal ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_true .
+
+ifc:hasString_Pset_WindowCommon
+        a               ifc:IfcLabel ;
+        expr:hasString  "Pset_WindowCommon"^^xsd:string .
+
+model:_LINE_160_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_76  a  ifc:IfcMaterialLayerSet ;
+        ifc:materialLayers_IfcMaterialLayerSet
+                model:_LINE_76_1 .
+
+model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_F92C2898-FD68-44EF-9178-3348E340017B .
+
+model:_LINE_96_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_96_1_slot_3 , model:_LINE_96_1_slot_2 , model:_LINE_96_1_slot_1 .
+
+model:_LINE_3  a  ifc:IfcPersonAndOrganization ;
+        ifc:theOrganization_IfcPersonAndOrganization
+                model:_LINE_3_1 ;
+        ifc:thePerson_IfcPersonAndOrganization
+                model:_LINE_3_2 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_6
+        expr:index  "6"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_6 .
+
+model:_LINE_116_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.3 .
+
+ifc:hasString_TNO  a    ifc:IfcLabel ;
+        expr:hasString  "TNO"^^xsd:string .
+
+model:_LINE_87_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_4 .
+
+model:_LINE_46  a  ifc:IfcLocalPlacement ;
+        ifc:placementRelTo_IfcLocalPlacement
+                model:_LINE_46_1 ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_46_2 .
+
+model:_LINE_107  a                    ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Width ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_0.75 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Width .
+
+ifc:hasString_2fHMxamlj5DvGvEKfCk8nj
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2fHMxamlj5DvGvEKfCk8nj"^^xsd:string .
+
+model:_LINE_16  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:GRAM ;
+        ifc:unitType_IfcNamedUnit  ifc:MASSUNIT .
+
+ifc:hasReal_0.7  a    ifc:IfcReal ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+ifc:hasString_0LV8Pid0X3IA3jJLVDPidY
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0LV8Pid0X3IA3jJLVDPidY"^^xsd:string .
+
+model:_LINE_38_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_88  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_88_1 .
+
+model:_LINE_95_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasInteger_0 .
+
+model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2
+        a               ifc:IfcProduct_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_2 , model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2_slot_1 .
+
+model:_LINE_26_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_58  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_ThermalTransmittance ;
+        ifc:name_IfcProperty         ifc:hasString_ThermalTransmittance ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasReal_0.24 .
+
+model:_LINE_119  a                    ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_119_1 ;
+        ifc:location_IfcPlacement     model:_LINE_119_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_119_3 .
+
+model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_3 .
+
+ifc:hasReal_1.4  a    ifc:IfcLengthMeasure , ifc:IfcPositiveLengthMeasure ;
+        expr:hasReal  "1"^^xsd:decimal .
+
+model:_LINE_28  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_28_1 .
+
+ifc:hasString_AcousticRating
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "AcousticRating"^^xsd:string .
+
+ifc:hasString_BuildingContainer
+        a               ifc:IfcLabel ;
+        expr:hasString  "BuildingContainer"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Opening+Element+xyz>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Opening Element xyz"^^xsd:string .
+
+model:_LINE_150  a                   ifc:IfcShapeRepresentation ;
+        ifc:contextOfItems_IfcRepresentation
+                model:_LINE_150_1 ;
+        ifc:items_IfcRepresentation  model:_LINE_150_2 ;
+        ifc:representationIdentifier_IfcRepresentation
+                ifc:hasString_Body ;
+        ifc:representationType_IfcRepresentation
+                ifc:hasString_SweptSolid .
+
+model:_LINE_127_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.1 .
+
+model:_LINE_160_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_160_1_slot_3 , model:_LINE_160_1_slot_2 , model:_LINE_160_1_slot_1 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0FmgI0DRX49OXL_%24Wa2P1E>
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0FmgI0DRX49OXL_$Wa2P1E"^^xsd:string .
+
+model:_LINE_120  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_120_1 .
+
+model:_LINE_48_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_48_1_slot_3 , model:_LINE_48_1_slot_2 , model:_LINE_48_1_slot_1 .
+
+model:_LINE_153_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_153_1_2 .
+
+model:_LINE_122_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasString_DEGREE  a  ifc:IfcLabel ;
+        expr:hasString  "DEGREE"^^xsd:string .
+
+model:_LINE_79_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_79_2_1 .
+
+model:_LINE_93_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_49_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_F92C2898-FD68-44EF-9178-3348E340017B .
+
+model:_LINE_7_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_7_1_2 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_2 .
+
+model:_LINE_162  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_162_1 .
+
+ifc:hasString_Peter  a  ifc:IfcLabel ;
+        expr:hasString  "Peter"^^xsd:string .
+
+model:_LINE_50_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasString_2168U9nPH5xB3UpDx_uK11
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2168U9nPH5xB3UpDx_uK11"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Building+Storey>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Default Building Storey"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0fhz_bHU54xB%24tXHjHPUZl>
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0fhz_bHU54xB$tXHjHPUZl"^^xsd:string .
+
+ifc:hasString_2O_dMuDnr1Ahv28oR6ZVpr
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2O_dMuDnr1Ahv28oR6ZVpr"^^xsd:string .
+
+model:_LINE_71  a                     ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Height ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_2.3 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Height .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_1 .
+
+ifc:hasString_0.10  a   ifc:IfcLabel ;
+        expr:hasString  "0.10"^^xsd:string .
+
+model:_LINE_130_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_130_1_1 .
+
+model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A
+        a                         ifc:IfcRelDefinesByProperties ;
+        ifc:globalId_IfcRoot      ifc:hasString_0cpLgxVi9Ew8B08wF2Ql1w ;
+        ifc:ownerHistory_IfcRoot  model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_1 ;
+        ifc:relatedObjects_IfcRelDefines
+                model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2 ;
+        ifc:relatingPropertyDefinition_IfcRelDefinesByProperties
+                model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Test+Application>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Test Application"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Building+Storey>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Default Building Storey"^^xsd:string .
+
+model:_LINE_96_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:GUID_A9456EE4-C2FB-4537-9439-394A4CB88C6D_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2 .
+
+model:_LINE_32_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_27_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_102  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_102_1 .
+
+model:_LINE_9  a                   ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:SQUARE_METRE ;
+        ifc:unitType_IfcNamedUnit  ifc:AREAUNIT .
+
+ifc:hasString_2UEO1blXL9sPmb1AMeW7Ax
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2UEO1blXL9sPmb1AMeW7Ax"^^xsd:string .
+
+model:_LINE_11  a                    ifc:IfcConversionBasedUnit ;
+        ifc:conversionFactor_IfcConversionBasedUnit
+                model:_LINE_11_1 ;
+        ifc:dimensions_IfcNamedUnit  model:_LINE_11_2 ;
+        ifc:name_IfcConversionBasedUnit
+                ifc:hasString_DEGREE ;
+        ifc:unitType_IfcNamedUnit    ifc:PLANEANGLEUNIT .
+
+model:_LINE_155_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_155_1_slot_2 , model:_LINE_155_1_slot_1 .
+
+model:_LINE_158_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B .
+
+model:_LINE_83  a                    ifc:IfcShapeRepresentation ;
+        ifc:contextOfItems_IfcRepresentation
+                model:_LINE_83_1 ;
+        ifc:items_IfcRepresentation  model:_LINE_83_2 ;
+        ifc:representationIdentifier_IfcRepresentation
+                ifc:hasString_Body ;
+        ifc:representationType_IfcRepresentation
+                ifc:hasString_SweptSolid .
+
+model:_LINE_102_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_144  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_SmokeStop ;
+        ifc:name_IfcProperty         ifc:hasString_SmokeStop ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_53  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_Reference ;
+        ifc:name_IfcProperty         ifc:hasString_Reference ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:_LINE_115_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_114  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_114_1 .
+
+model:_LINE_91_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_91_1_slot_2 , model:_LINE_91_1_slot_1 .
+
+model:_LINE_86_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_86_1_1 .
+
+model:_LINE_110_2  a    ifc:IfcRepresentationItem_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_110_2_slot_1 .
+
+model:_LINE_81_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_100_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_100_1_slot_3 , model:_LINE_100_1_slot_2 , model:_LINE_100_1_slot_1 .
+
+model:_LINE_95  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_95_1 .
+
+model:_LINE_162_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_156  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_156_1 .
+
+model:_LINE_156_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.1 .
+
+model:_LINE_89_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.3 .
+
+model:_LINE_65  a                     ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Width ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_0.3 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Width .
+
+model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2
+        a               ifc:IfcObjectDefinition_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_57BFE2D2-B505-4BBA-8278-F867834A0BE0_2_slot_1 .
+
+ifc:hasString_ThermalTransmittance
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "ThermalTransmittance"^^xsd:string .
+
+model:_LINE_126  a                    ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_126_1 ;
+        ifc:location_IfcPlacement     model:_LINE_126_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_126_3 .
+
+model:_LINE_33_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+ifc:hasString_0bB_7AP5v5OBZ90TDvo0Fo
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0bB_7AP5v5OBZ90TDvo0Fo"^^xsd:string .
+
+model:_LINE_113_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_113_1_2 .
+
+model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2 .
+
+model:_LINE_7_1_slot_8
+        expr:index  "8"^^xsd:int ;
+        expr:item   model:_LINE_7_1_8 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_8
+        expr:index  "8"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_8 .
+
+model:_LINE_138  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_Infiltration ;
+        ifc:name_IfcProperty         ifc:hasString_Infiltration ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_77  a                      ifc:IfcMaterialLayer ;
+        ifc:layerThickness_IfcMaterialLayer
+                ifc:hasReal_0.3 ;
+        ifc:material_IfcMaterialLayer  model:_LINE_77_1 .
+
+model:_LINE_86_1  a     ifc:IfcCartesianPoint_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "5"^^xsd:int ;
+        expr:slot       model:_LINE_86_1_slot_5 , model:_LINE_86_1_slot_4 , model:_LINE_86_1_slot_3 , model:_LINE_86_1_slot_2 , model:_LINE_86_1_slot_1 .
+
+model:_LINE_4  a                  ifc:IfcPerson ;
+        ifc:familyName_IfcPerson  ifc:hasString_Bonsma ;
+        ifc:givenName_IfcPerson   ifc:hasString_Peter ;
+        ifc:id_IfcPerson          ifc:hasString_ID001 .
+
+ifc:hasString_Axis  a   ifc:IfcLabel ;
+        expr:hasString  "Axis"^^xsd:string .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_7
+        expr:index  "7"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_7 .
+
+model:_LINE_121_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_5
+        expr:index  "5"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_5 .
+
+model:_LINE_47  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_47_1 ;
+        ifc:location_IfcPlacement     model:_LINE_47_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_47_3 .
+
+ifc:hasString_0cpLgxVi9Ew8B08wF2Ql1w
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0cpLgxVi9Ew8B08wF2Ql1w"^^xsd:string .
+
+model:_LINE_17  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:SECOND ;
+        ifc:unitType_IfcNamedUnit  ifc:TIMEUNIT .
+
+model:_LINE_162_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_162_1_slot_3 , model:_LINE_162_1_slot_2 , model:_LINE_162_1_slot_1 .
+
+model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121
+        a                         ifc:IfcRelAggregates ;
+        ifc:description_IfcRoot   <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_SiteContainer+For+Buildings> ;
+        ifc:globalId_IfcRoot      ifc:hasString_3JuhmQJDj9xPnAnWoNb94X ;
+        ifc:name_IfcRoot          ifc:hasString_SiteContainer ;
+        ifc:ownerHistory_IfcRoot  model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_1 ;
+        ifc:relatedObjects_IfcRelDecomposes
+                model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2 ;
+        ifc:relatingObject_IfcRelDecomposes
+                model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B .
+
+ifc:hasString_3JuhmQJDj9xPnAnWoNb94X
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "3JuhmQJDj9xPnAnWoNb94X"^^xsd:string .
+
+model:_LINE_38_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1
+        a               ifc:IfcProperty_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "10"^^xsd:int ;
+        expr:slot       model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_10 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_3 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_2 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_1 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_7 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_6 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_9 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_5 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_8 , model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_4 .
+
+ifc:hasString_2zeggBjk9A5wcc3k9CYqdL
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2zeggBjk9A5wcc3k9CYqdL"^^xsd:string .
+
+ifc:hasString_1Nl_BIjGLBke9u_6U3IWlW
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "1Nl_BIjGLBke9u_6U3IWlW"^^xsd:string .
+
+model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2
+        a               ifc:IfcObjectDefinition_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_D3E2BC1A-4CDB-49ED-9C4A-C60C97949121_2_slot_1 .
+
+model:_LINE_89  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_89_1 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_10
+        expr:index  "10"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_10 .
+
+model:_LINE_95_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_118_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_26_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasInteger_24 .
+
+model:_LINE_59  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_IsExternal ;
+        ifc:name_IfcProperty         ifc:hasString_IsExternal ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_true .
+
+ifc:hasInteger_0  a      expr:INTEGER ;
+        expr:hasInteger  "0"^^xsd:long .
+
+ifc:hasReal_1.5  a    ifc:IfcAreaMeasure ;
+        expr:hasReal  "1"^^xsd:decimal .
+
+model:_LINE_90  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_90_1 .
+
+ifc:hasString_SmokeStop
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "SmokeStop"^^xsd:string .
+
+model:_LINE_151  a                      ifc:IfcExtrudedAreaSolid ;
+        ifc:depth_IfcExtrudedAreaSolid  ifc:hasReal_1.4 ;
+        ifc:extrudedDirection_IfcExtrudedAreaSolid
+                model:_LINE_151_1 ;
+        ifc:position_IfcSweptAreaSolid  model:_LINE_151_2 ;
+        ifc:sweptArea_IfcSweptAreaSolid
+                model:_LINE_151_3 .
+
+model:_LINE_127_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_3vB2YO%24MX4xv5uCqZZG05x>
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "3vB2YO$MX4xv5uCqZZG05x"^^xsd:string .
+
+model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2
+        a                         ifc:IfcElementQuantity ;
+        ifc:globalId_IfcRoot      ifc:hasString_0bB_7AP5v5OBZ90TDvo0Fo ;
+        ifc:name_IfcRoot          ifc:hasString_BaseQuantities ;
+        ifc:ownerHistory_IfcRoot  model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_1 ;
+        ifc:quantities_IfcElementQuantity
+                model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2 .
+
+model:_LINE_101_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_60  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_ExtendToStructure ;
+        ifc:name_IfcProperty         ifc:hasString_ExtendToStructure ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_121  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_121_1 .
+
+model:_LINE_38_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_38_1_slot_3 , model:_LINE_38_1_slot_2 , model:_LINE_38_1_slot_1 .
+
+ifc:hasString_NetVolume
+        a               ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "NetVolume"^^xsd:string .
+
+model:_LINE_153_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:_LINE_153_1_3 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0C87kaqBXF%24xpGmTZ7zxN%24>
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0C87kaqBXF$xpGmTZ7zxN$"^^xsd:string .
+
+ifc:hasString_Pset_WallCommon
+        a               ifc:IfcLabel ;
+        expr:hasString  "Pset_WallCommon"^^xsd:string .
+
+model:_LINE_122_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_30  a  ifc:IfcLocalPlacement ;
+        ifc:placementRelTo_IfcLocalPlacement
+                model:_LINE_30_1 ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_30_2 .
+
+model:_LINE_93_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_49_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_157_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_157_1_slot_2 , model:_LINE_157_1_slot_1 .
+
+model:_LINE_7_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:_LINE_7_1_3 .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_3 .
+
+model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2
+        a               ifc:IfcPhysicalQuantity_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_2 , model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2_2_slot_1 .
+
+model:_LINE_129_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_114_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_114_1_slot_2 , model:_LINE_114_1_slot_1 .
+
+model:_LINE_163  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_163_1 .
+
+ifc:hasString_0yf_M5JZv9QQXly4dq_zvI
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "0yf_M5JZv9QQXly4dq_zvI"^^xsd:string .
+
+model:_LINE_50_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_72  a                      ifc:IfcQuantityArea ;
+        ifc:areaValue_IfcQuantityArea  ifc:hasReal_1.5 ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_GrossFootprintArea ;
+        ifc:name_IfcPhysicalQuantity   ifc:hasString_GrossFootprintArea .
+
+model:_LINE_133  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_Reference ;
+        ifc:name_IfcProperty         ifc:hasString_Reference ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_2 .
+
+model:_LINE_155_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_79_2  a     ifc:IfcRepresentationItem_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_79_2_slot_1 .
+
+model:_LINE_26_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_26_1_slot_3 , model:_LINE_26_1_slot_2 , model:_LINE_26_1_slot_1 .
+
+model:_LINE_93_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_93_1_slot_3 , model:_LINE_93_1_slot_2 , model:_LINE_93_1_slot_1 .
+
+model:_LINE_32_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_103  a  ifc:IfcProductDefinitionShape ;
+        ifc:representations_IfcProductRepresentation
+                model:_LINE_103_1 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Site>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Default Site"^^xsd:string .
+
+model:_LINE_50_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_50_1_slot_3 , model:_LINE_50_1_slot_2 , model:_LINE_50_1_slot_1 .
+
+model:_LINE_12  a  ifc:IfcDimensionalExponents ;
+        ifc:amountOfSubstanceExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:electricCurrentExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:lengthExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:luminousIntensityExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:massExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:thermodynamicTemperatureExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 ;
+        ifc:timeExponent_IfcDimensionalExponents
+                ifc:hasInteger_0 .
+
+ifc:hasReal_0.3  a    ifc:IfcPositiveLengthMeasure , ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+ifc:hasString_Curve2D
+        a               ifc:IfcLabel ;
+        expr:hasString  "Curve2D"^^xsd:string .
+
+model:_LINE_102_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_102_1_slot_3 , model:_LINE_102_1_slot_2 , model:_LINE_102_1_slot_1 .
+
+model:_LINE_158_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_84  a                       ifc:IfcExtrudedAreaSolid ;
+        ifc:depth_IfcExtrudedAreaSolid  ifc:hasReal_2.3 ;
+        ifc:extrudedDirection_IfcExtrudedAreaSolid
+                model:_LINE_84_1 ;
+        ifc:position_IfcSweptAreaSolid  model:_LINE_84_2 ;
+        ifc:sweptArea_IfcSweptAreaSolid
+                model:_LINE_84_3 .
+
+ifc:hasString_FireRating
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "FireRating"^^xsd:string .
+
+model:_LINE_102_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_40_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Window>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Window"^^xsd:string .
+
+model:_LINE_54  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_AcousticRating ;
+        ifc:name_IfcProperty         ifc:hasString_AcousticRating ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:_LINE_115_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.3 .
+
+model:_LINE_115  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_115_1 .
+
+model:_LINE_81_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_81_1_slot_2 , model:_LINE_81_1_slot_1 .
+
+model:_LINE_86_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   model:_LINE_86_1_2 .
+
+ifc:hasLogical_true  a   ifc:IfcBoolean ;
+        expr:hasLogical  expr:true .
+
+model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E
+        a                         ifc:IfcRelDefinesByProperties ;
+        ifc:globalId_IfcRoot      <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_0FmgI0DRX49OXL_%24Wa2P1E> ;
+        ifc:ownerHistory_IfcRoot  model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_1 ;
+        ifc:relatedObjects_IfcRelDefines
+                model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2 ;
+        ifc:relatingPropertyDefinition_IfcRelDefinesByProperties
+                model:GUID_252FE1CA-645E-4560-B8C9-01D379C803F2 .
+
+ifc:hasReal_1.0  a    expr:REAL ;
+        expr:hasReal  "1"^^xsd:decimal .
+
+model:_LINE_24  a  ifc:IfcLocalPlacement ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_24_1 .
+
+model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255
+        a                              ifc:IfcProject ;
+        ifc:description_IfcRoot        <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Project> ;
+        ifc:globalId_IfcRoot           ifc:hasString_0YvctVUKr0kugbFTf53O9L ;
+        ifc:name_IfcRoot               <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Project> ;
+        ifc:ownerHistory_IfcRoot       model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_1 ;
+        ifc:representationContexts_IfcProject
+                model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_2 ;
+        ifc:unitsInContext_IfcProject  model:GUID_22E66DDF-794D-40BB-8AA5-3DDA450D8255_3 .
+
+model:_LINE_81_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.15 .
+
+model:_LINE_96  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_96_1 .
+
+ifc:hasString_Reference
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "Reference"^^xsd:string .
+
+model:_LINE_157  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_157_1 .
+
+model:_LINE_161_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_88_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_88_1_slot_2 , model:_LINE_88_1_slot_1 .
+
+model:_LINE_94_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasString_GrossSideArea
+        a               ifc:IfcLabel , ifc:IfcText ;
+        expr:hasString  "GrossSideArea"^^xsd:string .
+
+model:_LINE_66  a                     ifc:IfcQuantityLength ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_Lenght ;
+        ifc:lengthValue_IfcQuantityLength
+                ifc:hasReal_5.0 ;
+        ifc:name_IfcPhysicalQuantity  ifc:hasString_Lenght .
+
+model:_LINE_127  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_127_1 .
+
+model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2
+        a               ifc:IfcPhysicalQuantity_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_3 , model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_2 , model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2_slot_1 .
+
+model:_LINE_36  a  ifc:IfcLocalPlacement ;
+        ifc:placementRelTo_IfcLocalPlacement
+                model:_LINE_36_1 ;
+        ifc:relativePlacement_IfcLocalPlacement
+                model:_LINE_36_2 .
+
+model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2
+        a               ifc:IfcObject_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_9E398065-BE15-49D9-9C25-04A5A88072BB_2_slot_1 .
+
+model:_LINE_113_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:_LINE_113_1_3 .
+
+ifc:hasString_  a       ifc:IfcText ;
+        expr:hasString  ""^^xsd:string .
+
+ifc:hasString_2yDPSWYWf319fWaWWvPxwA
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "2yDPSWYWf319fWaWWvPxwA"^^xsd:string .
+
+model:_LINE_7_1_slot_9
+        expr:index  "9"^^xsd:int ;
+        expr:item   model:_LINE_7_1_9 .
+
+model:_LINE_121_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_121_1_slot_3 , model:_LINE_121_1_slot_2 , model:_LINE_121_1_slot_1 .
+
+model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD
+        a                         ifc:IfcRelDefinesByProperties ;
+        ifc:globalId_IfcRoot      ifc:hasString_3IxFuNHRvBDfMT6_FiWPEz ;
+        ifc:ownerHistory_IfcRoot  model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_1 ;
+        ifc:relatedObjects_IfcRelDefines
+                model:GUID_D2ECFE17-45BE-4B36-959D-1BE3EC8193BD_2 ;
+        ifc:relatingPropertyDefinition_IfcRelDefinesByProperties
+                model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Project>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Default Project"^^xsd:string .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653
+        a                         ifc:IfcElementQuantity ;
+        ifc:globalId_IfcRoot      ifc:hasString_10m6qcXSj0Iu4RVOK1omPJ ;
+        ifc:name_IfcRoot          ifc:hasString_BaseQuantities ;
+        ifc:ownerHistory_IfcRoot  model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_1 ;
+        ifc:quantities_IfcElementQuantity
+                model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2 .
+
+model:_LINE_78  a             ifc:IfcMaterial ;
+        ifc:name_IfcMaterial  <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Name+of+the+material+used+for+the+wall> .
+
+model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5
+        a                         ifc:IfcRelAssociatesMaterial ;
+        ifc:globalId_IfcRoot      ifc:hasString_2zeggBjk9A5wcc3k9CYqdL ;
+        ifc:ownerHistory_IfcRoot  model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_1 ;
+        ifc:relatedObjects_IfcRelAssociates
+                model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_2 ;
+        ifc:relatingMaterial_IfcRelAssociatesMaterial
+                model:GUID_BDA2AA8B-B6E2-4A17-A9A6-0EE24C8B49D5_3 .
+
+model:_LINE_76_1  a     ifc:IfcMaterialLayer_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_76_1_slot_1 .
+
+model:_LINE_139  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_ThermalTransmittance ;
+        ifc:name_IfcProperty         ifc:hasString_ThermalTransmittance ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasReal_0.24 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_8
+        expr:index  "8"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_8 .
+
+model:_LINE_5  a                  ifc:IfcOrganization ;
+        ifc:description_IfcOrganization
+                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_TNO+Building+Innovation> ;
+        ifc:name_IfcOrganization  ifc:hasString_TNO .
+
+model:_LINE_33_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_33_1_slot_3 , model:_LINE_33_1_slot_2 , model:_LINE_33_1_slot_1 .
+
+model:_LINE_121_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A
+        a                         ifc:IfcElementQuantity ;
+        ifc:globalId_IfcRoot      ifc:hasString_2yDPSWYWf319fWaWWvPxwA ;
+        ifc:name_IfcRoot          ifc:hasString_BaseQuantities ;
+        ifc:ownerHistory_IfcRoot  model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_1 ;
+        ifc:quantities_IfcElementQuantity
+                model:GUID_BC359720-8A0A-4304-9A60-92083967BE8A_2 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_6
+        expr:index  "6"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_6 .
+
+model:_LINE_48  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_48_1 .
+
+model:_LINE_48_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_128_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_128_1_slot_3 , model:_LINE_128_1_slot_2 , model:_LINE_128_1_slot_1 .
+
+model:_LINE_103_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_103_1_1 .
+
+model:_LINE_18  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:DEGREE_CELSIUS ;
+        ifc:unitType_IfcNamedUnit  ifc:THERMODYNAMICTEMPERATUREUNIT .
+
+ifc:hasReal_0.9  a    ifc:IfcLengthMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_140  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_GlazingAresFraction ;
+        ifc:name_IfcProperty         ifc:hasString_GlazingAresFraction ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasReal_0.7 .
+
+model:_LINE_38_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasReal_3.45  a   ifc:IfcVolumeMeasure ;
+        expr:hasReal  "3"^^xsd:decimal .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_11
+        expr:index  "11"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_11 .
+
+model:_LINE_110  a                   ifc:IfcShapeRepresentation ;
+        ifc:contextOfItems_IfcRepresentation
+                model:_LINE_110_1 ;
+        ifc:items_IfcRepresentation  model:_LINE_110_2 ;
+        ifc:representationIdentifier_IfcRepresentation
+                ifc:hasString_Body ;
+        ifc:representationType_IfcRepresentation
+                ifc:hasString_SweptSolid .
+
+model:_LINE_95_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_118_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Wall+xyz>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Wall xyz"^^xsd:string .
+
+model:_LINE_26_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasInteger_28 .
+
+model:_LINE_116_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_116_1_slot_2 , model:_LINE_116_1_slot_1 .
+
+model:_LINE_91  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_91_1 .
+
+model:_LINE_157_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.75 .
+
+model:_LINE_152  a                     ifc:IfcArbitraryClosedProfileDef ;
+        ifc:outerCurve_IfcArbitraryClosedProfileDef
+                model:_LINE_152_1 ;
+        ifc:profileType_IfcProfileDef  ifc:AREA .
+
+model:_LINE_150_2  a    ifc:IfcRepresentationItem_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:_LINE_150_2_slot_1 .
+
+model:_LINE_101_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_61  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_LoadBearing ;
+        ifc:name_IfcProperty         ifc:hasString_LoadBearing ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_28_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_28_1_slot_3 , model:_LINE_28_1_slot_2 , model:_LINE_28_1_slot_1 .
+
+model:_LINE_122  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_122_1 .
+
+model:_LINE_28_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_95_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_95_1_slot_3 , model:_LINE_95_1_slot_2 , model:_LINE_95_1_slot_1 .
+
+model:_LINE_153_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:_LINE_153_1_4 .
+
+ifc:hasReal_0.24  a   ifc:IfcReal ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2
+        a               ifc:IfcObject_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_0FC2A480-35B8-4425-8855-FBF82409904E_2_slot_1 .
+
+model:_LINE_31  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_31_1 ;
+        ifc:location_IfcPlacement     model:_LINE_31_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_31_3 .
+
+model:_LINE_49_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Opening>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Opening"^^xsd:string .
+
+ifc:hasReal_2.3  a    ifc:IfcLengthMeasure , ifc:IfcPositiveLengthMeasure ;
+        expr:hasReal  "2"^^xsd:decimal .
+
+model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:GUID_40C06D26-85CB-404B-811B-7D8501CB0653_2_4 .
+
+model:_LINE_7_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:_LINE_7_1_4 .
+
+ifc:hasInteger_28  a     expr:INTEGER ;
+        expr:hasInteger  "28"^^xsd:long .
+
+ifc:hasString_Compartmentation
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "Compartmentation"^^xsd:string .
+
+model:_LINE_129_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B
+        a                               ifc:IfcSite ;
+        ifc:compositionType_IfcSpatialStructureElement
+                ifc:ELEMENT ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Default+Site> ;
+        ifc:globalId_IfcRoot            ifc:hasString_3rNg_N55v4CRBpQVbZJoHB ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Site> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_1 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_2 ;
+        ifc:refLatitude_IfcSite         model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7 ;
+        ifc:refLongitude_IfcSite        model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_8 .
+
+model:_LINE_80_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_80_1_1 .
+
+model:_LINE_134  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_FireRating ;
+        ifc:name_IfcProperty         ifc:hasString_FireRating ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Name+of+the+material+used+for+the+wall>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Name of the material used for the wall"^^xsd:string .
+
+model:_LINE_155_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.1 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_3 .
+
+model:GUID_4C36F556-7D6E-41D3-A06A-B1E8736AAED2
+        a                         ifc:IfcRelFillsElement ;
+        ifc:globalId_IfcRoot      ifc:hasString_1CDlLMVMv1qw1giUXpQgxI ;
+        ifc:ownerHistory_IfcRoot  model:GUID_4C36F556-7D6E-41D3-A06A-B1E8736AAED2_1 ;
+        ifc:relatedBuildingElement_IfcRelFillsElement
+                model:GUID_157C866C-9C08-4348-A0ED-4D57CD66C9E2 ;
+        ifc:relatingOpeningElement_IfcRelFillsElement
+                model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D .
+
+ifc:hasString_10m6qcXSj0Iu4RVOK1omPJ
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "10m6qcXSj0Iu4RVOK1omPJ"^^xsd:string .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_1 .
+
+model:_LINE_32_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_40_1  a     ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_40_1_slot_3 , model:_LINE_40_1_slot_2 , model:_LINE_40_1_slot_1 .
+
+model:_LINE_13  a  ifc:IfcMeasureWithUnit ;
+        ifc:unitComponent_IfcMeasureWithUnit
+                model:_LINE_13_1 ;
+        ifc:valueComponent_IfcMeasureWithUnit
+                ifc:hasReal_0.01745 .
+
+model:_LINE_39_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Wall>
+        a               ifc:IfcText ;
+        expr:hasString  "Description of Wall"^^xsd:string .
+
+model:_LINE_163_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasString_SurfaceSpreadOfFlame
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "SurfaceSpreadOfFlame"^^xsd:string .
+
+ifc:hasReal_0.01745  a  ifc:IfcPlaneAngleMeasure ;
+        expr:hasReal  "0"^^xsd:decimal .
+
+model:_LINE_85  a                      ifc:IfcArbitraryClosedProfileDef ;
+        ifc:outerCurve_IfcArbitraryClosedProfileDef
+                model:_LINE_85_1 ;
+        ifc:profileType_IfcProfileDef  ifc:AREA .
+
+model:_LINE_40_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_34_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_150_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_150_2_1 .
+
+model:_LINE_55  a                    ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_FireRating ;
+        ifc:name_IfcProperty         ifc:hasString_FireRating ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasString_ .
+
+model:_LINE_120_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_116  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_116_1 .
+
+model:_LINE_86_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   model:_LINE_86_1_3 .
+
+model:_LINE_91_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_TA+1001>
+        a               ifc:IfcIdentifier ;
+        expr:hasString  "TA 1001"^^xsd:string .
+
+model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D
+        a                               ifc:IfcOpeningElement ;
+        ifc:description_IfcRoot         <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Description+of+Opening> ;
+        ifc:globalId_IfcRoot            ifc:hasString_2LcE70iQb51PEZynawyvuT ;
+        ifc:name_IfcRoot                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Opening+Element+xyz> ;
+        ifc:objectPlacement_IfcProduct  model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_1 ;
+        ifc:ownerHistory_IfcRoot        model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_2 ;
+        ifc:representation_IfcProduct   model:GUID_9598E1C0-B1A9-4505-93A3-F3193AF39E1D_3 .
+
+model:_LINE_22_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7
+        a               ifc:IfcCompoundPlaneAngleMeasure ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_3 , model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_2 , model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_1 .
+
+ifc:hasReal_11.5  a   ifc:IfcAreaMeasure ;
+        expr:hasReal  "11"^^xsd:decimal .
+
+model:_LINE_25  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_25_1 ;
+        ifc:location_IfcPlacement     model:_LINE_25_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_25_3 .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Window+xyz>
+        a               ifc:IfcLabel ;
+        expr:hasString  "Window xyz"^^xsd:string .
+
+<http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_BuildingContainer+for+BuildigStories>
+        a               ifc:IfcText ;
+        expr:hasString  "BuildingContainer for BuildigStories"^^xsd:string .
+
+model:_LINE_123_1  a    ifc:REAL_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "3"^^xsd:int ;
+        expr:slot       model:_LINE_123_1_slot_3 , model:_LINE_123_1_slot_2 , model:_LINE_123_1_slot_1 .
+
+model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2
+        a               ifc:IfcObject_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "1"^^xsd:int ;
+        expr:slot       model:GUID_26CD5ABB-7EC2-4EE8-82C0-23A3C26AF07A_2_slot_1 .
+
+model:_LINE_158  a  ifc:IfcCartesianPoint ;
+        ifc:coordinates_IfcCartesianPoint
+                model:_LINE_158_1 .
+
+model:_LINE_161_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_94_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_117_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.75 .
+
+model:_LINE_67  a                      ifc:IfcQuantityArea ;
+        ifc:areaValue_IfcQuantityArea  ifc:hasReal_11.5 ;
+        ifc:description_IfcPhysicalQuantity
+                ifc:hasString_GrossSideArea ;
+        ifc:name_IfcPhysicalQuantity   ifc:hasString_GrossSideArea .
+
+model:_LINE_128  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_128_1 .
+
+model:_LINE_88_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+ifc:hasString_SiteContainer
+        a               ifc:IfcLabel ;
+        expr:hasString  "SiteContainer"^^xsd:string .
+
+model:_LINE_37  a                     ifc:IfcAxis2Placement3D ;
+        ifc:axis_IfcAxis2Placement3D  model:_LINE_37_1 ;
+        ifc:location_IfcPlacement     model:_LINE_37_2 ;
+        ifc:refDirection_IfcAxis2Placement3D
+                model:_LINE_37_3 .
+
+ifc:hasString_GlazingAresFraction
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "GlazingAresFraction"^^xsd:string .
+
+model:_LINE_113_1_slot_4
+        expr:index  "4"^^xsd:int ;
+        expr:item   model:_LINE_113_1_4 .
+
+model:_LINE_154_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_154_1_slot_2 , model:_LINE_154_1_slot_1 .
+
+model:_LINE_100_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.9 .
+
+model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5
+        a                         ifc:IfcRelContainedInSpatialStructure ;
+        ifc:description_IfcRoot   <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Contents+of+Building+Storey> ;
+        ifc:globalId_IfcRoot      ifc:hasString_2O_dMuDnr1Ahv28oR6ZVpr ;
+        ifc:name_IfcRoot          <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Default+Building> ;
+        ifc:ownerHistory_IfcRoot  model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_1 ;
+        ifc:relatedElements_IfcRelContainedInSpatialStructure
+                model:GUID_98FA75B8-371D-412A-BE42-2326C68DFCF5_2 ;
+        ifc:relatingStructure_IfcRelContainedInSpatialStructure
+                model:GUID_0C207BA4-D0B8-4FFF-BCD0-C1D8C7F7B5FF .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51
+        a                         ifc:IfcPropertySet ;
+        ifc:globalId_IfcRoot      ifc:hasString_18RtPv6efDwuUOMduCZ7rH ;
+        ifc:hasProperties_IfcPropertySet
+                model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1 ;
+        ifc:name_IfcRoot          ifc:hasString_Pset_WallCommon ;
+        ifc:ownerHistory_IfcRoot  model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_2 .
+
+model:_LINE_79  a                    ifc:IfcShapeRepresentation ;
+        ifc:contextOfItems_IfcRepresentation
+                model:_LINE_79_1 ;
+        ifc:items_IfcRepresentation  model:_LINE_79_2 ;
+        ifc:representationIdentifier_IfcRepresentation
+                ifc:hasString_Axis ;
+        ifc:representationType_IfcRepresentation
+                ifc:hasString_Curve2D .
+
+model:_LINE_6  a                    ifc:IfcApplication ;
+        ifc:applicationDeveloper_IfcApplication
+                model:_LINE_6_1 ;
+        ifc:applicationFullName_IfcApplication
+                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_Test+Application> ;
+        ifc:applicationIdentifier_IfcApplication
+                <http://drumbeat.cs.hut.fi/owl/IFC2X3#hasString_TA+1001> ;
+        ifc:version_IfcApplication  ifc:hasString_0.10 .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_9
+        expr:index  "9"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_9 .
+
+model:_LINE_121_1_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasReal_1.0 .
+
+model:_LINE_90_1  a     ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_90_1_slot_2 , model:_LINE_90_1_slot_1 .
+
+ifc:hasString_1CDlLMVMv1qw1giUXpQgxI
+        a               ifc:IfcGloballyUniqueId ;
+        expr:hasString  "1CDlLMVMv1qw1giUXpQgxI"^^xsd:string .
+
+model:_LINE_7_1  a      ifc:IfcUnit_Set ;
+        expr:isOrdered  expr:false ;
+        expr:size       "9"^^xsd:int ;
+        expr:slot       model:_LINE_7_1_slot_5 , model:_LINE_7_1_slot_2 , model:_LINE_7_1_slot_8 , model:_LINE_7_1_slot_4 , model:_LINE_7_1_slot_1 , model:_LINE_7_1_slot_7 , model:_LINE_7_1_slot_3 , model:_LINE_7_1_slot_6 , model:_LINE_7_1_slot_9 .
+
+model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_slot_7
+        expr:index  "7"^^xsd:int ;
+        expr:item   model:GUID_486F7679-1A8A-4DEB-8798-5A7E0C8C7D51_1_7 .
+
+model:_LINE_49  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_49_1 .
+
+model:_LINE_48_1_slot_2
+        expr:index  "2"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_118_1  a    ifc:IfcLengthMeasure_List ;
+        expr:isOrdered  expr:true ;
+        expr:size       "2"^^xsd:int ;
+        expr:slot       model:_LINE_118_1_slot_2 , model:_LINE_118_1_slot_1 .
+
+ifc:hasString_Infiltration
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "Infiltration"^^xsd:string .
+
+model:_LINE_128_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_19  a                  ifc:IfcSIUnit ;
+        ifc:name_IfcSIUnit         ifc:LUMEN ;
+        ifc:unitType_IfcNamedUnit  ifc:LUMINOUSINTENSITYUNIT .
+
+model:_LINE_80  a               ifc:IfcPolyline ;
+        ifc:points_IfcPolyline  model:_LINE_80_1 .
+
+model:_LINE_141  a                   ifc:IfcPropertySingleValue ;
+        ifc:description_IfcProperty  ifc:hasString_HandicapAccessible ;
+        ifc:name_IfcProperty         ifc:hasString_HandicapAccessible ;
+        ifc:nominalValue_IfcPropertySingleValue
+                ifc:hasLogical_false .
+
+model:_LINE_154_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:_LINE_50  a  ifc:IfcDirection ;
+        ifc:directionRatios_IfcDirection
+                model:_LINE_50_1 .
+
+ifc:hasString_ExtendToStructure
+        a               ifc:IfcIdentifier , ifc:IfcText ;
+        expr:hasString  "ExtendToStructure"^^xsd:string .
+
+model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_slot_12
+        expr:index  "12"^^xsd:int ;
+        expr:item   model:GUID_29AFDFA5-45E1-44EC-BFF7-851B5165E8EF_1_12 .
+
+model:_LINE_111  a                      ifc:IfcExtrudedAreaSolid ;
+        ifc:depth_IfcExtrudedAreaSolid  ifc:hasReal_1.4 ;
+        ifc:extrudedDirection_IfcExtrudedAreaSolid
+                model:_LINE_111_1 ;
+        ifc:position_IfcSweptAreaSolid  model:_LINE_111_2 ;
+        ifc:sweptArea_IfcSweptAreaSolid
+                model:_LINE_111_3 .
+
+model:_LINE_123_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_0.0 .
+
+model:GUID_F55EAF97-145E-4431-B2F3-69F9634F244B_7_slot_3
+        expr:index  "3"^^xsd:int ;
+        expr:item   ifc:hasInteger_0 .
+
+model:_LINE_20  a  ifc:IfcGeometricRepresentationContext ;
+        ifc:contextType_IfcRepresentationContext
+                ifc:hasString_Model ;
+        ifc:coordinateSpaceDimension_IfcGeometricRepresentationContext
+                ifc:hasInteger_3 ;
+        ifc:precision_IfcGeometricRepresentationContext
+                ifc:hasReal_1.0E-5 ;
+        ifc:worldCoordinateSystem_IfcGeometricRepresentationContext
+                model:_LINE_20_1 .
+
+model:_LINE_110_2_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   model:_LINE_110_2_1 .
+
+model:_LINE_82_1_slot_1
+        expr:index  "1"^^xsd:int ;
+        expr:item   ifc:hasReal_5.0 .
