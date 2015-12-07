@@ -24,7 +24,6 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataVocabulary;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
@@ -166,7 +165,7 @@ public class DataSetManager {
 					"<%s> a ldbho:Collection ; ldbho:hasDataSource <%s> . \n" +
 					"<%s> a ldbho:DataSource ; ldbho:hasDataSet <%s> . \n" +
 					"<%s> a ldbho:DataSet . }",
-					BuildingDataVocabulary.BASE_URL,
+					BuildingDataOntology.BASE_URL,
 					collectionUri,
 					dataSourceUri,
 					dataSourceUri,
