@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 
 /*
@@ -125,7 +126,7 @@ public class ObjectResource {
 	private static ObjectManager getManager(ServletContext servletContext) {
 		if (objectManager == null) {
 			try {
-				Model model = ApplicationConfig.getJenaProvider().openDefaultModel();
+				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
 				objectManager = new ObjectManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

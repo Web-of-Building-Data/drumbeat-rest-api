@@ -65,15 +65,17 @@
 			<version>${jena.version}</version>
 		</dependency>
 		
-        <!-- Jersey Core -->        
+        <!-- Jersey -->        
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
-            <!-- use the following artifactId if you don't need servlet 2.x compatibility -->
-            <!-- artifactId>jersey-container-servlet</artifactId -->
         </dependency>
         
-        <!-- Jersey MultiPart -->        
+		<dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-json-jackson</artifactId>
+		</dependency>		
+
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-multipart</artifactId>
@@ -91,17 +93,34 @@
 			<groupId>com.github.jsonld-java</groupId>
 			<artifactId>jsonld-java-jena</artifactId>
 			<version>0.4.1</version>
-		</dependency>
+		</dependency>		
 		
-        <!-- Jersey test -->        
+        <!-- Jersey test -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+		    <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+		    <scope>test</scope>
+		</dependency>	
+		
+		
+        <!--  
+        <dependency>
+		    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+		    <artifactId>jersey-test-framework-provider-external</artifactId>
+		</dependency>
+		 -->
+				
+
+        <!--          
 		<dependency>
 			<groupId>com.sun.jersey.jersey-test-framework</groupId>
 			<artifactId>jersey-test-framework-external</artifactId>
 			<version>1.9</version>
 			<scope>test</scope>
 		</dependency>
+		 -->
 		
-        <!-- JSON -->        
+        <!-- JSON -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
