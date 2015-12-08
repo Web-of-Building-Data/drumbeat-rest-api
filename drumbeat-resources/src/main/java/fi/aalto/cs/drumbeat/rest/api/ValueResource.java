@@ -16,7 +16,7 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ValueManager;
 
@@ -53,7 +53,6 @@ public class ValueResource {
 
 	@Path("/alive")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
@@ -71,12 +70,12 @@ public class ValueResource {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		return PrettyPrinting.prettyPrintingHTML(m);	
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET	
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();

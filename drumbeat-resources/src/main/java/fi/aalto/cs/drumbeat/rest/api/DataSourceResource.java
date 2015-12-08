@@ -20,7 +20,7 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 
@@ -58,7 +58,6 @@ public class DataSourceResource {
 
 	@Path("/alive")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
@@ -78,12 +77,12 @@ public class DataSourceResource {
 		}
 
 			
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		return PrettyPrinting.prettyPrintingHTML(m);	
 	}
 
 	@Path("/{collectionid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String listJSON_LD(@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
 		
@@ -180,12 +179,12 @@ public class DataSourceResource {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);	
+		return PrettyPrinting.prettyPrintingHTML(m);	
 	}
 
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
@@ -255,7 +254,6 @@ public class DataSourceResource {
 	
 	@Path("/{collectionid}/{datasourceid}")
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid,@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
@@ -269,7 +267,6 @@ public class DataSourceResource {
 
 	@Path("/{collectionid}/{datasourceid}")
 	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {

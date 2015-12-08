@@ -1,9 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +22,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
@@ -62,7 +60,6 @@ public class CollectionResource {
 
 	@Path("/alive")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
@@ -77,7 +74,7 @@ public class CollectionResource {
 			ret = "http://" + httpRequest.getLocalAddr() + ":" + httpRequest.getLocalPort() + "/";
 
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR in URL \"}";
+			return PrettyPrinting.formatErrorJSON("ERROR in URL");
 		}
 
 		return "{\"requested url beginning\":" + ret + "\"}";
@@ -92,25 +89,39 @@ public class CollectionResource {
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager(servletContext).listAll(m))
-				return "<HTML><BODY>Status:\"No collections\"</BODY></HTML>";
+				return PrettyPrinting.formatErrorHTML("No collections");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		return PrettyPrinting.prettyPrintingHTML(m);
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String listTXT() {
+		Model m = ModelFactory.createDefaultModel();
+		try {
+			if (!getManager(servletContext).listAll(m))
+				return PrettyPrinting.formatErrorTXT("No collections");
+		} catch (Exception e) {
+			return PrettyPrinting.formatErrorTXT("Check that the RDF store is started: "+e.getMessage());
+		}
+
+		return PrettyPrinting.prettyPrintingPlain(m);
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listJSON_LD() {
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
+	public String listJSON() {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
 			try {
 				if (!getManager(servletContext).listAll(m))
-					return "{\"Status\":\"No collections\"}";
+					return PrettyPrinting.formatErrorJSON("No collections");
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -119,25 +130,25 @@ public class CollectionResource {
 			try {
 				return new String(os.toByteArray(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+				return PrettyPrinting.formatErrorJSON(e.getMessage());
 			}
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorJSON(e.getMessage());
 		}
 
 	}
 
 	@GET
 	@Produces("text/turtle")
-	public String listTurtle() {
+	public String listTURTLE() {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
 			try{
 			if (!getManager(servletContext).listAll(m))
-				return "{\"Status\":\"No collections\"}";
+				return PrettyPrinting.formatErrorTURTLE("No collections");
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -146,10 +157,10 @@ public class CollectionResource {
 			try {
 				return new String(os.toByteArray(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+				return PrettyPrinting.formatErrorTURTLE(e.getMessage());
 			}
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorTURTLE(e.getMessage());
 		}
 
 	}
@@ -162,9 +173,9 @@ public class CollectionResource {
 		try {
 			try{
 			if (!getManager(servletContext).listAll(m))
-				return "{\"Status\":\"No collections\"}";
+				return PrettyPrinting.formatErrorRDF("No collections");
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -173,10 +184,10 @@ public class CollectionResource {
 			try {
 				return new String(os.toByteArray(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+				return PrettyPrinting.formatErrorRDF(e.getMessage());
 			}
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorRDF(e.getMessage());
 		}
 
 	}
@@ -198,13 +209,13 @@ public class CollectionResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String listSampleHTML() {
 		Model model = listSample();
-		return HTMLPrettyPrinting.prettyPrinting(model);
+		return PrettyPrinting.prettyPrintingHTML(model);
 	}
-
+	
 	@Path("/example")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listSampleJSON_LD() {
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
+	public String listSampleJSON() {
 		Model model = listSample();
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -212,14 +223,14 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorJSON(e.getMessage());
 		}
 	}
 
 	@Path("/example")
 	@GET
 	@Produces("text/turtle")
-	public String listSampleTurtle() {
+	public String listSampleTURTLE() {
 		Model model = listSample();
 
 		JenaJSONLD.init();
@@ -228,7 +239,7 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorTURTLE(e.getMessage());
 		}
 	}
 
@@ -244,7 +255,7 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorRDF(e.getMessage());
 		}
 	}
 
@@ -256,25 +267,26 @@ public class CollectionResource {
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionid, m))
-			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
+			return PrettyPrinting.formatErrorHTML("The ID does not exists");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		return PrettyPrinting.prettyPrintingHTML(m);
 	}
 
+	
 	@Path("/{collectionid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionid, m))
-			return "{\"Status\":\"The ID does not exists\"}";
+			return PrettyPrinting.formatErrorJSON("The ID does not exists");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -283,7 +295,7 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorJSON(e.getMessage());
 		}
 	}
 
@@ -295,9 +307,9 @@ public class CollectionResource {
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionid, m))
-			return "{\"Status\":\"The ID does not exists\"}";
+			return PrettyPrinting.formatErrorTURTLE("The ID does not exists");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -306,7 +318,7 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorTURTLE(e.getMessage());
 		}
 	}
 
@@ -318,9 +330,9 @@ public class CollectionResource {
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if (!getManager(servletContext).get(collectionid, m))
-			return "{\"Status\":\"The ID does not exists\"}";
+			return PrettyPrinting.formatErrorRDF("The ID does not exists");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -329,20 +341,19 @@ public class CollectionResource {
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatErrorRDF(e.getMessage());
 		}
 	}
 
 	@Path("/{collectionid}")
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,
 			@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionid,name);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";
@@ -350,13 +361,12 @@ public class CollectionResource {
 
 	@Path("/{collectionid}")
 	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionid);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";

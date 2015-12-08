@@ -2,10 +2,8 @@ package fi.aalto.cs.drumbeat.rest.api;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,7 +38,7 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.DataManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
@@ -90,9 +88,10 @@ public class DataSetResource {
 	@Context
 	private ServletContext servletContext;
 
+	
+	
 	@Path("/alive")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
@@ -106,16 +105,16 @@ public class DataSetResource {
 		if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 			return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		return PrettyPrinting.prettyPrintingHTML(m);
 	}
 
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listJSON_LD(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
+	public String listJSON(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
@@ -123,7 +122,7 @@ public class DataSetResource {
 			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -143,7 +142,7 @@ public class DataSetResource {
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces("text/turtle")
-	public String listTurtle(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+	public String listTURTLE(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
@@ -152,7 +151,7 @@ public class DataSetResource {
 			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -180,7 +179,7 @@ public class DataSetResource {
 			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -203,14 +202,18 @@ public class DataSetResource {
 	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
+		try{
 		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		} catch (Exception e) {
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
+		}
+		return PrettyPrinting.prettyPrintingHTML(m);
 	}
 
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
@@ -218,7 +221,7 @@ public class DataSetResource {
 		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -242,7 +245,7 @@ public class DataSetResource {
 		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -265,7 +268,7 @@ public class DataSetResource {
 		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -278,29 +281,31 @@ public class DataSetResource {
 		}
 	}
 
+	
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
 	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).create(collectionid, datasourceid, datasetid,name);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";
 	}
 
+	
+	
+	
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager(servletContext).delete(collectionid, datasourceid, datasetid);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";
@@ -312,6 +317,7 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadServerFile(
+			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -319,6 +325,7 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("filePath") String filePath)
 	{
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath));
 		
@@ -341,7 +348,7 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadUrl(
-//			@Context HttpServletRequest httpRequest,
+			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -349,7 +356,7 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("url") String url)
 	{
-//		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
@@ -373,6 +380,7 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadContent(
+			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -380,6 +388,7 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,			
 			@FormParam("content") String content)
 	{
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
 		
@@ -393,6 +402,7 @@ public class DataSetResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadClientFile(
+			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -401,7 +411,7 @@ public class DataSetResource {
 			@FormDataParam("file") InputStream inputStream,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail)
 	{
-		
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -508,30 +518,7 @@ public class DataSetResource {
 		return String.format(DATASET_NAME_FORMAT, collectionId, dataSourceId, dataSetId);
 	}
 
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://jo/";
-    // For small datasets
-	@POST
-	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/upload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@Context HttpServletRequest httpRequest,@PathParam("collectionId") String collectionId, @PathParam("dataSourceId") String dataSourceId, @PathParam("dataSetId") String dataSetId, @FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		String filePath = SERVER_UPLOAD_LOCATION_FOLDER + contentDispositionHeader.getFileName();
-		try {
-			OutputStream outpuStream = new FileOutputStream(new File(filePath));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			outpuStream = new FileOutputStream(new File(filePath));
-			while ((read = fileInputStream.read(bytes)) != -1) {
-				outpuStream.write(bytes, 0, read);
-			}
-			outpuStream.flush();
-			outpuStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		String output = "File saved to server location : " + filePath;
-		return Response.status(200).entity(output).build();
-	}
+
 
 	private static DataSetManager getManager(ServletContext servletContext) {
 		if (dataSetManager == null) {

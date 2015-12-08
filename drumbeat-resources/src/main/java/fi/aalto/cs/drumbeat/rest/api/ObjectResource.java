@@ -16,7 +16,7 @@ import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
-import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 
@@ -53,7 +53,6 @@ public class ObjectResource {
 
 	@Path("/alive")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public String isAlive() {
 		return "{\"status\":\"LIVE\"}";
 	}
@@ -70,12 +69,12 @@ public class ObjectResource {
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		return PrettyPrinting.prettyPrintingHTML(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
@@ -155,12 +154,12 @@ public class ObjectResource {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
 
-		return HTMLPrettyPrinting.prettyPrinting(m);
+		return PrettyPrinting.prettyPrintingHTML(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
 	public String getTypeJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();

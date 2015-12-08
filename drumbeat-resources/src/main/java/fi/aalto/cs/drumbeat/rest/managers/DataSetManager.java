@@ -157,7 +157,7 @@ public class DataSetManager {
 					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +
 					"<%s> a lbdho:DataSource ; lbdho:hasDataSet <%s> . \n" +
 					"<%s> a lbdho:DataSet . }",
-					BuildingDataOntology.BASE_URL,
+					BuildingDataOntology.Ontology_BASE_URL,
 					collectionUri,
 					dataSourceUri,
 					dataSourceUri,
