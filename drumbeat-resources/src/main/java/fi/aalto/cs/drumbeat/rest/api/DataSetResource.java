@@ -319,8 +319,8 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("filePath") String filePath)
 	{
-		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
-		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", datasetid, filePath));
+		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
+		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath));
 		
 		InputStream inputStream;
 		try {
@@ -350,8 +350,8 @@ public class DataSetResource {
 			@FormParam("url") String url)
 	{
 //		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);			
-		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", datasetid, url));
+		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
+		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
 		InputStream inputStream;
 		try {
@@ -380,8 +380,8 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,			
 			@FormParam("content") String content)
 	{
-		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);			
-		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", datasetid, content));
+		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
+		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
 		
 		InputStream inputStream = new ByteArrayInputStream(content.getBytes());
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -402,16 +402,16 @@ public class DataSetResource {
 	        @FormDataParam("file") FormDataContentDisposition fileDetail)
 	{
 		
-		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
-		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", datasetid, fileDetail.getFileName()));		
+		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
+		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 	
-	private String getUploadFilePath(String datasetid, String dataType, String dataFormat) {
+	private String getUploadFilePath(String dataSetName, String dataType, String dataFormat) {
 		return String.format("%s/%s/%s.%s",
 				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
 				dataType,
-				datasetid,
+				dataSetName,
 				dataFormat);
 	}
 	
@@ -429,7 +429,7 @@ public class DataSetResource {
 			Model mainModel = DrumbeatApplication.getInstance().getMainModel();
 			DataManager dataManager = new DataManager(mainModel);			
 
-			String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
+			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
 			if (!dataManager.checkDataSetExists(collectionId, dataSourceId, dataSetId)) {
 				throw new WebApplicationException(
 						Response
@@ -444,7 +444,7 @@ public class DataSetResource {
 			}
 			
 			if (DrumbeatApplication.getInstance().getSaveUploads()) {
-				String outputFilePath = getUploadFilePath(datasetid, dataType, dataFormat); 
+				String outputFilePath = getUploadFilePath(dataSetName, dataType, dataFormat); 
 				OutputStream outputStream = FileManager.createFileOutputStream(outputFilePath);
 				IOUtils.copy(inputStream, outputStream);
 				inputStream.close();
@@ -453,10 +453,10 @@ public class DataSetResource {
 				inputStream = new FileInputStream(outputFilePath);
 			}
 
-			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(datasetid);
+			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(dataSetName);
 			
 			Map<String, Object> responseEntity = new HashMap<>();
-			responseEntity.put("datasetid", datasetid);
+			responseEntity.put("dataSetName", dataSetName);
 			responseEntity.put("oldSize", jenaModel.size());
 			
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
@@ -500,7 +500,7 @@ public class DataSetResource {
 	}
 	
 	
-	public static String getdatasetid(
+	public static String getDataSetName(
 			String collectionId,
 			String dataSourceId,
 			String dataSetId)
