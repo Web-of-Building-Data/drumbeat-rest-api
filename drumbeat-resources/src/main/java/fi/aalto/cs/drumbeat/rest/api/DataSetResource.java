@@ -97,13 +97,13 @@ public class DataSetResource {
 		return "{\"status\":\"LIVE\"}";
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String listHTML(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename) {
+	public String listHTML(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).listAll(m, collectionname, datasourcename))
+		if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 			return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -112,15 +112,15 @@ public class DataSetResource {
 		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listJSON_LD(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename) {
+	public String listJSON_LD(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
 			try{
-			if (!getManager(servletContext).listAll(m, collectionname, datasourcename))
+			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -140,16 +140,16 @@ public class DataSetResource {
 
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces("text/turtle")
-	public String listTurtle(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename) {
+	public String listTurtle(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
 			try
 			{
-			if (!getManager(servletContext).listAll(m, collectionname, datasourcename))
+			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -169,15 +169,15 @@ public class DataSetResource {
 
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String listRDF(@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename) {
+	public String listRDF(@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		Model m = ModelFactory.createDefaultModel();
 
 		try {
 			try{
-			if (!getManager(servletContext).listAll(m, collectionname, datasourcename))
+			if (!getManager(servletContext).listAll(m, collectionid, datasourceid))
 				return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -197,25 +197,25 @@ public class DataSetResource {
 
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
+		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
+		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -231,15 +231,15 @@ public class DataSetResource {
 		}
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
-		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
+		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -255,14 +255,14 @@ public class DataSetResource {
 		}
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(m, collectionname, datasourcename, datasetname))
+		if (!getManager(servletContext).get(m, collectionid, datasourceid, datasetid))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -278,13 +278,13 @@ public class DataSetResource {
 		}
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).create(collectionname, datasourcename, datasetname);
+			getManager(servletContext).create(collectionid, datasourceid, datasetid,name);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -292,13 +292,13 @@ public class DataSetResource {
 		return "{\"Status\":\"Done\"}";
 	}
 
-	@Path("/{collectionname}/{datasourcename}/{datasetname}")
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("datasetname") String datasetname) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).delete(collectionname, datasourcename, datasetname);
+			getManager(servletContext).delete(collectionid, datasourceid, datasetid);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -319,8 +319,8 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("filePath") String filePath)
 	{
-		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
-		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath));
+		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
+		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", datasetid, filePath));
 		
 		InputStream inputStream;
 		try {
@@ -350,8 +350,8 @@ public class DataSetResource {
 			@FormParam("url") String url)
 	{
 //		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
-		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
+		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);			
+		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", datasetid, url));
 		
 		InputStream inputStream;
 		try {
@@ -380,8 +380,8 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,			
 			@FormParam("content") String content)
 	{
-		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);			
-		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
+		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);			
+		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", datasetid, content));
 		
 		InputStream inputStream = new ByteArrayInputStream(content.getBytes());
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -402,16 +402,16 @@ public class DataSetResource {
 	        @FormDataParam("file") FormDataContentDisposition fileDetail)
 	{
 		
-		String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
-		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
+		String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
+		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", datasetid, fileDetail.getFileName()));		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 	
-	private String getUploadFilePath(String dataSetName, String dataType, String dataFormat) {
+	private String getUploadFilePath(String datasetid, String dataType, String dataFormat) {
 		return String.format("%s/%s/%s.%s",
 				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
 				dataType,
-				dataSetName,
+				datasetid,
 				dataFormat);
 	}
 	
@@ -429,7 +429,7 @@ public class DataSetResource {
 			Model mainModel = DrumbeatApplication.getInstance().getMainModel();
 			DataManager dataManager = new DataManager(mainModel);			
 
-			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
+			String datasetid = getdatasetid(collectionId, dataSourceId, dataSetId);
 			if (!dataManager.checkDataSetExists(collectionId, dataSourceId, dataSetId)) {
 				throw new WebApplicationException(
 						Response
@@ -444,7 +444,7 @@ public class DataSetResource {
 			}
 			
 			if (DrumbeatApplication.getInstance().getSaveUploads()) {
-				String outputFilePath = getUploadFilePath(dataSetName, dataType, dataFormat); 
+				String outputFilePath = getUploadFilePath(datasetid, dataType, dataFormat); 
 				OutputStream outputStream = FileManager.createFileOutputStream(outputFilePath);
 				IOUtils.copy(inputStream, outputStream);
 				inputStream.close();
@@ -453,10 +453,10 @@ public class DataSetResource {
 				inputStream = new FileInputStream(outputFilePath);
 			}
 
-			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(dataSetName);
+			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(datasetid);
 			
 			Map<String, Object> responseEntity = new HashMap<>();
-			responseEntity.put("dataSetName", dataSetName);
+			responseEntity.put("datasetid", datasetid);
 			responseEntity.put("oldSize", jenaModel.size());
 			
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
@@ -500,7 +500,7 @@ public class DataSetResource {
 	}
 	
 	
-	public static String getDataSetName(
+	public static String getdatasetid(
 			String collectionId,
 			String dataSourceId,
 			String dataSetId)

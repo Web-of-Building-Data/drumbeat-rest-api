@@ -88,16 +88,16 @@ public class CollectionManager {
         return ret;
 	}
 	
-	public boolean get(String name,Model m) {
+	public boolean get(String collectionid,Model m) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name);        	 
+         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -110,8 +110,8 @@ public class CollectionManager {
 	
 
 
-	public void create(String name) {
-		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+name); 
+	public void create(String id, String name) {
+		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+id); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         collection.addProperty(RDF.type,type);

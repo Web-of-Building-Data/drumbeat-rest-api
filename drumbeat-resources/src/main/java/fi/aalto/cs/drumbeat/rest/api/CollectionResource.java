@@ -1,6 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
@@ -14,6 +15,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -245,14 +248,14 @@ public class CollectionResource {
 		}
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionname, m))
+		if (!getManager(servletContext).get(collectionid, m))
 			return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -261,14 +264,14 @@ public class CollectionResource {
 		return HTMLPrettyPrinting.prettyPrinting(m);
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionname, m))
+		if (!getManager(servletContext).get(collectionid, m))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -284,14 +287,14 @@ public class CollectionResource {
 		}
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionname, m))
+		if (!getManager(servletContext).get(collectionid, m))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -307,14 +310,14 @@ public class CollectionResource {
 		}
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionname, m))
+		if (!getManager(servletContext).get(collectionid, m))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -330,13 +333,14 @@ public class CollectionResource {
 		}
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,
+			@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).create(collectionname);
+			getManager(servletContext).create(collectionid,name);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -344,13 +348,13 @@ public class CollectionResource {
 		return "{\"Status\":\"Done\"}";
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).delete(collectionname);
+			getManager(servletContext).delete(collectionid);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}

@@ -28,7 +28,7 @@ import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
 
 public class DataSetResourceImportTest extends DrumbeatTest {	
 	
-	private static final boolean DO_TEST = true;
+	private static final boolean DO_TEST = false;
 	
 	private static final String DATA_SET_NAME_CORRECT_1 = "c1/structural/v1";
 	private static final String DATA_SET_NAME_CORRECT_2 = "c1/structural/v2";

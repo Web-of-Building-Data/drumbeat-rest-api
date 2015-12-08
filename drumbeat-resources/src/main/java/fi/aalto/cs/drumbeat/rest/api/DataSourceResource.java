@@ -15,6 +15,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -63,14 +65,14 @@ public class DataSourceResource {
 	}
 	
 	
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String listHTML(@PathParam("collectionname") String collectionname) {
+	public String listHTML(@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
-		if(!getManager(servletContext).listAll(m,collectionname))
+		if(!getManager(servletContext).listAll(m,collectionid))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -80,15 +82,15 @@ public class DataSourceResource {
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listJSON_LD(@PathParam("collectionname") String collectionname) {
+	public String listJSON_LD(@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionname))
+			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -109,15 +111,15 @@ public class DataSourceResource {
 	}
 	
 
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces("text/turtle")
-	public String listTurtle(@PathParam("collectionname") String collectionname) {
+	public String listTurtle(@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionname))
+			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -137,15 +139,15 @@ public class DataSourceResource {
 		
 	}
 	
-	@Path("/{collectionname}")
+	@Path("/{collectionid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String listRDF(@PathParam("collectionname") String collectionname) {
+	public String listRDF(@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionname))
+			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -166,14 +168,14 @@ public class DataSourceResource {
 	}
 	
 	
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename))
+		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -182,14 +184,14 @@ public class DataSourceResource {
 		return HTMLPrettyPrinting.prettyPrinting(m);	
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename))
+		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -205,14 +207,14 @@ public class DataSourceResource {
 		}
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces("text/turtle")
-	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename))
+		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -228,14 +230,14 @@ public class DataSourceResource {
 		}
 	}
 	
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces("application/rdf+xml")
-	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename))
+		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
@@ -252,13 +254,13 @@ public class DataSourceResource {
 	}
 	
 	
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid,@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).create(collectionname, datasourcename);
+			getManager(servletContext).create(collectionid, datasourceid,name);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}
@@ -266,13 +268,13 @@ public class DataSourceResource {
 		return "{\"Status\":\"Done\"}";
 	}
 
-	@Path("/{collectionname}/{datasourcename}")
+	@Path("/{collectionid}/{datasourceid}")
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename) {
+	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).delete(collectionname, datasourcename);
+			getManager(servletContext).delete(collectionid, datasourceid);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
 		}

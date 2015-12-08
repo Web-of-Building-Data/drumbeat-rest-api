@@ -55,14 +55,14 @@ public class DataSetManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m,String collectionname,String datasourcename) {
+	public boolean listAll(Model m,String collectionid,String datasourceid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
@@ -78,16 +78,16 @@ public class DataSetManager {
          return ret;
 	}
 	
-	public boolean get(Model m,String collectionname,String datasourcename,String datasetname) {
+	public boolean get(Model m,String collectionid,String datasourceid,String datasetid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename); 
+         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -99,8 +99,8 @@ public class DataSetManager {
 	}
 	
 
-	public Resource getResource(String collectionname,String datasourcename,String datasetname) {
-		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+	public Resource getResource(String collectionid,String datasourceid,String datasetid) {
+		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -108,9 +108,9 @@ public class DataSetManager {
 	}
 	
 	
-	public void create(String collectionname,String datasourcename,String datasetname) {
-		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionname+"/"+datasourcename);
-		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname); 
+	public void create(String collectionid,String datasourceid,String datasetid,String name) {
+		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
+		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
@@ -121,11 +121,11 @@ public class DataSetManager {
         dataset.addProperty(isDataSet, datasource);
         
         dataset.addProperty(RDF.type,type);
-        dataset.addProperty(name_property,datasourcename , XSDDatatype.XSDstring);
+        dataset.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String collectionname,String datasourcename,String datasetname) {
-		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionname+"/"+datasourcename+"/"+datasetname;
+	public void delete(String collectionid,String datasourceid,String datasetid) {
+		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
