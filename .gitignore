@@ -9,3 +9,5 @@
 drumbeat-rdf.jena.provider.virtuoso/target/*
 drumbeat-rdf.jena.provider/target/*
 drumbeat-resources/.settings/org.eclipse.wst.common.component
+drumbeat-rest-api-test-2/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
+drumbeat-rest-api-test-2/target/m2e-wtp/web-resources/META-INF/maven/fi.hut.cs.drumbeat/drumbeat-rest-api-test-2/pom.properties

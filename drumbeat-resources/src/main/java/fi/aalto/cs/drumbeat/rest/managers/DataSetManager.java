@@ -17,6 +17,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSources;
 
 /*
 The MIT License (MIT)
@@ -132,6 +135,45 @@ public class DataSetManager {
 		UpdateAction.parseExecute(update1, gs);
 		UpdateAction.parseExecute(update2, gs);
 	}
+	
+	
+	/**
+	 * Checks if a dataset with the collection/datasource/dataset names exists
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return true if the dataset exists
+	 * @author Nam Vu 
+	 */
+	public boolean checkExists(String collectionId, String dataSourceId, String dataSetId) {
+		String collectionUri = Collections.formatUrl(collectionId);
+		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
+		String dataSetUri = DataSets.formatUrl(collectionId, dataSourceId, dataSetId);
+		
+		String queryString =
+				String.format(
+					"PREFIX ldbho: <%s> \n" +
+					"ASK { \n" + 
+					"<%s> a ldbho:Collection ; ldbho:hasDataSource <%s> . \n" +
+					"<%s> a ldbho:DataSource ; ldbho:hasDataSet <%s> . \n" +
+					"<%s> a ldbho:DataSet . }",
+					BuildingDataOntology.BASE_URL,
+					collectionUri,
+					dataSourceUri,
+					dataSourceUri,
+					dataSetUri,
+					dataSetUri);
+		
+		QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(queryString),
+						model);
+		
+		boolean result = queryExecution.execAsk();
+		return result;
+	}
+
+	
 	
 	
 }
