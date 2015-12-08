@@ -13,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -27,19 +26,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.riot.Lang;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.objectweb.asm.commons.GeneratorAdapter;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -47,7 +42,12 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.HTMLPrettyPrinting;
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.managers.DataManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSources;
+import fi.hut.cs.drumbeat.common.file.FileManager;
 
 /*
  The MIT License (MIT)
@@ -326,12 +326,11 @@ public class DataSetResource {
 		try {
 			inputStream = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {
-			throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
-//			return
-//					Response
-//						.status(Response.Status.NOT_FOUND)
-//						.entity(e.getMessage())
-//						.build();
+			throw new WebApplicationException(
+					Response
+						.status(Response.Status.NOT_FOUND)
+						.entity(e.getMessage())
+						.build());
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -358,18 +357,19 @@ public class DataSetResource {
 		try {
 			inputStream = new URL(url).openStream();
 		} catch (IOException e) {			
-			throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
-//			return
-//					Response
-//						.serverError()
-//						.entity(e.getMessage())
-//						.build();
+			throw new WebApplicationException(
+					Response
+						.status(Response.Status.NOT_FOUND)
+						.entity(e.getMessage())
+						.build());
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 
 
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadContent")
+	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadContent(
@@ -407,6 +407,14 @@ public class DataSetResource {
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
 	}
 	
+	private String getUploadFilePath(String dataSetName, String dataType, String dataFormat) {
+		return String.format("%s/%s/%s.%s",
+				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
+				dataType,
+				dataSetName,
+				dataFormat);
+	}
+	
 	
 	private Map<String, Object> internalUploadDataSet(
 			String collectionId,
@@ -418,13 +426,31 @@ public class DataSetResource {
 	{	
 		
 		try {
-			DataSetManager dataSetManager = new DataSetManager(DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel());			
+			Model mainModel = DrumbeatApplication.getInstance().getMainModel();
+			DataManager dataManager = new DataManager(mainModel);			
 
 			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
-			if (!dataSetManager.exists(collectionId, dataSourceId, dataSetId)) {
+			if (!dataManager.checkDataSetExists(collectionId, dataSourceId, dataSetId)) {
 				throw new WebApplicationException(
-						String.format("Data set not found: collectionId=%s, dataSourceId=%s, dataSetId=%s", collectionId, dataSourceId, dataSetId),
-						Response.Status.NOT_FOUND);				
+						Response
+							.status(Response.Status.NOT_FOUND)
+							.entity(
+									String.format(
+											"Data set not found: collection=<%s>, dataSource=<%s>, dataSet=<%s>",
+											Collections.formatUrl(collectionId),
+											DataSources.formatUrl(collectionId, dataSourceId),
+											DataSets.formatUrl(collectionId, dataSourceId, dataSetId)))
+							.build());				
+			}
+			
+			if (DrumbeatApplication.getInstance().getSaveUploads()) {
+				String outputFilePath = getUploadFilePath(dataSetName, dataType, dataFormat); 
+				OutputStream outputStream = FileManager.createFileOutputStream(outputFilePath);
+				IOUtils.copy(inputStream, outputStream);
+				inputStream.close();
+				outputStream.close();
+				
+				inputStream = new FileInputStream(outputFilePath);
 			}
 
 			Model jenaModel = DrumbeatApplication.getInstance().getJenaProvider().openModel(dataSetName);
@@ -434,43 +460,34 @@ public class DataSetResource {
 			responseEntity.put("oldSize", jenaModel.size());
 			
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
-				jenaModel = dataSetManager.uploadIfcData(inputStream, jenaModel);				
+				jenaModel = dataManager.uploadIfcData(inputStream, jenaModel);				
 			} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
 				// TODO: convert dataFormat string to Lang
-				jenaModel = dataSetManager.uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
+				jenaModel = dataManager.uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
 			} else {
 				throw new WebApplicationException(
-						String.format("Unknown data type=%s", dataType),
-						Response.Status.BAD_REQUEST);
-				
-//				return
-//						Response
-//						.status(Response.Status.NOT_FOUND)
-//						.entity(String.format("Unknown data type=%s", dataType))
-//						.build();
+						Response
+							.status(Response.Status.BAD_REQUEST)
+							.entity(String.format("Unknown data type=%s", dataType))
+							.build());
 			}
 			
 			responseEntity.put("newSize", jenaModel.size());
 			
 			return responseEntity;
 
-//			return Response
-//					.ok(responseEntity, MediaType.APPLICATION_JSON)
-//					.build();
-			
 		} catch (WebApplicationException wae) {
 			throw wae;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			
 			throw new WebApplicationException(
-					String.format("Unexpected error: %s", e.getMessage()),
-					Response.Status.BAD_REQUEST);
+					e,
+					Response
+						.serverError()
+						.entity(String.format("Unexpected error: %s", e.getMessage()))
+						.build());
 
-//			return Response
-//					.serverError()
-//					.entity(e.getMessage())
-//					.build();			
 		} finally {
 			try {
 				inputStream.close();

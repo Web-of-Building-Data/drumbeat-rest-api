@@ -206,7 +206,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		
 		Form form = new Form();
 		form.param("dataType", DataSetResource.DATA_TYPE_RDF);
-		form.param("dataFormat", Lang.TURTLE.toString());
+		form.param("dataFormat", "turtle");
 		form.param("filePath", testModelFilePath.getAbsolutePath());
 		
 		Model model = getApplication().getJenaProvider().openDefaultModel();
@@ -243,7 +243,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 		
 		Form form = new Form();
 		form.param("dataType", DataSetResource.DATA_TYPE_RDF);
-		form.param("dataFormat", Lang.TURTLE.toString());
+		form.param("dataFormat", "turtle");
 		form.param("filePath", testModelFilePath.getAbsolutePath());
 		
 		int statusCode;

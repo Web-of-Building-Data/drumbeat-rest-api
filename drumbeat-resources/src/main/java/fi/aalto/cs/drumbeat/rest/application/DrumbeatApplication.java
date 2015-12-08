@@ -2,7 +2,6 @@ package fi.aalto.cs.drumbeat.rest.application;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
 
@@ -15,8 +14,11 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import com.hp.hpl.jena.rdf.model.Model;
+
 import fi.aalto.cs.drumbeat.rest.api.CollectionResource;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationParserException;
+import fi.hut.cs.drumbeat.common.params.BooleanParam;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.config.Ifc2RdfConversionContextLoader;
 import fi.hut.cs.drumbeat.rdf.modelfactory.AbstractJenaProvider;
@@ -33,11 +35,13 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 		public static final String RESOURCES_FOLDER_PATH = "resources/";
 		public static final String IFC_SCHEMA_FOLDER_PATH = RESOURCES_FOLDER_PATH + "ifc/";
+		public static final String UPLOADS_FOLDER_PATH = "uploads/";
 	}
 	
 	public static class Params {
 		public static final String WEB_BASE_URI = "web.baseUri";		
-		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";		
+		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
+		public static final String UPLOADS_SAVE = "uploads.save";
 	}
 	
 	public static class Resources {
@@ -55,8 +59,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	private static final Logger logger = Logger.getLogger(DrumbeatApplication.class);
 	private static AbstractJenaProvider jenaProvider;
+	
 	private final int applicationId;
 	private Properties configurationProperties;
+	private Boolean saveUploads;
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
 
@@ -78,7 +84,9 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 			if (configurationProperties == null) {				
 				configurationProperties = new Properties();
 				try {
-					FileInputStream in = new FileInputStream(getRealPath(Paths.COMMON_CONFIG_FILE_PATH));
+					String configFilePath = getRealPath(Paths.COMMON_CONFIG_FILE_PATH);
+					logger.info("Config file: " + configFilePath);
+					FileInputStream in = new FileInputStream(configFilePath);
 					configurationProperties.load(in);
 				} catch (IOException e) {
 					throw new RuntimeException("Loading config file failed: " + e.getMessage(), e);
@@ -116,6 +124,19 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		}		
 	}
 	
+	/**
+	 * Gets value indicating whether uploaded files must be saved
+	 * @return
+	 */
+	public boolean getSaveUploads() {
+		if (saveUploads == null) {
+			BooleanParam param = new BooleanParam();
+			param.setStringValue(getConfigurationProperties().getProperty(Params.UPLOADS_SAVE, "false"));
+			saveUploads = param.getValue();
+		}
+		return saveUploads;
+	}
+	
 	
 	
 	public String getBaseUri(String path) {
@@ -131,6 +152,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		}
 		return jenaProvider;
 		
+	}
+	
+	public Model getMainModel() throws JenaProviderException, IOException {
+		return getJenaProvider().openDefaultModel();
 	}
 	
 	public String getRealPath(String path) {
