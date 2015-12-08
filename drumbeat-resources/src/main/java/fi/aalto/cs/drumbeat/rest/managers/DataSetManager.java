@@ -152,11 +152,11 @@ public class DataSetManager {
 		
 		String queryString =
 				String.format(
-					"PREFIX ldbho: <%s> \n" +
+					"PREFIX lbdho: <%s> \n" +
 					"ASK { \n" + 
-					"<%s> a ldbho:Collection ; ldbho:hasDataSource <%s> . \n" +
-					"<%s> a ldbho:DataSource ; ldbho:hasDataSet <%s> . \n" +
-					"<%s> a ldbho:DataSet . }",
+					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +
+					"<%s> a lbdho:DataSource ; lbdho:hasDataSet <%s> . \n" +
+					"<%s> a lbdho:DataSet . }",
 					BuildingDataOntology.BASE_URL,
 					collectionUri,
 					dataSourceUri,

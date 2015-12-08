@@ -288,6 +288,8 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 			
 			statusCode = Response.Status.OK.getStatusCode();
 		} catch (WebApplicationException e) {
+			String message = e.getResponse().getEntity().toString(); 
+			logger.error(message);
 			statusCode = e.getResponse().getStatus();
 		}
 		
