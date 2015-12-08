@@ -73,7 +73,7 @@ public class DataSourceResource {
 		if(!getManager(servletContext).listAll(m,collectionid))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
 			
@@ -91,7 +91,7 @@ public class DataSourceResource {
 			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -120,7 +120,7 @@ public class DataSourceResource {
 			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -148,7 +148,7 @@ public class DataSourceResource {
 			if(!getManager(servletContext).listAll(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
-				return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 			}
 
 			JenaJSONLD.init();
@@ -176,7 +176,7 @@ public class DataSourceResource {
 		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return PrettyPrinting.prettyPrintingHTML(m);	
@@ -192,7 +192,7 @@ public class DataSourceResource {
 		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -215,7 +215,7 @@ public class DataSourceResource {
 		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -238,7 +238,7 @@ public class DataSourceResource {
 		if(!getManager(servletContext).get(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -259,7 +259,7 @@ public class DataSourceResource {
 		try {
 			getManager(servletContext).create(collectionid, datasourceid,name);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";
@@ -272,7 +272,7 @@ public class DataSourceResource {
 		try {
 			getManager(servletContext).delete(collectionid, datasourceid);
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return "{\"Status\":\"Done\"}";

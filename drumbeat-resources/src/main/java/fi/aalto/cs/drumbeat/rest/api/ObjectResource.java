@@ -67,7 +67,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
 				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 		return PrettyPrinting.prettyPrintingHTML(m);
 	}
@@ -82,7 +82,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -105,7 +105,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -128,7 +128,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).get(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -151,7 +151,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
 				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		return PrettyPrinting.prettyPrintingHTML(m);
@@ -167,7 +167,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -190,7 +190,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
@@ -213,7 +213,7 @@ public class ObjectResource {
 			if (!getManager(servletContext).getType(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR: Check that the RDF store is started: cd /etc/init.d;sudo sh virtuoso start \"}";
+			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
 		JenaJSONLD.init();
