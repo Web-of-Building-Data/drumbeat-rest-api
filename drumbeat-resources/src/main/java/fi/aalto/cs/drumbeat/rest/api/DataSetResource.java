@@ -427,10 +427,10 @@ public class DataSetResource {
 		
 		try {
 			Model mainModel = DrumbeatApplication.getInstance().getMainModel();
-			DataManager dataManager = new DataManager(mainModel);			
+			DataSetManager dataSetManager = new DataSetManager(mainModel);			
 
 			String dataSetName = getDataSetName(collectionId, dataSourceId, dataSetId);
-			if (!dataManager.checkDataSetExists(collectionId, dataSourceId, dataSetId)) {
+			if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
 				throw new WebApplicationException(
 						Response
 							.status(Response.Status.NOT_FOUND)
@@ -460,10 +460,10 @@ public class DataSetResource {
 			responseEntity.put("oldSize", jenaModel.size());
 			
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
-				jenaModel = dataManager.uploadIfcData(inputStream, jenaModel);				
+				jenaModel = new DataManager().uploadIfcData(inputStream, jenaModel);				
 			} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
 				// TODO: convert dataFormat string to Lang
-				jenaModel = dataManager.uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
+				jenaModel = new DataManager().uploadRdfData(inputStream, Lang.TURTLE, jenaModel);				
 			} else {
 				throw new WebApplicationException(
 						Response

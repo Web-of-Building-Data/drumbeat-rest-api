@@ -6,14 +6,9 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.*;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
@@ -29,38 +24,7 @@ public class DataManager {
 	
 	private static boolean ifcSchemaLoaded;
 	
-	private Model model;
-	
-	public DataManager(Model metaModel) {
-		this.model = metaModel;
-	}
-
-	public boolean checkDataSetExists(String collectionId, String dataSourceId, String dataSetId) {
-		String collectionUri = Collections.formatUrl(collectionId);
-		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
-		String dataSetUri = DataSets.formatUrl(collectionId, dataSourceId, dataSetId);
-		
-		String queryString =
-				String.format(
-					"PREFIX ldbho: <%s> \n" +
-					"ASK { \n" + 
-					"<%s> a ldbho:Collection ; ldbho:hasDataSource <%s> . \n" +
-					"<%s> a ldbho:DataSource ; ldbho:hasDataSet <%s> . \n" +
-					"<%s> a ldbho:DataSet . }",
-					BuildingDataOntology.BASE_URL,
-					collectionUri,
-					dataSourceUri,
-					dataSourceUri,
-					dataSetUri,
-					dataSetUri);
-		
-		QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(queryString),
-						model);
-		
-		boolean result = queryExecution.execAsk();
-		return result;
+	public DataManager() {
 	}
 
 	
