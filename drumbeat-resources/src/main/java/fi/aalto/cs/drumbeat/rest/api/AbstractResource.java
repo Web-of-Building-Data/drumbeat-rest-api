@@ -103,7 +103,7 @@ public abstract class AbstractResource {
 				case "application/rdf+xml":
 					return model2RDF(m);										
 				default:									
-					return PrettyPrinting.prettyPrintingTXT(m);
+					return PrettyPrinting.prettyPrintingHTML(m);
 				}
 			}
 			else

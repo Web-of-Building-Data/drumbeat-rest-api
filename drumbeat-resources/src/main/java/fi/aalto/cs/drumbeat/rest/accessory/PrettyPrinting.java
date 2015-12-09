@@ -256,7 +256,7 @@ public class PrettyPrinting {
 				case "application/rdf+xml":
 					return format2TURTLE(txt,ERROR);										
 				default:									
-					return format2TXT(txt,ERROR);
+					return format2HTML(txt,ERROR);
 				}
 			}
 			else
