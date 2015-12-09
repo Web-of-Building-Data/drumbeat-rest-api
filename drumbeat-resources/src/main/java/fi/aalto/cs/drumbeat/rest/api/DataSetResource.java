@@ -14,6 +14,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -118,7 +119,7 @@ public class DataSetResource  extends AbstractResource{
 	
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@PUT
-	public String create(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@FormDataParam("name") String name) {
+	public String create(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@DefaultValue("No name given.") @FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager().create(collectionid, datasourceid, datasetid,name);

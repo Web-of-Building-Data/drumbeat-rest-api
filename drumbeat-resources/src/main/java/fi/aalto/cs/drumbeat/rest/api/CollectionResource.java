@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.rest.api;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -102,7 +103,7 @@ public class CollectionResource extends AbstractResource {
 
 	@Path("/{collectionid}")
 	@PUT
-	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @FormDataParam("name") String name) {
+	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid,@DefaultValue("No name given.") @FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager().create(collectionid, name);
