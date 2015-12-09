@@ -54,29 +54,6 @@ public class CollectionResource extends AbstractResource{
 	@Context
 	private ServletContext servletContext;
 
-	@Path("/alive")
-	@GET
-	public String isAlive() {
-		return "{\"status\":\"LIVE\"}";
-	}
-
-	@Path("/url")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getURL(@Context HttpServletRequest httpRequest) {
-		String ret = "";
-		try {
-
-			ret = "http://" + httpRequest.getLocalAddr() + ":" + httpRequest.getLocalPort() + "/";
-
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorJSON("ERROR in URL");
-		}
-
-		return "{\"requested url beginning\":" + ret + "\"}";
-	}
-
-	
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String listHTML() {

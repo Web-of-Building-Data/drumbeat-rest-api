@@ -90,12 +90,6 @@ public class DataSetResource  extends AbstractResource{
 	private static final Logger logger = Logger.getLogger(DataSetResource.class);
 
 	
-	@Path("/alive")
-	@GET
-	public String isAlive() {
-		return "{\"status\":\"LIVE\"}";
-	}
-
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)

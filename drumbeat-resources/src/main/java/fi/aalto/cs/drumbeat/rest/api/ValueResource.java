@@ -1,8 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -12,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -51,12 +47,7 @@ public class ValueResource  extends AbstractResource{
 	@Context
 	private ServletContext servletContext;
 
-	@Path("/alive")
-	@GET
-	public String isAlive() {
-		return "{\"status\":\"LIVE\"}";
-	}
-	
+
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)

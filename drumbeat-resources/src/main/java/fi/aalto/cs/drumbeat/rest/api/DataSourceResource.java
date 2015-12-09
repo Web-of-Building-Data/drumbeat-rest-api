@@ -55,13 +55,7 @@ public class DataSourceResource extends AbstractResource {
 	@Context
 	private ServletContext servletContext;
 
-	@Path("/alive")
-	@GET
-	public String isAlive() {
-		return "{\"status\":\"LIVE\"}";
-	}
-	
-	
+
 	@Path("/{collectionid}")
 	@GET
 	@Produces(MediaType.TEXT_HTML)

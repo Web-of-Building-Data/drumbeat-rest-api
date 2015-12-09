@@ -3,6 +3,9 @@ package fi.aalto.cs.drumbeat.rest.api;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -37,6 +40,12 @@ import fi.aalto.cs.drumbeat.rest.managers.AbstractManager;
 
 public abstract class AbstractResource {
 	abstract public AbstractManager getManager();
+	
+	@Path("/alive")
+	@GET
+	public String isAlive() {
+		return "{\"status\":\"LIVE\"}";
+	}
 	
 	protected String model2JSON_LD(Model m) {
 		JenaJSONLD.init();

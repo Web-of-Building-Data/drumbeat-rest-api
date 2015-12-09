@@ -51,11 +51,6 @@ public class ObjectResource  extends AbstractResource{
 	@Context
 	private ServletContext servletContext;
 
-	@Path("/alive")
-	@GET
-	public String isAlive() {
-		return "{\"status\":\"LIVE\"}";
-	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
