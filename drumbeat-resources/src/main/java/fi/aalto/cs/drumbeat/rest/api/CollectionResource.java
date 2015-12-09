@@ -144,7 +144,25 @@ public class CollectionResource extends AbstractResource {
 
 		return PrettyPrinting.format(httpRequest, "Done",PrettyPrinting.OK);
 	}
-
+	
+	@Path("/{collectionid}/{extras:.+}")
+	@GET
+	public String getExtrasGET(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /collections  or /collections/{ID} Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionid}/{extras:.+}")
+	@PUT
+	public String getExtrasPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /collections  or /collections/{ID} Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionid}/{extras:.+}")
+	@POST
+	public String getExtrasPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /collections  or /collections/{ID} Extra characters were:/"+extras);
+	}
+	
 	@Override
 	public CollectionManager getManager() {
 		if (manager == null) {

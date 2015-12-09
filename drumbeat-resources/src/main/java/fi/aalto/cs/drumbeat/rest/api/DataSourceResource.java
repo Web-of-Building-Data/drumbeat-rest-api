@@ -128,6 +128,25 @@ public class DataSourceResource extends AbstractResource {
 		return PrettyPrinting.format(httpRequest, "Done",PrettyPrinting.OK);
 	}
 
+	@Path("/{collectionid}/{datasourceid}/{extras:.+}")
+	@GET
+	public String getExtrasGET(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /datasources  or /datasources/{ID}/{ID} Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionid}/{datasourceid}/{extras:.+}")
+	@PUT
+	public String getExtrasPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /datasources  or /datasources/{ID}/{ID} Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionid}/{datasourceid}/{extras:.+}")
+	@POST
+	public String getExtrasPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /datasources/{collectionid}  or /datasources/{collectionid}/{datasourceid} Extra characters were:/"+extras);
+	}
+
+	
 	@Override
 	public DataSourceManager getManager() {
 		if (manager == null) {

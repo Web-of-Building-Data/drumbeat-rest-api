@@ -102,6 +102,23 @@ public class ObjectResource  extends AbstractResource{
 		return PrettyPrinting.formatError(httpRequest, "Use import to add data.");
 	}
 	
+	@Path("/{collectionname}/{datasourcename}/{guid}/{extras:.+}")
+	@GET
+	public String getExtrasGET(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /object/{collectionname}/{datasourcename}/{guid}  or /object/{collectionname}/{datasourcename}/{guid}/type  Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/{extras:.+}")
+	@PUT
+	public String getExtrasPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /object/{collectionname}/{datasourcename}/{guid}  or /object/{collectionname}/{datasourcename}/{guid}/type  Extra characters were:/"+extras);
+	}
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/{extras:.+}")
+	@POST
+	public String getExtrasPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("extras") String extras) {
+		return PrettyPrinting.formatError(httpRequest, "Usage: /object/{collectionname}/{datasourcename}/{guid}  or /object/{collectionname}/{datasourcename}/{guid}/type  Extra characters were:/"+extras);
+	}
 	@Override
 	public ObjectManager getManager() {
 		if (manager == null) {
