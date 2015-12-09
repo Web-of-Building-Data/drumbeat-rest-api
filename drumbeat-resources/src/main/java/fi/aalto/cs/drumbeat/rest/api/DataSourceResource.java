@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -65,6 +66,19 @@ public class DataSourceResource extends AbstractResource {
 		return model2AcceptedFormat(httpRequest, m);
 	}
 
+	@Path("/{collectionid}")
+	@PUT
+	public String listPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list data sources");
+	}
+
+	@Path("/{collectionid}")
+	@POST
+	public String listPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list data sources");
+	}
+
+	
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	public String get(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
@@ -80,6 +94,11 @@ public class DataSourceResource extends AbstractResource {
 		return model2AcceptedFormat(httpRequest, m);
 	}
 
+	@Path("/{collectionid}/{datasourceid}")
+	@POST
+	public String getPOST(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+		return PrettyPrinting.formatError(httpRequest, "Use PUT to create data sources");
+	}
 
 	@Path("/{collectionid}/{datasourceid}")
 	@PUT

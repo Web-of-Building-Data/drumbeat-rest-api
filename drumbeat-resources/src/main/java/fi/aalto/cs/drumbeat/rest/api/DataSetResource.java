@@ -101,6 +101,19 @@ public class DataSetResource  extends AbstractResource{
 
 			return model2AcceptedFormat(httpRequest, m);
 	}
+	
+	
+	@Path("/{collectionid}/{datasourceid}")
+	@PUT
+	public String listPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list datasets");
+	}
+
+	@Path("/{collectionid}/{datasourceid}")
+	@POST
+	public String listPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list datasets");
+	}
 
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")
 	@GET
@@ -115,6 +128,12 @@ public class DataSetResource  extends AbstractResource{
 		}
 
 		return model2AcceptedFormat(httpRequest, m);
+	}
+	
+	@Path("/{collectionid}/{datasourceid}/{datasetid}")
+	@POST
+	public String getPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@DefaultValue("No name given.") @FormDataParam("name") String name) {
+		return PrettyPrinting.formatError(httpRequest, "Use PUT to create datasets");
 	}
 	
 	@Path("/{collectionid}/{datasourceid}/{datasetid}")

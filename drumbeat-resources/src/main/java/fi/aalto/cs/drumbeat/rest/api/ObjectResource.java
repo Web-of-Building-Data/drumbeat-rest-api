@@ -3,6 +3,8 @@ package fi.aalto.cs.drumbeat.rest.api;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -60,7 +62,19 @@ public class ObjectResource  extends AbstractResource{
 
 		return model2AcceptedFormat(httpRequest, m);
 	}
-
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}")
+	@PUT
+	public String getPUT(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		return PrettyPrinting.formatError(httpRequest, "Use import to add data.");
+	}
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}")
+	@POST
+	public String getPOST(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		return PrettyPrinting.formatError(httpRequest, "Use import to add data.");
+	}
+	
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
 	public String getType(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
@@ -76,6 +90,18 @@ public class ObjectResource  extends AbstractResource{
 		return model2AcceptedFormat(httpRequest, m);
 	}
 
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@PUT
+	public String getTypePUT(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		return PrettyPrinting.formatError(httpRequest, "Use import to add data.");
+	}
+	
+	@Path("/{collectionname}/{datasourcename}/{guid}/type")
+	@POST
+	public String getTypePOST(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
+		return PrettyPrinting.formatError(httpRequest, "Use import to add data.");
+	}
+	
 	@Override
 	public ObjectManager getManager() {
 		if (manager == null) {

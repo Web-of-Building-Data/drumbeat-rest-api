@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -67,6 +68,17 @@ public class CollectionResource extends AbstractResource {
 		return model2AcceptedFormat(httpRequest, m);
 	}
 
+	@PUT
+	public String listPUT(@Context HttpServletRequest httpRequest) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list Collections");
+	}
+
+	@POST
+	public String listPOST(@Context HttpServletRequest httpRequest) {
+		return PrettyPrinting.formatError(httpRequest, "Use GET to list Collections");
+	}
+
+	
 	private Model listSample() {
 		Model model = ModelFactory.createDefaultModel();
 		Resource ctype = model.createResource(BuildingDataOntology.Collections.Collection);
@@ -100,6 +112,11 @@ public class CollectionResource extends AbstractResource {
 		return model2AcceptedFormat(httpRequest, m);
 	}
 
+	@Path("/{collectionid}")
+	@POST
+	public String getPOST(@Context HttpServletRequest httpRequest) {
+		return PrettyPrinting.formatError(httpRequest, "Use PUT to create data");
+	}
 
 	@Path("/{collectionid}")
 	@PUT
