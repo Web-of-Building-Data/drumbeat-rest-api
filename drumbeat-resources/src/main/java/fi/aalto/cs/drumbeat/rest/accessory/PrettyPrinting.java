@@ -128,12 +128,12 @@ public class PrettyPrinting {
 		html_src.append("<TR>");
 		// Status
 		html_src.append("<TD>");
-		html_src.append("Status");
+		html_src.append(status_txt);
 		html_src.append("</TD>");
 
 		// Value
 		html_src.append("<TD>");
-		html_src.append(status_txt+": " + txt);
+		html_src.append(txt);
 		html_src.append("</TD>");
 
 		html_src.append("</TR>\n");
