@@ -70,7 +70,7 @@ public class DataSourceResource {
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
-		if(!getManager(servletContext).listAll(m,collectionid))
+		if(!getManager(servletContext).listAll2Model(m,collectionid))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -88,7 +88,7 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionid))
+			if(!getManager(servletContext).listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
@@ -117,7 +117,7 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionid))
+			if(!getManager(servletContext).listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
@@ -145,7 +145,7 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll(m,collectionid))
+			if(!getManager(servletContext).listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
@@ -173,7 +173,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionid, datasourceid))
+		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -189,7 +189,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionid, datasourceid))
+		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
@@ -212,7 +212,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionid, datasourceid))
+		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
@@ -235,7 +235,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionid, datasourceid))
+		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());

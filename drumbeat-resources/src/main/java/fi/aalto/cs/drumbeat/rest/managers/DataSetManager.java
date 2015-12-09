@@ -58,7 +58,7 @@ public class DataSetManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m,String collectionid,String datasourceid) {
+	public boolean listAll2Model(Model m,String collectionid,String datasourceid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -81,7 +81,7 @@ public class DataSetManager {
          return ret;
 	}
 	
-	public boolean get(Model m,String collectionid,String datasourceid,String datasetid) {
+	public boolean get2Model(Model m,String collectionid,String datasourceid,String datasetid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(

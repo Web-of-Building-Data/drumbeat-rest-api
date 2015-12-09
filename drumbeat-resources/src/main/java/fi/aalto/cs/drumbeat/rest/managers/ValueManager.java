@@ -54,7 +54,7 @@ public class ValueManager {
 		this.model = model;
 	}
 
-	public boolean get(Model m,String collectionname,String datasourcename,String guid,String property) {
+	public boolean get2Model(Model m,String collectionname,String datasourcename,String guid,String property) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(

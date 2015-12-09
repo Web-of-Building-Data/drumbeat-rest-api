@@ -53,7 +53,7 @@ public class ObjectManager {
 		this.model = model;
 	}
 	
-	public boolean get(Model m,String collectionname,String datasourcename,String guid) {
+	public boolean get2Model(Model m,String collectionname,String datasourcename,String guid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -73,7 +73,7 @@ public class ObjectManager {
          return ret;
 	}
 	
-	public boolean getType(Model m,String collectionname,String datasourcename,String guid) {
+	public boolean getType2Model(Model m,String collectionname,String datasourcename,String guid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(

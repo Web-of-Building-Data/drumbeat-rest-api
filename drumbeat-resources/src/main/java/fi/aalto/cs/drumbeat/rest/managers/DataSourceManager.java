@@ -59,7 +59,7 @@ public class DataSourceManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m,String collectionid) {
+	public boolean listAll2Model(Model m,String collectionid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -82,7 +82,7 @@ public class DataSourceManager {
          return ret;
 	}
 	
-	public boolean get(Model m,String collectionid,String datasourcerid) {
+	public boolean get2Model(Model m,String collectionid,String datasourcerid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(

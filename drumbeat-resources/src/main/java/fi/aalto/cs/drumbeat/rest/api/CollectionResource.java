@@ -88,7 +88,7 @@ public class CollectionResource {
 		
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).listAll(m))
+			if (!getManager(servletContext).listAll2Model(m))
 				return PrettyPrinting.formatErrorHTML("No collections");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -102,7 +102,7 @@ public class CollectionResource {
 	public String listTXT() {
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).listAll(m))
+			if (!getManager(servletContext).listAll2Model(m))
 				return PrettyPrinting.formatErrorTXT("No collections");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTXT("Check that the RDF store is started: "+e.getMessage());
@@ -118,7 +118,7 @@ public class CollectionResource {
 
 		try {
 			try {
-				if (!getManager(servletContext).listAll(m))
+				if (!getManager(servletContext).listAll2Model(m))
 					return PrettyPrinting.formatErrorJSON("No collections");
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
@@ -145,7 +145,7 @@ public class CollectionResource {
 
 		try {
 			try{
-			if (!getManager(servletContext).listAll(m))
+			if (!getManager(servletContext).listAll2Model(m))
 				return PrettyPrinting.formatErrorTURTLE("No collections");
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
@@ -172,7 +172,7 @@ public class CollectionResource {
 
 		try {
 			try{
-			if (!getManager(servletContext).listAll(m))
+			if (!getManager(servletContext).listAll2Model(m))
 				return PrettyPrinting.formatErrorRDF("No collections");
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
@@ -266,7 +266,7 @@ public class CollectionResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionid, m))
+		if (!getManager(servletContext).get2Model(m, collectionid))
 			return PrettyPrinting.formatErrorHTML("The ID does not exists");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -283,7 +283,7 @@ public class CollectionResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionid, m))
+		if (!getManager(servletContext).get2Model(m, collectionid))
 			return PrettyPrinting.formatErrorJSON("The ID does not exists");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
@@ -306,7 +306,7 @@ public class CollectionResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionid, m))
+		if (!getManager(servletContext).get2Model(m, collectionid))
 			return PrettyPrinting.formatErrorTURTLE("The ID does not exists");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
@@ -329,7 +329,7 @@ public class CollectionResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if (!getManager(servletContext).get(collectionid, m))
+		if (!getManager(servletContext).get2Model(m, collectionid))
 			return PrettyPrinting.formatErrorRDF("The ID does not exists");
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());

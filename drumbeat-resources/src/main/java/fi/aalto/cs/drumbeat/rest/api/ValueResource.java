@@ -64,7 +64,7 @@ public class ValueResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
+		if(!getManager(servletContext).get2Model(m,collectionname, datasourcename, guid, property))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -80,7 +80,7 @@ public class ValueResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
+		if(!getManager(servletContext).get2Model(m,collectionname, datasourcename, guid, property))
 			return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
@@ -103,7 +103,7 @@ public class ValueResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
+		if(!getManager(servletContext).get2Model(m,collectionname, datasourcename, guid, property))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
@@ -127,7 +127,7 @@ public class ValueResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get(m,collectionname, datasourcename, guid, property))
+		if(!getManager(servletContext).get2Model(m,collectionname, datasourcename, guid, property))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());

@@ -58,7 +58,7 @@ public class CollectionManager {
 		this.model = model;
 	}
 	
-	public boolean listAll(Model m) {
+	public boolean listAll2Model(Model m) {
 		boolean ret=false;
 		try
 		{
@@ -88,7 +88,7 @@ public class CollectionManager {
         return ret;
 	}
 	
-	public boolean get(String collectionid,Model m) {
+	public boolean get2Model(Model m,String collectionid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
