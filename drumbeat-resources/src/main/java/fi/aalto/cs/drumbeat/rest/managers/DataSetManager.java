@@ -25,6 +25,7 @@ import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSources;
 The MIT License (MIT)
 
 Copyright (c) 2015 Jyrki Oraskari
+Copyright (c) 2015 Nam Vu Hoang
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -80,6 +81,8 @@ public class DataSetManager  extends AbstractManager{
          }
          return ret;
 	}
+
+	
 	
 	@Override
 	public boolean get2Model(Model m,String... specification) {
@@ -114,20 +117,45 @@ public class DataSetManager  extends AbstractManager{
 		}
 		return null;
 	}
+
+	public boolean isCollectionAndDataSourceExisting(String collectionId, String dataSourceId) {
+		String collectionUri = Collections.formatUrl(collectionId);
+		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
+		
+		String queryString =
+				String.format(
+					"PREFIX lbdho: <%s> \n" +
+					"ASK { \n" + 
+					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +					
+					"}",
+					BuildingDataOntology.Ontology_BASE_URL,
+					collectionUri,
+					dataSourceUri);
+		
+		QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(queryString),
+						model);
+		
+		boolean result = queryExecution.execAsk();
+		return result;
+	}
 	
 	@Override
-	public void create(String... specification) {
-		create_implementation(specification[0],specification[1],specification[2],specification[3]);
+	public boolean create(String... specification) {
+		return create_implementation(specification[0],specification[1],specification[2],specification[3]);
 		
 	}
 
 	@Override
-	public void delete(String... specification) {
-		delete_implementation(specification[0],specification[1],specification[2]);
+	public boolean delete(String... specification) {
+		return delete_implementation(specification[0],specification[1],specification[2]);
 	}
 	
 	
-	private void create_implementation(String collectionid,String datasourceid,String datasetid,String name) {
+	private boolean create_implementation(String collectionid,String datasourceid,String datasetid,String name) {
+		if(!isCollectionAndDataSourceExisting(collectionid,datasourceid))
+			return false;
 		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
 		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 
@@ -141,15 +169,17 @@ public class DataSetManager  extends AbstractManager{
         
         dataset.addProperty(RDF.type,type);
         dataset.addProperty(name_property,name , XSDDatatype.XSDstring);
+        return true;
 	}
 	
-	private void delete_implementation(String collectionid,String datasourceid,String datasetid) {
+	private boolean delete_implementation(String collectionid,String datasourceid,String datasetid) {
 		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
 		UpdateAction.parseExecute(update1, gs);
 		UpdateAction.parseExecute(update2, gs);
+		return true;
 	}
 	
 	

@@ -86,7 +86,8 @@ public class DataSourceResource extends AbstractResource {
 	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid,@DefaultValue("No name given.")  @FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager().create(collectionid, datasourceid, name);
+			if(!getManager().create(collectionid, datasourceid, name))
+				return PrettyPrinting.formatError(httpRequest,"The named collection does not exist. Creation was not done.");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}
@@ -98,8 +99,9 @@ public class DataSourceResource extends AbstractResource {
 	@DELETE
 	public String delete(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		try {
-			getManager().delete(collectionid, datasourceid);
+		try {		
+			if(!getManager().delete(collectionid, datasourceid))
+				return PrettyPrinting.formatError(httpRequest,"The data source has still datasets. Removal was not done.");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}

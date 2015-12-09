@@ -122,7 +122,8 @@ public class DataSetResource  extends AbstractResource{
 	public String create(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @PathParam("datasetid") String datasetid,@DefaultValue("No name given.") @FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager().create(collectionid, datasourceid, datasetid,name);
+			if(!getManager().create(collectionid, datasourceid, datasetid,name))
+				return PrettyPrinting.formatError(httpRequest,"The named collection or data source does not exist. Creation was not done.");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}

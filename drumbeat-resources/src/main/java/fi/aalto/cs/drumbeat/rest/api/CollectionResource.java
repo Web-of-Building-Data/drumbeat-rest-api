@@ -119,7 +119,8 @@ public class CollectionResource extends AbstractResource {
 	public String delete(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager().delete(collectionid);
+			if(!getManager().delete(collectionid))
+				return PrettyPrinting.formatError(httpRequest,"The collection has still data sources. Removal was not done.");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}

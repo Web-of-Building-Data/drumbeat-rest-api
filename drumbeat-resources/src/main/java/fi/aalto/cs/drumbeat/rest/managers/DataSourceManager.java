@@ -21,6 +21,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
+import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSources;
 
 /*
 The MIT License (MIT)
@@ -82,6 +85,7 @@ public class DataSourceManager  extends AbstractManager{
          return ret;
 	}
 	
+		
 	@Override
 	public boolean get2Model(Model m,String... specification) {
 		return get2Model_implementation(m, specification[0],specification[1]);
@@ -106,21 +110,57 @@ public class DataSourceManager  extends AbstractManager{
          }
          return ret;
 	}
+
+	public boolean hasDataSets(String collectionid,String datasourceid) {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
+								+ "SELECT ?dataset "
+								+ "WHERE {"								
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
+								+ "}"
+								),
+						model);
+
+         ResultSet rs = queryExecution.execSelect();
+         Resource type = model.createResource(BuildingDataOntology.DataSets.DataSet); 		
+         if (rs.hasNext())
+        	         return true;
+         return false;
+	}
+	
+	public boolean isCollectionExisting(String collection_id) {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create(
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id)),
+						model);
+
+         ResultSet rs = queryExecution.execSelect();
+         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id);        	 
+         if(rs.hasNext())
+        	          return true;
+         return false;
+	}
+
 	
 	@Override
-	public void create(String... specification) {
-		create_implementation(specification[0],specification[1],specification[2]);
+	public boolean create(String... specification) {
+		return create_implementation(specification[0],specification[1],specification[2]);
 		
 	}
 
 	@Override
-	public void delete(String... specification) {
-		delete_implementation(specification[0],specification[1]);
+	public boolean  delete(String... specification) {
+		return delete_implementation(specification[0],specification[1]);
 	}
 	
 	
-	
-	private void create_implementation(String collectionid,String datasourceid,String name) {
+
+		
+	private boolean create_implementation(String collectionid,String datasourceid,String name) {
+		if(!isCollectionExisting(collectionid))
+			return false;
 		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid); 
 		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
@@ -134,15 +174,19 @@ public class DataSourceManager  extends AbstractManager{
 		
         datasource.addProperty(RDF.type,type);
         datasource.addProperty(name_property,name , XSDDatatype.XSDstring);
+        return true;
 	}
 	
-	private void delete_implementation(String collectionid,String datasourceid) {
+	private boolean delete_implementation(String collectionid,String datasourceid) {
+		if(hasDataSets(collectionid,datasourceid))
+			return false;
 		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
 		UpdateAction.parseExecute(update1, gs);
 		UpdateAction.parseExecute(update2, gs);
+		return true;
 	}
 	
 

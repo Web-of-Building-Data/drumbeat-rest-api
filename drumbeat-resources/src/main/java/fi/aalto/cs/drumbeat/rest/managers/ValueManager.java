@@ -77,13 +77,13 @@ public class ValueManager  extends AbstractManager{
 	}
 
 	@Override
-	public void create(String... specification) {
-	   ;	
+	public boolean create(String... specification) {
+	   return true;	
 	}
 
 	@Override
-	public void delete(String... specification) {
-		;
+	public boolean delete(String... specification) {
+		return true;
 	}
 
 }

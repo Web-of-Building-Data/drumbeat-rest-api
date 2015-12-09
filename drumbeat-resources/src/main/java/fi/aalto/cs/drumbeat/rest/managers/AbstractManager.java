@@ -34,6 +34,6 @@ public abstract class AbstractManager {
 		return model;
 	}
     abstract public boolean get2Model(Model m,String... specification); 
-	abstract public void create(String... specification);
-	abstract public void delete(String... specification);
+	abstract public boolean create(String... specification);
+	abstract public boolean delete(String... specification);
 }

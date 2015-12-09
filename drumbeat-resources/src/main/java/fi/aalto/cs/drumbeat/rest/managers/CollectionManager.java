@@ -75,6 +75,7 @@ public class CollectionManager extends AbstractManager{
         return ret;
 	}
 	
+	
 	@Override
 	public boolean get2Model(Model m,String... specification) {
 		return get2Model_implementation(m, specification[0]);
@@ -100,34 +101,57 @@ public class CollectionManager extends AbstractManager{
          return ret;
 	}
 	
+	public boolean hasDataSources(String collectionid) {
+		final QueryExecution queryExecution = 
+				QueryExecutionFactory.create(
+						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
+								+ "SELECT ?datasource "
+								+ "WHERE {"
+								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSources ?datasource."								
+								+ "}"
+								),
+						model);
 
+         ResultSet rs = queryExecution.execSelect();
+         if(rs.hasNext()) 
+        	         return true;
+         return false;
+	}
+
+
+	
+	
 	@Override
-	public void create(String... specification) {
-		create_implementation(specification[0],specification[1]);
+	public boolean create(String... specification) {
+		return create_implementation(specification[0],specification[1]);
 		
 	}
 
 	@Override
-	public void delete(String... specification) {
-		delete_implementation(specification[0]);
+	public boolean delete(String... specification) {
+		return delete_implementation(specification[0]);
 	}
 	
 
-	private void create_implementation(String collection_id, String name) {
+	private boolean create_implementation(String collection_id, String name) {
 		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         collection.addProperty(RDF.type,type);
         collection.addProperty(name_property,name , XSDDatatype.XSDstring);
+        return true;
 	}
 	
-	private void delete_implementation(String collection_id) {
+	private boolean delete_implementation(String collection_id) {
+		if(hasDataSources(collection_id))
+			return false;
 		String item=DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
 		UpdateAction.parseExecute(update1, gs);
 		UpdateAction.parseExecute(update2, gs);
+		return true;
 	}
 
 
