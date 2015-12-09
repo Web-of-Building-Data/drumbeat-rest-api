@@ -45,7 +45,7 @@ import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
  */
 
 @Path("/object")
-public class ObjectResource {
+public class ObjectResource  extends AbstractResource{
 	private static ObjectManager manager;
 
 	@Context
@@ -64,7 +64,7 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).get2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().get2Model(m, collectionname, datasourcename, guid))
 				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -79,20 +79,13 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).get2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().get2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2JSON_LD(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}")
@@ -102,20 +95,13 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).get2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().get2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "TURTLE");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2TURTLE(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}")
@@ -125,20 +111,13 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).get2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().get2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "RDF/XML");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2RDF(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
@@ -148,7 +127,7 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).getType2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().getType2Model(m, collectionname, datasourcename, guid))
 				return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -164,20 +143,13 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).getType2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().getType2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2JSON_LD(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
@@ -187,20 +159,13 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).getType2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().getType2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "TURTLE");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2TURTLE(m);
 	}
 
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
@@ -210,23 +175,17 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
-			if (!getManager(servletContext).getType2Model(m, collectionname, datasourcename, guid))
+			if (!getManager().getType2Model(m, collectionname, datasourcename, guid))
 				return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "RDF/XML");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2RDF(m);
 	}
 
-	private static ObjectManager getManager(ServletContext servletContext) {
+	@Override
+	public ObjectManager getManager() {
 		if (manager == null) {
 			try {
 				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();

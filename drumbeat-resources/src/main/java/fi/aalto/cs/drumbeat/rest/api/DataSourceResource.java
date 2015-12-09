@@ -49,9 +49,8 @@ import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
  */
 
 @Path("/datasources")
-public class DataSourceResource {
-
-	private static DataSourceManager datasourceManager;
+public class DataSourceResource extends AbstractResource {
+	private static DataSourceManager manager;
 
 	@Context
 	private ServletContext servletContext;
@@ -70,7 +69,7 @@ public class DataSourceResource {
 		Model m = ModelFactory.createDefaultModel();
 		try
 		{
-		if(!getManager(servletContext).listAll2Model(m,collectionid))
+		if(!getManager().listAll2Model(m,collectionid))
 			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -88,20 +87,13 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll2Model(m,collectionid))
+			if(!getManager().listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 			}
 
-			JenaJSONLD.init();
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			m.write(os, "JSON-LD");
-			try {
-				return new String(os.toByteArray(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-			}
+			return model2JSON_LD(m);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
@@ -117,20 +109,13 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll2Model(m,collectionid))
+			if(!getManager().listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 			}
 
-			JenaJSONLD.init();
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			m.write(os, "TURTLE");
-			try {
-				return new String(os.toByteArray(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-			}
+			return model2TURTLE(m);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
@@ -145,20 +130,13 @@ public class DataSourceResource {
 		
 		try {
 			try{
-			if(!getManager(servletContext).listAll2Model(m,collectionid))
+			if(!getManager().listAll2Model(m,collectionid))
 			   return "{\"Status\":\"No datasources\"}";
 			} catch (Exception e) {
 				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 			}
 
-			JenaJSONLD.init();
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			m.write(os, "RDF/XML");
-			try {
-				return new String(os.toByteArray(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-			}
+			return model2RDF(m);
 		} catch (Exception e) {
 			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
 		}
@@ -173,7 +151,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
+		if(!getManager().get2Model(m,collectionid, datasourceid))
 			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
@@ -189,20 +167,13 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
+		if(!getManager().get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "JSON-LD");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2JSON_LD(m);
 	}
 
 	@Path("/{collectionid}/{datasourceid}")
@@ -212,20 +183,13 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
+		if(!getManager().get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "TURTLE");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2TURTLE(m);
 	}
 	
 	@Path("/{collectionid}/{datasourceid}")
@@ -235,29 +199,22 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
-		if(!getManager(servletContext).get2Model(m,collectionid, datasourceid))
+		if(!getManager().get2Model(m,collectionid, datasourceid))
 			   return "{\"Status\":\"The ID does not exists\"}";
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
 		}
 
-		JenaJSONLD.init();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		m.write(os, "RDF/XML");
-		try {
-			return new String(os.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
+		return model2RDF(m);
 	}
 	
 	
 	@Path("/{collectionid}/{datasourceid}")
 	@PUT
-	public String createJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid,@FormDataParam("name") String name) {
+	public String create(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid,@FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).create(collectionid, datasourceid,name);
+			getManager().create(collectionid, datasourceid,name);
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
@@ -267,10 +224,10 @@ public class DataSourceResource {
 
 	@Path("/{collectionid}/{datasourceid}")
 	@DELETE
-	public String deleteJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
+	public String delete(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager(servletContext).delete(collectionid, datasourceid);
+			getManager().delete(collectionid, datasourceid);
 		} catch (Exception e) {
 			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
 		}
@@ -278,17 +235,17 @@ public class DataSourceResource {
 		return "{\"Status\":\"Done\"}";
 	}
 	
-
-	private static DataSourceManager getManager(ServletContext servletContext) {
-		if (datasourceManager == null) {
+	@Override
+	public DataSourceManager getManager() {
+		if (manager == null) {
 			try {
 				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
-				datasourceManager = new DataSourceManager(model);
+				manager = new DataSourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);
 			}
 		}
-		return datasourceManager;
+		return manager;
 	}
 
 }

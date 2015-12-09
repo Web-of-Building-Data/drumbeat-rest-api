@@ -46,7 +46,7 @@ SOFTWARE.
 */
 
 
-public class DataSetManager {
+public class DataSetManager  extends AbstractManager{
 
 	private final Model model;	
 	
@@ -81,7 +81,12 @@ public class DataSetManager {
          return ret;
 	}
 	
-	public boolean get2Model(Model m,String collectionid,String datasourceid,String datasetid) {
+	@Override
+	public boolean get2Model(Model m,String... specification) {
+		return get2Model_implementation(m, specification[0],specification[1],specification[2]);
+	}
+
+	private boolean get2Model_implementation(Model m,String collectionid,String datasourceid,String datasetid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -110,8 +115,19 @@ public class DataSetManager {
 		return null;
 	}
 	
+	@Override
+	public void create(String... specification) {
+		create_implementation(specification[0],specification[1],specification[2],specification[3]);
+		
+	}
+
+	@Override
+	public void delete(String... specification) {
+		delete_implementation(specification[0],specification[1],specification[2]);
+	}
 	
-	public void create(String collectionid,String datasourceid,String datasetid,String name) {
+	
+	private void create_implementation(String collectionid,String datasourceid,String datasetid,String name) {
 		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
 		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 
@@ -127,7 +143,7 @@ public class DataSetManager {
         dataset.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String collectionid,String datasourceid,String datasetid) {
+	private void delete_implementation(String collectionid,String datasourceid,String datasetid) {
 		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);

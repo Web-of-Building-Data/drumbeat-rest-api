@@ -14,7 +14,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
 The MIT License (MIT)
@@ -41,7 +40,7 @@ SOFTWARE.
 */
 
 
-public class ObjectManager {
+public class ObjectManager  extends AbstractManager{
 	private static final Logger logger = Logger.getLogger(ObjectManager .class);
 	private final Model model;	
 	
@@ -53,7 +52,12 @@ public class ObjectManager {
 		this.model = model;
 	}
 	
-	public boolean get2Model(Model m,String collectionname,String datasourcename,String guid) {
+	@Override
+	public boolean get2Model(Model m,String... specification) {
+		return get2Model_implementation(m, specification[0],specification[1],specification[2]);
+	}
+	
+	public boolean get2Model_implementation(Model m,String collectionname,String datasourcename,String guid) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -91,5 +95,16 @@ public class ObjectManager {
          }
          return ret;
 	}
+	
+	@Override
+	public void create(String... specification) {
+	   ;	
+	}
 
+	@Override
+	public void delete(String... specification) {
+		;
+	}
+	
+	
 }

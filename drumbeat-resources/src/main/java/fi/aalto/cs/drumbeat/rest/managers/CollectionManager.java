@@ -14,7 +14,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
-import com.hp.hpl.jena.update.GraphStore;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -46,14 +45,9 @@ SOFTWARE.
 */
 
 
-public class CollectionManager {
+public class CollectionManager extends AbstractManager{
 	private static final Logger logger = Logger.getLogger(CollectionManager .class);
-	private final Model model;	
 	
-	public Model getModel() {
-		return model;
-	}
-
 	public CollectionManager(Model model) {
 		this.model = model;
 	}
@@ -88,16 +82,21 @@ public class CollectionManager {
         return ret;
 	}
 	
-	public boolean get2Model(Model m,String collectionid) {
+	@Override
+	public boolean get2Model(Model m,String... specification) {
+		return get2Model_implementation(m, specification[0]);
+	}
+	
+	private boolean get2Model_implementation(Model m,String collection_id) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid);        	 
+         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id);        	 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -109,24 +108,34 @@ public class CollectionManager {
 	}
 	
 
+	@Override
+	public void create(String... specification) {
+		create_implementation(specification[0],specification[1]);
+		
+	}
 
-	public void create(String id, String name) {
-		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+id); 
+	@Override
+	public void delete(String... specification) {
+		delete_implementation(specification[0]);
+	}
+	
+
+	private void create_implementation(String collection_id, String name) {
+		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id); 
 		Resource type = model.createResource(BuildingDataOntology.Collections.Collection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.Collections.name);
         collection.addProperty(RDF.type,type);
         collection.addProperty(name_property,name , XSDDatatype.XSDstring);
 	}
 	
-	public void delete(String collectionname) {
-		String item=DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionname;
+	private void delete_implementation(String collection_id) {
+		String item=DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
 		UpdateAction.parseExecute(update1, gs);
 		UpdateAction.parseExecute(update2, gs);
 	}
-
 
 
 }

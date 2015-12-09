@@ -8,10 +8,8 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
@@ -42,7 +40,7 @@ SOFTWARE.
 */
 
 
-public class ValueManager {
+public class ValueManager  extends AbstractManager{
 	private static final Logger logger = Logger.getLogger(ValueManager .class);
 	private final Model model;	
 	
@@ -54,7 +52,12 @@ public class ValueManager {
 		this.model = model;
 	}
 
-	public boolean get2Model(Model m,String collectionname,String datasourcename,String guid,String property) {
+	@Override
+	public boolean get2Model(Model m,String... specification) {
+		return get2Model_implementation(m, specification[0],specification[1],specification[2],specification[3]);
+	}
+
+	private boolean get2Model_implementation(Model m,String collectionname,String datasourcename,String guid,String property) {
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -71,6 +74,16 @@ public class ValueManager {
                      m.add(m.createStatement(ds,RDF.type,o));
          }
          return ret;
+	}
+
+	@Override
+	public void create(String... specification) {
+	   ;	
+	}
+
+	@Override
+	public void delete(String... specification) {
+		;
 	}
 
 }
