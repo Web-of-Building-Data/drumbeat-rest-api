@@ -5,9 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -47,70 +45,19 @@ public class ValueResource  extends AbstractResource{
 	@Context
 	private ServletContext servletContext;
 
-
-	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionname, datasourcename, guid, property))
-			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
-		}
-
-		return PrettyPrinting.prettyPrintingHTML(m);	
-	}
-
 	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
 	@GET	
-	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
-	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
+	public String get(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager().get2Model(m,collectionname, datasourcename, guid, property))
-			return "{\"Status\":\"The ID does not exists\"}";
+			return PrettyPrinting.formatError(httpRequest, "The ID does not exists");
 		} catch (Exception e) {
-			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
+			return PrettyPrinting.formatError(httpRequest, "Check that the RDF store is started: " + e.getMessage());
 		}
 
-		return model2JSON_LD(m);
-	}
-
-	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
-	@GET
-	@Produces("text/turtle")
-	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionname, datasourcename, guid, property))
-			   return "{\"Status\":\"The ID does not exists\"}";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
-		}
-
-		return model2TURTLE(m);
-	}
-		
-	
-	@Path("/{collectionname}/{datasourcename}/{guid}/{property}")
-	@GET
-	@Produces("application/rdf+xml")
-	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname,@PathParam("datasourcename") String datasourcename,@PathParam("guid") String guid,@PathParam("property") String property) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionname, datasourcename, guid, property))
-			   return "{\"Status\":\"The ID does not exists\"}";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
-		}
-
-		return model2RDF(m);
+		return model2AcceptedFormat(httpRequest, m);
 	}
 
 	

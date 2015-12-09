@@ -1,25 +1,17 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
-import org.glassfish.jersey.client.ClientResponse;
-import org.glassfish.jersey.test.JerseyTest;
-import org.json.JSONObject;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
-import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 
 
 public class CollectionResourceTest extends DrumbeatTest {

@@ -1,6 +1,9 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +16,6 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.jena.riot.Lang;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;

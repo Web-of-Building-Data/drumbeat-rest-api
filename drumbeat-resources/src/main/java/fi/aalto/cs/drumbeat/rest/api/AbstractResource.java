@@ -3,8 +3,10 @@ package fi.aalto.cs.drumbeat.rest.api;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -47,36 +49,73 @@ public abstract class AbstractResource {
 		return "{\"status\":\"LIVE\"}";
 	}
 	
-	protected String model2JSON_LD(Model m) {
+	private String model2JSON_LD(Model m) {
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		m.write(os, "JSON-LD");
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return PrettyPrinting.formatErrorJSON(e.getMessage());
+			return PrettyPrinting.format2JSON(e.getMessage(),PrettyPrinting.ERROR);
 		}
 	}
 
-	protected String model2TURTLE(Model m) {
+	private String model2TURTLE(Model m) {
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		m.write(os, "TURTLE");
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return PrettyPrinting.formatErrorTURTLE(e.getMessage());
+			return PrettyPrinting.format2TURTLE(e.getMessage(),PrettyPrinting.ERROR);
 		}
 	}
 	
-	protected String model2RDF(Model m) {
+	private String model2RDF(Model m) {
 		JenaJSONLD.init();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		m.write(os, "RDF/XML");
 		try {
 			return new String(os.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			return PrettyPrinting.formatErrorRDF(e.getMessage());
+			return PrettyPrinting.format2RDF(e.getMessage(),PrettyPrinting.ERROR);
 		}
+	}
+	
+	public String  model2AcceptedFormat(HttpServletRequest httpRequest, Model m) {
+		if(httpRequest==null)
+		 return "ERROR: HTTP request header is missing";
+		if(m==null)
+			return PrettyPrinting.formatError(httpRequest, "Check the RDF store.");
+		try {
+			String accept = httpRequest.getHeader("Accept");
+			if (accept != null) {
+				switch (accept) {
+				case MediaType.TEXT_HTML:
+					return PrettyPrinting.prettyPrintingHTML(m);
+				case MediaType.TEXT_PLAIN:
+					return PrettyPrinting.prettyPrintingTXT(m);
+				case MediaType.APPLICATION_JSON:
+				case "application/ld+json":
+					return model2JSON_LD(m);
+				case "text/turtle":
+					return model2TURTLE(m);
+				case "application/rdf+xml":
+					return model2RDF(m);										
+				default:									
+					return PrettyPrinting.prettyPrintingTXT(m);
+				}
+			}
+			else
+			{
+				return PrettyPrinting.prettyPrintingTXT(m);
+			}
+
+		} catch (Exception e) {
+			;
+		}
+		return PrettyPrinting.formatError(httpRequest, "Data format errot: Check the RDF store.");
+		
+		
 	}
 }

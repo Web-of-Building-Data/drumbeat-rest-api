@@ -1,8 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
@@ -10,13 +7,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -55,180 +49,63 @@ public class DataSourceResource extends AbstractResource {
 	@Context
 	private ServletContext servletContext;
 
-
 	@Path("/{collectionid}")
 	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String listHTML(@PathParam("collectionid") String collectionid) {
+	public String list(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid) {
 		Model m = ModelFactory.createDefaultModel();
-		try
-		{
-		if(!getManager().listAll2Model(m,collectionid))
-			   return "<HTML><BODY>Status:\"No datasources\"</BODY></HTML>";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
-		}
 
-			
-		return PrettyPrinting.prettyPrintingHTML(m);	
-	}
-
-	@Path("/{collectionid}")
-	@GET
-	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
-	public String listJSON_LD(@PathParam("collectionid") String collectionid) {
-		Model m = ModelFactory.createDefaultModel();
-		
 		try {
-			try{
-			if(!getManager().listAll2Model(m,collectionid))
-			   return "{\"Status\":\"No datasources\"}";
-			} catch (Exception e) {
-				return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
-			}
-
-			return model2JSON_LD(m);
+			if (!getManager().listAll2Model(m, collectionid))
+				return PrettyPrinting.formatError(httpRequest, "No datasources");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
+			return PrettyPrinting.formatError(httpRequest, "Check that the RDF store is started: " + e.getMessage());
 		}
-		
-	}
-	
 
-	@Path("/{collectionid}")
+		return model2AcceptedFormat(httpRequest, m);
+	}
+
+	@Path("/{collectionid}/{datasourceid}")
 	@GET
-	@Produces("text/turtle")
-	public String listTurtle(@PathParam("collectionid") String collectionid) {
+	public String get(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
+		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
-		
 		try {
-			try{
-			if(!getManager().listAll2Model(m,collectionid))
-			   return "{\"Status\":\"No datasources\"}";
-			} catch (Exception e) {
-				return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
-			}
-
-			return model2TURTLE(m);
+			if (!getManager().get2Model(m, collectionid, datasourceid))
+				return PrettyPrinting.formatError(httpRequest, "The ID does not exists");
 		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-		
-	}
-	
-	@Path("/{collectionid}")
-	@GET
-	@Produces("application/rdf+xml")
-	public String listRDF(@PathParam("collectionid") String collectionid) {
-		Model m = ModelFactory.createDefaultModel();
-		
-		try {
-			try{
-			if(!getManager().listAll2Model(m,collectionid))
-			   return "{\"Status\":\"No datasources\"}";
-			} catch (Exception e) {
-				return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
-			}
-
-			return model2RDF(m);
-		} catch (Exception e) {
-			return "{\"Status\":\"ERROR:" + e.getMessage() + "\"}";
-		}
-		
-	}
-	
-	
-	@Path("/{collectionid}/{datasourceid}")
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String getHTML(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionid, datasourceid))
-			   return "<HTML><BODY>Status:\"The ID does not exists\"</BODY></HTML>";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorHTML("Check that the RDF store is started: "+e.getMessage());
+			return PrettyPrinting.formatError(httpRequest, "Check that the RDF store is started: " + e.getMessage());
 		}
 
-		return PrettyPrinting.prettyPrintingHTML(m);	
+		return model2AcceptedFormat(httpRequest, m);
 	}
 
-	@Path("/{collectionid}/{datasourceid}")
-	@GET
-	@Produces({MediaType.APPLICATION_JSON,"application/ld+json"})
-	public String getJSON(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionid, datasourceid))
-			   return "{\"Status\":\"The ID does not exists\"}";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
-		}
 
-		return model2JSON_LD(m);
-	}
-
-	@Path("/{collectionid}/{datasourceid}")
-	@GET
-	@Produces("text/turtle")
-	public String getTURTLE(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionid, datasourceid))
-			   return "{\"Status\":\"The ID does not exists\"}";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorTURTLE("Check that the RDF store is started: "+e.getMessage());
-		}
-
-		return model2TURTLE(m);
-	}
-	
-	@Path("/{collectionid}/{datasourceid}")
-	@GET
-	@Produces("application/rdf+xml")
-	public String getRDF(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
-		Model m = ModelFactory.createDefaultModel();
-		try{
-		if(!getManager().get2Model(m,collectionid, datasourceid))
-			   return "{\"Status\":\"The ID does not exists\"}";
-		} catch (Exception e) {
-			return PrettyPrinting.formatErrorRDF("Check that the RDF store is started: "+e.getMessage());
-		}
-
-		return model2RDF(m);
-	}
-	
-	
 	@Path("/{collectionid}/{datasourceid}")
 	@PUT
-	public String create(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid,@FormDataParam("name") String name) {
+	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid, @FormDataParam("name") String name) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
-			getManager().create(collectionid, datasourceid,name);
+			getManager().create(collectionid, datasourceid, name);
 		} catch (Exception e) {
-			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
+			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}
 
-		return "{\"Status\":\"Done\"}";
+		return PrettyPrinting.format(httpRequest, "Done",PrettyPrinting.OK);
 	}
 
 	@Path("/{collectionid}/{datasourceid}")
 	@DELETE
-	public String delete(@Context HttpServletRequest httpRequest,@PathParam("collectionid") String collectionid,@PathParam("datasourceid") String datasourceid) {
+	public String delete(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
 		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager().delete(collectionid, datasourceid);
 		} catch (Exception e) {
-			return PrettyPrinting.formatErrorJSON("Check that the RDF store is started: "+e.getMessage());
+			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}
 
-		return "{\"Status\":\"Done\"}";
+		return PrettyPrinting.format(httpRequest, "Done",PrettyPrinting.OK);
 	}
-	
+
 	@Override
 	public DataSourceManager getManager() {
 		if (manager == null) {
