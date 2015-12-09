@@ -54,8 +54,6 @@ public class CollectionManager extends AbstractManager{
 	
 	public boolean listAll2Model(Model m) {
 		boolean ret=false;
-		try
-		{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
@@ -74,11 +72,6 @@ public class CollectionManager extends AbstractManager{
                      Resource c = model.createResource(row.getResource("collection").getURI());
                      m.add(m.createStatement(c,RDF.type,type));
          }
-		}
-		catch (Exception e)
-		{
-		  return false;	
-		}
         return ret;
 	}
 	
