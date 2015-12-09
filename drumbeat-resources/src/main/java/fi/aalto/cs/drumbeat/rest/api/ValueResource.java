@@ -52,7 +52,7 @@ public class ValueResource  extends AbstractResource{
 		Model m = ModelFactory.createDefaultModel();
 		try{
 		if(!getManager().get2Model(m,collectionname, datasourcename, guid, property))
-			return PrettyPrinting.formatError(httpRequest, "The ID does not exists");
+			return PrettyPrinting.formatError(httpRequest, "The ID does not exist");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest, "Check that the RDF store is started: " + e.getMessage());
 		}

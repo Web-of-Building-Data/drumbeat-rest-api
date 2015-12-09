@@ -59,7 +59,7 @@ public class CollectionResource extends AbstractResource {
 
 		try {
 			if (!getManager().listAll2Model(m))
-				return PrettyPrinting.formatError(httpRequest, "No collections");
+				return PrettyPrinting.format(httpRequest, "No collections",PrettyPrinting.OK);
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest, "Check that the RDF store is started: " + e.getMessage());
 		}
@@ -93,7 +93,7 @@ public class CollectionResource extends AbstractResource {
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager().get2Model(m, collectionid))
-				return PrettyPrinting.formatError(httpRequest,"The ID does not exists");
+				return PrettyPrinting.formatError(httpRequest,"The ID does not exist");
 		} catch (Exception e) {
 			return PrettyPrinting.formatError(httpRequest,"Check that the RDF store is started: " + e.getMessage());
 		}
