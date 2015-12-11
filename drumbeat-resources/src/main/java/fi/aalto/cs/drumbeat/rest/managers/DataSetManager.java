@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -48,6 +50,8 @@ SOFTWARE.
 
 
 public class DataSetManager  extends AbstractManager{
+	
+	private static final Logger logger = Logger.getLogger(DataSetManager.class);
 
 	private final Model model;	
 	
@@ -130,7 +134,7 @@ public class DataSetManager  extends AbstractManager{
 					"}",
 					BuildingDataOntology.Ontology_BASE_URL,
 					collectionUri,
-					dataSourceUri);
+					dataSourceUri);		
 		
 		QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
@@ -138,6 +142,11 @@ public class DataSetManager  extends AbstractManager{
 						model);
 		
 		boolean result = queryExecution.execAsk();
+
+		if (!result) {
+			logger.warn("Query returns false: " + queryString);	
+		}	
+		
 		return result;
 	}
 	
@@ -216,6 +225,9 @@ public class DataSetManager  extends AbstractManager{
 						model);
 		
 		boolean result = queryExecution.execAsk();
+		if (!result) {
+			logger.warn("Query returns false: " + queryString);	
+		}	
 		return result;
 	}
 
