@@ -56,7 +56,7 @@ public class CollectionManager extends AbstractManager{
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#>"
+						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
 								+ "SELECT ?collection "
 								+ "WHERE {"
 								+ "?collection ?p lbdh:Collection ."
@@ -104,7 +104,7 @@ public class CollectionManager extends AbstractManager{
 	public boolean hasDataSources(String collectionid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#>"
+						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
 								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSource ?datasource."								
