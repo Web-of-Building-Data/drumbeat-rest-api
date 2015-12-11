@@ -115,18 +115,25 @@ public abstract class DrumbeatWebApplication extends ResourceConfig {
 	}
 	
 	public void setBaseUrl(@Context HttpServletRequest httpRequest) {
-		try
-		{
-		  String url = httpRequest.getScheme()+"://" + httpRequest.getServerName() + ":" + httpRequest.getLocalPort() + httpRequest.getContextPath();
-		  if(!url.endsWith("/"))
-			  url+="/";
-		  getConfigurationProperties().setProperty(
-				  Params.WEB_BASE_URI,
-				  url);
-		}
-		 catch (Exception e) {
-			 // Nothing bad happends
-		}		
+		  String url = 
+				  String.format("%s://%s:%d/%s",
+					  httpRequest.getScheme(),
+					  httpRequest.getServerName(),
+					  httpRequest.getServerPort(),
+					  httpRequest.getContextPath().replaceFirst("^/", ""));
+		  
+		  if (!url.endsWith("/")) {
+			  url += "/";
+		  }
+				  
+		  String oldUrl = getBaseUri();
+		  
+		  if (!url.equals(oldUrl)) {
+			  logger.warn("New base URI: " + url);
+			  getConfigurationProperties().setProperty(
+					  Params.WEB_BASE_URI,
+					  url);
+		  }
 	}
 	
 	/**
