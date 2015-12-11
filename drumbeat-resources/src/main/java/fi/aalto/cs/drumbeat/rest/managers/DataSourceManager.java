@@ -66,7 +66,7 @@ public class DataSourceManager  extends AbstractManager{
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
+						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.ONTOLOGY_BASE_URL+">"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
 								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSource ?datasource."								
@@ -114,7 +114,7 @@ public class DataSourceManager  extends AbstractManager{
 	public boolean hasDataSets(String collectionid,String datasourceid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
+						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.ONTOLOGY_BASE_URL+">"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
 								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSet ?dataset."		
