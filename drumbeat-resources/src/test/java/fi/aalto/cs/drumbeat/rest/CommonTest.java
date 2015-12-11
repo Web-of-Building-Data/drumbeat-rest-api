@@ -10,12 +10,17 @@ public class CommonTest extends DrumbeatTest {
 	
 	private static final boolean DO_TEST = true;
 	
+	@Override
+	protected boolean doTest() {
+		return DO_TEST && super.doTest();
+	}
+	
 	private static final Logger logger = Logger.getLogger(CommonTest.class);
 	
 	
 	@Test
 	public void test_config_file() {
-		if (!DO_TEST) {
+		if (!doTest()) {
 			return;
 		}
 		

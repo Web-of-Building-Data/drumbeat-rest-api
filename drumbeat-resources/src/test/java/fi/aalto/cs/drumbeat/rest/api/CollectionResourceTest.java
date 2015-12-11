@@ -16,13 +16,19 @@ import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 
 public class CollectionResourceTest extends DrumbeatTest {
 	 
-	static final boolean testing = false;
+	private static final boolean DO_TEST = true;
 	
+	@Override
+	protected boolean doTest() {
+		return DO_TEST && super.doTest();
+	}
+
 	@Test
 	public void testAlive() throws JSONException,
 			URISyntaxException {
-		if(!testing)
+		if(!doTest()) {
 			return;
+		}
 		
 		Map<String, String> result =
 				target("datasets/alive")
