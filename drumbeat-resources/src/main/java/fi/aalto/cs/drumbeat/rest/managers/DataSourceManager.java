@@ -111,7 +111,7 @@ public class DataSourceManager  extends AbstractManager{
          return ret;
 	}
 
-	public boolean hasDataSet(String collectionid,String datasourceid) {
+	public boolean hasDataSets(String collectionid,String datasourceid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
@@ -178,7 +178,7 @@ public class DataSourceManager  extends AbstractManager{
 	}
 	
 	private boolean delete_implementation(String collectionid,String datasourceid) {
-		if(hasDataSet(collectionid,datasourceid))
+		if(hasDataSets(collectionid,datasourceid))
 			return false;
 		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
