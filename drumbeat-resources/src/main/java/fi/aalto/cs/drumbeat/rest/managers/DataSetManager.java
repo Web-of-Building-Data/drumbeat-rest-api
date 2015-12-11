@@ -70,7 +70,7 @@ public class DataSetManager  extends AbstractManager{
 						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSet ?dataset."		
 								+ "}"
 								),
 						model);
@@ -132,7 +132,7 @@ public class DataSetManager  extends AbstractManager{
 					"ASK { \n" + 
 					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +					
 					"}",
-					BuildingDataOntology.Ontology_BASE_URL,
+					BuildingDataOntology.ONTOLOGY_BASE_URL,
 					collectionUri,
 					dataSourceUri);		
 		
@@ -170,11 +170,11 @@ public class DataSetManager  extends AbstractManager{
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        Property hasDataSets = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSets);
-        Property isDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSets.isDataSet);
+        Property hasDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSet);
+        Property inDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSets.inDataSource);
    
-        datasource.addProperty(hasDataSets, dataset);
-        dataset.addProperty(isDataSet, datasource);
+        datasource.addProperty(hasDataSet, dataset);
+        dataset.addProperty(inDataSource, datasource);
         
         dataset.addProperty(RDF.type,type);
         dataset.addProperty(name_property,name , XSDDatatype.XSDstring);
@@ -212,7 +212,7 @@ public class DataSetManager  extends AbstractManager{
 					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +
 					"<%s> a lbdho:DataSource ; lbdho:hasDataSet <%s> . \n" +
 					"<%s> a lbdho:DataSet . }",
-					BuildingDataOntology.Ontology_BASE_URL,
+					BuildingDataOntology.ONTOLOGY_BASE_URL,
 					collectionUri,
 					dataSourceUri,
 					dataSourceUri,

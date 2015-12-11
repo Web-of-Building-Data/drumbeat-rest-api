@@ -62,7 +62,7 @@ public class ValueManager  extends AbstractManager{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,BuildingDataOntology.Ontology_BASE_URL+property)),
+								String.format("SELECT ?o  WHERE {<%s> <%s> ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"objects/"+collectionname+"/"+datasourcename+"/"+guid,BuildingDataOntology.ONTOLOGY_BASE_URL+property)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();

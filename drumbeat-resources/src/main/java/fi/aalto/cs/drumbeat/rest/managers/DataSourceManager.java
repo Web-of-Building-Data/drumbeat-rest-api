@@ -111,13 +111,13 @@ public class DataSourceManager  extends AbstractManager{
          return ret;
 	}
 
-	public boolean hasDataSets(String collectionid,String datasourceid) {
+	public boolean hasDataSet(String collectionid,String datasourceid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.Ontology_BASE_URL+">"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSet ?dataset."		
 								+ "}"
 								),
 						model);
@@ -166,11 +166,11 @@ public class DataSourceManager  extends AbstractManager{
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
 
         Property hasDataSource = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSource);
-        Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.isDataSource);
+        Property inCollection = ResourceFactory.createProperty(BuildingDataOntology.DataSources.inCollection);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
 
 		collection.addProperty(hasDataSource, datasource);
-		datasource.addProperty(isDataSource, collection);
+		datasource.addProperty(inCollection, collection);
 		
         datasource.addProperty(RDF.type,type);
         datasource.addProperty(name_property,name , XSDDatatype.XSDstring);
@@ -178,7 +178,7 @@ public class DataSourceManager  extends AbstractManager{
 	}
 	
 	private boolean delete_implementation(String collectionid,String datasourceid) {
-		if(hasDataSets(collectionid,datasourceid))
+		if(hasDataSet(collectionid,datasourceid))
 			return false;
 		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
