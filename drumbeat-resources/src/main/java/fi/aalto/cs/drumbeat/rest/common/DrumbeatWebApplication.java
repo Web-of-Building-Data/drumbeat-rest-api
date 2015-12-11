@@ -117,7 +117,7 @@ public abstract class DrumbeatWebApplication extends ResourceConfig {
 	public void setBaseUrl(@Context HttpServletRequest httpRequest) {
 		try
 		{
-		  String url = "http://" + httpRequest.getLocalAddr() + ":" + httpRequest.getLocalPort() + "/";
+		  String url = "http://" + httpRequest.getLocalName() + ":" + httpRequest.getLocalPort() + "/"+httpRequest.getContextPath();
 		  getConfigurationProperties().setProperty(
 				  Params.WEB_BASE_URI,
 				  url);
