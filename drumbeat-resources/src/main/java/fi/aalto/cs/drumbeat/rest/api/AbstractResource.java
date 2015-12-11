@@ -6,12 +6,14 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.github.jsonldjava.jena.JenaJSONLD;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.managers.AbstractManager;
 
 
@@ -42,6 +44,14 @@ import fi.aalto.cs.drumbeat.rest.managers.AbstractManager;
 
 public abstract class AbstractResource {
 	abstract public AbstractManager getManager();
+	
+	@Path("/url")
+	@GET
+	public String getURL(@Context HttpServletRequest httpRequest) {
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
+		return "{\"URL\":\""+DrumbeatWebApplication.getInstance().getBaseUri()+"\"}";
+	}
+	
 	
 	@Path("/alive")
 	@GET
