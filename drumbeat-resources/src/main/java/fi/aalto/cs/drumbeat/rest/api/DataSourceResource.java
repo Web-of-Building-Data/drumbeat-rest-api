@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 
 /*
@@ -82,7 +82,7 @@ public class DataSourceResource extends AbstractResource {
 	@Path("/{collectionid}/{datasourceid}")
 	@GET
 	public String get(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager().get2Model(m, collectionid, datasourceid))
@@ -103,7 +103,7 @@ public class DataSourceResource extends AbstractResource {
 	@Path("/{collectionid}/{datasourceid}")
 	@PUT
 	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid,@DefaultValue("No name given.")  @FormDataParam("name") String name) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			if(!getManager().create(collectionid, datasourceid, name))
 				return PrettyPrinting.formatError(httpRequest,"The named collection does not exist. Creation was not done.");
@@ -117,7 +117,7 @@ public class DataSourceResource extends AbstractResource {
 	@Path("/{collectionid}/{datasourceid}")
 	@DELETE
 	public String delete(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid, @PathParam("datasourceid") String datasourceid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		try {		
 			if(!getManager().delete(collectionid, datasourceid))
 				return PrettyPrinting.formatError(httpRequest,"The data source has still datasets. Removal was not done.");
@@ -151,7 +151,7 @@ public class DataSourceResource extends AbstractResource {
 	public DataSourceManager getManager() {
 		if (manager == null) {
 			try {
-				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
+				Model model = DrumbeatWebApplication.getInstance().getJenaProvider().openDefaultModel();
 				manager = new DataSourceManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

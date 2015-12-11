@@ -16,7 +16,7 @@ import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 
 public class CollectionResourceTest extends DrumbeatTest {
 	 
-	static final boolean testing = true;
+	static final boolean testing = false;
 	
 	@Test
 	public void testAlive() throws JSONException,

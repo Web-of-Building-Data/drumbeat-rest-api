@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rest.application;
+package fi.aalto.cs.drumbeat.rest.common;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import fi.hut.cs.drumbeat.rdf.modelfactory.AbstractJenaProvider;
 import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
 
 @ApplicationPath("/")
-public abstract class DrumbeatApplication extends ResourceConfig {
+public abstract class DrumbeatWebApplication extends ResourceConfig {
 	
 	public static class Paths {	
 		public static final String CONFIG_FOLDER_PATH = "config/";
@@ -49,9 +49,9 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	
-	private static DrumbeatApplication instance;
+	private static DrumbeatWebApplication instance;
 
-	public static DrumbeatApplication getInstance() {
+	public static DrumbeatWebApplication getInstance() {
 		return instance;
 	}	
 	
@@ -65,7 +65,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
 
-	protected DrumbeatApplication(String workingFolderPath) {
+	protected DrumbeatWebApplication(String workingFolderPath) {
 		
 		applicationId = nextApplicationId++;
 		
@@ -76,7 +76,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 		this.workingFolderPath = workingFolderPath;
 		
-		synchronized (DrumbeatApplication.class) {
+		synchronized (DrumbeatWebApplication.class) {
 			if (logger == null) {
 				logger = Logger.getRootLogger();
 				DOMConfigurator.configure(getRealPath(Paths.LOGGER_CONFIG_FILE_PATH));

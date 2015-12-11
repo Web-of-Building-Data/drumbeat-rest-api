@@ -19,7 +19,7 @@ import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
@@ -69,7 +69,7 @@ public class DataSourceManager  extends AbstractManager{
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSources ?datasource."								
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSources ?datasource."								
 								+ "}"
 								),
 						model);
@@ -96,11 +96,11 @@ public class DataSourceManager  extends AbstractManager{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourcerid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourcerid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourcerid); 
+         Resource ds = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourcerid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -117,7 +117,7 @@ public class DataSourceManager  extends AbstractManager{
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
@@ -133,11 +133,11 @@ public class DataSourceManager  extends AbstractManager{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collection_id)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource c = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collection_id);        	 
+         Resource c = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collection_id);        	 
          if(rs.hasNext())
         	          return true;
          return false;
@@ -161,8 +161,8 @@ public class DataSourceManager  extends AbstractManager{
 	private boolean create_implementation(String collectionid,String datasourceid,String name) {
 		if(!isCollectionExisting(collectionid))
 			return false;
-		Resource collection = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"collections/"+collectionid); 
-		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
+		Resource collection = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid); 
+		Resource datasource = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
 
         Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
@@ -180,7 +180,7 @@ public class DataSourceManager  extends AbstractManager{
 	private boolean delete_implementation(String collectionid,String datasourceid) {
 		if(hasDataSets(collectionid,datasourceid))
 			return false;
-		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid;
+		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 

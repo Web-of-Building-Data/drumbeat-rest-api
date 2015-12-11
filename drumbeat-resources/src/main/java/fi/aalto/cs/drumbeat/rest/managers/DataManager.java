@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
@@ -35,8 +35,8 @@ public class DataManager {
 			// loading schemas and config files
 			synchronized (DataSetManager.class) {
 				if (!ifcSchemaLoaded) {
-					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
-					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+					ConfigurationDocument.load(DrumbeatWebApplication.getInstance().getRealPath(DrumbeatWebApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
+					Ifc2RdfExporter.parseSchemas(DrumbeatWebApplication.getInstance().getRealPath(DrumbeatWebApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
 					ifcSchemaLoaded = true;
 				}			
 			}
@@ -53,8 +53,8 @@ public class DataManager {
 
 			// export model
 			logger.debug("exporting model");
-			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
-			conversionContext.setModelNamespaceUriFormat(DrumbeatApplication.getInstance().getBaseUri());
+			Ifc2RdfConversionContext conversionContext = DrumbeatWebApplication.getInstance().getDefaultIfc2RdfConversionContext();
+			conversionContext.setModelNamespaceUriFormat(DrumbeatWebApplication.getInstance().getBaseUri());
 			
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, jenaModel);
 			jenaModel = modelExporter.export();

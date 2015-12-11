@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
@@ -30,7 +32,7 @@ import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
 
 public class DataSetResourceImportTest extends DrumbeatTest {	
 	
-	private static final boolean DO_TEST = false;
+	private static final boolean DO_TEST = true;
 	
 	private static final String DATA_SET_NAME_CORRECT_1 = "c1/structural/v1";
 	private static final String DATA_SET_NAME_CORRECT_2 = "c1/structural/v2";
@@ -290,6 +292,7 @@ public class DataSetResourceImportTest extends DrumbeatTest {
 			
 			statusCode = Response.Status.OK.getStatusCode();
 		} catch (WebApplicationException e) {
+			e.getResponse().getStatusInfo();
 			String message = e.getResponse().getEntity().toString(); 
 			logger.error(message);
 			statusCode = e.getResponse().getStatus();

@@ -16,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
 /*
@@ -145,7 +145,7 @@ public class PrettyPrinting {
 	static public String format2JSON(String txt,String status_txt) {
 		try {
 			Model m = ModelFactory.createDefaultModel();
-			Resource status = m.createResource(DrumbeatApplication.getInstance().getBaseUri() + "STATUS");
+			Resource status = m.createResource(DrumbeatWebApplication.getInstance().getBaseUri() + "STATUS");
 			Property is_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "is");
 			Property description_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "description");
 			status.addProperty(is_property, status_txt, XSDDatatype.XSDstring);
@@ -168,7 +168,7 @@ public class PrettyPrinting {
 	static public String format2TURTLE(String txt,String status_txt) {
 		try {
 			Model m = ModelFactory.createDefaultModel();
-			Resource status = m.createResource(DrumbeatApplication.getInstance().getBaseUri() + "STATUS");
+			Resource status = m.createResource(DrumbeatWebApplication.getInstance().getBaseUri() + "STATUS");
 			Property is_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "is");
 			Property description_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "description");
 			status.addProperty(is_property, status_txt, XSDDatatype.XSDstring);
@@ -191,7 +191,7 @@ public class PrettyPrinting {
 	static public String format2RDF(String txt,String status_txt) {
 		try {
 			Model m = ModelFactory.createDefaultModel();
-			Resource status = m.createResource(DrumbeatApplication.getInstance().getBaseUri() + "STATUS");
+			Resource status = m.createResource(DrumbeatWebApplication.getInstance().getBaseUri() + "STATUS");
 			Property is_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "is");
 			Property description_property = ResourceFactory.createProperty(BuildingDataOntology.Ontology_BASE_URL + "description");
 			status.addProperty(is_property, status_txt, XSDDatatype.XSDstring);

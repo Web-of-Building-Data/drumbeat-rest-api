@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 
 /*
@@ -51,7 +51,7 @@ public class ObjectResource  extends AbstractResource{
 	@Path("/{collectionname}/{datasourcename}/{guid}")
 	@GET
 	public String get(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager().get2Model(m, collectionname, datasourcename, guid))
@@ -78,7 +78,7 @@ public class ObjectResource  extends AbstractResource{
 	@Path("/{collectionname}/{datasourcename}/{guid}/type")
 	@GET
 	public String getType(@Context HttpServletRequest httpRequest,@PathParam("collectionname") String collectionname, @PathParam("datasourcename") String datasourcename, @PathParam("guid") String guid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager().getType2Model(m, collectionname, datasourcename, guid))
@@ -123,7 +123,7 @@ public class ObjectResource  extends AbstractResource{
 	public ObjectManager getManager() {
 		if (manager == null) {
 			try {
-				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
+				Model model = DrumbeatWebApplication.getInstance().getJenaProvider().openDefaultModel();
 				manager = new ObjectManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.ontology;
 
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 
 public class BuildingDataOntology {
 	
@@ -15,7 +15,7 @@ public class BuildingDataOntology {
 		public static String formatUrl(String collectionId) {
 			return String.format(
 						"%scollections/%s",
-						DrumbeatApplication.getInstance().getBaseUri(),
+						DrumbeatWebApplication.getInstance().getBaseUri(),
 						collectionId);
 		}
 
@@ -31,7 +31,7 @@ public class BuildingDataOntology {
 			
 			return String.format(
 					"%sdatasources/%s/%s",
-					DrumbeatApplication.getInstance().getBaseUri(),
+					DrumbeatWebApplication.getInstance().getBaseUri(),
 					collectionId,
 					dataSourceId);
 		}
@@ -46,7 +46,7 @@ public class BuildingDataOntology {
 		public static String formatUrl(String collectionId, String dataSourceId, String dataSetId) {
 			return String.format(
 					"%sdatasets/%s/%s/%s",
-					DrumbeatApplication.getInstance().getBaseUri(),
+					DrumbeatWebApplication.getInstance().getBaseUri(),
 					collectionId,
 					dataSourceId,
 					dataSetId);

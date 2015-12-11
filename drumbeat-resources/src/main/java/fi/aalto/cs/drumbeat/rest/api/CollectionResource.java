@@ -19,7 +19,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.accessory.PrettyPrinting;
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 
@@ -101,7 +101,7 @@ public class CollectionResource extends AbstractResource {
 	@Path("/{collectionid}")
 	@GET
 	public String get(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		Model m = ModelFactory.createDefaultModel();
 		try {
 			if (!getManager().get2Model(m, collectionid))
@@ -121,7 +121,7 @@ public class CollectionResource extends AbstractResource {
 	@Path("/{collectionid}")
 	@PUT
 	public String create(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid,@DefaultValue("No name given.") @FormDataParam("name") String name) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			getManager().create(collectionid, name);
 		} catch (Exception e) {
@@ -134,7 +134,7 @@ public class CollectionResource extends AbstractResource {
 	@Path("/{collectionid}")
 	@DELETE
 	public String delete(@Context HttpServletRequest httpRequest, @PathParam("collectionid") String collectionid) {
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
+		DrumbeatWebApplication.getInstance().setBaseUrl(httpRequest);
 		try {
 			if(!getManager().delete(collectionid))
 				return PrettyPrinting.formatError(httpRequest,"The collection has still data sources. Removal was not done.");
@@ -167,7 +167,7 @@ public class CollectionResource extends AbstractResource {
 	public CollectionManager getManager() {
 		if (manager == null) {
 			try {
-				Model model = DrumbeatApplication.getInstance().getJenaProvider().openDefaultModel();
+				Model model = DrumbeatWebApplication.getInstance().getJenaProvider().openDefaultModel();
 				manager = new CollectionManager(model);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not get Jena model: " + e.getMessage(), e);

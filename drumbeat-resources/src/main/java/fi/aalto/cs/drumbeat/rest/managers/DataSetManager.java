@@ -15,7 +15,7 @@ import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.application.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
 import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
@@ -66,7 +66,7 @@ public class DataSetManager  extends AbstractManager{
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
-								+  "<"+DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
 								+ "}"
 								),
 						model);
@@ -94,11 +94,11 @@ public class DataSetManager  extends AbstractManager{
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid)),
+								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid)),
 						model);
 
          ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid); 
+         Resource ds = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid); 
          while (rs.hasNext()) {
         	         ret=true;
                      QuerySolution row = rs.nextSolution();
@@ -111,7 +111,7 @@ public class DataSetManager  extends AbstractManager{
 	
 
 	public Resource getResource(String collectionid,String datasourceid,String datasetid) {
-		Resource r = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
+		Resource r = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 		if (model.contains( r, null, (RDFNode) null )) {
 			return r;
 		}
@@ -156,8 +156,8 @@ public class DataSetManager  extends AbstractManager{
 	private boolean create_implementation(String collectionid,String datasourceid,String datasetid,String name) {
 		if(!isCollectionAndDataSourceExisting(collectionid,datasourceid))
 			return false;
-		Resource datasource = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
-		Resource dataset = model.createResource(DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
+		Resource datasource = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
+		Resource dataset = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
 
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
@@ -173,7 +173,7 @@ public class DataSetManager  extends AbstractManager{
 	}
 	
 	private boolean delete_implementation(String collectionid,String datasourceid,String datasetid) {
-		String item=DrumbeatApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
+		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
 		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
 		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
