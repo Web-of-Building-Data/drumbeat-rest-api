@@ -63,7 +63,7 @@ public class DataSetManager  extends AbstractManager{
 		boolean ret=false;
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/LDBHO#>"
+						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#>"
 								+ "SELECT ?dataset "
 								+ "WHERE {"								
 								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSets ?dataset."		
