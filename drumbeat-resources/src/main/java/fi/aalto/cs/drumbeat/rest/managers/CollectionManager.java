@@ -101,13 +101,13 @@ public class CollectionManager extends AbstractManager{
          return ret;
 	}
 	
-	public boolean hasDataSources(String collectionid) {
+	public boolean hasDataSource(String collectionid) {
 		final QueryExecution queryExecution = 
 				QueryExecutionFactory.create(
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSources ?datasource."								
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSource ?datasource."								
 								+ "}"
 								),
 						model);
@@ -143,7 +143,7 @@ public class CollectionManager extends AbstractManager{
 	}
 	
 	private boolean delete_implementation(String collection_id) {
-		if(hasDataSources(collection_id))
+		if(hasDataSource(collection_id))
 			return false;
 		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collection_id;
 		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);

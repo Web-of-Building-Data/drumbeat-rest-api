@@ -69,7 +69,7 @@ public class DataSourceManager  extends AbstractManager{
 						QueryFactory.create("PREFIX lbdh: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#>"
 								+ "SELECT ?datasource "
 								+ "WHERE {"
-								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSources ?datasource."								
+								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"collections/"+collectionid+"> lbdh:hasDataSource ?datasource."								
 								+ "}"
 								),
 						model);
@@ -165,11 +165,11 @@ public class DataSourceManager  extends AbstractManager{
 		Resource datasource = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
 		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
 
-        Property hasDataSources = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSources);
+        Property hasDataSource = ResourceFactory.createProperty(BuildingDataOntology.Collections.hasDataSource);
         Property isDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSources.isDataSource);
         Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
 
-		collection.addProperty(hasDataSources, datasource);
+		collection.addProperty(hasDataSource, datasource);
 		datasource.addProperty(isDataSource, collection);
 		
         datasource.addProperty(RDF.type,type);

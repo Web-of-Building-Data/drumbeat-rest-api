@@ -9,7 +9,7 @@ public class BuildingDataOntology {
 	public static class Collections {
 		public static final String Collection = Ontology_BASE_URL + "Collection";
 		public static final String name = Ontology_BASE_URL + "name";
-		public static final String hasDataSources = Ontology_BASE_URL + "hasDataSources";
+		public static final String hasDataSource = Ontology_BASE_URL + "hasDataSource";
 		
 		
 		public static String formatUrl(String collectionId) {
