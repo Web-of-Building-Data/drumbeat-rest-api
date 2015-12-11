@@ -35,6 +35,13 @@
 			<param name="ConversionPattern" value="%-4r %-5p [%-25c{1}] %m%n"/>
 		</layout>
 	</appender>
+	<appender class="org.apache.log4j.FileAppender" name="FILE_TEST">
+		<param name="append" value="false"/>
+		<param name="file" value="logs/Drumbeat_TEST.log"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-4r %-5p [%-25c{1}] %m%n"/>
+		</layout>
+	</appender>
 	
 	<logger name="fi.hut.cs.drumbeat" additivity="false">
 		<level value="info"/>
@@ -54,6 +61,14 @@
 		<appender-ref ref="CONSOLE"/>
 		<appender-ref ref="FILE_ANALYSER"/>
 	</logger>	
+	<logger name="fi.aalto.cs.drumbeat" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="FILE_COMMON"/>
+	</logger>
+	<logger name="fi.aalto.cs.drumbeat.rest" additivity="false">
+		<level value="debug"/>
+		<appender-ref ref="FILE_TEST"/>
+	</logger>
 	<logger name="com.hp.hpl.jena">
 		<level value="warn"/>
 	</logger>
@@ -74,14 +89,6 @@
 	</logger>
 	<logger name="org.openjena">
 		<level value="warn"/>
-	</logger>
-	<logger name="fi.hut.cs.drumbeat.rest" additivity="false">
-		<level value="debug"/>
-		<appender-ref ref="FILE_COMMON"/>
-	</logger>
-	<logger name="fi.aalto.cs.drumbeat.rest" additivity="false">
-		<level value="debug"/>
-		<appender-ref ref="FILE_COMMON"/>
 	</logger>
 	
 	

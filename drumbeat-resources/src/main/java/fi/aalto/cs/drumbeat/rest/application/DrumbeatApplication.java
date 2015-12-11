@@ -55,10 +55,9 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		return instance;
 	}	
 	
-
-	
-	private static final Logger logger = Logger.getLogger(DrumbeatApplication.class);
+	private static Logger logger;
 	private static AbstractJenaProvider jenaProvider;
+	private static int nextApplicationId = 0;
 	
 	private final int applicationId;
 	private Properties configurationProperties;
@@ -68,7 +67,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 
 	protected DrumbeatApplication(String workingFolderPath) {
 		
-		applicationId = new Random().nextInt();
+		applicationId = nextApplicationId++;
 		
 		instance = this;
 		
@@ -77,11 +76,14 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 		this.workingFolderPath = workingFolderPath;
 		
-		DOMConfigurator.configure(getRealPath(Paths.LOGGER_CONFIG_FILE_PATH));				
-		logger.info("Starting Web API");
-
 		synchronized (DrumbeatApplication.class) {
-			if (configurationProperties == null) {				
+			if (logger == null) {
+				logger = Logger.getRootLogger();
+				DOMConfigurator.configure(getRealPath(Paths.LOGGER_CONFIG_FILE_PATH));
+				logger.info("Starting Web API");
+			}
+			
+			if (configurationProperties == null) {
 				configurationProperties = new Properties();
 				try {
 					String configFilePath = getRealPath(Paths.COMMON_CONFIG_FILE_PATH);
@@ -95,6 +97,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 			}			
 		}		
 		
+		logger.info("ApplicationId: " + applicationId);
 		logger.info("BaseUrl: " + getBaseUri());
 		logger.info("Web API started");
 	}
