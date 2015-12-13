@@ -64,8 +64,9 @@
 	<logger name="fi.aalto.cs.drumbeat" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="FILE_COMMON"/>
+		<appender-ref ref="CONSOLE_HIGHLIGHT"/>
 	</logger>
-	<logger name="fi.aalto.cs.drumbeat.rest" additivity="false">
+	<logger name="fi.aalto.cs.drumbeat.rest" additivity="true">
 		<level value="debug"/>
 		<appender-ref ref="FILE_TEST"/>
 	</logger>

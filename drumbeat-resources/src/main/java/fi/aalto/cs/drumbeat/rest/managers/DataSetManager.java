@@ -1,238 +1,192 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import org.apache.log4j.Logger;
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.ParameterizedSparqlString;
+import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.sparql.core.DatasetGraphMaker;
-import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.Collections;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSets;
-import fi.aalto.cs.drumbeat.rest.ontology.BuildingDataOntology.DataSources;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.hut.cs.drumbeat.common.DrumbeatException;
 
-/*
-The MIT License (MIT)
-
-Copyright (c) 2015 Jyrki Oraskari
-Copyright (c) 2015 Nam Vu Hoang
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
-
-public class DataSetManager  extends AbstractManager{
+public class DataSetManager extends MetaDataManager {
 	
-	private static final Logger logger = Logger.getLogger(DataSetManager.class);
-
-	private final Model model;	
+//	private static final Logger logger = Logger.getLogger(DataSetManager.class);	
 	
-	public Model getModel() {
-		return model;
-	}
-
-	public DataSetManager(Model model) {
-		this.model = model;
+	public DataSetManager() throws DrumbeatException {
+		this(DrumbeatApplication.getInstance().getMetaDataModel());
 	}
 	
-	public boolean listAll2Model(Model m,String collectionid,String datasourceid) {
-		boolean ret=false;
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create("PREFIX lbdh: <"+BuildingDataOntology.ONTOLOGY_BASE_URL+">"
-								+ "SELECT ?dataset "
-								+ "WHERE {"								
-								+  "<"+DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"> lbdh:hasDataSet ?dataset."		
-								+ "}"
-								),
-						model);
-
-         ResultSet rs = queryExecution.execSelect();
-         Resource type = model.createResource(BuildingDataOntology.DataSets.DataSet); 		
-         while (rs.hasNext()) {
-        	         ret=true;
-                     QuerySolution row = rs.nextSolution();                     
-                     Resource c = model.createResource(row.getResource("dataset").getURI());
-                     m.add(m.createStatement(c,RDF.type,type));
-         }
-         return ret;
-	}
-
-	
-	
-	@Override
-	public boolean get2Model(Model m,String... specification) {
-		return get2Model_implementation(m, specification[0],specification[1],specification[2]);
-	}
-
-	private boolean get2Model_implementation(Model m,String collectionid,String datasourceid,String datasetid) {
-		boolean ret=false;
-		final QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(
-								String.format("SELECT ?p ?o  WHERE {<%s> ?p ?o} ",DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid)),
-						model);
-
-         ResultSet rs = queryExecution.execSelect();
-         Resource ds = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid); 
-         while (rs.hasNext()) {
-        	         ret=true;
-                     QuerySolution row = rs.nextSolution();
-                     Property p = model.createProperty(row.getResource("p").getURI());
-                     RDFNode o = row.get("o");
-                     m.add(m.createStatement(ds,p,o));
-         }
-         return ret;
+	public DataSetManager(Model metaDataModel) {
+		super(metaDataModel);
 	}
 	
-
-	public Resource getResource(String collectionid,String datasourceid,String datasetid) {
-		Resource r = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
-		if (model.contains( r, null, (RDFNode) null )) {
-			return r;
+	/**
+	 * Gets all dataSets that belong to the specified collection and datasource.
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @return List of statements <<dataSet>> rdf:type lbdho:DataSet
+	 * @throws NotFoundException if the datasource is not found
+	 */
+	public Model getAll(String collectionId, String dataSourceId) {
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT (?dataSetUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_DataSet AS ?object) { \n" + 
+					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a ?lbdho_DataSet . \n" +
+					"} \n" + 
+					"ORDER BY ?subject");
+			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+		}}.asQuery();
+		
+		ResultSet resultSet = 
+				QueryExecutionFactory
+					.create(query, getMetaDataModel())
+					.execSelect();
+		
+		if (!resultSet.hasNext()) {
+			DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel()); 
+			if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
+				throw new NotFoundException(
+						String.format("DataSource <%s> not found", getDataSourceResource(collectionId, dataSourceId)));
+			}
 		}
-		return null;
-	}
-
-	public boolean isCollectionAndDataSourceExisting(String collectionId, String dataSourceId) {
-		String collectionUri = Collections.formatUrl(collectionId);
-		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
 		
-		String queryString =
-				String.format(
-					"PREFIX lbdho: <%s> \n" +
-					"ASK { \n" + 
-					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +					
-					"}",
-					BuildingDataOntology.ONTOLOGY_BASE_URL,
-					collectionUri,
-					dataSourceUri);		
-		
-		QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(queryString),
-						model);
-		
-		boolean result = queryExecution.execAsk();
-
-		if (!result) {
-			logger.warn("Query returns false: " + queryString);	
-		}	
-		
-		return result;
-	}
-	
-	@Override
-	public boolean create(String... specification) {
-		return create_implementation(specification[0],specification[1],specification[2],specification[3]);
-		
-	}
-
-	@Override
-	public boolean delete(String... specification) {
-		return delete_implementation(specification[0],specification[1],specification[2]);
-	}
-	
-	
-	private boolean create_implementation(String collectionid,String datasourceid,String datasetid,String name) {
-		if(!isCollectionAndDataSourceExisting(collectionid,datasourceid))
-			return false;
-		Resource datasource = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasources/"+collectionid+"/"+datasourceid);
-		Resource dataset = model.createResource(DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid); 
-
-		Resource type = model.createResource(BuildingDataOntology.DataSources.DataSource);
-        Property name_property = ResourceFactory.createProperty(BuildingDataOntology.DataSources.name);
-        Property hasDataSet = ResourceFactory.createProperty(BuildingDataOntology.DataSources.hasDataSet);
-        Property inDataSource = ResourceFactory.createProperty(BuildingDataOntology.DataSets.inDataSource);
-   
-        datasource.addProperty(hasDataSet, dataset);
-        dataset.addProperty(inDataSource, datasource);
-        
-        dataset.addProperty(RDF.type,type);
-        dataset.addProperty(name_property,name , XSDDatatype.XSDstring);
-        return true;
-	}
-	
-	private boolean delete_implementation(String collectionid,String datasourceid,String datasetid) {
-		String item=DrumbeatWebApplication.getInstance().getBaseUri()+"datasets/"+collectionid+"/"+datasourceid+"/"+datasetid;
-		String update1=String.format("DELETE {<%s> ?p ?o} WHERE {<%s> ?p ?o }",item,item);
-		String update2=String.format("DELETE {?s ?p <%s>} WHERE {<%s> ?p ?o }",item,item);
-		DatasetGraphMaker gs= new DatasetGraphMaker(model.getGraph()); 
-		UpdateAction.parseExecute(update1, gs);
-		UpdateAction.parseExecute(update2, gs);
-		return true;
+		return convertResultSetToModel(resultSet);
 	}
 	
 	
 	/**
-	 * Checks if a dataset with the collection/datasource/dataset names exists
+	 * Gets all properties of a specified dataSet 
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
-	 * @return true if the dataset exists
-	 * @author Nam Vu 
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 */
+	public Model getById(String collectionId, String dataSourceId, String dataSetId) {
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT (?dataSetUri AS ?subject) ?predicate ?object { \n" + 
+					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a ?lbdho_DataSet ; ?predicate ?object . \n" +
+					"} \n" + 
+					"ORDER BY ?subject ?predicate ?object");
+			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+			setIri("dataSetUri", getDataSetResource(collectionId, dataSourceId, dataSetId).getURI());
+		}}.asQuery();
+		
+		ResultSet resultSet = 
+				QueryExecutionFactory
+					.create(query, getMetaDataModel())
+					.execSelect();
+		
+		if (!resultSet.hasNext()) {
+			throw new NotFoundException(
+					String.format(
+							"DataSet <%s> not found", getDataSetResource(collectionId, dataSourceId, dataSetId)));
+		}
+		
+		return convertResultSetToModel(resultSet);
+	}
+	
+	
+	/**
+	 * Creates a specified dataSet 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return the recently created dataSet
+	 * @throws AlreadyExistsException if the dataSet already exists
+	 * @throws NotFoundException if the datasource is not found
+	 */
+	public Resource create(String collectionId, String dataSourceId, String dataSetId, String name) {
+		DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel()); 
+		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
+		if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
+			throw new NotFoundException(
+					String.format("DataSource <%s> not found", dataSourceResource.getURI()));
+		}
+		
+		Resource dataSetResource = getDataSetResource(collectionId, dataSourceId, dataSetId);		
+		if (checkExists(collectionId, dataSourceId, dataSetId)) {
+			throw new AlreadyExistsException(String.format("DataSet <%s> already exists", dataSetResource.getURI()));
+		}
+		
+		
+		dataSourceResource
+			.inModel(getMetaDataModel())
+			.addProperty(LinkedBuildingDataOntology.hasDataSet, dataSetResource);
+	
+		dataSetResource
+			.inModel(getMetaDataModel())
+			.addProperty(RDF.type, LinkedBuildingDataOntology.DataSet)
+			.addLiteral(LinkedBuildingDataOntology.name, name)
+			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);
+		
+		return dataSetResource;
+	}
+	
+	
+	/**
+	 * Creates a specified dataSet 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return the recently created dataSet
+	 * @throws NotFoundException if the dataSet is not found
+	 */
+	public void delete(String collectionId, String dataSourceId, String dataSetId) {
+		Resource dataSetResource = getDataSetResource(collectionId, dataSourceId, dataSetId);		
+		if (!checkExists(collectionId, dataSourceId, dataSetId)) {
+			throw new NotFoundException(
+					String.format("DataSet <%s> not found", getDataSetResource(collectionId, dataSourceId, dataSetId)));
+		}
+		
+		getMetaDataModel()
+			.removeAll(dataSetResource, null, null)
+			.removeAll(null, LinkedBuildingDataOntology.hasDataSet, dataSetResource);
+	}
+	
+	
+	/**
+	 * Checks if the dataSet exists
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return true if the dataSet exists
 	 */
 	public boolean checkExists(String collectionId, String dataSourceId, String dataSetId) {
-		String collectionUri = Collections.formatUrl(collectionId);
-		String dataSourceUri = DataSources.formatUrl(collectionId, dataSourceId);
-		String dataSetUri = DataSets.formatUrl(collectionId, dataSourceId, dataSetId);
 		
-		String queryString =
-				String.format(
-					"PREFIX lbdho: <%s> \n" +
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
 					"ASK { \n" + 
-					"<%s> a lbdho:Collection ; lbdho:hasDataSource <%s> . \n" +
-					"<%s> a lbdho:DataSource ; lbdho:hasDataSet <%s> . \n" +
-					"<%s> a lbdho:DataSet . }",
-					BuildingDataOntology.ONTOLOGY_BASE_URL,
-					collectionUri,
-					dataSourceUri,
-					dataSourceUri,
-					dataSetUri,
-					dataSetUri);
+					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a ?lbdho_DataSet . \n" + 
+					"}");			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+			setIri("dataSetUri", getDataSetResource(collectionId, dataSourceId, dataSetId).getURI());			
+		}}.asQuery();
 		
-		QueryExecution queryExecution = 
-				QueryExecutionFactory.create(
-						QueryFactory.create(queryString),
-						model);
-		
-		boolean result = queryExecution.execAsk();
-		if (!result) {
-			logger.warn("Query returns false: " + queryString);	
-		}	
-		return result;
+		return QueryExecutionFactory
+					.create(query, getMetaDataModel())
+					.execAsk();		
 	}
 
-	
-	
-	
 }
-

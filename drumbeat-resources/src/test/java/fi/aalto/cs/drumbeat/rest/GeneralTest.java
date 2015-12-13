@@ -6,16 +6,15 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 
-public class CommonTest extends DrumbeatTest {	
+public class GeneralTest extends DrumbeatTest {	
 	
-	private static final boolean DO_TEST = true;
+	private static final boolean DO_TEST = false;
 	
-	@Override
-	protected boolean doTest() {
-		return DO_TEST && super.doTest();
+	public GeneralTest() {
+		super(DO_TEST);
 	}
 	
-	private static final Logger logger = Logger.getLogger(CommonTest.class);
+	private static final Logger logger = Logger.getLogger(GeneralTest.class);
 	
 	
 	@Test

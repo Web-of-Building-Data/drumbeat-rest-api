@@ -8,23 +8,24 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
+import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
 
-public class DataManager {
+public class DataSetContentManager {
 	
-	private static final Logger logger = Logger.getLogger(DataSetManager.class);
+	private static final Logger logger = Logger.getLogger(DataSetContentManager.class);
 	
 	private static boolean ifcSchemaLoaded;
 	
-	public DataManager() {
+	public DataSetContentManager() {
 	}
 
 	
@@ -33,10 +34,10 @@ public class DataManager {
 		logger.info("Uploading IFC model");
 		try {			
 			// loading schemas and config files
-			synchronized (DataSetManager.class) {
+			synchronized (DataSetContentManager.class) {
 				if (!ifcSchemaLoaded) {
-					ConfigurationDocument.load(DrumbeatWebApplication.getInstance().getRealPath(DrumbeatWebApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
-					Ifc2RdfExporter.parseSchemas(DrumbeatWebApplication.getInstance().getRealPath(DrumbeatWebApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
+					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
 					ifcSchemaLoaded = true;
 				}			
 			}
@@ -53,14 +54,17 @@ public class DataManager {
 
 			// export model
 			logger.debug("exporting model");
-			Ifc2RdfConversionContext conversionContext = DrumbeatWebApplication.getInstance().getDefaultIfc2RdfConversionContext();
-			conversionContext.setModelNamespaceUriFormat(DrumbeatWebApplication.getInstance().getBaseUri());
+			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
+			conversionContext.setModelNamespaceUriFormat(DrumbeatApplication.getInstance().getBaseUri());
 			
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, jenaModel);
 			jenaModel = modelExporter.export();
 			logger.info("Uploading IFC model completed successfully");
 			return jenaModel;
 			
+		} catch (IfcParserException e) {
+			logger.warn("Parsing IFC model failed", e);
+			throw e;			
 		} catch (Exception e) {
 			logger.error("Uploading IFC model failed", e);
 			throw e;			
