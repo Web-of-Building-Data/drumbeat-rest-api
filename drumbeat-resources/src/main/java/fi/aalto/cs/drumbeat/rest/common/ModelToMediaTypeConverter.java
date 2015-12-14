@@ -11,7 +11,6 @@ import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import static javax.ws.rs.core.MediaType.*;
 
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MediaType;

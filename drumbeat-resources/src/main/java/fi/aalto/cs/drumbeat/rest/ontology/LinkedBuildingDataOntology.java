@@ -1,8 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.ontology;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
