@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -27,6 +26,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
@@ -35,6 +35,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetContentManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
+import fi.aalto.cs.drumbeat.rest.managers.ErrorFactory;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.common.file.FileManager;
@@ -144,14 +145,17 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadServerFile(
-			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,
-			@FormParam("filePath") String filePath)
+			@FormParam("filePath") String filePath,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
 	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath));
 		
@@ -170,14 +174,17 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadUrl(
-			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,
-			@FormParam("url") String url)
+			@FormParam("url") String url,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
 	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
@@ -197,14 +204,17 @@ public class DataSetResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadContent(
-			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,			
-			@FormParam("content") String content)
+			@FormParam("content") String content,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
 	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
 		
@@ -218,15 +228,18 @@ public class DataSetResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> uploadClientFile(
-			@Context HttpServletRequest httpRequest,
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormDataParam("dataType") String dataType,
 			@FormDataParam("dataFormat") String dataFormat,
 			@FormDataParam("file") InputStream inputStream,
-	        @FormDataParam("file") FormDataContentDisposition fileDetail)
+	        @FormDataParam("file") FormDataContentDisposition fileDetail,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
 	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+	        
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -255,15 +268,8 @@ public class DataSetResource {
 
 			String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 			if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
-				String baseUri = DrumbeatApplication.getInstance().getBaseUri();
-				throw new DrumbeatWebException(
-						Status.NOT_FOUND,
-						String.format(
-								"Data set not found: collection=<%s>, dataSource=<%s>, dataSet=<%s>",
-								LinkedBuildingDataOntology.formatCollectionResourceUri(baseUri, collectionId),
-								LinkedBuildingDataOntology.formatDataSourceResourceUri(baseUri, collectionId, dataSourceId),
-								LinkedBuildingDataOntology.formatDataSetResourceUri(baseUri, collectionId, dataSourceId, dataSetId)),
-						null);
+				Resource dataSetResource = dataSetManager.getDataSetResource(collectionId, dataSourceId, dataSetId);
+				throw ErrorFactory.createDataSetNotFoundException(dataSetResource);
 			}
 			
 			if (DrumbeatApplication.getInstance().getSaveUploads()) {
@@ -314,6 +320,8 @@ public class DataSetResource {
 
 		} catch (DrumbeatWebException drumbeatWebException) {
 			throw drumbeatWebException;
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			

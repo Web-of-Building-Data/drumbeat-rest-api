@@ -131,7 +131,7 @@ public class CollectionManager extends MetaDataManager {
 		}
 		
 		if (checkHasChildren(collectionId)) {
-			throw ErrorFactory.createCollectionHasChildren(collectionResource);
+			throw ErrorFactory.createCollectionHasChildrenException(collectionResource);
 		}		
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{

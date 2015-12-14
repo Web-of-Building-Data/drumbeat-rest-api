@@ -37,12 +37,12 @@ public class ErrorFactory {
 				String.format("DataSet already exists: <%s>", dataSetResource.getURI()));
 	}
 
-	public static DeleteDeniedException createCollectionHasChildren(Resource collectionResource) {
+	public static DeleteDeniedException createCollectionHasChildrenException(Resource collectionResource) {
 		return new DeleteDeniedException(
 			String.format("Collection has children: <%s>", collectionResource.getURI()));
 	}
 
-	public static DeleteDeniedException createDataSourceHasChildren(Resource dataSourceResource) {
+	public static DeleteDeniedException createDataSourceHasChildrenException(Resource dataSourceResource) {
 		return new DeleteDeniedException(
 			String.format("DataSource has children: <%s>", dataSourceResource.getURI()));
 	}

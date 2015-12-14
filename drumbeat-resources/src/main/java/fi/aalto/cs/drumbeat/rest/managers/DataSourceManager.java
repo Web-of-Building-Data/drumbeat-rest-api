@@ -157,7 +157,7 @@ public class DataSourceManager extends MetaDataManager {
 		}
 		
 		if (checkHasChildren(collectionId, dataSourceId)) {
-			throw ErrorFactory.createDataSourceHasChildren(dataSourceResource);
+			throw ErrorFactory.createDataSourceHasChildrenException(dataSourceResource);
 		}
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
