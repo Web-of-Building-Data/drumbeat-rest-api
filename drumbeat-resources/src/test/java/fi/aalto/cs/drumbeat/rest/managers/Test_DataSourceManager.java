@@ -46,18 +46,28 @@ public class Test_DataSourceManager extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getAll_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSourceManager.getAll("col-1-999");
 		assertEquals(0L, model.size());		
 	}	
 
 	@Test
 	public void test_getAll_correctId_emptyList() {
-		Model model = dataSourceManager.getAll("col-2");
+		if (!doTest()) {
+			return;
+		}
+		Model model = dataSourceManager.getAll("col-4");
 		assertEquals(0L, model.size());
 	}	
 
 	@Test
 	public void test_getAll_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
+		
 		Model model = dataSourceManager.getAll("col-1");
 		assertEquals(4L, model.size());
 		
@@ -93,6 +103,10 @@ public class Test_DataSourceManager extends DrumbeatTest {
 	 **************************************/
 	@Test
 	public void test_getById_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
+
 		Model model = dataSourceManager.getById("col-1", "dso-1-1");
 		
 		assertEquals(5L, model.size());
@@ -129,6 +143,9 @@ public class Test_DataSourceManager extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getById_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSourceManager.getById("col-1", "dso-1-999");
 	}
 
@@ -139,16 +156,25 @@ public class Test_DataSourceManager extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_create_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSourceManager.create("col-999", "dso-999-1", "DataSource 1-999-1");
 	}
 	
 	@Test(expected=AlreadyExistsException.class)
 	public void test_create_correctId_alreadyExists() {
+		if (!doTest()) {
+			return;
+		}
 		dataSourceManager.create("col-1", "dso-1-1", "DataSource 1-1-1");
 	}
 	
 	@Test
 	public void test_create_correctId_new() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 		
@@ -186,16 +212,25 @@ public class Test_DataSourceManager extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_delete_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSourceManager.delete("col-1", "dso-1-999");
 	}
 	
 	@Test(expected=DeleteDeniedException.class)
 	public void test_delete_correctId_hasChildren() {
-		dataSourceManager.delete("col-1", "dso-1-1");
+		if (!doTest()) {
+			return;
+		}
+		dataSourceManager.delete("col-2", "dso-2-1");
 	}
 
 	@Test
 	public void test_delete_correctId_noChildren() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 

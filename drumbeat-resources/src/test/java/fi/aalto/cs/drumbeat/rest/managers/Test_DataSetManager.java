@@ -45,24 +45,36 @@ public class Test_DataSetManager extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getAll_wrongCollectionId() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSetManager.getAll("col-999", "dso-1-1");
 		assertEquals(0L, model.size());		
 	}	
 
 	@Test(expected=NotFoundException.class)
 	public void test_getAll_wrongDataSourceId() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSetManager.getAll("col-1", "dso-1-999");
 		assertEquals(0L, model.size());		
 	}	
 
 	@Test
 	public void test_getAll_correctId_emptyList() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSetManager.getAll("col-1", "dso-1-2");
 		assertEquals(0L, model.size());
 	}	
 
 	@Test
 	public void test_getAll_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSetManager.getAll("col-1", "dso-1-1");
 		assertEquals(2L, model.size());
 		
@@ -86,6 +98,9 @@ public class Test_DataSetManager extends DrumbeatTest {
 	 **************************************/
 	@Test
 	public void test_getById_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
 		Model model = dataSetManager.getById("col-1", "dso-1-1", "dse-1-1-1");
 		
 		assertEquals(3L, model.size());
@@ -109,6 +124,9 @@ public class Test_DataSetManager extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getById_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSetManager.getById("col-1", "dso-1-2", "dse-1-1-999");
 	}
 
@@ -119,16 +137,25 @@ public class Test_DataSetManager extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_create_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSetManager.create("col-1", "dso-1-999", "dse-1-999-1", "DataSet 1-999-1");
 	}
 	
 	@Test(expected=AlreadyExistsException.class)
 	public void test_create_correctId_alreadyExists() {
+		if (!doTest()) {
+			return;
+		}
 		dataSetManager.create("col-1", "dso-1-1", "dse-1-1-1", "DataSet 1-1-1");
 	}
 	
 	@Test
 	public void test_create_correctId_new() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 		
@@ -164,12 +191,18 @@ public class Test_DataSetManager extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_delete_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		dataSetManager.delete("col-1", "dso-1-999", "dse-1-999-1");
 	}
 	
 
 	@Test
 	public void test_delete_correctId() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 

@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.StringBufferInputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
@@ -54,6 +57,9 @@ public class Test_DataSetResource extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getAll_wrongCollectionId() {
+		if (!doTest()) {
+			return;
+		}
 		
 		try {
 			target("datasets/col-999/dso-1-1/")
@@ -74,6 +80,9 @@ public class Test_DataSetResource extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_getAll_wrongDataSourceId() {
+		if (!doTest()) {
+			return;
+		}
 		
 		try {
 			target("datasets/col-1/dso-1-999/")
@@ -94,28 +103,32 @@ public class Test_DataSetResource extends DrumbeatTest {
 
 	@Test
 	public void test_getAll_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
 		
-		Object entity = target("datasets/col-1/dso-1-1/")
-			.request(MediaType.APPLICATION_JSON)
-			.get();
+		String entity = target("datasets/col-1/dso-1-1")
+			.request("text/turtle")
+			.get(String.class);		
 		
-		getLogger().warn(entity.getClass());
+		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
+
+		Model model = ModelFactory.createDefaultModel();
+		model.read(new ByteArrayInputStream(entity.getBytes()), baseUri, "TURTLE");
 		
-//		Model model = dataSetManager.getAll("col-1", "dso-1-1");
-//		assertEquals(2L, model.size());
-//		
-//		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
-//		assertTrue(
-//				model.contains(
-//						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1"),
-//						RDF.type,
-//						LinkedBuildingDataOntology.DataSet));
-//
-//		assertTrue(
-//				model.contains(
-//						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-2"),
-//						RDF.type,
-//						LinkedBuildingDataOntology.DataSet));
+		assertEquals(2L, model.size());
+		
+		assertTrue(
+				model.contains(
+						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1"),
+						RDF.type,
+						LinkedBuildingDataOntology.DataSet));
+
+		assertTrue(
+				model.contains(
+						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-2"),
+						RDF.type,
+						LinkedBuildingDataOntology.DataSet));
 	}	
 	
 	

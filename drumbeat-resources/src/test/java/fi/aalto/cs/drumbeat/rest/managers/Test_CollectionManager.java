@@ -47,6 +47,10 @@ public class Test_CollectionManager extends DrumbeatTest {
 	
 	@Test
 	public void test_getAll_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
+
 		Model model = collectionManager.getAll();
 		
 		logModel(Level.ERROR, model);
@@ -85,6 +89,10 @@ public class Test_CollectionManager extends DrumbeatTest {
 	 **************************************/
 	@Test
 	public void test_getById_correctId_nonEmptyList() {
+		if (!doTest()) {
+			return;
+		}
+
 		Model model = collectionManager.getById("col-1");
 		
 		assertEquals(6L, model.size());
@@ -128,6 +136,9 @@ public class Test_CollectionManager extends DrumbeatTest {
 	
 	@Test(expected=NotFoundException.class)
 	public void test_getById_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		collectionManager.getById("col-999");
 	}
 
@@ -138,11 +149,17 @@ public class Test_CollectionManager extends DrumbeatTest {
 
 	@Test(expected=AlreadyExistsException.class)
 	public void test_create_correctId_alreadyExists() {
+		if (!doTest()) {
+			return;
+		}
 		collectionManager.create("col-1", "Collection 1-1-1");
 	}
 	
 	@Test
 	public void test_create_correctId_new() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 		
@@ -176,16 +193,25 @@ public class Test_CollectionManager extends DrumbeatTest {
 
 	@Test(expected=NotFoundException.class)
 	public void test_delete_wrongId() {
+		if (!doTest()) {
+			return;
+		}
 		collectionManager.delete("col-999");
 	}
 	
 	@Test(expected=DeleteDeniedException.class)
 	public void test_delete_correctId_hasChildren() {
-		collectionManager.delete("col-1");
+		if (!doTest()) {
+			return;
+		}
+		collectionManager.delete("col-2");
 	}	
 
 	@Test
 	public void test_delete_correctId() {
+		if (!doTest()) {
+			return;
+		}
 		
 		long oldSize = metaDataModel.size();
 

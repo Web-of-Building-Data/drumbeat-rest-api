@@ -38,6 +38,17 @@
 
 <collections/col-2> lbdho:name "Collection 2" .
 <collections/col-2> rdf:type lbdho:Collection .
+<collections/col-2> lbdho:hasDataSource <datasources/col-2/dso-2-1> .
+
+<datasources/col-2/dso-2-1> lbdho:inCollection <collections/col-2> .
+<datasources/col-2/dso-2-1> lbdho:name "DataSource 2-1" .
+<datasources/col-2/dso-2-1> rdf:type lbdho:DataSource .
+<datasources/col-2/dso-2-1> lbdho:hasDataSet <datasets/col-2/dso-2-1/dse-2-1-1>  .
+
+<datasets/col-2/dso-2-1/dse-2-1-1> lbdho:inDataSource <datasources/col-2/dso-2-1> .
+<datasets/col-2/dso-2-1/dse-2-1-1> lbdho:name "DataSet 2-1-1" .
+<datasets/col-2/dso-2-1/dse-2-1-1> rdf:type lbdho:DataSet .
+
 
 <collections/col-3> lbdho:name "Collection 3" .
 <collections/col-3> rdf:type lbdho:Collection .
