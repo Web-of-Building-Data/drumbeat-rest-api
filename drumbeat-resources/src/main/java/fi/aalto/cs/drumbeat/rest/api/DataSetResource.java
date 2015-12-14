@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -43,10 +42,6 @@ import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 @Path("/datasets")
 public class DataSetResource {
 
-	@Context
-	private ServletContext servletContext;
-
-	
 	public static final String DATA_TYPE_IFC = "IFC";
 	public static final String DATA_TYPE_RDF = "RDF";
 	public static final String DATA_TYPE_CSV = "CSV";
@@ -124,11 +119,12 @@ public class DataSetResource {
 	
 	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String create(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
-			@FormParam("name") @FormDataParam("name") String name,
+			@FormParam("name") String name,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
