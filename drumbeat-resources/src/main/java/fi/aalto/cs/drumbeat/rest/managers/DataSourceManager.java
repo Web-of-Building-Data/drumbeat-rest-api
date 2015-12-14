@@ -16,9 +16,10 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 
-public class DataSourceManager extends MetaDataManager {
+public class DataSourceManager extends DrumbeatManager {
 	
 	public DataSourceManager() throws DrumbeatException {
 		this(DrumbeatApplication.getInstance().getMetaDataModel());
@@ -46,7 +47,7 @@ public class DataSourceManager extends MetaDataManager {
 					"ORDER BY ?subject");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
 		ResultSet resultSet = 
@@ -57,9 +58,7 @@ public class DataSourceManager extends MetaDataManager {
 		if (!resultSet.hasNext()) {
 			CollectionManager collectionManager = new CollectionManager(getMetaDataModel()); 
 			if (!collectionManager.checkExists(collectionId)) {
-				throw ErrorFactory
-							.createCollectionNotFoundException(
-									getCollectionResource(collectionId));
+				throw ErrorFactory.createCollectionNotFoundException(collectionId);
 			}
 		}
 		
@@ -86,8 +85,8 @@ public class DataSourceManager extends MetaDataManager {
 					"ORDER BY ?subject ?predicate ?object");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
-			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
 		ResultSet resultSet = 
@@ -96,7 +95,7 @@ public class DataSourceManager extends MetaDataManager {
 					.execSelect();
 		
 		if (!resultSet.hasNext()) {
-			throw ErrorFactory.createDataSourceNotFoundException(getDataSourceResource(collectionId, dataSourceId));
+			throw ErrorFactory.createDataSourceNotFoundException(collectionId, dataSourceId);
 		}
 		
 		return convertResultSetToModel(resultSet);
@@ -115,16 +114,17 @@ public class DataSourceManager extends MetaDataManager {
 		throws AlreadyExistsException, NotFoundException
 	{
 		CollectionManager collectionManager = new CollectionManager(getMetaDataModel()); 
-		Resource collectionResource = getCollectionResource(collectionId);		
 		if (!collectionManager.checkExists(collectionId)) {
-			throw ErrorFactory.createCollectionNotFoundException(collectionResource);
+			throw ErrorFactory.createCollectionNotFoundException(collectionId);
 		}
 		
-		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
 		if (checkExists(collectionId, dataSourceId)) {
-			throw ErrorFactory.createDataSourceAlreadyExistsException(dataSourceResource);
+			throw ErrorFactory.createDataSourceAlreadyExistsException(collectionId, dataSourceId);
 		}
 		
+		Resource collectionResource = getCollectionResource(collectionId);		
+		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);
+
 		collectionResource
 			.inModel(getMetaDataModel())
 			.addProperty(LinkedBuildingDataOntology.hasDataSource, dataSourceResource);
@@ -151,13 +151,12 @@ public class DataSourceManager extends MetaDataManager {
 	public void delete(String collectionId, String dataSourceId)
 		throws NotFoundException, DeleteDeniedException
 	{
-		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
 		if (!checkExists(collectionId, dataSourceId)) {
-			throw ErrorFactory.createDataSourceNotFoundException(dataSourceResource);
+			throw ErrorFactory.createDataSourceNotFoundException(collectionId, dataSourceId);
 		}
 		
 		if (checkHasChildren(collectionId, dataSourceId)) {
-			throw ErrorFactory.createDataSourceHasChildrenException(dataSourceResource);
+			throw ErrorFactory.createDataSourceHasChildrenException(collectionId, dataSourceId);
 		}
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
@@ -165,7 +164,7 @@ public class DataSourceManager extends MetaDataManager {
 					"DELETE { ?dataSourceUri ?p ?o } \n" +
 					"WHERE { ?dataSourceUri ?p ?o }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());			
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));			
 		}}.asUpdate();
 		
 		UpdateRequest updateRequest2 = new ParameterizedSparqlString() {{
@@ -173,7 +172,7 @@ public class DataSourceManager extends MetaDataManager {
 					"DELETE { ?s ?p ?dataSourceUri } \n" +
 					"WHERE { ?s ?p ?dataSourceUri }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());			
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));			
 		}}.asUpdate();
 
 		UpdateAction.execute(updateRequest1, getMetaDataModel());
@@ -199,8 +198,8 @@ public class DataSourceManager extends MetaDataManager {
 					"	?dataSourceUri a ?lbdho_DataSource . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
-			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
 		boolean result = 
@@ -215,10 +214,10 @@ public class DataSourceManager extends MetaDataManager {
 	
 	
 	/**
-	 * Checks if the dataSource exists
+	 * Checks if the dataSource has children dataSets
 	 * @param collectionId
 	 * @param dataSourceId
-	 * @return true if the dataSource exists
+	 * @return
 	 */
 	public boolean checkHasChildren(String collectionId, String dataSourceId) {
 		Query query = new ParameterizedSparqlString() {{
@@ -229,8 +228,8 @@ public class DataSourceManager extends MetaDataManager {
 					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
-			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
 		boolean result = 

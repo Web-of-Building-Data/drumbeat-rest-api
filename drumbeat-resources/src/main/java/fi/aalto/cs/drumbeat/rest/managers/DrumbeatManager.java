@@ -13,11 +13,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
-public abstract class MetaDataManager {
+public abstract class DrumbeatManager {
 	
 	private final Model metaDataModel;
 	
-	public MetaDataManager(Model metaDataModel) {
+	public DrumbeatManager(Model metaDataModel) {
 		this.metaDataModel = metaDataModel; 
 	}
 	
@@ -28,14 +28,12 @@ public abstract class MetaDataManager {
 	public Resource getCollectionResource(String collectionId) {
 		return metaDataModel.createResource(
 				LinkedBuildingDataOntology.formatCollectionResourceUri(
-						DrumbeatApplication.getInstance().getBaseUri(),
 						collectionId));
 	}
 	
 	public Resource getDataSourceResource(String collectionId, String dataSourceId) {
 		return metaDataModel.createResource(
 				LinkedBuildingDataOntology.formatDataSourceResourceUri(
-						DrumbeatApplication.getInstance().getBaseUri(),						
 						collectionId,
 						dataSourceId));
 	}
@@ -43,7 +41,6 @@ public abstract class MetaDataManager {
 	public Resource getDataSetResource(String collectionId, String dataSourceId, String dataSetId) {
 		return metaDataModel.createResource(
 				LinkedBuildingDataOntology.formatDataSetResourceUri(
-						DrumbeatApplication.getInstance().getBaseUri(),						
 						collectionId,
 						dataSourceId,
 						dataSetId));

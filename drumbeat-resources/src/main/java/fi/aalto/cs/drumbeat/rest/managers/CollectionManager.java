@@ -16,9 +16,10 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 
-public class CollectionManager extends MetaDataManager {
+public class CollectionManager extends DrumbeatManager {
 	
 	public CollectionManager() throws DrumbeatException {
 		this(DrumbeatApplication.getInstance().getMetaDataModel());
@@ -73,7 +74,7 @@ public class CollectionManager extends MetaDataManager {
 					"ORDER BY ?subject ?predicate ?object");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
 		ResultSet resultSet = 
@@ -82,7 +83,7 @@ public class CollectionManager extends MetaDataManager {
 					.execSelect();
 		
 		if (!resultSet.hasNext()) {
-			throw ErrorFactory.createCollectionNotFoundException(getCollectionResource(collectionId));
+			throw ErrorFactory.createCollectionNotFoundException(collectionId);
 		}
 		
 		return convertResultSetToModel(resultSet);
@@ -99,11 +100,12 @@ public class CollectionManager extends MetaDataManager {
 	public Model create(String collectionId, String name)
 		throws AlreadyExistsException
 	{
-		Resource collectionResource = getCollectionResource(collectionId);		
 		if (checkExists(collectionId)) {
-			throw ErrorFactory.createCollectionAlreadyExistsException(collectionResource);
+			throw ErrorFactory.createCollectionAlreadyExistsException(collectionId);
 		}
 		
+		Resource collectionResource = getCollectionResource(collectionId);		
+
 		collectionResource
 			.inModel(getMetaDataModel())
 			.addProperty(RDF.type, LinkedBuildingDataOntology.Collection)
@@ -125,13 +127,12 @@ public class CollectionManager extends MetaDataManager {
 	public void delete(String collectionId)
 		throws NotFoundException, DeleteDeniedException
 	{
-		Resource collectionResource = getCollectionResource(collectionId);		
 		if (!checkExists(collectionId)) {
-			throw ErrorFactory.createCollectionNotFoundException(collectionResource);
+			throw ErrorFactory.createCollectionNotFoundException(collectionId);
 		}
 		
 		if (checkHasChildren(collectionId)) {
-			throw ErrorFactory.createCollectionHasChildrenException(collectionResource);
+			throw ErrorFactory.createCollectionHasChildrenException(collectionId);
 		}		
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
@@ -139,7 +140,7 @@ public class CollectionManager extends MetaDataManager {
 					"DELETE { ?collectionUri ?p ?o } \n" +
 					"WHERE { ?collectionUri ?p ?o }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());			
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));			
 		}}.asUpdate();
 		
 		UpdateAction.execute(updateRequest1, getMetaDataModel());
@@ -162,7 +163,7 @@ public class CollectionManager extends MetaDataManager {
 					"	?collectionUri a ?lbdho_Collection . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
 		boolean result = 
@@ -177,10 +178,10 @@ public class CollectionManager extends MetaDataManager {
 	
 	
 	/**
-	 * Checks if the collection exists
+	 * Checks if the collection has children dataSources
 	 * @param collectionId
 	 * @param collectionId
-	 * @return true if the collection exists
+	 * @return
 	 */
 	public boolean checkHasChildren(String collectionId) {
 		Query query = new ParameterizedSparqlString() {{
@@ -189,7 +190,7 @@ public class CollectionManager extends MetaDataManager {
 					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
 		boolean result = 

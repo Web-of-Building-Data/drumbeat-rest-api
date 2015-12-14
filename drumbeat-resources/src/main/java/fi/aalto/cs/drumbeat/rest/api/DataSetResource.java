@@ -268,8 +268,7 @@ public class DataSetResource {
 
 			String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 			if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
-				Resource dataSetResource = dataSetManager.getDataSetResource(collectionId, dataSourceId, dataSetId);
-				throw ErrorFactory.createDataSetNotFoundException(dataSetResource);
+				throw ErrorFactory.createDataSetNotFoundException(collectionId, dataSourceId, dataSetId);
 			}
 			
 			if (DrumbeatApplication.getInstance().getSaveUploads()) {

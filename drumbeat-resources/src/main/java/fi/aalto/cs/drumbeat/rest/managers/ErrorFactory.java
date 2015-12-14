@@ -1,50 +1,74 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
+import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
+
 public class ErrorFactory {
 	
-	public static NotFoundException createCollectionNotFoundException(Resource collectionResource) {
+	public static NotFoundException createCollectionNotFoundException(String collectionId) {
 		return new NotFoundException(
-				String.format("Collection not found: <%s>", collectionResource.getURI()));
+				String.format(
+						"Collection not found: <%s>",
+						formatCollectionResourceUri(collectionId)));
 	}
 	
-	public static NotFoundException createDataSourceNotFoundException(Resource dataSourceResource) {
+	public static NotFoundException createDataSourceNotFoundException(String collectionId, String dataSourceId) {
 		return new NotFoundException(
-				String.format("DataSource not found: <%s>", dataSourceResource.getURI()));
+				String.format(
+						"DataSource not found: <%s>",
+						formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 
-	public static NotFoundException createDataSetNotFoundException(Resource dataSetResource) {
+	public static NotFoundException createDataSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
 		return new NotFoundException(
-				String.format("DataSet not found: <%s>", dataSetResource.getURI()));
+				String.format(
+						"DataSet not found: <%s>",
+						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
-	public static AlreadyExistsException createCollectionAlreadyExistsException(Resource collectionResource) {
+	public static NotFoundException createDataSetNotFoundException(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+		return new NotFoundException(
+				String.format(
+						"Object not found: <%s>",
+						formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId)));
+	}
+
+	public static AlreadyExistsException createCollectionAlreadyExistsException(String collectionId) {
 		return new AlreadyExistsException(
-				String.format("Collection already exists: <%s>", collectionResource.getURI()));
+				String.format(
+						"Collection already exists: <%s>",
+						formatCollectionResourceUri(collectionId)));
 	}
 	
-	public static AlreadyExistsException createDataSourceAlreadyExistsException(Resource dataSourceResource) {
+	public static AlreadyExistsException createDataSourceAlreadyExistsException(String collectionId, String dataSourceId) {
 		return new AlreadyExistsException(
-				String.format("DataSource already exists: <%s>", dataSourceResource.getURI()));
+				String.format(
+						"DataSource already exists: <%s>",
+						formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 
-	public static AlreadyExistsException createDataSetAlreadyExistsException(Resource dataSetResource) {
+	public static AlreadyExistsException createDataSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
 		return new AlreadyExistsException(
-				String.format("DataSet already exists: <%s>", dataSetResource.getURI()));
+				String.format(
+						"DataSet already exists: <%s>",
+						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 
-	public static DeleteDeniedException createCollectionHasChildrenException(Resource collectionResource) {
+	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
 		return new DeleteDeniedException(
-			String.format("Collection has children: <%s>", collectionResource.getURI()));
+			String.format(
+					"Collection has children: <%s>",
+					formatCollectionResourceUri(collectionId)));
 	}
 
-	public static DeleteDeniedException createDataSourceHasChildrenException(Resource dataSourceResource) {
+	public static DeleteDeniedException createDataSourceHasChildrenException(String collectionId, String dataSourceId) {
 		return new DeleteDeniedException(
-			String.format("DataSource has children: <%s>", dataSourceResource.getURI()));
+			String.format(
+					"DataSource has children: <%s>",
+					formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
 	

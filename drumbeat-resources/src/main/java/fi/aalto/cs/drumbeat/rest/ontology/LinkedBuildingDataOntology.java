@@ -51,30 +51,40 @@ public class LinkedBuildingDataOntology {
 		pss.setIri(ONTOLOGY_BASE_PREFIX + "_inDataSource", LinkedBuildingDataOntology.inDataSource.getURI());
 	}
 	
-	public static String formatCollectionResourceUri(String hostBaseUri, String collectionId) {
+	public static String formatCollectionResourceUri(String collectionId) {
 		return String.format(
 						"%scollections/%s",
-						hostBaseUri,
+						DrumbeatApplication.getInstance().getBaseUri(),
 						collectionId);
 	}
 	
-	public static String formatDataSourceResourceUri(String hostBaseUri, String collectionId, String dataSourceId) {		
+	public static String formatDataSourceResourceUri(String collectionId, String dataSourceId) {		
 		return String.format(
 					"%sdatasources/%s/%s",
-					hostBaseUri,
+					DrumbeatApplication.getInstance().getBaseUri(),
 					collectionId,
 					dataSourceId);
 	}
 
-	public static String formatDataSetResourceUri(String hostBaseUri, String collectionId, String dataSourceId, String dataSetId) {
+	public static String formatDataSetResourceUri(String collectionId, String dataSourceId, String dataSetId) {
 		return String.format(
 				"%sdatasets/%s/%s/%s",
-				hostBaseUri,
+				DrumbeatApplication.getInstance().getBaseUri(),
 				collectionId,
 				dataSourceId,
 				dataSetId);
 	}
 		
+	public static String formatObjectResourceUri(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+		return String.format(
+				"%sobjects/%s/%s/%s/%s",
+				DrumbeatApplication.getInstance().getBaseUri(),
+				collectionId,
+				dataSourceId,
+				dataSetId,
+				objectId);
+	}
+
 	public static String formatDataSetName(String collectionId, String dataSourceId, String dataSetId)
 	{
 		return String.format("%s_%s_%s", collectionId, dataSourceId, dataSetId);
