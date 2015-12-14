@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
@@ -39,11 +40,8 @@ public class DataSourceResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -62,11 +60,8 @@ public class DataSourceResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -82,11 +77,10 @@ public class DataSourceResource {
 		
 		try {		
 			getDataSourceManager().delete(collectionId, dataSourceId);
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+		} catch (DeleteDeniedException e) {
+			throw new DrumbeatWebException(Response.Status.FORBIDDEN, e);
 		}
 	}
 	
@@ -107,16 +101,10 @@ public class DataSourceResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
-		} catch (AlreadyExistsException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.CONFLICT,
-					exception.getMessage(),
-					exception);			
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+		} catch (AlreadyExistsException e) {
+			throw new DrumbeatWebException(Response.Status.CONFLICT, e);
 		}
 	}	
 	

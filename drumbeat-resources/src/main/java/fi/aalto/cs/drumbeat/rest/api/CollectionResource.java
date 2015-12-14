@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
@@ -84,6 +85,11 @@ public class CollectionResource {
 					Response.Status.NOT_FOUND,
 					exception.getMessage(),
 					exception);
+		} catch (DeleteDeniedException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.FORBIDDEN,
+					exception.getMessage(),
+					exception);			
 		}
 	}
 	

@@ -10,6 +10,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -178,6 +179,10 @@ public class Test_CollectionManager extends DrumbeatTest {
 		collectionManager.delete("col-999");
 	}
 	
+	@Test(expected=DeleteDeniedException.class)
+	public void test_delete_correctId_hasChildren() {
+		collectionManager.delete("col-1");
+	}	
 
 	@Test
 	public void test_delete_correctId() {

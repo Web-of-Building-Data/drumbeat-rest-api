@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 public class ErrorFactory {
@@ -35,4 +36,16 @@ public class ErrorFactory {
 		return new AlreadyExistsException(
 				String.format("DataSet already exists: <%s>", dataSetResource.getURI()));
 	}
+
+	public static DeleteDeniedException createCollectionHasChildren(Resource collectionResource) {
+		return new DeleteDeniedException(
+			String.format("Collection has children: <%s>", collectionResource.getURI()));
+	}
+
+	public static DeleteDeniedException createDataSourceHasChildren(Resource dataSourceResource) {
+		return new DeleteDeniedException(
+			String.format("DataSource has children: <%s>", dataSourceResource.getURI()));
+	}
+	
+	
 }

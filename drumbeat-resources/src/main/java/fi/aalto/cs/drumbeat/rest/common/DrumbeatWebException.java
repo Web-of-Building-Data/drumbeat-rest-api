@@ -10,6 +10,16 @@ public class DrumbeatWebException extends WebApplicationException {
 	
 	public DrumbeatWebException(
 			Status status,
+			Throwable cause)
+	{
+		this(
+			status,
+			cause != null ? cause.getMessage() : null,
+			cause);
+	}
+
+	public DrumbeatWebException(
+			Status status,
 			String message,
 			Throwable cause)
 	{

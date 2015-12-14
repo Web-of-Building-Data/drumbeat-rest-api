@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
@@ -122,12 +123,16 @@ public class CollectionManager extends MetaDataManager {
 	 * @throws NotFoundException if the collection is not found
 	 */
 	public void delete(String collectionId)
-		throws NotFoundException
+		throws NotFoundException, DeleteDeniedException
 	{
 		Resource collectionResource = getCollectionResource(collectionId);		
 		if (!checkExists(collectionId)) {
 			throw ErrorFactory.createCollectionNotFoundException(collectionResource);
 		}
+		
+		if (checkHasChildren(collectionId)) {
+			throw ErrorFactory.createCollectionHasChildren(collectionResource);
+		}		
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
 			setCommandText(
@@ -177,11 +182,23 @@ public class CollectionManager extends MetaDataManager {
 	 * @param collectionId
 	 * @return true if the collection exists
 	 */
-	public boolean checkContainsChildren(String collectionId) {
-		return getMetaDataModel()
-				.contains(
-						getCollectionResource(collectionId),
-						LinkedBuildingDataOntology.hasDataSource);
+	public boolean checkHasChildren(String collectionId) {
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT (1 AS ?exists) { \n" + 
+					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" + 
+					"}");			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+		}}.asQuery();
+		
+		boolean result = 
+				QueryExecutionFactory
+					.create(query, getMetaDataModel())
+					.execSelect()
+					.hasNext();
+		
+		return result;
 	}
 
 }

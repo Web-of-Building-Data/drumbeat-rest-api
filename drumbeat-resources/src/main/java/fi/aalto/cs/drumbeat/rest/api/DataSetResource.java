@@ -64,11 +64,8 @@ public class DataSetResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -88,11 +85,8 @@ public class DataSetResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -109,11 +103,8 @@ public class DataSetResource {
 		
 		try {		
 			getDataSetManager().delete(collectionId, dataSourceId, dataSetId);
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -135,16 +126,10 @@ public class DataSetResource {
 			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
 					model,
 					headers.getAcceptableMediaTypes());			
-		} catch (NotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
-		} catch (AlreadyExistsException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.CONFLICT,
-					exception.getMessage(),
-					exception);			
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+		} catch (AlreadyExistsException e) {
+			throw new DrumbeatWebException(Response.Status.CONFLICT, e);			
 		}
 	}	
 	
@@ -168,11 +153,8 @@ public class DataSetResource {
 		InputStream inputStream;
 		try {
 			inputStream = new FileInputStream(filePath);
-		} catch (FileNotFoundException exception) {
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (FileNotFoundException e) {
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -197,11 +179,8 @@ public class DataSetResource {
 		InputStream inputStream;
 		try {
 			inputStream = new URL(url).openStream();
-		} catch (IOException exception) {			
-			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
-					exception.getMessage(),
-					exception);
+		} catch (IOException e) {			
+			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -330,13 +309,13 @@ public class DataSetResource {
 
 		} catch (DrumbeatWebException drumbeatWebException) {
 			throw drumbeatWebException;
-		} catch (Exception exception) {
-			logger.error(exception.getMessage(), exception);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			
 			throw new DrumbeatWebException(
 					Response.Status.INTERNAL_SERVER_ERROR,
-					String.format("Unexpected error: %s", exception.getMessage()),
-					exception);
+					String.format("Unexpected error: %s", e.getMessage()),
+					e);
 
 		} finally {
 			try {

@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
@@ -148,11 +149,15 @@ public class DataSourceManager extends MetaDataManager {
 	 * @throws NotFoundException if the dataSource is not found
 	 */
 	public void delete(String collectionId, String dataSourceId)
-		throws NotFoundException
+		throws NotFoundException, DeleteDeniedException
 	{
 		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
 		if (!checkExists(collectionId, dataSourceId)) {
-			throw ErrorFactory.createDataSetNotFoundException(dataSourceResource);
+			throw ErrorFactory.createDataSourceNotFoundException(dataSourceResource);
+		}
+		
+		if (checkHasChildren(collectionId, dataSourceId)) {
+			throw ErrorFactory.createDataSourceHasChildren(dataSourceResource);
 		}
 		
 		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
@@ -215,11 +220,27 @@ public class DataSourceManager extends MetaDataManager {
 	 * @param dataSourceId
 	 * @return true if the dataSource exists
 	 */
-	public boolean checkContainsChildren(String collectionId) {
-		return getMetaDataModel()
-				.contains(
-						getCollectionResource(collectionId),
-						LinkedBuildingDataOntology.hasDataSet);
+	public boolean checkHasChildren(String collectionId, String dataSourceId) {
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+//					"ASK { \n" + 
+					"SELECT (1 AS ?exists) { \n" + 
+					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" + 
+					"}");			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());
+			setIri("dataSourceUri", getDataSourceResource(collectionId, dataSourceId).getURI());
+		}}.asQuery();
+		
+		boolean result = 
+				QueryExecutionFactory
+					.create(query, getMetaDataModel())
+//					.execAsk();
+					.execSelect()
+					.hasNext();
+		
+		return result;
 	}
 	
 	

@@ -9,6 +9,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -188,9 +189,13 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		dataSourceManager.delete("col-1", "dso-1-999");
 	}
 	
+	@Test(expected=DeleteDeniedException.class)
+	public void test_delete_correctId_hasChildren() {
+		dataSourceManager.delete("col-1", "dso-1-1");
+	}
 
 	@Test
-	public void test_delete_correctId() {
+	public void test_delete_correctId_noChildren() {
 		
 		long oldSize = metaDataModel.size();
 
