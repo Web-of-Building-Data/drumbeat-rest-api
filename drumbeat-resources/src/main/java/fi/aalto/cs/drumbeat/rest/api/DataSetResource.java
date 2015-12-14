@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
@@ -30,6 +31,7 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetContentManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
@@ -51,7 +53,7 @@ public class DataSetResource {
 	
 	@GET
 	@Path("/{collectionId}/{dataSourceId}")
-	public String getAll(			
+	public Response getAll(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@Context UriInfo uriInfo,
@@ -61,17 +63,18 @@ public class DataSetResource {
 		
 		try {		
 			Model model = getDataSetManager().getAll(collectionId, dataSourceId);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 	}
 	
 	@GET
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
-	public String getById(			
+	public Response getById(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -82,11 +85,12 @@ public class DataSetResource {
 		
 		try {		
 			Model model = getDataSetManager().getById(collectionId, dataSourceId, dataSetId);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -104,14 +108,14 @@ public class DataSetResource {
 		try {		
 			getDataSetManager().delete(collectionId, dataSourceId, dataSetId);
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 	}
 	
 	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String create(			
+	public Response create(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -123,13 +127,14 @@ public class DataSetResource {
 		
 		try {
 			Model model = getDataSetManager().create(collectionId, dataSourceId, dataSetId, name);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.CREATED,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (AlreadyExistsException e) {
-			throw new DrumbeatWebException(Response.Status.CONFLICT, e);			
+			throw new DrumbeatWebException(Status.CONFLICT, e);			
 		}
 	}	
 	
@@ -154,7 +159,7 @@ public class DataSetResource {
 		try {
 			inputStream = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -180,7 +185,7 @@ public class DataSetResource {
 		try {
 			inputStream = new URL(url).openStream();
 		} catch (IOException e) {			
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -252,7 +257,7 @@ public class DataSetResource {
 			if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
 				String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 				throw new DrumbeatWebException(
-						Response.Status.NOT_FOUND,
+						Status.NOT_FOUND,
 						String.format(
 								"Data set not found: collection=<%s>, dataSource=<%s>, dataSet=<%s>",
 								LinkedBuildingDataOntology.formatCollectionResourceUri(baseUri, collectionId),
@@ -282,7 +287,7 @@ public class DataSetResource {
 					targetDataSetModel = new DataSetContentManager().uploadIfcData(inputStream, targetDataSetModel);
 				} catch (IfcParserException ifcException) {
 					throw new DrumbeatWebException(
-							Response.Status.BAD_REQUEST,
+							Status.BAD_REQUEST,
 							String.format("Invalid IFC data: " + ifcException.getMessage()),
 							ifcException);
 				}
@@ -292,13 +297,13 @@ public class DataSetResource {
 					targetDataSetModel = new DataSetContentManager().uploadRdfData(inputStream, Lang.TURTLE, targetDataSetModel);
 				} catch (RiotException riotException) {
 					throw new DrumbeatWebException(
-							Response.Status.BAD_REQUEST,
+							Status.BAD_REQUEST,
 							String.format("Invalid RDF data: " + riotException.getMessage()),
 							riotException);					
 				}
 			} else {
 				throw new DrumbeatWebException(
-						Response.Status.BAD_REQUEST,
+						Status.BAD_REQUEST,
 						String.format("Unknown data type=%s", dataType),
 						null);
 			}
@@ -313,7 +318,7 @@ public class DataSetResource {
 			logger.error(e.getMessage(), e);
 			
 			throw new DrumbeatWebException(
-					Response.Status.INTERNAL_SERVER_ERROR,
+					Status.INTERNAL_SERVER_ERROR,
 					String.format("Unexpected error: %s", e.getMessage()),
 					e);
 
@@ -335,7 +340,7 @@ public class DataSetResource {
 		} catch (DrumbeatException e) {
 			logger.error(e);
 			throw new DrumbeatWebException(
-					Response.Status.INTERNAL_SERVER_ERROR,
+					Status.INTERNAL_SERVER_ERROR,
 					"Error getting DataSetManager instance: " + e.getMessage(),
 					e);
 		}

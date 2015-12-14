@@ -6,6 +6,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +16,7 @@ import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
@@ -27,7 +29,7 @@ public class CollectionResource {
 
 	@GET
 	@Path("/")
-	public String getAll(			
+	public Response getAll(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -36,12 +38,13 @@ public class CollectionResource {
 		
 		try {		
 			Model model = getCollectionManager().getAll();
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
+					Status.NOT_FOUND,
 					exception.getMessage(),
 					exception);
 		}
@@ -49,7 +52,7 @@ public class CollectionResource {
 	
 	@GET
 	@Path("/{collectionId}")
-	public String getById(			
+	public Response getById(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -58,12 +61,13 @@ public class CollectionResource {
 		
 		try {		
 			Model model = getCollectionManager().getById(collectionId);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
+					Status.NOT_FOUND,
 					exception.getMessage(),
 					exception);
 		}
@@ -82,12 +86,12 @@ public class CollectionResource {
 			getCollectionManager().delete(collectionId);
 		} catch (NotFoundException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
+					Status.NOT_FOUND,
 					exception.getMessage(),
 					exception);
 		} catch (DeleteDeniedException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.FORBIDDEN,
+					Status.FORBIDDEN,
 					exception.getMessage(),
 					exception);			
 		}
@@ -106,21 +110,18 @@ public class CollectionResource {
 		
 		try {
 			Model model = getCollectionManager().create(collectionId, name);
-			String entity = ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.CREATED,
 					model,
 					headers.getAcceptableMediaTypes());
-			return Response
-					.status(Response.Status.CREATED)
-					.entity(entity)
-					.build();
 		} catch (NotFoundException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.NOT_FOUND,
+					Status.NOT_FOUND,
 					exception.getMessage(),
 					exception);
 		} catch (AlreadyExistsException exception) {
 			throw new DrumbeatWebException(
-					Response.Status.CONFLICT,
+					Status.CONFLICT,
 					exception.getMessage(),
 					exception);			
 		}
@@ -133,7 +134,7 @@ public class CollectionResource {
 		} catch (DrumbeatException e) {
 			logger.error(e);
 			throw new DrumbeatWebException(
-					Response.Status.INTERNAL_SERVER_ERROR,
+					Status.INTERNAL_SERVER_ERROR,
 					"Error getting CollectionManager instance: " + e.getMessage(),
 					e);
 		}

@@ -5,6 +5,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
@@ -28,7 +30,7 @@ public class DataSourceResource {
 	
 	@GET
 	@Path("/{collectionId}")
-	public String getAll(			
+	public Response getAll(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -37,17 +39,18 @@ public class DataSourceResource {
 		
 		try {		
 			Model model = getDataSourceManager().getAll(collectionId);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 	}
 	
 	@GET
 	@Path("/{collectionId}/{dataSourceId}")
-	public String getById(			
+	public Response getById(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@Context UriInfo uriInfo,
@@ -57,11 +60,12 @@ public class DataSourceResource {
 		
 		try {		
 			Model model = getDataSourceManager().getById(collectionId, dataSourceId);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 	}
 	
@@ -78,16 +82,16 @@ public class DataSourceResource {
 		try {		
 			getDataSourceManager().delete(collectionId, dataSourceId);
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (DeleteDeniedException e) {
-			throw new DrumbeatWebException(Response.Status.FORBIDDEN, e);
+			throw new DrumbeatWebException(Status.FORBIDDEN, e);
 		}
 	}
 	
 	@POST
 	@Path("/{collectionId}/{dataSourceId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String create(
+	public Response create(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@FormParam("name") String name,
@@ -98,13 +102,14 @@ public class DataSourceResource {
 		
 		try {
 			Model model = getDataSourceManager().create(collectionId, dataSourceId, name);
-			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+			return DrumbeatResponseBuilder.build(
+					Status.CREATED,
 					model,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Response.Status.NOT_FOUND, e);
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (AlreadyExistsException e) {
-			throw new DrumbeatWebException(Response.Status.CONFLICT, e);
+			throw new DrumbeatWebException(Status.CONFLICT, e);
 		}
 	}	
 	
@@ -115,7 +120,7 @@ public class DataSourceResource {
 		} catch (DrumbeatException e) {
 			logger.error(e);
 			throw new DrumbeatWebException(
-					Response.Status.INTERNAL_SERVER_ERROR,
+					Status.INTERNAL_SERVER_ERROR,
 					"Error getting DataSourceManager instance: " + e.getMessage(),
 					e);
 		}
