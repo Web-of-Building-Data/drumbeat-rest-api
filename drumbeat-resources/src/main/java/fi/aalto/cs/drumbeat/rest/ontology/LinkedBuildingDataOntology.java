@@ -1,11 +1,17 @@
 package fi.aalto.cs.drumbeat.rest.ontology;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.hut.cs.drumbeat.rdf.RdfVocabulary;
 
 public class LinkedBuildingDataOntology {
@@ -23,11 +29,18 @@ public class LinkedBuildingDataOntology {
 	public static final Property inCollection = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inCollection");	
 	public static final Property inDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inDataSource");
 	
+	@SuppressWarnings("serial")
+	public static Map<String, String> getDefaultNsPrefixes() {
+		return new TreeMap<String, String>() {{
+			put("ldbho", LinkedBuildingDataOntology.ONTOLOGY_BASE_URI);
+			put("rdf", RDF.getURI());		
+			put("owl", OWL.getURI());			
+		}};
+	}
+	
 	public static void fillParameterizedSparqlString(ParameterizedSparqlString pss) {
-		pss.setBaseUri(ONTOLOGY_BASE_URI);
-		pss.setNsPrefix("ldbho", LinkedBuildingDataOntology.ONTOLOGY_BASE_URI);
-		pss.setNsPrefix("rdf", RDF.getURI());		
-		pss.setNsPrefix("owl", OWL.getURI());		
+		pss.setBaseUri(DrumbeatApplication.getInstance().getBaseUri());
+		pss.setNsPrefixes(getDefaultNsPrefixes());
 
 		pss.setIri(ONTOLOGY_BASE_PREFIX + "_Collection", LinkedBuildingDataOntology.Collection.getURI());
 		pss.setIri(ONTOLOGY_BASE_PREFIX + "_DataSet", LinkedBuildingDataOntology.DataSet.getURI());

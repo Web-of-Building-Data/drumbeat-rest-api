@@ -12,15 +12,12 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.riot.Lang;
@@ -30,12 +27,15 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.shared.AlreadyExistsException;
+import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetContentManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.common.file.FileManager;
 import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
@@ -53,6 +53,106 @@ public class DataSetResource {
 	
 	private static final Logger logger = Logger.getLogger(DataSetResource.class);
 	
+	
+	@GET
+	@Path("/{collectionId}/{dataSourceId}")
+	public String getAll(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			Model model = getDataSetManager().getAll(collectionId, dataSourceId);
+			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+					model,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.NOT_FOUND,
+					exception.getMessage(),
+					exception);
+		}
+	}
+	
+	@GET
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
+	public String getById(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			Model model = getDataSetManager().getById(collectionId, dataSourceId, dataSetId);
+			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+					model,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.NOT_FOUND,
+					exception.getMessage(),
+					exception);
+		}
+	}
+	
+	@DELETE
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
+	public void delete(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			getDataSetManager().delete(collectionId, dataSourceId, dataSetId);
+		} catch (NotFoundException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.NOT_FOUND,
+					exception.getMessage(),
+					exception);
+		}
+	}
+	
+	@POST
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
+	public String create(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@FormParam("name") @FormDataParam("name") String name,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {
+			Model model = getDataSetManager().create(collectionId, dataSourceId, dataSetId, name);
+			return ModelToMediaTypeConverter.convertModelToAcceptableMediaTypes(
+					model,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.NOT_FOUND,
+					exception.getMessage(),
+					exception);
+		} catch (AlreadyExistsException exception) {
+			throw new DrumbeatWebException(
+					Response.Status.CONFLICT,
+					exception.getMessage(),
+					exception);			
+		}
+	}	
+	
+	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadServerFile")
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -66,7 +166,6 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("filePath") String filePath)
 	{
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", dataSetName, filePath));
 		
@@ -96,7 +195,6 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,
 			@FormParam("url") String url)
 	{
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", dataSetName, url));
 		
@@ -127,7 +225,6 @@ public class DataSetResource {
 			@FormParam("dataFormat") String dataFormat,			
 			@FormParam("content") String content)
 	{
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", dataSetName, content));
 		
@@ -150,7 +247,6 @@ public class DataSetResource {
 			@FormDataParam("file") InputStream inputStream,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail)
 	{
-		DrumbeatApplication.getInstance().setBaseUrl(httpRequest);
 		String dataSetName = LinkedBuildingDataOntology.formatDataSetName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", dataSetName, fileDetail.getFileName()));		
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream);
@@ -255,6 +351,19 @@ public class DataSetResource {
 		}
 		
 		
+	}
+	
+	
+	private DataSetManager getDataSetManager() {
+		try {
+			return new DataSetManager();
+		} catch (DrumbeatException e) {
+			logger.error(e);
+			throw new DrumbeatWebException(
+					Response.Status.INTERNAL_SERVER_ERROR,
+					"Error getting DataSetManager instance: " + e.getMessage(),
+					e);
+		}
 	}
 	
 	

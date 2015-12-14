@@ -145,9 +145,18 @@ public class Test_CollectionManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 		
-		Resource collectionResource = collectionManager.create("col-998", "Collection 998");
+		Model model = collectionManager.create("col-998", "Collection 998");
+		assertEquals(1L,  model.size());
 		
+		Resource collectionResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.Collection,
+				collectionResource.getProperty(RDF.type).getObject());
+		
+
 		assertEquals(oldSize + 2L, metaDataModel.size());
+
+		collectionResource = collectionResource.inModel(metaDataModel);		
 		
 		assertEquals(
 				LinkedBuildingDataOntology.Collection,
@@ -175,7 +184,15 @@ public class Test_CollectionManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 
-		Resource collectionResource = collectionManager.create("col-997", "Collection 997");
+		Model model = collectionManager.create("col-997", "Collection 997");
+		assertEquals(1L,  model.size());
+		
+		Resource collectionResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.Collection,
+				collectionResource.getProperty(RDF.type).getObject());
+		
+		collectionResource = collectionResource.inModel(metaDataModel);
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(baseUri + "collections/col-997", collectionResource.getURI());

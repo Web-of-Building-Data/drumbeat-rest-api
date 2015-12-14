@@ -44,7 +44,13 @@ public class Test_DataSetManager extends DrumbeatTest {
 	 **************************************/
 	
 	@Test(expected=NotFoundException.class)
-	public void test_getAll_wrongId() {
+	public void test_getAll_wrongCollectionId() {
+		Model model = dataSetManager.getAll("col-999", "dso-1-1");
+		assertEquals(0L, model.size());		
+	}	
+
+	@Test(expected=NotFoundException.class)
+	public void test_getAll_wrongDataSourceId() {
 		Model model = dataSetManager.getAll("col-1", "dso-1-999");
 		assertEquals(0L, model.size());		
 	}	
@@ -126,8 +132,16 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 		
-		Resource dataSetResource = dataSetManager.create("col-1", "dso-1-3", "dse-1-3-1", "DataSet 1-3-1");
+		Model model = dataSetManager.create("col-1", "dso-1-3", "dse-1-3-1", "DataSet 1-3-1");
+		assertEquals(1L,  model.size());
 		
+		Resource dataSetResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.DataSet,
+				dataSetResource.getProperty(RDF.type).getObject());
+		
+		dataSetResource = dataSetResource.inModel(metaDataModel);
+
 		assertEquals(oldSize + 4L, metaDataModel.size());
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
@@ -159,7 +173,17 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 
-		Resource dataSetResource = dataSetManager.create("col-1", "dso-1-4", "dse-1-4-1", "DataSet 1-4-1");
+		Model model = dataSetManager.create("col-1", "dso-1-4", "dse-1-4-1", "DataSet 1-4-1");
+		
+		assertEquals(1L,  model.size());
+		
+		Resource dataSetResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.DataSet,
+				dataSetResource.getProperty(RDF.type).getObject());
+		
+		dataSetResource = dataSetResource.inModel(metaDataModel);
+		
 
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(baseUri + "datasets/col-1/dso-1-4/dse-1-4-1", dataSetResource.getURI());

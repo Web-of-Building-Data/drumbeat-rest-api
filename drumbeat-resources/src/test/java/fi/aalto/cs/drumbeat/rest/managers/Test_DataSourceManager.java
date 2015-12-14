@@ -151,7 +151,17 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 		
-		Resource dataSourceResource = dataSourceManager.create("col-3", "dso-3-1", "DataSource 3-1");
+		Model model = dataSourceManager.create("col-3", "dso-3-1", "DataSource 3-1");
+		
+		assertEquals(1L,  model.size());
+		
+		Resource dataSourceResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.DataSource,
+				dataSourceResource.getProperty(RDF.type).getObject());
+		
+		dataSourceResource = dataSourceResource.inModel(metaDataModel);
+		
 		
 		assertEquals(oldSize + 4L, metaDataModel.size());
 		
@@ -184,7 +194,17 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 
-		Resource dataSourceResource = dataSourceManager.create("col-4", "dso-4-1", "DataSource 4-1");
+		Model model = dataSourceManager.create("col-4", "dso-4-1", "DataSource 4-1");
+		
+		assertEquals(1L,  model.size());
+		
+		Resource dataSourceResource = model.listSubjects().next();
+		assertEquals(
+				LinkedBuildingDataOntology.DataSource,
+				dataSourceResource.getProperty(RDF.type).getObject());
+		
+		dataSourceResource = dataSourceResource.inModel(metaDataModel);
+		
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(baseUri + "datasources/col-4/dso-4-1", dataSourceResource.getURI());

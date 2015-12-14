@@ -1,6 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.common;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -9,14 +10,15 @@ public class DrumbeatWebException extends WebApplicationException {
 	
 	public DrumbeatWebException(
 			Status status,
-			Object entity,
+			String message,
 			Throwable cause)
 	{
 		super(
 			cause,
 			Response
 				.status(status)
-				.entity(entity)
+				.entity(message)
+				.type(MediaType.TEXT_PLAIN)
 				.build());
 	}
 

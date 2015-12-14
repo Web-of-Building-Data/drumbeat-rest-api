@@ -26,11 +26,11 @@ import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.rdf.RdfUtils;
 
 
-public class DataSetResourceImportTest extends DrumbeatTest {	
+public class Test_DataSetResource_Uploads extends DrumbeatTest {	
 	
 	private static final boolean DO_TEST = false;
 	
-	public DataSetResourceImportTest() {
+	public Test_DataSetResource_Uploads() {
 		super(DO_TEST);
 	}
 	

@@ -5,9 +5,12 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
+import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
@@ -33,7 +36,9 @@ public class DataSetManager extends MetaDataManager {
 	 * @return List of statements <<dataSet>> rdf:type lbdho:DataSet
 	 * @throws NotFoundException if the datasource is not found
 	 */
-	public Model getAll(String collectionId, String dataSourceId) {
+	public Model getAll(String collectionId, String dataSourceId)
+		throws NotFoundException
+	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?dataSetUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_DataSet AS ?object) { \n" + 
@@ -56,8 +61,8 @@ public class DataSetManager extends MetaDataManager {
 		if (!resultSet.hasNext()) {
 			DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel()); 
 			if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
-				throw new NotFoundException(
-						String.format("DataSource <%s> not found", getDataSourceResource(collectionId, dataSourceId)));
+				Resource dataSourceResouce = getDataSourceResource(collectionId, dataSourceId);
+				throw ErrorFactory.createDataSourceNotFoundException(dataSourceResouce);
 			}
 		}
 		
@@ -73,7 +78,9 @@ public class DataSetManager extends MetaDataManager {
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 */
-	public Model getById(String collectionId, String dataSourceId, String dataSetId) {
+	public Model getById(String collectionId, String dataSourceId, String dataSetId)
+		throws NotFoundException
+	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?dataSetUri AS ?subject) ?predicate ?object { \n" + 
@@ -95,9 +102,8 @@ public class DataSetManager extends MetaDataManager {
 					.execSelect();
 		
 		if (!resultSet.hasNext()) {
-			throw new NotFoundException(
-					String.format(
-							"DataSet <%s> not found", getDataSetResource(collectionId, dataSourceId, dataSetId)));
+			Resource dataSetResouce = getDataSetResource(collectionId, dataSourceId, dataSetId);
+			throw ErrorFactory.createDataSetNotFoundException(dataSetResouce);
 		}
 		
 		return convertResultSetToModel(resultSet);
@@ -113,17 +119,19 @@ public class DataSetManager extends MetaDataManager {
 	 * @throws AlreadyExistsException if the dataSet already exists
 	 * @throws NotFoundException if the datasource is not found
 	 */
-	public Resource create(String collectionId, String dataSourceId, String dataSetId, String name) {
+	public Model create(String collectionId, String dataSourceId, String dataSetId, String name)
+		throws AlreadyExistsException, NotFoundException
+	{
 		DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel()); 
 		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
 		if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
-			throw new NotFoundException(
-					String.format("DataSource <%s> not found", dataSourceResource.getURI()));
+			Resource dataSourceResouce = getDataSourceResource(collectionId, dataSourceId);
+			throw ErrorFactory.createDataSourceNotFoundException(dataSourceResouce);
 		}
 		
 		Resource dataSetResource = getDataSetResource(collectionId, dataSourceId, dataSetId);		
 		if (checkExists(collectionId, dataSourceId, dataSetId)) {
-			throw new AlreadyExistsException(String.format("DataSet <%s> already exists", dataSetResource.getURI()));
+			throw ErrorFactory.createDataSetAlreadyExistsException(dataSetResource);
 		}
 		
 		
@@ -137,7 +145,9 @@ public class DataSetManager extends MetaDataManager {
 			.addLiteral(LinkedBuildingDataOntology.name, name)
 			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);
 		
-		return dataSetResource;
+		return ModelFactory
+				.createDefaultModel()
+				.add(dataSetResource, RDF.type, LinkedBuildingDataOntology.DataSet);
 	}
 	
 	
@@ -149,16 +159,32 @@ public class DataSetManager extends MetaDataManager {
 	 * @return the recently created dataSet
 	 * @throws NotFoundException if the dataSet is not found
 	 */
-	public void delete(String collectionId, String dataSourceId, String dataSetId) {
+	public void delete(String collectionId, String dataSourceId, String dataSetId)
+		throws NotFoundException
+	{
 		Resource dataSetResource = getDataSetResource(collectionId, dataSourceId, dataSetId);		
 		if (!checkExists(collectionId, dataSourceId, dataSetId)) {
-			throw new NotFoundException(
-					String.format("DataSet <%s> not found", getDataSetResource(collectionId, dataSourceId, dataSetId)));
+			throw ErrorFactory.createDataSetNotFoundException(dataSetResource);
 		}
 		
-		getMetaDataModel()
-			.removeAll(dataSetResource, null, null)
-			.removeAll(null, LinkedBuildingDataOntology.hasDataSet, dataSetResource);
+		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
+			setCommandText(
+					"DELETE { ?dataSetUri ?p ?o } \n" +
+					"WHERE { ?dataSetUri ?p ?o }");
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("dataSetUri", getDataSetResource(collectionId, dataSourceId, dataSetId).getURI());			
+		}}.asUpdate();
+		
+		UpdateRequest updateRequest2 = new ParameterizedSparqlString() {{
+			setCommandText(
+					"DELETE { ?s ?p ?dataSetUri } \n" +
+					"WHERE { ?s ?p ?dataSetUri }");
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("dataSetUri", getDataSetResource(collectionId, dataSourceId, dataSetId).getURI());			
+		}}.asUpdate();
+
+		UpdateAction.execute(updateRequest1, getMetaDataModel());
+		UpdateAction.execute(updateRequest2, getMetaDataModel());		
 	}
 	
 	
@@ -171,9 +197,12 @@ public class DataSetManager extends MetaDataManager {
 	 */
 	public boolean checkExists(String collectionId, String dataSourceId, String dataSetId) {
 		
+		// execAsk() in Virtuoso always returns false 
+
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"ASK { \n" + 
+//					"ASK { \n" + 
+					"SELECT (1 AS ?exists) { \n" + 
 					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
 					"	?dataSetUri a ?lbdho_DataSet . \n" + 
@@ -186,7 +215,9 @@ public class DataSetManager extends MetaDataManager {
 		
 		return QueryExecutionFactory
 					.create(query, getMetaDataModel())
-					.execAsk();		
+//					.execAsk();		
+					.execSelect()
+					.hasNext();
 	}
 
 }

@@ -4,9 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -39,6 +37,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	public static class Params {
 		public static final String WEB_BASE_URI = "web.baseUri";		
+		public static final String WEB_BASE_URI_FIXED = "web.baseUri.fixed";		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
 		public static final String UPLOADS_SAVE = "uploads.save";
 	}
@@ -60,6 +59,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	private final int applicationId;
 	private Properties configurationProperties;
+	private String baseUri;
+	private Boolean isBaseUriFixed;
 	private Boolean saveUploads;
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
@@ -97,7 +98,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		}		
 		
 		logger.info("ApplicationId: " + applicationId);
-		logger.info("BaseUrl: " + getBaseUri());
+		logger.info("BaseUri: " + getBaseUri());
 		logger.info("Web API started");
 	}
 	
@@ -110,22 +111,30 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	public String getBaseUri() {
-		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI);
+		if (baseUri == null) {
+			baseUri = getConfigurationProperties().getProperty(Params.WEB_BASE_URI); 
+		}
+		return baseUri;
+	}
+	
+	public boolean isBaseUriFixed() {
+		if (isBaseUriFixed == null) {
+			String value = getConfigurationProperties().getProperty(Params.WEB_BASE_URI_FIXED, "true");
+			BooleanParam param = new BooleanParam();
+			param.setStringValue(value);
+			isBaseUriFixed = param.getValue();
+		}
+		return isBaseUriFixed;		
 	}
 
-	public void setBaseUrl(@Context HttpServletRequest httpRequest) {
-		try
-		{
-		  String url = httpRequest.getScheme()+"://" + httpRequest.getServerName() + ":" + httpRequest.getLocalPort() + httpRequest.getContextPath();
-		  if(!url.endsWith("/"))
-			  url+="/";
-		  getConfigurationProperties().setProperty(
-				  Params.WEB_BASE_URI,
-				  url);
+	public void notifyRequest(UriInfo uriInfo) {
+		if (!isBaseUriFixed()) {
+			String newBaseUri = uriInfo.getBaseUri().toString();
+			if (!newBaseUri.equals(baseUri)) {
+				logger.info("New BaseUri: " + newBaseUri);
+				this.baseUri = newBaseUri;
+			}
 		}
-		 catch (Exception e) {
-			 // Nothing bad happends
-		}		
 	}
 		
 	/**
@@ -134,8 +143,9 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean getSaveUploads() {
 		if (saveUploads == null) {
+			String value = getConfigurationProperties().getProperty(Params.UPLOADS_SAVE, "false");
 			BooleanParam param = new BooleanParam();
-			param.setStringValue(getConfigurationProperties().getProperty(Params.UPLOADS_SAVE, "false"));
+			param.setStringValue(value);
 			saveUploads = param.getValue();
 		}
 		return saveUploads;

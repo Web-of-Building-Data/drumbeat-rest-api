@@ -5,11 +5,12 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
+import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
@@ -32,7 +33,9 @@ public class CollectionManager extends MetaDataManager {
 	 * @return List of statements <<collection>> rdf:type lbdho:Collection
 	 * @throws NotFoundException if the collection is not found
 	 */
-	public Model getAll() {
+	public Model getAll()
+		throws NotFoundException
+	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?collectionUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_Collection AS ?object) { \n" + 
@@ -58,7 +61,9 @@ public class CollectionManager extends MetaDataManager {
 	 * @return List of statements <<collection>> ?predicate ?object
 	 * @throws NotFoundException if the collection is not found
 	 */
-	public Model getById(String collectionId) {
+	public Model getById(String collectionId)
+		throws NotFoundException
+	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?collectionUri AS ?subject) ?predicate ?object { \n" + 
@@ -76,9 +81,7 @@ public class CollectionManager extends MetaDataManager {
 					.execSelect();
 		
 		if (!resultSet.hasNext()) {
-			throw new NotFoundException(
-					String.format(
-							"Collection <%s> not found", getCollectionResource(collectionId)));
+			throw ErrorFactory.createCollectionNotFoundException(getCollectionResource(collectionId));
 		}
 		
 		return convertResultSetToModel(resultSet);
@@ -92,10 +95,12 @@ public class CollectionManager extends MetaDataManager {
 	 * @return the recently created collection
 	 * @throws AlreadyExistsException if the collection already exists
 	 */
-	public Resource create(String collectionId, String name) {
+	public Model create(String collectionId, String name)
+		throws AlreadyExistsException
+	{
 		Resource collectionResource = getCollectionResource(collectionId);		
 		if (checkExists(collectionId)) {
-			throw new AlreadyExistsException(String.format("Collection <%s> already exists", collectionResource.getURI()));
+			throw ErrorFactory.createCollectionAlreadyExistsException(collectionResource);
 		}
 		
 		collectionResource
@@ -103,7 +108,9 @@ public class CollectionManager extends MetaDataManager {
 			.addProperty(RDF.type, LinkedBuildingDataOntology.Collection)
 			.addLiteral(LinkedBuildingDataOntology.name, name);
 		
-		return collectionResource;
+		return ModelFactory
+				.createDefaultModel()
+				.add(collectionResource, RDF.type, LinkedBuildingDataOntology.Collection);
 	}
 	
 	
@@ -114,15 +121,23 @@ public class CollectionManager extends MetaDataManager {
 	 * @return the recently created collection
 	 * @throws NotFoundException if the collection is not found
 	 */
-	public void delete(String collectionId) {
+	public void delete(String collectionId)
+		throws NotFoundException
+	{
 		Resource collectionResource = getCollectionResource(collectionId);		
 		if (!checkExists(collectionId)) {
-			throw new NotFoundException(
-					String.format("Collection <%s> not found", getCollectionResource(collectionId)));
+			throw ErrorFactory.createCollectionNotFoundException(collectionResource);
 		}
 		
-		getMetaDataModel()
-			.removeAll(collectionResource, null, null);
+		UpdateRequest updateRequest1 = new ParameterizedSparqlString() {{
+			setCommandText(
+					"DELETE { ?collectionUri ?p ?o } \n" +
+					"WHERE { ?collectionUri ?p ?o }");
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", getCollectionResource(collectionId).getURI());			
+		}}.asUpdate();
+		
+		UpdateAction.execute(updateRequest1, getMetaDataModel());
 	}
 	
 	
@@ -133,9 +148,12 @@ public class CollectionManager extends MetaDataManager {
 	 * @return true if the collection exists
 	 */
 	public boolean checkExists(String collectionId) {
+		// execAsk() in Virtuoso always returns false 
+
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"ASK { \n" + 
+//					"ASK { \n" + 
+					"SELECT (1 AS ?exists) { \n" + 
 					"	?collectionUri a ?lbdho_Collection . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
@@ -145,7 +163,9 @@ public class CollectionManager extends MetaDataManager {
 		boolean result = 
 				QueryExecutionFactory
 					.create(query, getMetaDataModel())
-					.execAsk();
+//					.execAsk();
+					.execSelect()
+					.hasNext();
 		
 		return result;
 	}

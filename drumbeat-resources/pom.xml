@@ -96,7 +96,7 @@
 			<version>3.1.0</version>
 		</dependency>		
 		
-        <!-- JSONLD -->        
+        <!-- JSONLD --> 
 		<dependency>
 			<groupId>com.github.jsonld-java</groupId>
 			<artifactId>jsonld-java-jena</artifactId>
