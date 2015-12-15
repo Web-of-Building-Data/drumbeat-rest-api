@@ -199,12 +199,9 @@ public class DataSetManager extends DrumbeatManager {
 	 */
 	public boolean checkExists(String collectionId, String dataSourceId, String dataSetId) {
 		
-		// execAsk() in Virtuoso always returns false 
-
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-//					"ASK { \n" + 
-					"SELECT (1 AS ?exists) { \n" + 
+					"ASK { \n" + 
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
 					"	?dataSetUri a lbdho:DataSet . \n" + 
@@ -217,9 +214,7 @@ public class DataSetManager extends DrumbeatManager {
 		
 		return QueryExecutionFactory
 					.create(query, getMetaDataModel())
-//					.execAsk();		
-					.execSelect()
-					.hasNext();
+					.execAsk();		
 	}
 	
 	
@@ -232,8 +227,7 @@ public class DataSetManager extends DrumbeatManager {
 	public boolean checkHasChildren(String collectionId, String dataSourceId, String dataSetId) {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-//					"ASK { \n" + 
-					"SELECT (1 AS ?exists) { \n" + 
+					"ASK { \n" + 
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
 					"	?dataSetUri a lbdho:DataSet . \n" + 
@@ -247,9 +241,7 @@ public class DataSetManager extends DrumbeatManager {
 		boolean result = 
 				QueryExecutionFactory
 					.create(query, getMetaDataModel())
-//					.execAsk();
-					.execSelect()
-					.hasNext();
+					.execAsk();
 		
 		return result;
 	}

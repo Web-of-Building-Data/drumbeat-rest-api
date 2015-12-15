@@ -154,12 +154,9 @@ public class CollectionManager extends DrumbeatManager {
 	 * @return true if the collection exists
 	 */
 	public boolean checkExists(String collectionId) {
-		// execAsk() in Virtuoso always returns false 
-
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-//					"ASK { \n" + 
-					"SELECT (1 AS ?exists) { \n" + 
+					"ASK { \n" + 
 					"	?collectionUri a lbdho:Collection . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
@@ -169,9 +166,7 @@ public class CollectionManager extends DrumbeatManager {
 		boolean result = 
 				QueryExecutionFactory
 					.create(query, getMetaDataModel())
-//					.execAsk();
-					.execSelect()
-					.hasNext();
+					.execAsk();
 		
 		return result;
 	}
@@ -186,7 +181,7 @@ public class CollectionManager extends DrumbeatManager {
 	public boolean checkHasChildren(String collectionId) {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (1 AS ?exists) { \n" + 
+					"ASK { \n" + 
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
@@ -196,8 +191,7 @@ public class CollectionManager extends DrumbeatManager {
 		boolean result = 
 				QueryExecutionFactory
 					.create(query, getMetaDataModel())
-					.execSelect()
-					.hasNext();
+					.execAsk();
 		
 		return result;
 	}
