@@ -40,9 +40,9 @@ public class DataSourceManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?dataSourceUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_DataSource AS ?object) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource . \n" +
+					"SELECT (?dataSourceUri AS ?subject) (rdf:type AS ?predicate) (lbdho:DataSource AS ?object) { \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource . \n" +
 					"} \n" + 
 					"ORDER BY ?subject");
 			
@@ -79,8 +79,8 @@ public class DataSourceManager extends DrumbeatManager {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?dataSourceUri AS ?subject) ?predicate ?object { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?predicate ?object . \n" +
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; ?predicate ?object . \n" +
 					"} \n" + 
 					"ORDER BY ?subject ?predicate ?object");
 			
@@ -122,18 +122,21 @@ public class DataSourceManager extends DrumbeatManager {
 			throw ErrorFactory.createDataSourceAlreadyExistsException(collectionId, dataSourceId);
 		}
 		
-		Resource collectionResource = getCollectionResource(collectionId);		
-		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);
+		Model metaDataModel = getMetaDataModel();		
 
+		Resource collectionResource = metaDataModel
+				.createResource(formatCollectionResourceUri(collectionId));
+		
+		Resource dataSourceResource = metaDataModel 
+				.createResource(formatDataSourceResourceUri(collectionId, dataSourceId));
+		
 		collectionResource
-			.inModel(getMetaDataModel())
 			.addProperty(LinkedBuildingDataOntology.hasDataSource, dataSourceResource);
 	
 		dataSourceResource
-			.inModel(getMetaDataModel())
 			.addProperty(RDF.type, LinkedBuildingDataOntology.DataSource)
-			.addLiteral(LinkedBuildingDataOntology.name, name)
-			.addProperty(LinkedBuildingDataOntology.inCollection, collectionResource);
+			.addLiteral(LinkedBuildingDataOntology.name, metaDataModel.createTypedLiteral(name))
+			.addProperty(LinkedBuildingDataOntology.inCollection, collectionResource);		
 		
 		return ModelFactory
 				.createDefaultModel()
@@ -194,8 +197,8 @@ public class DataSourceManager extends DrumbeatManager {
 			setCommandText(
 //					"ASK { \n" + 
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource . \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
@@ -224,8 +227,8 @@ public class DataSourceManager extends DrumbeatManager {
 			setCommandText(
 //					"ASK { \n" + 
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));

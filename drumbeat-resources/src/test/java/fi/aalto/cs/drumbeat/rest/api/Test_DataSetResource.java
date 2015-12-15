@@ -68,7 +68,10 @@ public class Test_DataSetResource extends DrumbeatTest {
 		} catch (NotFoundException e) {
 			Response response = e.getResponse();
 			String baseUri = DrumbeatApplication.getInstance().getBaseUri();
-			String expectedMessage = String.format("DataSource not found: <%sdatasources/col-999/dso-1-1>",  baseUri);
+			String expectedMessage = String.format(
+					"%s: DataSource not found: <%sdatasources/col-999/dso-1-1>",
+					com.hp.hpl.jena.shared.NotFoundException.class,
+					baseUri);
 
 			String actualMessage = response.readEntity(String.class);
 			assertTrue(expectedMessage.equals(actualMessage));
@@ -91,7 +94,10 @@ public class Test_DataSetResource extends DrumbeatTest {
 		} catch (NotFoundException e) {
 			Response response = e.getResponse();
 			String baseUri = DrumbeatApplication.getInstance().getBaseUri();
-			String expectedMessage = String.format("DataSource not found: <%sdatasources/col-1/dso-1-999>",  baseUri);
+			String expectedMessage = String.format(
+					"%s: DataSource not found: <%sdatasources/col-1/dso-1-999>",
+					com.hp.hpl.jena.shared.NotFoundException.class, 
+					baseUri);
 
 			String actualMessage = response.readEntity(String.class);
 			assertTrue(expectedMessage.equals(actualMessage));

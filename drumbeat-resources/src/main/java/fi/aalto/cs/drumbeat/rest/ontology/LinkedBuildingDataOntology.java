@@ -8,6 +8,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.hut.cs.drumbeat.rdf.RdfVocabulary;
@@ -21,34 +23,42 @@ public class LinkedBuildingDataOntology {
 	public static final Resource DataSet = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSet");	
 	public static final Resource DataSource = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSource");	
 	
+	public static final Property graphName = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "graphName");	
 	public static final Property hasDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSet");	
 	public static final Property hasDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSource");	
-	public static final Property name = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "name");	
 	public static final Property inCollection = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inCollection");	
 	public static final Property inDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inDataSource");
+	public static final Property lastModified = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "lastModified");	
+	public static final Property name = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "name");	
+	public static final Property replaces = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "replaces");	
+	public static final Property sizeInTriples = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "sizeInTriples");
 	
 	@SuppressWarnings("serial")
 	public static Map<String, String> getDefaultNsPrefixes() {
-		return new TreeMap<String, String>() {{
-			put("ldbho", LinkedBuildingDataOntology.ONTOLOGY_BASE_URI);
-			put("rdf", RDF.getURI());		
-			put("owl", OWL.getURI());			
-		}};
+		final Map<String, String> map =
+			new TreeMap<String, String>() {{
+				put(ONTOLOGY_BASE_PREFIX, ONTOLOGY_BASE_URI);
+				put(RdfVocabulary.OWL.BASE_PREFIX, OWL.getURI());
+				put(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());		
+				put(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());		
+				put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
+			}};
+		return map;
 	}
 	
 	public static void fillParameterizedSparqlString(ParameterizedSparqlString pss) {
 		pss.setBaseUri(DrumbeatApplication.getInstance().getBaseUri());
 		pss.setNsPrefixes(getDefaultNsPrefixes());
 
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_Collection", LinkedBuildingDataOntology.Collection.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_DataSet", LinkedBuildingDataOntology.DataSet.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_DataSource", LinkedBuildingDataOntology.DataSource.getURI());
-		
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_hasDataSet", LinkedBuildingDataOntology.hasDataSet.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_hasDataSource", LinkedBuildingDataOntology.hasDataSource.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_name", LinkedBuildingDataOntology.name.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_inCollection", LinkedBuildingDataOntology.inCollection.getURI());
-		pss.setIri(ONTOLOGY_BASE_PREFIX + "_inDataSource", LinkedBuildingDataOntology.inDataSource.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_Collection", LinkedBuildingDataOntology.Collection.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_DataSet", LinkedBuildingDataOntology.DataSet.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_DataSource", LinkedBuildingDataOntology.DataSource.getURI());
+//		
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_hasDataSet", LinkedBuildingDataOntology.hasDataSet.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_hasDataSource", LinkedBuildingDataOntology.hasDataSource.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_name", LinkedBuildingDataOntology.name.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_inCollection", LinkedBuildingDataOntology.inCollection.getURI());
+//		pss.setIri(ONTOLOGY_BASE_PREFIX + "_inDataSource", LinkedBuildingDataOntology.inDataSource.getURI());
 	}
 	
 	public static String formatCollectionResourceUri(String collectionId) {
@@ -85,7 +95,7 @@ public class LinkedBuildingDataOntology {
 				objectId);
 	}
 
-	public static String formatDataSetName(String collectionId, String dataSourceId, String dataSetId)
+	public static String formatGraphName(String collectionId, String dataSourceId, String dataSetId)
 	{
 		return String.format("%s_%s_%s", collectionId, dataSourceId, dataSetId);
 	}

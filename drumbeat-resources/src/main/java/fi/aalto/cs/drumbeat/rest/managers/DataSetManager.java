@@ -43,10 +43,10 @@ public class DataSetManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?dataSetUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_DataSet AS ?object) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
-					"	?dataSetUri a ?lbdho_DataSet . \n" +
+					"SELECT (?dataSetUri AS ?subject) (rdf:type AS ?predicate) (lbdho:DataSet AS ?object) { \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a lbdho:DataSet . \n" +
 					"} \n" + 
 					"ORDER BY ?subject");
 			
@@ -85,9 +85,9 @@ public class DataSetManager extends DrumbeatManager {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?dataSetUri AS ?subject) ?predicate ?object { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
-					"	?dataSetUri a ?lbdho_DataSet ; ?predicate ?object . \n" +
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a lbdho:DataSet ; ?predicate ?object . \n" +
 					"} \n" + 
 					"ORDER BY ?subject ?predicate ?object");
 			
@@ -132,18 +132,21 @@ public class DataSetManager extends DrumbeatManager {
 		}
 		
 		
-		Resource dataSourceResource = getDataSourceResource(collectionId, dataSourceId);		
-		Resource dataSetResource = getDataSetResource(collectionId, dataSourceId, dataSetId);
+		Model metaDataModel = getMetaDataModel();		
+
+		Resource dataSourceResource = metaDataModel
+				.createResource(formatDataSourceResourceUri(collectionId, dataSourceId));
+		
+		Resource dataSetResource = metaDataModel 
+				.createResource(formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
 		
 		dataSourceResource
-			.inModel(getMetaDataModel())
 			.addProperty(LinkedBuildingDataOntology.hasDataSet, dataSetResource);
 	
 		dataSetResource
-			.inModel(getMetaDataModel())
 			.addProperty(RDF.type, LinkedBuildingDataOntology.DataSet)
 			.addLiteral(LinkedBuildingDataOntology.name, name)
-			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);
+			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);		
 		
 		return ModelFactory
 				.createDefaultModel()
@@ -202,9 +205,9 @@ public class DataSetManager extends DrumbeatManager {
 			setCommandText(
 //					"ASK { \n" + 
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
-					"	?dataSetUri a ?lbdho_DataSet . \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a lbdho:DataSet . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
@@ -231,9 +234,9 @@ public class DataSetManager extends DrumbeatManager {
 			setCommandText(
 //					"ASK { \n" + 
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" +
-					"	?dataSourceUri a ?lbdho_DataSource ; ?lbdho_hasDataSet ?dataSetUri . \n" +
-					"	?dataSetUri a ?lbdho_DataSet . \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a lbdho:DataSet . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));

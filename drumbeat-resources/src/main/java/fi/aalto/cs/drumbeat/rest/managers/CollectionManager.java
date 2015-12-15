@@ -40,8 +40,8 @@ public class CollectionManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?collectionUri AS ?subject) (rdf:type AS ?predicate) (?lbdho_Collection AS ?object) { \n" + 
-					"	?collectionUri a ?lbdho_Collection . \n" +
+					"SELECT (?collectionUri AS ?subject) (rdf:type AS ?predicate) (lbdho:Collection AS ?object) { \n" + 
+					"	?collectionUri a lbdho:Collection . \n" +
 					"} \n" + 
 					"ORDER BY ?subject");
 			
@@ -69,7 +69,7 @@ public class CollectionManager extends DrumbeatManager {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (?collectionUri AS ?subject) ?predicate ?object { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?predicate ?object . \n" +
+					"	?collectionUri a lbdho:Collection ; ?predicate ?object . \n" +
 					"} \n" + 
 					"ORDER BY ?subject ?predicate ?object");
 			
@@ -102,14 +102,14 @@ public class CollectionManager extends DrumbeatManager {
 	{
 		if (checkExists(collectionId)) {
 			throw ErrorFactory.createCollectionAlreadyExistsException(collectionId);
-		}
+		}		
 		
-		Resource collectionResource = getCollectionResource(collectionId);		
-
-		collectionResource
-			.inModel(getMetaDataModel())
-			.addProperty(RDF.type, LinkedBuildingDataOntology.Collection)
-			.addLiteral(LinkedBuildingDataOntology.name, name);
+		Model metaDataModel = getMetaDataModel();		
+		
+		Resource collectionResource = metaDataModel
+				.createResource(formatCollectionResourceUri(collectionId))
+				.addProperty(RDF.type, LinkedBuildingDataOntology.Collection)
+				.addLiteral(LinkedBuildingDataOntology.name, name);
 		
 		return ModelFactory
 				.createDefaultModel()
@@ -160,7 +160,7 @@ public class CollectionManager extends DrumbeatManager {
 			setCommandText(
 //					"ASK { \n" + 
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection . \n" + 
+					"	?collectionUri a lbdho:Collection . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
@@ -187,7 +187,7 @@ public class CollectionManager extends DrumbeatManager {
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"SELECT (1 AS ?exists) { \n" + 
-					"	?collectionUri a ?lbdho_Collection ; ?lbdho_hasDataSource ?dataSourceUri . \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));

@@ -20,7 +20,7 @@ public class DrumbeatResponseBuilder {
 			
 			try {
 			
-				String entity = ModelToMediaTypeConverter.convert(model, mediaType);
+				String entity = MediaTypeConverter.convertModel(model, mediaType);
 				return Response
 						.status(status)
 						.entity(entity)
@@ -36,7 +36,7 @@ public class DrumbeatResponseBuilder {
 				Response.Status.UNSUPPORTED_MEDIA_TYPE,
 				String.format(
 						"Use supported media types: %s",
-						ModelToMediaTypeConverter.getSupportedMediaTypes().toString()),
+						MediaTypeConverter.getSupportedMediaTypes().toString()),
 				null);
 	}
 	

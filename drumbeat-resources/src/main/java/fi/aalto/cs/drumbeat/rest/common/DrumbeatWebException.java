@@ -5,6 +5,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+//import org.apache.commons.lang3.StringEscapeUtils;
+
 @SuppressWarnings("serial")
 public class DrumbeatWebException extends WebApplicationException {
 	
@@ -14,7 +16,7 @@ public class DrumbeatWebException extends WebApplicationException {
 	{
 		this(
 			status,
-			cause != null ? cause.getMessage() : null,
+			cause != null ? cause.getClass() + ": " + cause.getMessage() : null,
 			cause);
 	}
 
@@ -23,10 +25,12 @@ public class DrumbeatWebException extends WebApplicationException {
 			String message,
 			Throwable cause)
 	{
+		// TODO: Support different media types
 		super(
 			cause,
 			Response
 				.status(status)
+//				.entity(message != null ? StringEscapeUtils.escapeHtml4(message) : null)
 				.entity(message)
 				.type(MediaType.TEXT_PLAIN)
 				.build());
