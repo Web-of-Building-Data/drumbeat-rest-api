@@ -12,6 +12,8 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfVocabulary;
+import fi.hut.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.hut.cs.drumbeat.rdf.RdfVocabulary;
 
 public class LinkedBuildingDataOntology {
@@ -42,6 +44,11 @@ public class LinkedBuildingDataOntology {
 				put(RdfVocabulary.RDF.BASE_PREFIX, RDF.getURI());		
 				put(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());		
 				put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
+				// TODO: get IFC URI from config file
+				put("expr", "http://drumbeat.cs.hut.fi/owl/EXPRESS#");
+				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
+				put("ifc2x3", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");
+				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
 			}};
 		return map;
 	}

@@ -92,17 +92,48 @@ public class MediaTypeConverter {
 		return writer.toString();
 	}
 
-	public static String convertModelToHtml(Model model) {		
+	public static String convertModelToHtml(Model model) {
+		return convertModelToHtml(model, true);
+	}
+
+	public static String convertModelToHtml(Model model, boolean supportSorting) {		
 		StringBuilder stringBuilder = new StringBuilder()
-				.append("<html><body>")
+				.append("<html>")
+				.append("<head>")
 				.append("<style type=\"text/css\">")
-				.append("table.rdf { width:100%; } ")
-				.append("table.rdf th { color:#fff; background-color: #000; } ")
-				.append("table.rdf tr:nth-child(odd) { background-color: #e0e0e0; } ")
-				.append("table.rdf tr:nth-child(even) { background-color: #fff; } ")
-				.append("</style>")
-				.append("<table class=\"rdf\">")
-				.append("<tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>");
+				.append("	table.rdf { width:100%; font-family:arial; font-size: 9pt; text-align: left; } ")
+				.append("	table.rdf thead tr th { color:#fff; background-color: #000; } ")
+				.append("	table.rdf tbody tr:nth-child(odd) { background-color: #e0e0e0; } ")
+				.append("	table.rdf tbody tr:nth-child(even) { background-color: #fff; } ")
+				.append("	table.rdf thead tr th, table.rdf tfoot tr th { border: 1px solid #FFF; font-size: 10pt; padding: 4px; } ")
+				.append("	table.rdf thead tr .header { background-repeat: no-repeat; background-position: center right; cursor: pointer; } ")
+				.append("	table.rdf  thead tr .headerSortUp { ")
+				.append("		background-image: url(http://www.cypressgs.com/sbpmdemo/grid-filtering/extjs/resources/themes/images/access/grid/sort_asc.gif); }")
+				.append("	table.rdf thead tr .headerSortDown { ")
+				.append("		background-image: url(http://www.cypressgs.com/sbpmdemo/grid-filtering/extjs/resources/themes/images/access/grid/sort_desc.gif); }")
+				.append("</style>");
+//				.append("<link rel=\"stylesheet\" href=\"http://tablesorter.com/themes/blue/style.css\" type=\"text/css\" id=\"\" media=\"print, projection, screen\" />");
+		
+		if (supportSorting) {
+			// TODO: use local script files and use min .js versions
+			stringBuilder
+				.append("<script type=\"text/javascript\" src=\"http://tablesorter.com/jquery-latest.js\"></script>")
+				.append("<script type=\"text/javascript\" src=\"http://tablesorter.com/__jquery.tablesorter.js\"></script>")
+				.append("<script type=\"text/javascript\">")
+				.append("	$(document).ready(function(){")
+				.append("		$(\"table#graph\").tablesorter(")
+				.append("			{sortList: [[0,0],[1,0],[2,0]]});")
+				.append("		$(\"table#prefixes\").tablesorter(")
+				.append("			{sortList: [[0,0],[1,0]]});")
+				.append("	});")
+				.append("</script>");			
+		}
+		
+		stringBuilder
+				.append("</head><body>")
+				.append("<table id=\"graph\" class=\"rdf tablesorter\">")
+				.append("<thead><tr><th>Subject</th><th>Predicate</th><th>Object</th></tr></thead>")
+				.append("<tbody>");
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		Map<String, String> nsPrefixMap = LinkedBuildingDataOntology.getDefaultNsPrefixes();
@@ -122,14 +153,16 @@ public class MediaTypeConverter {
 		}
 		
 		stringBuilder
+				.append("</tbody>")
 				.append("</table>");
 		
 		if (!usedNsPrefixSet.isEmpty()) {
 			stringBuilder
 				.append("<br/>")
 				.append("<h2>Prefixes</h2>")
-				.append("<table class=\"rdf\">")
-				.append("<tr><th>Prefix</th><th>URI</th></tr>");
+				.append("<table id=\"prefixes\" class=\"rdf\">")
+				.append("<thead><tr><th>Prefix</th><th>URI</th></tr></thead>")
+				.append("<tbody>");
 			
 			for (String prefix : usedNsPrefixSet) {
 				String uri;
@@ -149,11 +182,12 @@ public class MediaTypeConverter {
 					.append(uri)
 					.append("\">")
 					.append(uri)
-					.append("</a")
+					.append("</a>")
 					.append("</td></tr>");
 			}
 			
 			stringBuilder
+					.append("</tbody>")			
 					.append("</table>");			
 		}
 		
@@ -165,9 +199,11 @@ public class MediaTypeConverter {
 	private static String convertRdfNodeToHtml(RDFNode node, String baseUri, Map<String, String> nsPrefixMap, Set<String> usedNsPrefixSet) {
 		if (node.isURIResource()) {
 			
+			boolean useBrackets = true;
+			
 			String nodeString = node.toString();
 			if (nodeString.startsWith(baseUri)) {
-				nodeString = "&lt;" + nodeString.substring(baseUri.length()) + "&gt;";
+				nodeString = nodeString.substring(baseUri.length());
 				usedNsPrefixSet.add("");
 			} else {
 				String nameSpace = node.asResource().getNameSpace();				
@@ -175,11 +211,17 @@ public class MediaTypeConverter {
 					if (nsPrefix.getValue().equals(nameSpace)) {
 						nodeString = nsPrefix.getKey() + ":" + node.asResource().getLocalName();
 						usedNsPrefixSet.add(nsPrefix.getKey());
+						useBrackets = false;
 						break;
 					}
 				}
 			}
-			return String.format("<a href=\"%s\">%s</a>", node.toString(), nodeString);
+			return String.format(
+					"<a href=\"%s\">%s%s%s</a>",
+					node.toString(),
+					useBrackets ? "&lt;" : "",
+					nodeString,
+					useBrackets ? "&gt;" : "");
 			
 		} else if (node.isLiteral()) {
 			

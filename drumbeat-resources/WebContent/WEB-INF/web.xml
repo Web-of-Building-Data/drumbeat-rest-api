@@ -6,24 +6,25 @@
 	<display-name>resources</display-name>
 	<servlet>
 		<servlet-name>Drumbeat Web Application</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>fi.aalto.cs.drumbeat.rest.api</param-value>
-        </init-param>
-        <init-param>
-		    <param-name>jersey.config.server.provider.classnames</param-name>
-		    <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>fi.aalto.cs.drumbeat.rest.api</param-value>
 		</init-param>
 		<init-param>
-            <param-name>javax.ws.rs.Application</param-name>
-            <param-value>fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication</param-value>
-        </init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+		</init-param>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>fi.aalto.cs.drumbeat.rest.common.DrumbeatWebApplication</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>Drumbeat Web Application</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+
 </web-app>
