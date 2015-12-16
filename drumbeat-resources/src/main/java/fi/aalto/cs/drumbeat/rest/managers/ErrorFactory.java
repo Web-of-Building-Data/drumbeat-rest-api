@@ -29,7 +29,7 @@ public class ErrorFactory {
 						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
-	public static NotFoundException createDataSetNotFoundException(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String dataSetId, String objectId) {
 		return new NotFoundException(
 				String.format(
 						"Object not found: <%s>",

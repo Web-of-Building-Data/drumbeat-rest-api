@@ -88,7 +88,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					.execSelect();
 		
 		if (!resultSet.hasNext()) {
-			throw ErrorFactory.createDataSetNotFoundException(collectionId, dataSourceId, dataSetId);
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, objectId);
 		}
 		
 		return convertResultSetToModel(resultSet);
