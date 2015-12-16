@@ -16,14 +16,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.hut.cs.drumbeat.common.file.FileManager;
+import fi.hut.cs.drumbeat.common.string.StringUtils;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
@@ -43,6 +48,8 @@ public class ObjectManager extends DrumbeatManager {
 	public static final String DATA_TYPE_RDF = "RDF";
 	public static final String DATA_TYPE_CSV = "CSV";
 	
+	public static final String COMPRESSION_FORMAT_GZIP = "gzip";	
+	public static final String COMPRESSION_FORMAT_GZ = "gz";	
 
 	public ObjectManager() throws DrumbeatException {
 		this(DrumbeatApplication.getInstance().getMetaDataModel());
@@ -58,7 +65,7 @@ public class ObjectManager extends DrumbeatManager {
 	}
 	
 	/**
-	 * Gets all properties of a specified dataSet 
+	 * Gets all properties of a specified object 
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
@@ -94,23 +101,80 @@ public class ObjectManager extends DrumbeatManager {
 		return convertResultSetToModel(resultSet);
 	}
 	
-	private String getUploadFilePath(String graphName, String dataType, String dataFormat) {
-		return String.format("%s/%s/%s.%s",
-				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
-				dataType,
-				graphName,
-				dataFormat);
+	
+	/**
+	 * Gets type of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getObjectType(String collectionId, String dataSourceId, String dataSetId, String objectId)
+		throws NotFoundException, DrumbeatException
+	{
+		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
+		
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT (?objectUri AS ?subject) (rdf:type AS ?predicate) (?type AS ?object) { \n" + 
+					"	?objectUri a ?type . \n" +
+					"} \n" + 
+					"ORDER BY ?subject ?predicate ?object");
+			
+			fillParameterizedSparqlString(this);
+			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId));
+		}}.asQuery();
+		
+		ResultSet resultSet = 
+				QueryExecutionFactory
+					.create(query, dataModel)
+					.execSelect();
+		
+		if (!resultSet.hasNext()) {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, objectId);
+		}
+		
+		return convertResultSetToModel(resultSet);
 	}
 	
-	private InputStream saveToFile(String graphName, String dataType, String dataFormat, InputStream inputStream) throws IOException {
-		String outputFilePath = getUploadFilePath(graphName, dataType, dataFormat); 
-		OutputStream outputStream = FileManager.createFileOutputStream(outputFilePath);
-		IOUtils.copy(inputStream, outputStream);
-		inputStream.close();
-		outputStream.close();
+	/**
+	 * Gets type of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getObjectProperty(String collectionId, String dataSourceId, String dataSetId, String objectId)
+		throws NotFoundException, DrumbeatException
+	{
+		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
-		return new FileInputStream(outputFilePath);
-	}
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT (?objectUri AS ?subject) (rdf:type AS ?predicate) (?type AS ?object) { \n" + 
+					"	?objectUri a ?type . \n" +
+					"} \n" + 
+					"ORDER BY ?subject ?predicate ?object");
+			
+			fillParameterizedSparqlString(this);
+			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId));
+		}}.asQuery();
+		
+		ResultSet resultSet = 
+				QueryExecutionFactory
+					.create(query, dataModel)
+					.execSelect();
+		
+		if (!resultSet.hasNext()) {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, objectId);
+		}
+		
+		return convertResultSetToModel(resultSet);
+	}	
 	
 	/**
 	 * Imports data set from an input stream
@@ -119,7 +183,7 @@ public class ObjectManager extends DrumbeatManager {
 	 * @param dataSetId
 	 * @param dataType
 	 * @param dataFormat
-	 * @param inputStream
+	 * @param in
 	 * @param saveFiles
 	 * @return
 	 * @throws NotFoundException
@@ -130,120 +194,132 @@ public class ObjectManager extends DrumbeatManager {
 			String dataSetId,
 			String dataType,
 			String dataFormat,
-			InputStream inputStream,
+			String compressionFormat,
+			InputStream in,
 			boolean saveToFiles)
 		throws NotFoundException, IllegalArgumentException, Exception
 	{
+		//
+		// Checking compression format
+		//
+		boolean inputStreamGzipped = false;		
+		if (!StringUtils.isEmptyOrNull(compressionFormat)) {
+			if (compressionFormat.equalsIgnoreCase(COMPRESSION_FORMAT_GZIP) || compressionFormat.equalsIgnoreCase(COMPRESSION_FORMAT_GZ)) {
+				inputStreamGzipped = true;
+			} else {
+				throw ErrorFactory.createCompressionFormatNotFoundException(compressionFormat);
+			}
+		}
 		
+		
+		//
+		// Checking if dataSet exists
+		//		
 		DataSetManager dataSetManager = new DataSetManager();
 		if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
 			throw ErrorFactory.createDataSetNotFoundException(collectionId, dataSourceId, dataSetId);
 		}
 		
-		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
+		
+		
+		//
+		// Save to file (if needed)
+		//
 		if (saveToFiles) {
-			inputStream = saveToFile(graphName, dataType, dataFormat, inputStream);
-		}
-
-		Model targetDataSetModel = DrumbeatApplication.getInstance().getDataModel(graphName);
-		String objectBaseUri = formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");			
-
-		if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
-			internalUploadIfc(inputStream, objectBaseUri, targetDataSetModel);
-		} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
-			internalUploadRdf(inputStream, dataFormat, objectBaseUri, targetDataSetModel);
-		} else {
-			throw new IllegalArgumentException(String.format("Unknown data type=%s", dataType));
+			String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);		
+			in = saveToGzippedFile(graphName, dataType, dataFormat, inputStreamGzipped, in);
+			inputStreamGzipped = true;
 		}
 		
-		Model metaDataModel = getMetaDataModel();
-		
-		if (metaDataModel.supportsTransactions()) {
-			metaDataModel.begin();
-		}		
-		
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"DELETE { ?dataSetUri lbdho:graphName ?o } \n" +
-							"WHERE { ?dataSetUri lbdho:graphName ?o }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-				}}.asUpdate(),
-				metaDataModel);
-		
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"INSERT DATA { ?dataSetUri lbdho:graphName ?graphName }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-					setLiteral("graphName", metaDataModel.createLiteral(graphName));
-				}}.asUpdate(),
-				metaDataModel);
 
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
-							"WHERE { ?dataSetUri lbdho:lastModified ?o }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-				}}.asUpdate(),
-				metaDataModel);
+		//
+		// Uncompress input stream (if needed)
+		//
+		if (inputStreamGzipped) {
+			in = new GZIPInputStream(in);
+		}
 		
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-					setLiteral("lastModified", Calendar.getInstance());
-				}}.asUpdate(),
-				metaDataModel);
-		
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
-							"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-				}}.asUpdate(),
-				metaDataModel);
-		
-		UpdateAction.execute(
-				new ParameterizedSparqlString() {{
-					setCommandText(
-							"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
-					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-					setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-					setLiteral("sizeInTriples", targetDataSetModel.size());
-				}}.asUpdate(),
-				metaDataModel);
-		
-		if (metaDataModel.supportsTransactions()) {
-			metaDataModel.commit();
-		}		
-		
-		
-//		new UpdateDeleteInsert().
-//		
-//		updateRequest1.add(updateRequest1);
-//		
-////		
-//		metaDataModel
-//			.removeAll(dataSetResource, LinkedBuildingDataOntology.graphName, null)
-//			.removeAll(dataSetResource, LinkedBuildingDataOntology.sizeInTriples, null)
-//			.removeAll(dataSetResource, LinkedBuildingDataOntology.lastModified, null)
-//			.add(dataSetResource, LinkedBuildingDataOntology.graphName, graphName)
-//			.add(dataSetResource, LinkedBuildingDataOntology.sizeInTriples, metaDataModel.createTypedLiteral(targetDataSetModel.size()))
-//			.add(dataSetResource, LinkedBuildingDataOntology.lastModified, metaDataModel.createTypedLiteral(Calendar.getInstance()));
+		internalUpload(collectionId, dataSourceId, dataSetId, dataType, dataFormat, in);
 		
 		return dataSetManager.getById(collectionId, dataSourceId, dataSetId);
 	}
 	
-	private void internalUploadIfc(InputStream inputStream, String objectBaseUri, Model targetModel) throws Exception {
+	private void internalUpload(
+			String collectionId,
+			String dataSourceId,
+			String dataSetId,
+			String dataType,
+			String dataFormat,
+			InputStream in) throws Exception
+	{
+		//
+		// Open target model and begin transactions (if supported)
+		//
+		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
+		
+		Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphName);		
+		Model metaDataModel = getMetaDataModel();
+
+		//
+		// Upload data to target model
+		//		
+		try {
+			long oldSize = targetModel.size();		
+			
+			if (targetModel.supportsTransactions()) {
+				targetModel.begin();
+			}
+			
+			if (metaDataModel.supportsTransactions()) {
+				metaDataModel.begin();
+			}		
+			
+			targetModel.removeAll();
+		
+			String objectBaseUri = formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");			
+	
+			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
+				internalUploadIfc(in, objectBaseUri, targetModel);
+			} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
+				internalUploadRdf(in, dataFormat, objectBaseUri, targetModel);
+			} else {
+				throw new IllegalArgumentException(String.format("Unknown data type=%s", dataType));
+			}
+			
+			long newSize = targetModel.size();			
+			
+			//
+			// Update meta data model
+			//
+			String dataSetUri = formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
+			updateMetaModelAfterUploading(metaDataModel, dataSetUri, graphName, newSize);
+			
+				
+			if (targetModel.supportsTransactions()) {
+				targetModel.commit();
+			}
+			
+			if (metaDataModel.supportsTransactions()) {
+				metaDataModel.commit();
+			}
+			
+			logger.info(String.format("Uploaded data to graph '%s': oldSize=%d, newSize=%d", graphName, oldSize, newSize));
+			
+		} catch (Exception e) {
+			if (targetModel.supportsTransactions()) {
+				targetModel.abort();
+			}	
+			
+			if (metaDataModel.supportsTransactions()) {
+				metaDataModel.abort();
+			}	
+			
+			logger.error(e);
+			throw e;			
+		}
+	}
+	
+	private void internalUploadIfc(InputStream in, String objectBaseUri, Model targetModel) throws Exception {
 		logger.info("Uploading IFC model");
 		try {			
 			// loading schemas and config files
@@ -256,7 +332,7 @@ public class ObjectManager extends DrumbeatManager {
 			
 			// parse model
 			logger.debug("Parsing model");
-			IfcModel ifcModel = IfcModelParser.parse(inputStream);			
+			IfcModel ifcModel = IfcModelParser.parse(in);			
 
 			// ground nodes in the model
 			logger.debug("Grounding nodes");
@@ -283,21 +359,107 @@ public class ObjectManager extends DrumbeatManager {
 	}	
 	
 	
-	private void internalUploadRdf(InputStream inputStream, String dataFormat, String objectBaseUri, Model targetModel) throws Exception
+	private void internalUploadRdf(InputStream in, String dataFormat, String objectBaseUri, Model targetModel) throws Exception
 	{		
 		logger.info("Uploading RDF model");
-		try {			
-			// export model
-			targetModel.read(inputStream, objectBaseUri, dataFormat);
-			
-			logger.info("Uploading RDF model completed successfully");
-			
+		
+		Lang lang;
+		
+		try {
+			lang = (Lang)Lang.class.getField(dataFormat).get(null);				
 		} catch (Exception e) {
-			logger.error("Uploading RDF model failed", e);
-			throw e;			
+			throw ErrorFactory.createLangNotFoundException(dataFormat);
 		}
+
+		RDFDataMgr.read(targetModel, in, objectBaseUri, lang);
+		
+		logger.info("Uploading RDF model completed successfully");			
 	}	
 
+	private InputStream saveToGzippedFile(String graphName, String dataType, String dataFormat, boolean inputStreamGzipped, InputStream in) throws IOException {
+		String outputFilePath = String.format("%s/%s/%s.gz",
+				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
+				dataType.toUpperCase(),
+				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" + graphName : graphName);
+		
+		logger.info("Saving data to file: " + outputFilePath);
+		
+		OutputStream out = FileManager.createFileOutputStream(outputFilePath);
+		if (!inputStreamGzipped) {
+			out = new GZIPOutputStream(out);
+		}
+		
+		IOUtils.copy(in, out);
+		in.close();
+		out.close();
+		
+		return new FileInputStream(outputFilePath);
+	}
+	
+	
+	private void updateMetaModelAfterUploading(Model metaDataModel, String dataSetUri, String graphName, long sizeInTriples) {
+		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"DELETE { ?dataSetUri lbdho:graphName ?o } \n" +
+							"WHERE { ?dataSetUri lbdho:graphName ?o }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+				}}.asUpdate(),
+				metaDataModel);
+		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"INSERT DATA { ?dataSetUri lbdho:graphName ?graphName }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+					setLiteral("graphName", metaDataModel.createLiteral(graphName));
+				}}.asUpdate(),
+				metaDataModel);
+
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
+							"WHERE { ?dataSetUri lbdho:lastModified ?o }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+				}}.asUpdate(),
+				metaDataModel);
+		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+					setLiteral("lastModified", Calendar.getInstance());
+				}}.asUpdate(),
+				metaDataModel);
+		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
+							"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+				}}.asUpdate(),
+				metaDataModel);
+		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
+					LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+					setIri("dataSetUri", dataSetUri);
+					setLiteral("sizeInTriples", sizeInTriples);
+				}}.asUpdate(),
+				metaDataModel);
+		
+	}
 	
 	
 	

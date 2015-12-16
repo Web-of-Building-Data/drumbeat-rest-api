@@ -17,7 +17,6 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 
@@ -52,6 +51,31 @@ public class ObjectResource {
 		
 		try {		
 			Model model = getObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
+					model,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
+		} catch (DrumbeatException e) {
+			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
+		}
+	}		
+
+	@GET
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/{objectId}/type")
+	public Response getType(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@PathParam("objectId") String objectId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			Model model = getObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,

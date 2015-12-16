@@ -137,6 +137,7 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,
+			@FormParam("compressionFormat") String compressionFormat,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -146,14 +147,14 @@ public class DataSetResource {
 		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", graphName, filePath));
 		
-		InputStream inputStream;
+		InputStream in;
 		try {
-			inputStream = new FileInputStream(filePath);
+			in = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
 	}
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadUrl")
@@ -166,6 +167,7 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,
+			@FormParam("compressionFormat") String compressionFormat,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -175,14 +177,14 @@ public class DataSetResource {
 		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", graphName, url));
 		
-		InputStream inputStream;
+		InputStream in;
 		try {
-			inputStream = new URL(url).openStream();
+			in = new URL(url).openStream();
 		} catch (IOException e) {			
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
 	}
 
 
@@ -196,6 +198,7 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@FormParam("dataFormat") String dataFormat,			
+			@FormParam("compressionFormat") String compressionFormat,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -205,8 +208,8 @@ public class DataSetResource {
 		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
-		InputStream inputStream = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, headers);
+		InputStream in = new ByteArrayInputStream(content.getBytes());
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
 	}
 
 	
@@ -218,18 +221,24 @@ public class DataSetResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("file") InputStream in,
+	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@FormDataParam("dataType") String dataType,
 			@FormDataParam("dataFormat") String dataFormat,
-			@FormDataParam("file") InputStream inputStream,
-	        @FormDataParam("file") FormDataContentDisposition fileDetail,
+			@FormDataParam("compressionFormat") String compressionFormat,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		if (fileDetail == null || in == null) {
+			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
+		}
 	        
 		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, headers);
+
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
 	}
 	
 	private Response internalUploadDataSet(
@@ -238,14 +247,25 @@ public class DataSetResource {
 			String dataSetId,
 			String dataType,
 			String dataFormat,
-			InputStream inputStream,
+			String compressionFormat,
+			InputStream in,
 			HttpHeaders headers)
 	{	
 		
 		try {
-			ObjectManager dataSetObjectManager = new ObjectManager();
+			ObjectManager objectManager = new ObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
-			Model dataSetInfoModel = dataSetObjectManager.upload(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, saveToFiles);
+			
+			Model dataSetInfoModel = objectManager.upload(
+					collectionId,
+					dataSourceId,
+					dataSetId,
+					dataType,
+					dataFormat,
+					compressionFormat,
+					in,
+					saveToFiles);
+			
 			return DrumbeatResponseBuilder.build(
 					Status.CREATED,
 					dataSetInfoModel,
@@ -265,7 +285,7 @@ public class DataSetResource {
 					e);
 		} finally {
 			try {
-				inputStream.close();
+				in.close();
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			}
