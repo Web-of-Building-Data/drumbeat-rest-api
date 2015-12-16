@@ -19,7 +19,7 @@
 			<class>fi.hut.cs.drumbeat.ifc.processing.grounding.SetNameByGlobalId</class>
 			<params>
 				<!-- use $Entity.ShortGlobalId$ or $Entity.StandardGlobalId$ -->
-				<param name="entityNamePattern" value="GUID_$Entity.StandardGlobalId$" />
+				<param name="entityNamePattern" value="$Entity.StandardGlobalId$" />
 				<param name="encoderType" value="SafeUrl" />
 			</params>
 		</processor>

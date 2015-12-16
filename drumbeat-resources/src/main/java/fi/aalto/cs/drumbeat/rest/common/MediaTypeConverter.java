@@ -96,7 +96,9 @@ public class MediaTypeConverter {
 		return convertModelToHtml(model, true);
 	}
 
-	public static String convertModelToHtml(Model model, boolean supportSorting) {		
+	public static String convertModelToHtml(Model model, boolean supportSorting) {
+		// TODO: Use local style sheet file
+		
 		StringBuilder stringBuilder = new StringBuilder()
 				.append("<html>")
 				.append("<head>")
