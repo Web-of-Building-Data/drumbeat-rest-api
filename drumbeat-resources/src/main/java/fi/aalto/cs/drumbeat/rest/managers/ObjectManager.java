@@ -35,20 +35,20 @@ import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 
-public class DataSetObjectManager extends DrumbeatManager {
+public class ObjectManager extends DrumbeatManager {
 	
-	private static final Logger logger = Logger.getLogger(DataSetObjectManager.class);
+	private static final Logger logger = Logger.getLogger(ObjectManager.class);
 	
 	public static final String DATA_TYPE_IFC = "IFC";
 	public static final String DATA_TYPE_RDF = "RDF";
 	public static final String DATA_TYPE_CSV = "CSV";
 	
 
-	public DataSetObjectManager() throws DrumbeatException {
+	public ObjectManager() throws DrumbeatException {
 		this(DrumbeatApplication.getInstance().getMetaDataModel());
 	}
 
-	public DataSetObjectManager(Model metaDataModel) {
+	public ObjectManager(Model metaDataModel) {
 		super(metaDataModel);
 	}
 	
@@ -247,7 +247,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 		logger.info("Uploading IFC model");
 		try {			
 			// loading schemas and config files
-			synchronized (DataSetObjectManager.class) {
+			synchronized (ObjectManager.class) {
 				if (IfcSchemaPool.size() == 0) {
 					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
 					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));

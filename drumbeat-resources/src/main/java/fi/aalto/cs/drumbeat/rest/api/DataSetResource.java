@@ -26,7 +26,7 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
+import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
@@ -243,7 +243,7 @@ public class DataSetResource {
 	{	
 		
 		try {
-			DataSetObjectManager dataSetObjectManager = new DataSetObjectManager();
+			ObjectManager dataSetObjectManager = new ObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			Model dataSetInfoModel = dataSetObjectManager.upload(collectionId, dataSourceId, dataSetId, dataType, dataFormat, inputStream, saveToFiles);
 			return DrumbeatResponseBuilder.build(
