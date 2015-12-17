@@ -38,6 +38,30 @@ public class ObjectResource {
 	}
 	
 	@GET
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
+	public Response getAll(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			Model model = getObjectManager().getAll(collectionId, dataSourceId, dataSetId);
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
+					model,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
+		} catch (DrumbeatException e) {
+			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
+		}
+	}		
+
+	@GET
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/{objectId}")
 	public Response getById(			
 			@PathParam("collectionId") String collectionId,

@@ -2,6 +2,8 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import java.util.List;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -12,17 +14,33 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.hut.cs.drumbeat.common.DrumbeatException;
+import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
 
 public abstract class DrumbeatManager {
 	
 	private final Model metaDataModel;
+	private final JenaProvider jenaProvider;
 	
-	public DrumbeatManager(Model metaDataModel) {
-		this.metaDataModel = metaDataModel; 
+	public DrumbeatManager() throws DrumbeatException {
+		this(DrumbeatApplication.getInstance().getMetaDataModel(), DrumbeatApplication.getInstance().getJenaProvider());		
+	}
+	
+	public DrumbeatManager(Model metaDataModel, JenaProvider jenaProvider) {
+		this.metaDataModel = metaDataModel;
+		this.jenaProvider = jenaProvider;
 	}
 	
 	public Model getMetaDataModel() {
 		return metaDataModel;
+	}
+	
+	protected JenaProvider getJenaProvider() {
+		return jenaProvider;
+	}
+	
+	protected QueryExecution createQueryExecution(Query query, Model model) {
+		return getJenaProvider().createQueryExecution(query, model);
 	}
 	
 	public Resource getCollectionResource(String collectionId) {
@@ -46,6 +64,15 @@ public abstract class DrumbeatManager {
 						dataSetId));
 	}
 	
+	/**
+	 * @deprecated Instead of SELECT-queries use CONSTRUCT-queries to get direct Model 
+	 * 
+	 * Converts a {@link ResultSet} with 3 columns to a {@link Model}
+	 * @param resultSet
+	 * @return
+	 * 
+	 */
+	@Deprecated
 	public static Model convertResultSetToModel(ResultSet resultSet) {
 		List<String> varNames = resultSet.getResultVars();
 		if (varNames.size() != 3) {

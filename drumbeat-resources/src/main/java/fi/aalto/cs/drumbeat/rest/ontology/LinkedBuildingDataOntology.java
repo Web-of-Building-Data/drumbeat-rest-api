@@ -21,6 +21,15 @@ public class LinkedBuildingDataOntology {
 	public static final String ONTOLOGY_BASE_PREFIX = "lbdho";
 	public static final String ONTOLOGY_BASE_URI = "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#";
 	
+	public static final String GRAPH_NAME_IFC = "owl_ifc_ifc2x3";
+	
+//	public static final String COLLECTION_OWL = "owl";
+//	public static final String DATASOURCE_IFC = "ifc";
+//	public static final String DATASET_IFC2X3 = "ifc2x3";
+//	
+//	public static final String DATASOURCE_IFC = "ifc";
+	
+	
 	public static final Resource Collection = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "Collection");	
 	public static final Resource DataSet = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSet");	
 	public static final Resource DataSource = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSource");	
@@ -46,9 +55,9 @@ public class LinkedBuildingDataOntology {
 				put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
 				// TODO: get IFC URI from config file
 				put("expr", "http://drumbeat.cs.hut.fi/owl/EXPRESS#");
-				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
-				put("ifc2x3", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");
-				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
+//				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
+				put("ifc", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");
+//				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
 			}};
 		return map;
 	}
@@ -106,5 +115,5 @@ public class LinkedBuildingDataOntology {
 	{
 		return String.format("%s_%s_%s", collectionId, dataSourceId, dataSetId);
 	}
-
+	
 }

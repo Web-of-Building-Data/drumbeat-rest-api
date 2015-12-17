@@ -18,6 +18,7 @@ import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.rdf.RdfUtils;
 
 public class Test_CollectionManager extends DrumbeatTest {
@@ -43,10 +44,11 @@ public class Test_CollectionManager extends DrumbeatTest {
 	
 	/***************************************
 	 * getAll()
+	 * @throws DrumbeatException 
 	 **************************************/
 	
 	@Test
-	public void test_getAll_nonEmptyList() {
+	public void test_getAll_nonEmptyList() throws DrumbeatException {
 		if (!doTest()) {
 			return;
 		}
@@ -86,9 +88,11 @@ public class Test_CollectionManager extends DrumbeatTest {
 
 	/***************************************
 	 * getById()
+	 * @throws DrumbeatException 
+	 * @throws NotFoundException 
 	 **************************************/
 	@Test
-	public void test_getById_correctId_nonEmptyList() {
+	public void test_getById_correctId_nonEmptyList() throws NotFoundException, DrumbeatException {
 		if (!doTest()) {
 			return;
 		}
@@ -135,7 +139,7 @@ public class Test_CollectionManager extends DrumbeatTest {
 	
 	
 	@Test(expected=NotFoundException.class)
-	public void test_getById_wrongId() {
+	public void test_getById_wrongId() throws NotFoundException, DrumbeatException {
 		if (!doTest()) {
 			return;
 		}

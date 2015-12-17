@@ -2,8 +2,6 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -14,20 +12,19 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
+import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
 
 public class DataSourceManager extends DrumbeatManager {
 	
 	public DataSourceManager() throws DrumbeatException {
-		this(DrumbeatApplication.getInstance().getMetaDataModel());
 	}
 	
-	public DataSourceManager(Model metaDataModel) {
-		super(metaDataModel);
-	}
+	public DataSourceManager(Model metaDataModel, JenaProvider jenaProvider) {
+		super(metaDataModel, jenaProvider);
+	}	
 	
 	/**
 	 * Gets all dataSources that belong to the specified collection
@@ -40,7 +37,9 @@ public class DataSourceManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?dataSourceUri AS ?subject) (rdf:type AS ?predicate) (lbdho:DataSource AS ?object) { \n" + 
+					"CONSTRUCT { \n" +
+					"	?dataSourceUri rdf:type lbdho:DataSource \n" +
+					"} WHERE { \n" + 
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource . \n" +
 					"} \n" + 
@@ -50,19 +49,18 @@ public class DataSourceManager extends DrumbeatManager {
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
-		ResultSet resultSet = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
-					.execSelect();
+		Model resultModel = 
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
 		
-		if (!resultSet.hasNext()) {
-			CollectionManager collectionManager = new CollectionManager(getMetaDataModel()); 
+		if (resultModel.isEmpty()) {
+			CollectionManager collectionManager = new CollectionManager(getMetaDataModel(), getJenaProvider()); 
 			if (!collectionManager.checkExists(collectionId)) {
 				throw ErrorFactory.createCollectionNotFoundException(collectionId);
 			}
 		}
 		
-		return convertResultSetToModel(resultSet);
+		return resultModel;
 	}
 	
 	
@@ -78,7 +76,9 @@ public class DataSourceManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?dataSourceUri AS ?subject) ?predicate ?object { \n" + 
+					"CONSTRUCT { \n" +
+					"	?dataSourceUri ?predicate ?object \n" +
+					"} WHERE { \n" + 
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource ; ?predicate ?object . \n" +
 					"} \n" + 
@@ -89,16 +89,15 @@ public class DataSourceManager extends DrumbeatManager {
 			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
-		ResultSet resultSet = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
-					.execSelect();
+		Model resultModel = 
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
 		
-		if (!resultSet.hasNext()) {
+		if (resultModel.isEmpty()) {
 			throw ErrorFactory.createDataSourceNotFoundException(collectionId, dataSourceId);
 		}
 		
-		return convertResultSetToModel(resultSet);
+		return resultModel;
 	}
 	
 	
@@ -113,7 +112,7 @@ public class DataSourceManager extends DrumbeatManager {
 	public Model create(String collectionId, String dataSourceId, String name)
 		throws AlreadyExistsException, NotFoundException
 	{
-		CollectionManager collectionManager = new CollectionManager(getMetaDataModel()); 
+		CollectionManager collectionManager = new CollectionManager(getMetaDataModel(), getJenaProvider()); 
 		if (!collectionManager.checkExists(collectionId)) {
 			throw ErrorFactory.createCollectionNotFoundException(collectionId);
 		}
@@ -203,8 +202,7 @@ public class DataSourceManager extends DrumbeatManager {
 		}}.asQuery();
 		
 		boolean result = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
+				createQueryExecution(query, getMetaDataModel())
 					.execAsk();
 		
 		return result;
@@ -230,8 +228,7 @@ public class DataSourceManager extends DrumbeatManager {
 		}}.asQuery();
 		
 		boolean result = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
+				createQueryExecution(query, getMetaDataModel())
 					.execAsk();
 		
 		return result;

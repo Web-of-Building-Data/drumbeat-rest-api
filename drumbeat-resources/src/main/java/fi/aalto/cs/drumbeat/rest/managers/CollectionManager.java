@@ -2,8 +2,6 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -14,21 +12,19 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
+import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
 
 public class CollectionManager extends DrumbeatManager {
 	
 	public CollectionManager() throws DrumbeatException {
-		this(DrumbeatApplication.getInstance().getMetaDataModel());
 	}
-	
-	public CollectionManager(Model metaDataModel) {
-		super(metaDataModel);
+
+	public CollectionManager(Model metaDataModel, JenaProvider jenaProvider) {
+		super(metaDataModel, jenaProvider);
 	}
-	
 
 	/**
 	 * Gets all collections that belong to the specified collection
@@ -36,24 +32,24 @@ public class CollectionManager extends DrumbeatManager {
 	 * @throws NotFoundException if the collection is not found
 	 */
 	public Model getAll()
-		throws NotFoundException
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?collectionUri AS ?subject) (rdf:type AS ?predicate) (lbdho:Collection AS ?object) { \n" + 
+					"CONSTRUCT { \n" +
+					"	?collectionUri rdf:type lbdho:Collection \n" +
+					"} WHERE { \n" + 
 					"	?collectionUri a lbdho:Collection . \n" +
 					"} \n" + 
-					"ORDER BY ?subject");
+					"ORDER BY ?collectionUri");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 		}}.asQuery();
+	
+		Model result = 
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
 		
-		ResultSet resultSet = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
-					.execSelect();
-		
-		return convertResultSetToModel(resultSet);
+		return result;
 	}
 	
 	
@@ -68,7 +64,9 @@ public class CollectionManager extends DrumbeatManager {
 	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
-					"SELECT (?collectionUri AS ?subject) ?predicate ?object { \n" + 
+					"CONSTRUCT { \n" +
+					"	?collectionUri ?predicate ?object \n" +
+					"} WHERE { \n" + 
 					"	?collectionUri a lbdho:Collection ; ?predicate ?object . \n" +
 					"} \n" + 
 					"ORDER BY ?subject ?predicate ?object");
@@ -77,16 +75,15 @@ public class CollectionManager extends DrumbeatManager {
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 		}}.asQuery();
 		
-		ResultSet resultSet = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
-					.execSelect();
+		Model result =
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
 		
-		if (!resultSet.hasNext()) {
+		if (result.isEmpty()) {
 			throw ErrorFactory.createCollectionNotFoundException(collectionId);
 		}
 		
-		return convertResultSetToModel(resultSet);
+		return result;
 	}
 	
 	
@@ -164,8 +161,7 @@ public class CollectionManager extends DrumbeatManager {
 		}}.asQuery();
 		
 		boolean result = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
+				createQueryExecution(query, getMetaDataModel())
 					.execAsk();
 		
 		return result;
@@ -189,8 +185,7 @@ public class CollectionManager extends DrumbeatManager {
 		}}.asQuery();
 		
 		boolean result = 
-				QueryExecutionFactory
-					.create(query, getMetaDataModel())
+				createQueryExecution(query, getMetaDataModel())
 					.execAsk();
 		
 		return result;

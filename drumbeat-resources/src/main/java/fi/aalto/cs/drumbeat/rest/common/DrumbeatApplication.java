@@ -11,15 +11,19 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
+import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.hut.cs.drumbeat.common.DrumbeatException;
 import fi.hut.cs.drumbeat.common.config.document.ConfigurationParserException;
 import fi.hut.cs.drumbeat.common.params.BooleanParam;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
 import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.config.Ifc2RdfConversionContextLoader;
 import fi.hut.cs.drumbeat.rdf.modelfactory.AbstractJenaProvider;
+import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
 import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
 
 public abstract class DrumbeatApplication extends ResourceConfig {
@@ -157,7 +161,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI) + path;
 	}
 	
-	private AbstractJenaProvider getJenaProvider() throws DrumbeatException {
+	public JenaProvider getJenaProvider() throws DrumbeatException {
 		
 		if (jenaProvider == null) {		
 			String providerName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
@@ -197,6 +201,21 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 			logger.error(e.getMessage(), e);
 			throw new DrumbeatException(message, e);			
 		}		
+	}
+	
+	public Model getOwlModel(String name, boolean ontModel) throws DrumbeatException {
+		try {
+			Model ifcModel = getJenaProvider().openModel(LinkedBuildingDataOntology.GRAPH_NAME_IFC);
+			if (ontModel) {
+				return ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ifcModel);
+			}
+			return ifcModel;
+		} catch (JenaProviderException e) {
+			String message = "Error opening Jena model: " + e.getMessage();
+			logger.error(e.getMessage(), e);
+			throw new DrumbeatException(message, e);			
+		}	
+		
 	}
 	
 	public String getRealPath(String path) {
