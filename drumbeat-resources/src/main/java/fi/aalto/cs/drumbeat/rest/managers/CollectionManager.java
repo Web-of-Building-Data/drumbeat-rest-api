@@ -120,6 +120,7 @@ public class CollectionManager extends DrumbeatManager {
 	 * @param collectionId
 	 * @return the recently created collection
 	 * @throws NotFoundException if the collection is not found
+	 * throws DeleteDeniedException if collection has children
 	 */
 	public void delete(String collectionId)
 		throws NotFoundException, DeleteDeniedException

@@ -30,7 +30,6 @@ public class CollectionResource {
 	@GET
 	@Path("/")
 	public Response getAll(			
-			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{

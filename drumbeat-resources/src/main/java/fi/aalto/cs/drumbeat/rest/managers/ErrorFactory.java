@@ -17,6 +17,15 @@ public class ErrorFactory {
 						formatCollectionResourceUri(collectionId)));
 	}
 	
+	public static AlreadyExistsException createCollectionAlreadyExistsException(String collectionId) {
+		return new AlreadyExistsException(
+				String.format(
+						"Collection already exists: <%s>",
+						formatCollectionResourceUri(collectionId)));
+	}
+	
+	
+
 	
 	public static NotFoundException createDataSourceNotFoundException(String collectionId, String dataSourceId) {
 		return new NotFoundException(
@@ -25,7 +34,30 @@ public class ErrorFactory {
 						formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
+	public static AlreadyExistsException createDataSourceAlreadyExistsException(String collectionId, String dataSourceId) {
+		return new AlreadyExistsException(
+				String.format(
+						"DataSource already exists: <%s>",
+						formatDataSourceResourceUri(collectionId, dataSourceId)));
+	}
+	
+	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
+		return new DeleteDeniedException(
+			String.format(
+					"Collection has children: <%s>",
+					formatCollectionResourceUri(collectionId)));
+	}
+	
+	public static DeleteDeniedException createDataSourceHasChildrenException(String collectionId, String dataSourceId) {
+		return new DeleteDeniedException(
+			String.format(
+					"DataSource has children: <%s>",
+					formatDataSourceResourceUri(collectionId, dataSourceId)));
+	}
+	
 
+
+	
 	public static NotFoundException createDataSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
 		return new NotFoundException(
 				String.format(
@@ -33,6 +65,15 @@ public class ErrorFactory {
 						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
+	public static AlreadyExistsException createDataSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
+		return new AlreadyExistsException(
+				String.format(
+						"DataSet already exists: <%s>",
+						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
+	}
+	
+
+
 	
 	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String dataSetId, String objectId) {
 		return new NotFoundException(
@@ -42,53 +83,30 @@ public class ErrorFactory {
 	}
 	
 
-	public static AlreadyExistsException createCollectionAlreadyExistsException(String collectionId) {
-		return new AlreadyExistsException(
-				String.format(
-						"Collection already exists: <%s>",
-						formatCollectionResourceUri(collectionId)));
-	}
-	
-	
-	public static AlreadyExistsException createDataSourceAlreadyExistsException(String collectionId, String dataSourceId) {
-		return new AlreadyExistsException(
-				String.format(
-						"DataSource already exists: <%s>",
-						formatDataSourceResourceUri(collectionId, dataSourceId)));
-	}
-	
 
-	public static AlreadyExistsException createDataSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
-		return new AlreadyExistsException(
-				String.format(
-						"DataSet already exists: <%s>",
-						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
-	}
 	
-
-	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
-		return new DeleteDeniedException(
-			String.format(
-					"Collection has children: <%s>",
-					formatCollectionResourceUri(collectionId)));
-	}
-	
-
-	public static DeleteDeniedException createDataSourceHasChildrenException(String collectionId, String dataSourceId) {
-		return new DeleteDeniedException(
-			String.format(
-					"DataSource has children: <%s>",
-					formatDataSourceResourceUri(collectionId, dataSourceId)));
-	}
-	
-	
-	public static NotFoundException createLangNotFoundException(String lang) {
+	public static NotFoundException createRdfLangNotFoundException(String lang) {
 		return new NotFoundException(String.format("%s has no such field: %s", Lang.class, lang));
 	}
 
 
 	public static NotFoundException createCompressionFormatNotFoundException(String compressionFormat) {
 		return new NotFoundException(String.format("Unknown compression format: %s", compressionFormat));
+	}
+	
+	public static NotFoundException createOntologyNotFoundException(String ontologyId) {
+		return new NotFoundException(
+				String.format(
+						"Ontology not found: <%s>",
+						formatOntologyUri(ontologyId)));
+	}
+	
+	
+	public static AlreadyExistsException createOntologyAlreadyExistsException(String ontologyId) {
+		return new AlreadyExistsException(
+				String.format(
+						"Ontology already exists: <%s>",
+						formatOntologyUri(ontologyId)));
 	}
 	
 	

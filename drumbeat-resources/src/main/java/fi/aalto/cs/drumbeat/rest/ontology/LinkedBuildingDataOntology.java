@@ -12,8 +12,6 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfVocabulary;
-import fi.hut.cs.drumbeat.ifc.data.IfcVocabulary;
 import fi.hut.cs.drumbeat.rdf.RdfVocabulary;
 
 public class LinkedBuildingDataOntology {
@@ -33,6 +31,7 @@ public class LinkedBuildingDataOntology {
 	public static final Resource Collection = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "Collection");	
 	public static final Resource DataSet = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSet");	
 	public static final Resource DataSource = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSource");	
+	public static final Resource Ontology = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "Ontology");	
 	
 	public static final Property graphName = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "graphName");	
 	public static final Property hasDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSet");	
@@ -109,6 +108,14 @@ public class LinkedBuildingDataOntology {
 				dataSourceId,
 				dataSetId,
 				objectId);
+	}
+
+	public static String formatOntologyUri(String ontolgoyId)
+	{
+		return String.format(
+				"%sowl/%s",
+				DrumbeatApplication.getInstance().getBaseUri(),
+				ontolgoyId);
 	}
 
 	public static String formatGraphUri(String collectionId, String dataSourceId, String dataSetId)

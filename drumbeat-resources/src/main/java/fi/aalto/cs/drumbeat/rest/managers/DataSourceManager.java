@@ -149,6 +149,7 @@ public class DataSourceManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @return the recently created dataSource
 	 * @throws NotFoundException if the dataSource is not found
+	 * throws DeleteDeniedException if dataSource has children
 	 */
 	public void delete(String collectionId, String dataSourceId)
 		throws NotFoundException, DeleteDeniedException
