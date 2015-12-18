@@ -111,9 +111,9 @@ public class LinkedBuildingDataOntology {
 				objectId);
 	}
 
-	public static String formatGraphName(String collectionId, String dataSourceId, String dataSetId)
+	public static String formatGraphUri(String collectionId, String dataSourceId, String dataSetId)
 	{
-		return String.format("%s_%s_%s", collectionId, dataSourceId, dataSetId);
+		return formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
 	}
 	
 }

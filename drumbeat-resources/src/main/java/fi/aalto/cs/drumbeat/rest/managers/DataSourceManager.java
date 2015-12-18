@@ -43,7 +43,7 @@ public class DataSourceManager extends DrumbeatManager {
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource . \n" +
 					"} \n" + 
-					"ORDER BY ?subject");
+					"ORDER BY ?dataSourceUri");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
@@ -82,7 +82,7 @@ public class DataSourceManager extends DrumbeatManager {
 					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
 					"	?dataSourceUri a lbdho:DataSource ; ?predicate ?object . \n" +
 					"} \n" + 
-					"ORDER BY ?subject ?predicate ?object");
+					"ORDER BY ?predicate ?object");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));

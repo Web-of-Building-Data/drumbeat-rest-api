@@ -144,7 +144,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
+		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", graphName, filePath));
 		
 		InputStream in;
@@ -174,7 +174,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);			
+		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", graphName, url));
 		
 		InputStream in;
@@ -205,7 +205,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);			
+		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
@@ -235,7 +235,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
 		}
 	        
-		String graphName = LinkedBuildingDataOntology.formatGraphName(collectionId, dataSourceId, dataSetId);
+		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);

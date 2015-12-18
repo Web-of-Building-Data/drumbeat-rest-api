@@ -13,12 +13,14 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 
 public class DrumbeatTest extends JerseyTest {
+	
+	public static final boolean DO_TEST = true;
 
 	private static TestApplication application;
 	private final boolean doTest;
 	
 	public DrumbeatTest(boolean doTest) {
-		this.doTest = doTest;
+		this.doTest = doTest && DO_TEST;
 	}
 
 	@BeforeClass

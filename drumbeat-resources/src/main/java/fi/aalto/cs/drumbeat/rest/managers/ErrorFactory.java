@@ -87,7 +87,7 @@ public class ErrorFactory {
 	}
 
 
-	public static Exception createCompressionFormatNotFoundException(String compressionFormat) {
+	public static NotFoundException createCompressionFormatNotFoundException(String compressionFormat) {
 		return new NotFoundException(String.format("Unknown compression format: %s", compressionFormat));
 	}
 	

@@ -69,7 +69,7 @@ public class CollectionManager extends DrumbeatManager {
 					"} WHERE { \n" + 
 					"	?collectionUri a lbdho:Collection ; ?predicate ?object . \n" +
 					"} \n" + 
-					"ORDER BY ?subject ?predicate ?object");
+					"ORDER BY ?predicate ?object");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
