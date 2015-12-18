@@ -14,8 +14,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public abstract class DrumbeatManager {
 	

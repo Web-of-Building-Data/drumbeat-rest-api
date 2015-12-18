@@ -17,18 +17,18 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 
-import fi.hut.cs.drumbeat.common.config.ComplexProcessorConfiguration;
-import fi.hut.cs.drumbeat.common.config.document.ConfigurationDocument;
-import fi.hut.cs.drumbeat.common.file.FileManager;
-import fi.hut.cs.drumbeat.common.string.StringUtils;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
-import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
-import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
-import fi.hut.cs.drumbeat.ifc.data.model.IfcModel;
-import fi.hut.cs.drumbeat.ifc.data.schema.IfcSchemaPool;
-import fi.hut.cs.drumbeat.ifc.processing.IfcModelAnalyser;
+import fi.aalto.cs.drumbeat.common.config.ComplexProcessorConfiguration;
+import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
+import fi.aalto.cs.drumbeat.common.file.FileManager;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
+import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
+import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfModelExporter;
+import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.cli.Ifc2RdfExporter;
+import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcModelParser;
+import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
+import fi.aalto.cs.drumbeat.ifc.data.model.IfcModel;
+import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchemaPool;
+import fi.aalto.cs.drumbeat.ifc.processing.IfcModelAnalyser;
 
 
 

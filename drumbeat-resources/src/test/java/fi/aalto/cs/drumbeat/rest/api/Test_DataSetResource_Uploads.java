@@ -22,8 +22,8 @@
 //
 //import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 //import fi.aalto.cs.drumbeat.rest.application.TestApplication;
-//import fi.hut.cs.drumbeat.common.DrumbeatException;
-//import fi.hut.cs.drumbeat.rdf.RdfUtils;
+//import fi.aalto.cs.drumbeat.common.DrumbeatException;
+//import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 //
 //
 //public class Test_DataSetResource_Uploads extends DrumbeatTest {	

@@ -17,14 +17,14 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.common.config.document.ConfigurationParserException;
-import fi.hut.cs.drumbeat.common.params.BooleanParam;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
-import fi.hut.cs.drumbeat.ifc.convert.ifc2ld.config.Ifc2RdfConversionContextLoader;
-import fi.hut.cs.drumbeat.rdf.modelfactory.AbstractJenaProvider;
-import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
-import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProviderException;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.config.document.ConfigurationParserException;
+import fi.aalto.cs.drumbeat.common.params.BooleanParam;
+import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
+import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.config.Ifc2RdfConversionContextLoader;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.AbstractJenaProvider;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProviderException;
 
 public abstract class DrumbeatApplication extends ResourceConfig {
 	

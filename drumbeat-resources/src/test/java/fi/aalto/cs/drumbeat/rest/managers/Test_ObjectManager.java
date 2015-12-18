@@ -16,8 +16,8 @@ import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.rdf.RdfUtils;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
 public class Test_ObjectManager extends DrumbeatTest {
 	
@@ -47,8 +47,8 @@ public class Test_ObjectManager extends DrumbeatTest {
 	 * @throws DrumbeatException 
 	 * @throws NotFoundException 
 	 **************************************/
-	@Test
-	public void test_getAll() throws NotFoundException, DrumbeatException {
-		objectManager.getAll("col-1", "dso-1-1", "dse-1-1-1");
-	}
+//	@Test
+//	public void test_getAll() throws NotFoundException, DrumbeatException {
+//		objectManager.getAll("col-1", "dso-1-1", "dse-1-1-1");
+//	}
 }

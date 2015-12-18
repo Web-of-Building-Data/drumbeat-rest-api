@@ -18,8 +18,8 @@ import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class OntologyManager extends DrumbeatManager {
 	

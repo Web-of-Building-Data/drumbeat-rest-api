@@ -14,8 +14,8 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.rdf.modelfactory.JenaProvider;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSetManager extends DrumbeatManager {
 	

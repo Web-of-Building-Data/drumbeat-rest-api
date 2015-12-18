@@ -19,7 +19,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 
 @Path("/datasources")

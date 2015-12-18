@@ -29,8 +29,8 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-import fi.hut.cs.drumbeat.common.DrumbeatException;
-import fi.hut.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
 @Path("/datasets")

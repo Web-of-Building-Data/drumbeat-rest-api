@@ -12,7 +12,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.hut.cs.drumbeat.rdf.RdfVocabulary;
+import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
 public class LinkedBuildingDataOntology {
 	
