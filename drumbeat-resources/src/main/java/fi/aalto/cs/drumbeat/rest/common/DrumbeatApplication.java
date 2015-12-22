@@ -132,8 +132,22 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		return isBaseUriFixed;		
 	}
 
-	public String getRealBaseUri() {
-		return realBaseUri != null ? realBaseUri : getBaseUri();
+	public String getRealUri(String uri, boolean isRelative) {
+		String baseUri = getBaseUri();
+		if (!isRelative) {
+			if (!uri.startsWith(baseUri)) {
+				return uri;
+			}
+			uri = uri.substring(baseUri.length());
+			isRelative = true; 
+		}
+		
+		// uri is relative
+		if (realBaseUri != null) {
+			return realBaseUri + uri;
+		} else {
+			return getBaseUri() + uri;
+		}
 	}
 	
 	public void notifyRequest(UriInfo uriInfo) {		

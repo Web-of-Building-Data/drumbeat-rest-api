@@ -14,13 +14,23 @@ public class DrumbeatResponseBuilder {
 	public static Response build(
 			Status status,
 			Model model,
+			List<MediaType> acceptableMediaTypes)
+	{
+		return build(status, model, null, acceptableMediaTypes);
+	}
+	
+	
+	public static Response build(
+			Status status,
+			Model model,
+			String baseUri,
 			List<MediaType> acceptableMediaTypes) {
 		
 		for (MediaType mediaType : acceptableMediaTypes) {
 			
 			try {
 			
-				String entity = MediaTypeConverter.convertModel(model, mediaType);
+				String entity = MediaTypeConverter.convertModel(model, mediaType, baseUri);
 				return Response
 						.status(status)
 						.entity(entity)

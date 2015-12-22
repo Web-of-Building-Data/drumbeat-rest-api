@@ -7,6 +7,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.XSD;
 
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import static javax.ws.rs.core.MediaType.*;
@@ -27,30 +28,30 @@ public class MediaTypeConverter {
 	public static final String APPLICATION_LD_JSON = "application/ld+json";
 	public static final String TEXT_TURTLE = "text/turtle";	
 
-	public static String convertModel(Model model, MediaType mediaType) throws NotSupportedException {
-		return convertModel(model, mediaType.getType() + "/" + mediaType.getSubtype());
+	public static String convertModel(Model model, MediaType mediaType, String baseUri) throws NotSupportedException {
+		return convertModel(model, mediaType.getType() + "/" + mediaType.getSubtype(), baseUri);
 	}
 		
-	public static String convertModel(Model model, String mediaTypeString)
+	public static String convertModel(Model model, String mediaTypeString, String baseUri)
 		throws NotSupportedException
 	{
 		switch (mediaTypeString) {
 		
 		case APPLICATION_JSON:
 		case APPLICATION_LD_JSON:			
-			return convertModelToRdf(model, "JSON-LD");
+			return convertModelToRdf(model, "JSON-LD", baseUri);
 			
 		case TEXT_PLAIN:
 		case TEXT_TURTLE:
-			return convertModelToRdf(model, "TURTLE");
+			return convertModelToRdf(model, "TURTLE", baseUri);
 
 		case APPLICATION_RDF_XML:
 		case APPLICATION_XML:
-			return convertModelToRdf(model, "RDF/XML");
+			return convertModelToRdf(model, "RDF/XML", baseUri);
 
 		case TEXT_HTML:
 		case WILDCARD:
-			return convertModelToHtml(model);
+			return convertModelToHtml(model, baseUri);
 			
 		default:
 			throw new NotSupportedException(
@@ -82,21 +83,24 @@ public class MediaTypeConverter {
 //		return out.toString();
 //	}
 	
-	public static String convertModelToRdf(Model model, String lang) {
+	public static String convertModelToRdf(Model model, String lang, String baseUri) {
 		if (lang.equalsIgnoreCase("JSON-LD")) {
 			JenaJSONLD.init();
 		}
 		StringWriter writer = new StringWriter();
 		model.setNsPrefixes(LinkedBuildingDataOntology.getDefaultNsPrefixes());
-		model.write(writer, lang, DrumbeatApplication.getInstance().getBaseUri());
+		if (StringUtils.isEmptyOrNull(baseUri)) {
+			baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		}
+		model.write(writer, lang, baseUri);
 		return writer.toString();
 	}
 
-	public static String convertModelToHtml(Model model) {
-		return convertModelToHtml(model, true);
+	public static String convertModelToHtml(Model model, String baseUri) {
+		return convertModelToHtml(model, baseUri, true);
 	}
 
-	public static String convertModelToHtml(Model model, boolean supportSorting) {
+	public static String convertModelToHtml(Model model, String baseUri, boolean supportSorting) {
 		// TODO: Use local style sheet file
 		
 		StringBuilder stringBuilder = new StringBuilder()
@@ -137,7 +141,9 @@ public class MediaTypeConverter {
 				.append("<thead><tr><th>Subject</th><th>Predicate</th><th>Object</th></tr></thead>")
 				.append("<tbody>");
 		
-		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		if (StringUtils.isEmptyOrNull(baseUri)) {
+			baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		}
 		Map<String, String> nsPrefixMap = LinkedBuildingDataOntology.getDefaultNsPrefixes();
 		Set<String> usedNsPrefixSet = new TreeSet<>();
 		
@@ -215,17 +221,14 @@ public class MediaTypeConverter {
 					String localName = node.asResource().getLocalName();
 					nodeString = nsPrefix.getKey() + ":" + localName;
 					
-					if (nameSpace.startsWith(baseUri)) {
-						href = DrumbeatApplication.getInstance().getRealBaseUri() + nameSpace.substring(baseUri.length()) + localName;
-					}
-					
+					href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
 					break;
 				}
 			}
 			
 			if (useBrackets && nodeString.startsWith(baseUri)) {
 				nodeString = nodeString.substring(baseUri.length());
-				href = DrumbeatApplication.getInstance().getRealBaseUri() + nodeString;
+				href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
 				usedNsPrefixSet.add("");
 			}
 			

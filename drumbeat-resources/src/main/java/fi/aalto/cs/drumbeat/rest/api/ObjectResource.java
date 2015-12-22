@@ -18,6 +18,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
+import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 @Path("/objects")
@@ -50,9 +51,11 @@ public class ObjectResource {
 		
 		try {		
 			Model model = getObjectManager().getAll(collectionId, dataSourceId, dataSetId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
+					modelBaseUri,					
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
@@ -75,9 +78,11 @@ public class ObjectResource {
 		
 		try {		
 			Model model = getObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
+					modelBaseUri,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
@@ -100,9 +105,11 @@ public class ObjectResource {
 		
 		try {		
 			Model model = getObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
+					modelBaseUri,
 					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
