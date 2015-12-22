@@ -84,14 +84,14 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		synchronized (DrumbeatApplication.class) {
 			if (logger == null) {
 				logger = Logger.getRootLogger();
-				DOMConfigurator.configure(getRealPath(Paths.LOGGER_CONFIG_FILE_PATH));
+				DOMConfigurator.configure(getRealServerPath(Paths.LOGGER_CONFIG_FILE_PATH));
 				logger.info("Starting Web API");
 			}
 			
 			if (configurationProperties == null) {
 				configurationProperties = new Properties();
 				try {
-					String configFilePath = getRealPath(Paths.COMMON_CONFIG_FILE_PATH);
+					String configFilePath = getRealServerPath(Paths.COMMON_CONFIG_FILE_PATH);
 					logger.info("Config file: " + configFilePath);
 					FileInputStream in = new FileInputStream(configFilePath);
 					configurationProperties.load(in);
@@ -235,7 +235,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 	}
 	
-	public String getRealPath(String path) {
+	public String getRealServerPath(String path) {
 		return workingFolderPath + path;
 	}
 	

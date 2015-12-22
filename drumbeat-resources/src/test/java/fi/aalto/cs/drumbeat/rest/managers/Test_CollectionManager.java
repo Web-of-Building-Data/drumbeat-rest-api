@@ -32,7 +32,7 @@ public class Test_CollectionManager extends DrumbeatTest {
 	public static void setUpBeforeClass() throws Exception {
 		DrumbeatTest.setUpBeforeClass();
 		metaDataModel = getApplication().getMetaDataModel();		
-		String testDataFilePath = getApplication().getRealPath(TestApplication.TEST_RDF_META_DATA_FILE_PATH);
+		String testDataFilePath = getApplication().getRealServerPath(TestApplication.TEST_RDF_META_DATA_FILE_PATH);
 		RdfUtils.importRdfFileToJenaModel(metaDataModel, testDataFilePath);
 		collectionManager = new CollectionManager();
 	}

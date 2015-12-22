@@ -47,7 +47,7 @@ public class Test_DataSetResource extends DrumbeatTest {
 	public static void setUpBeforeClass() throws Exception {
 		DrumbeatTest.setUpBeforeClass();
 		Model metaDataModel = getApplication().getMetaDataModel();		
-		String testDataFilePath = getApplication().getRealPath(TestApplication.TEST_RDF_META_DATA_FILE_PATH);
+		String testDataFilePath = getApplication().getRealServerPath(TestApplication.TEST_RDF_META_DATA_FILE_PATH);
 		RdfUtils.importRdfFileToJenaModel(metaDataModel, testDataFilePath);
 	}
 	

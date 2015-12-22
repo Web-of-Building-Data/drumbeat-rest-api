@@ -199,8 +199,8 @@ public class UploadManager {
 			// loading schemas and config files
 			synchronized (ObjectManager.class) {
 				if (IfcSchemaPool.size() == 0) {
-					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
-					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
+					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
 				}			
 			}
 			
@@ -261,7 +261,7 @@ public class UploadManager {
 				graphUri.substring(baseUri.length()) : graphUri;
 		
 		String outputFilePath = String.format("%s/%s/%s/%sfile.gz",
-				DrumbeatApplication.getInstance().getRealPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
+				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
 				graphName,
 				dataType.toUpperCase(),
 				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
