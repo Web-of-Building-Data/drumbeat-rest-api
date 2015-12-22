@@ -64,6 +64,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	private final int applicationId;
 	private Properties configurationProperties;
 	private String baseUri;
+	private String realBaseUri;
 	private Boolean isBaseUriFixed;
 	private Boolean saveUploads;
 	private Ifc2RdfConversionContext defaultConversionContext;
@@ -131,13 +132,15 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		return isBaseUriFixed;		
 	}
 
-	public void notifyRequest(UriInfo uriInfo) {
-		if (!isBaseUriFixed()) {
-			String newBaseUri = uriInfo.getBaseUri().toString();
-			if (!newBaseUri.equals(baseUri)) {
-				logger.info("New BaseUri: " + newBaseUri);
-				this.baseUri = newBaseUri;
-			}
+	public String getRealBaseUri() {
+		return realBaseUri != null ? realBaseUri : getBaseUri();
+	}
+	
+	public void notifyRequest(UriInfo uriInfo) {		
+		realBaseUri = uriInfo.getBaseUri().toString();
+		if (!isBaseUriFixed() && !realBaseUri.equals(baseUri)) {
+			logger.info("New BaseUri: " + realBaseUri);
+			this.baseUri = realBaseUri;
 		}
 	}
 		

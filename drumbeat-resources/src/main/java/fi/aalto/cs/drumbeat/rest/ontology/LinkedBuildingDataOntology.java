@@ -55,7 +55,7 @@ public class LinkedBuildingDataOntology {
 				// TODO: get IFC URI from config file
 				put("expr", "http://drumbeat.cs.hut.fi/owl/EXPRESS#");
 //				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
-				put("ifc", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");
+				put("ifc", formatOntologyBaseUri("ifc2x3"));
 //				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
 			}};
 		return map;
@@ -116,6 +116,11 @@ public class LinkedBuildingDataOntology {
 				"%sowl/%s",
 				DrumbeatApplication.getInstance().getBaseUri(),
 				ontolgoyId);
+	}
+
+	public static String formatOntologyBaseUri(String ontologyId)
+	{
+		return formatOntologyUri(ontologyId) + "#";
 	}
 
 	public static String formatGraphUri(String collectionId, String dataSourceId, String dataSetId)

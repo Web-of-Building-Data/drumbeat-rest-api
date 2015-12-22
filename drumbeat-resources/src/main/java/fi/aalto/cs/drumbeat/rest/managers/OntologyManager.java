@@ -194,7 +194,7 @@ public class OntologyManager extends DrumbeatManager {
 		//		
 		String ontologyUri = formatOntologyUri(ontologyId);
 		String graphUri = ontologyUri;
-		String graphBaseUri = graphUri;
+		String graphBaseUri = formatOntologyBaseUri(ontologyId);
 		
 		//
 		// Read input stream to target model
@@ -210,7 +210,7 @@ public class OntologyManager extends DrumbeatManager {
 	}
 	
 	
-	private void updateMetaModelAfterUploading(String dataSetUri, String graphUri, String graphBaseUri, long sizeInTriples) {
+	private void updateMetaModelAfterUploading(String ontologyUri, String graphUri, String graphBaseUri, long sizeInTriples) {
 		
 		Model metaDataModel = getMetaDataModel();
 
@@ -223,19 +223,19 @@ public class OntologyManager extends DrumbeatManager {
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"DELETE { ?dataSetUri lbdho:graphUri ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:graphUri ?o }");
+								"DELETE { ?ontologyUri lbdho:graphUri ?o } \n" +
+								"WHERE { ?ontologyUri lbdho:graphUri ?o }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
 			
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:graphUri ?graphUri }");
+								"INSERT DATA { ?ontologyUri lbdho:graphUri ?graphUri }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 						setLiteral("graphUri", metaDataModel.createLiteral(graphUri));
 					}}.asUpdate(),
 					metaDataModel);
@@ -243,19 +243,19 @@ public class OntologyManager extends DrumbeatManager {
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"DELETE { ?dataSetUri lbdho:graphBaseUri ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:graphBaseUri ?o }");
+								"DELETE { ?ontologyUri lbdho:graphBaseUri ?o } \n" +
+								"WHERE { ?ontologyUri lbdho:graphBaseUri ?o }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
 			
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:graphBaseUri ?graphBaseUri }");
+								"INSERT DATA { ?ontologyUri lbdho:graphBaseUri ?graphBaseUri }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 						setLiteral("graphBaseUri", metaDataModel.createLiteral(graphBaseUri));
 					}}.asUpdate(),
 					metaDataModel);
@@ -263,19 +263,19 @@ public class OntologyManager extends DrumbeatManager {
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:lastModified ?o }");
+								"DELETE { ?ontologyUri lbdho:lastModified ?o } \n" +
+								"WHERE { ?ontologyUri lbdho:lastModified ?o }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
 			
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
+								"INSERT DATA { ?ontologyUri lbdho:lastModified ?lastModified }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 						setLiteral("lastModified", Calendar.getInstance());
 					}}.asUpdate(),
 					metaDataModel);
@@ -283,19 +283,19 @@ public class OntologyManager extends DrumbeatManager {
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
+								"DELETE { ?ontologyUri lbdho:sizeInTriples ?o } \n" +
+								"WHERE { ?ontologyUri lbdho:sizeInTriples ?o }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
 			
 			UpdateAction.execute(
 					new ParameterizedSparqlString() {{
 						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
+								"INSERT DATA { ?ontologyUri lbdho:sizeInTriples ?sizeInTriples }");
 						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
+						setIri("ontologyUri", ontologyUri);
 						setLiteral("sizeInTriples", sizeInTriples);
 					}}.asUpdate(),
 					metaDataModel);

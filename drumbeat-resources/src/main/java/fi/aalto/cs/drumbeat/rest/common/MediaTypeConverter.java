@@ -202,25 +202,36 @@ public class MediaTypeConverter {
 		if (node.isURIResource()) {
 			
 			boolean useBrackets = true;
-			
+
 			String nodeString = node.toString();
-			if (nodeString.startsWith(baseUri)) {
-				nodeString = nodeString.substring(baseUri.length());
-				usedNsPrefixSet.add("");
-			} else {
-				String nameSpace = node.asResource().getNameSpace();				
-				for (Entry<String,String> nsPrefix : nsPrefixMap.entrySet()) {
-					if (nsPrefix.getValue().equals(nameSpace)) {
-						nodeString = nsPrefix.getKey() + ":" + node.asResource().getLocalName();
-						usedNsPrefixSet.add(nsPrefix.getKey());
-						useBrackets = false;
-						break;
+			String href = nodeString;
+			String nameSpace = node.asResource().getNameSpace();
+			
+			for (Entry<String,String> nsPrefix : nsPrefixMap.entrySet()) {
+				if (nsPrefix.getValue().equals(nameSpace)) {
+					usedNsPrefixSet.add(nsPrefix.getKey());
+					useBrackets = false;
+
+					String localName = node.asResource().getLocalName();
+					nodeString = nsPrefix.getKey() + ":" + localName;
+					
+					if (nameSpace.startsWith(baseUri)) {
+						href = DrumbeatApplication.getInstance().getRealBaseUri() + nameSpace.substring(baseUri.length()) + localName;
 					}
+					
+					break;
 				}
 			}
+			
+			if (useBrackets && nodeString.startsWith(baseUri)) {
+				nodeString = nodeString.substring(baseUri.length());
+				href = DrumbeatApplication.getInstance().getRealBaseUri() + nodeString;
+				usedNsPrefixSet.add("");
+			}
+			
 			return String.format(
 					"<a href=\"%s\">%s%s%s</a>",
-					node.toString(),
+					href,
 					useBrackets ? "&lt;" : "",
 					nodeString,
 					useBrackets ? "&gt;" : "");

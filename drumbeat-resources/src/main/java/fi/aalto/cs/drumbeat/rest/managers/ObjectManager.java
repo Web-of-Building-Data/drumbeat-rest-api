@@ -43,28 +43,32 @@ public class ObjectManager extends DrumbeatManager {
 	public Model getAll(String collectionId, String dataSourceId, String dataSetId)
 		throws NotFoundException, DrumbeatException
 	{
+		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
+
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 						"CONSTRUCT { \n" +
 						"	?o rdf:type ?type \n" +
 						"} \n " +
-						"FROM NAMED <datasets/col-1/dso-1-1/dse-1-1-1> \n " +
-						"FROM NAMED <owl/ifc2x3> \n " +
+//						"FROM NAMED ?dataSetUri \n " +
+//						"FROM NAMED ?ifcOwlUri \n " +
 						"WHERE { \n " +
-						"	GRAPH <datasets/col-1/dso-1-1/dse-1-1-1> { \n " +
-						"		?o a ?type . \n " +
+						"	GRAPH ?dataSetUri { \n " +
+						"		?o a ?type ; ifc:globalId_IfcRoot _:globalId . \n " +
 						"	} \n " +
-						"	GRAPH <owl/ifc2x3> { \n " +
-						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
-						"	} \n " +
+//						"	GRAPH ?ifcOwlUri { \n " +
+//						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
+//						"	} \n " +
 						"} \n "
 					);
 			
-			fillParameterizedSparqlString(this);			
+			fillParameterizedSparqlString(this);
+			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+			setIri("ifcOwlUri", formatOntologyUri("ifc2x3"));
 		}}.asQuery();
 		
 		Model resultModel = 
-				createQueryExecution(query, getMetaDataModel())
+				createQueryExecution(query, dataModel)
 					.execConstruct();
 		
 		if (resultModel.isEmpty()) {
