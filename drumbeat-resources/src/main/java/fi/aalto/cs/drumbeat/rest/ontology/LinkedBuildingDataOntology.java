@@ -36,10 +36,13 @@ public class LinkedBuildingDataOntology {
 	public static final Property graphName = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "graphName");	
 	public static final Property hasDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSet");	
 	public static final Property hasDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSource");	
+	public static final Property hasLastDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasLastDataSet");
 	public static final Property inCollection = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inCollection");	
 	public static final Property inDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inDataSource");
 	public static final Property lastModified = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "lastModified");	
 	public static final Property name = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "name");	
+	public static final Property overwrites = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "overwrites");	
+	public static final Property overwritingMethod = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "overwritingMethod");	
 	public static final Property replaces = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "replaces");	
 	public static final Property sizeInTriples = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "sizeInTriples");
 	
@@ -100,14 +103,16 @@ public class LinkedBuildingDataOntology {
 				dataSetId);
 	}
 		
-	public static String formatObjectResourceUri(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+	public static String formatObjectResourceBaseUri(String collectionId, String dataSourceId) {
 		return String.format(
-				"%sobjects/%s/%s/%s/%s",
+				"%sobjects/%s/%s/",
 				DrumbeatApplication.getInstance().getBaseUri(),
 				collectionId,
-				dataSourceId,
-				dataSetId,
-				objectId);
+				dataSourceId);
+	}
+
+	public static String formatObjectResourceUri(String collectionId, String dataSourceId, String objectId) {
+		return formatObjectResourceBaseUri(collectionId, dataSourceId) + objectId;
 	}
 
 	public static String formatOntologyUri(String ontolgoyId)

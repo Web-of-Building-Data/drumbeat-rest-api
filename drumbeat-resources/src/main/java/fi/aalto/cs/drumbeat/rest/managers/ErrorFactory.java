@@ -75,11 +75,11 @@ public class ErrorFactory {
 
 
 	
-	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String objectId) {
 		return new NotFoundException(
 				String.format(
 						"Object not found: <%s>",
-						formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId)));
+						formatObjectResourceUri(collectionId, dataSourceId, objectId)));
 	}
 	
 
@@ -107,6 +107,10 @@ public class ErrorFactory {
 				String.format(
 						"Ontology already exists: <%s>",
 						formatOntologyUri(ontologyId)));
+	}
+
+	public static IllegalArgumentException createInvalidOverwritingMethodException(String overwritingMethod) {
+		return new IllegalArgumentException(String.format("Invalid overwriting method: %s", overwritingMethod));
 	}
 	
 	

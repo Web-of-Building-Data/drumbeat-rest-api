@@ -14,6 +14,7 @@
 <datasources/col-1/dso-1-1> rdf:type lbdho:DataSource .
 <datasources/col-1/dso-1-1> lbdho:hasDataSet <datasets/col-1/dso-1-1/dse-1-1-1>  .
 <datasources/col-1/dso-1-1> lbdho:hasDataSet <datasets/col-1/dso-1-1/dse-1-1-2>  .
+<datasources/col-1/dso-1-1> lbdho:hasLastDataSet <datasets/col-1/dso-1-1/dse-1-1-2>  .
 
 <datasets/col-1/dso-1-1/dse-1-1-1> lbdho:inDataSource <datasources/col-1/dso-1-1> .
 <datasets/col-1/dso-1-1/dse-1-1-1> lbdho:name "DataSet 1-1-1" .
@@ -23,6 +24,7 @@
 <datasets/col-1/dso-1-1/dse-1-1-2> lbdho:name "DataSet 1-1-2" .
 <datasets/col-1/dso-1-1/dse-1-1-2> lbdho:replaces <datasets/col-1/dso-1-1/dse-1-1-1> .
 <datasets/col-1/dso-1-1/dse-1-1-2> rdf:type lbdho:DataSet .
+<datasets/col-1/dso-1-1/dse-1-1-2> lbdho:overwrites <datasets/col-1/dso-1-1/dse-1-1-1>.
 
 <datasources/col-1/dso-1-2> lbdho:inCollection <collections/col-1> .
 <datasources/col-1/dso-1-2> lbdho:name "DataSource 1-2" .

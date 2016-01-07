@@ -28,7 +28,11 @@ import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProviderException;
 
 public abstract class DrumbeatApplication extends ResourceConfig {
 	
-	public static class Paths {	
+	public static class RequestParams {
+		public static final String NONE = "NONE";
+	}
+	
+	public static class ResourcePaths {	
 		public static final String CONFIG_FOLDER_PATH = "config/";
 		public static final String COMMON_CONFIG_FILE_PATH = CONFIG_FOLDER_PATH + "config.properties";
 		public static final String LOGGER_CONFIG_FILE_PATH = CONFIG_FOLDER_PATH + "log4j.xml";
@@ -39,7 +43,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		public static final String UPLOADS_FOLDER_PATH = "uploads/";
 	}
 	
-	public static class Params {
+	public static class ConfigParams {
 		public static final String WEB_BASE_URI = "web.baseUri";		
 		public static final String WEB_BASE_URI_FIXED = "web.baseUri.fixed";		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
@@ -84,14 +88,14 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		synchronized (DrumbeatApplication.class) {
 			if (logger == null) {
 				logger = Logger.getRootLogger();
-				DOMConfigurator.configure(getRealServerPath(Paths.LOGGER_CONFIG_FILE_PATH));
+				DOMConfigurator.configure(getRealServerPath(ResourcePaths.LOGGER_CONFIG_FILE_PATH));
 				logger.info("Starting Web API");
 			}
 			
 			if (configurationProperties == null) {
 				configurationProperties = new Properties();
 				try {
-					String configFilePath = getRealServerPath(Paths.COMMON_CONFIG_FILE_PATH);
+					String configFilePath = getRealServerPath(ResourcePaths.COMMON_CONFIG_FILE_PATH);
 					logger.info("Config file: " + configFilePath);
 					FileInputStream in = new FileInputStream(configFilePath);
 					configurationProperties.load(in);
@@ -117,14 +121,14 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	public String getBaseUri() {
 		if (baseUri == null) {
-			baseUri = getConfigurationProperties().getProperty(Params.WEB_BASE_URI); 
+			baseUri = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI); 
 		}
 		return baseUri;
 	}
 	
 	public boolean isBaseUriFixed() {
 		if (isBaseUriFixed == null) {
-			String value = getConfigurationProperties().getProperty(Params.WEB_BASE_URI_FIXED, "true");
+			String value = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI_FIXED, "true");
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isBaseUriFixed = param.getValue();
@@ -164,7 +168,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean getSaveUploads() {
 		if (saveUploads == null) {
-			String value = getConfigurationProperties().getProperty(Params.UPLOADS_SAVE, "false");
+			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE, "false");
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			saveUploads = param.getValue();
@@ -175,16 +179,16 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	
 	public String getBaseUri(String path) {
-		return getConfigurationProperties().getProperty(Params.WEB_BASE_URI) + path;
+		return getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI) + path;
 	}
 	
 	public JenaProvider getJenaProvider() throws DrumbeatException {
 		
 		if (jenaProvider == null) {		
-			String providerName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
-			String providerClassName = getConfigurationProperties().getProperty(Params.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS);
+			String providerName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
+			String providerClassName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS);
 			try {
-				jenaProvider = AbstractJenaProvider.getFactory(providerName, providerClassName, getConfigurationProperties(), Params.JENA_PROVIDER_PREFIX);
+				jenaProvider = AbstractJenaProvider.getFactory(providerName, providerClassName, getConfigurationProperties(), ConfigParams.JENA_PROVIDER_PREFIX);
 			} catch (JenaProviderException e) {
 				String message = "Error getting Jena provider: " + e.getMessage();
 				logger.error(e.getMessage(), e);

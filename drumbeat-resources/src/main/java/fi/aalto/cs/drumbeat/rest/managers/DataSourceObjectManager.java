@@ -3,157 +3,201 @@ package fi.aalto.cs.drumbeat.rest.managers;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import java.io.InputStream;
 import java.util.Calendar;
 
+import javax.sound.midi.MetaMessage;
+
+import org.apache.commons.lang3.NotImplementedException;
+
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 
-public class ObjectManager extends DrumbeatManager {
+public class DataSourceObjectManager extends DrumbeatManager {
 	
-	public ObjectManager() throws DrumbeatException {
+	public DataSourceObjectManager() throws DrumbeatException {
 	}
 	
-	public ObjectManager(Model metaDataModel, JenaProvider jenaProvider) {
+	public DataSourceObjectManager(Model metaDataModel, JenaProvider jenaProvider) {
 		super(metaDataModel, jenaProvider);
 	}	
 
-	public Model getDataModel(String collectionId, String dataSourceId, String dataSetId) throws DrumbeatException {
-		String graphName = formatGraphUri(collectionId, dataSourceId, dataSetId);
-		return DrumbeatApplication.getInstance().getDataModel(graphName);
-	}
+//	public Model getDataModels(String collectionId, String dataSourceId, String dataSetId) throws DrumbeatException {
+//		String graphName = formatGraphUri(collectionId, dataSourceId, dataSetId);
+//		return DrumbeatApplication.getInstance().getDataModel(graphName);
+//	}
 	
-	/**
-	 * Gets all attributes of a specified object 
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param dataSetId
-	 * @return List of statements <<dataSet>> ?predicate ?object
-	 * @throws NotFoundException if the dataSet is not found
-	 * @throws DrumbeatException 
-	 */
-	public Model getAll(String collectionId, String dataSourceId, String dataSetId)
-		throws NotFoundException, DrumbeatException
-	{
-		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
-
-		Query query = new ParameterizedSparqlString() {{
-			setCommandText(
-						"CONSTRUCT { \n" +
-						"	?o rdf:type ?type \n" +
-						"} \n " +
-//						"FROM NAMED ?dataSetUri \n " +
-//						"FROM NAMED ?ifcOwlUri \n " +
-						"WHERE { \n " +
-						"	GRAPH ?dataSetUri { \n " +
-						"		?o a ?type ; ifc:globalId_IfcRoot _:globalId . \n " +
-						"	} \n " +
-//						"	GRAPH ?ifcOwlUri { \n " +
-//						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
+//	/**
+//	 * Gets all attributes of a specified object 
+//	 * @param collectionId
+//	 * @param dataSourceId
+//	 * @return List of statements <<dataSet>> ?predicate ?object
+//	 * @throws NotFoundException if the dataSet is not found
+//	 * @throws DrumbeatException 
+//	 */
+//	public Model getAll(String collectionId, String dataSourceId)
+//		throws NotFoundException, DrumbeatException
+//	{
+//		Model dataModel = getDataModels(collectionId, dataSourceId);
+//
+//		Query query = new ParameterizedSparqlString() {{
+//			setCommandText(
+//						"CONSTRUCT { \n" +
+//						"	?o rdf:type ?type \n" +
+//						"} \n " +
+////						"FROM NAMED ?dataSetUri \n " +
+////						"FROM NAMED ?ifcOwlUri \n " +
+//						"WHERE { \n " +
+//						"	GRAPH ?dataSetUri { \n " +
+//						"		?o a ?type ; ifc:globalId_IfcRoot _:globalId . \n " +
 //						"	} \n " +
-						"} \n "
-					);
-			
-			fillParameterizedSparqlString(this);
-			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-			setIri("ifcOwlUri", formatOntologyUri("ifc2x3"));
-		}}.asQuery();
-		
-		Model resultModel = 
-				createQueryExecution(query, dataModel)
-					.execConstruct();
-		
-		if (resultModel.isEmpty()) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, "");
-		}
-		
-		return resultModel;
-	}
+////						"	GRAPH ?ifcOwlUri { \n " +
+////						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
+////						"	} \n " +
+//						"} \n "
+//					);
+//			
+//			fillParameterizedSparqlString(this);
+//			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+//			setIri("ifcOwlUri", formatOntologyUri("ifc2x3"));
+//		}}.asQuery();
+//		
+//		Model resultModel = 
+//				createQueryExecution(query, dataModel)
+//					.execConstruct();
+//		
+//		if (resultModel.isEmpty()) {
+//			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, "");
+//		}
+//		
+//		return resultModel;
+//	}
 	
 	
 	/**
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
 	 * @param dataSourceId
-	 * @param dataSetId
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getById(String collectionId, String dataSourceId, String dataSetId, String objectId)
+	public Model getById(String collectionId, String dataSourceId, String objectId)
 		throws NotFoundException, DrumbeatException
 	{
-		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
+		Model metaDataModel = getMetaDataModel();
+
+		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
 		
-		Query query = new ParameterizedSparqlString() {{
-			setCommandText(
-					"CONSTRUCT { \n" +
-					"	?objectUri ?predicate ?object \n" +
-					"} WHERE { \n" + 
-					"	?objectUri ?predicate ?object . \n" +
-					"} \n" + 
-					"ORDER BY ?predicate ?object");
+		Resource dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId).inModel(metaDataModel);
+		if (dataSetResource != null) {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);
+		}		
+		
+		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(metaDataModel, getJenaProvider());
+		
+		for (;;) {
 			
-			fillParameterizedSparqlString(this);
-			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId));
-		}}.asQuery();
-		
-		Model resultModel = 
-				createQueryExecution(query, dataModel)
-					.execConstruct();
-		
-		if (resultModel.isEmpty()) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, objectId);
+			String overwritingMethod = null;
+			String overwrittenDataSetUri = null;
+			
+			if (dataSetResource.hasProperty(LinkedBuildingDataOntology.overwritingMethod)) {
+				overwritingMethod = dataSetResource
+					.getProperty(LinkedBuildingDataOntology.overwritingMethod)
+					.getObject()
+					.asLiteral()
+					.getString();
+				
+				overwrittenDataSetUri = dataSetResource
+						.getProperty(LinkedBuildingDataOntology.overwrites)
+						.getObject()
+						.asLiteral()
+						.getString();
+			}
+			
+			if (StringUtils.isEmptyOrNull(overwritingMethod)) {
+				overwritingMethod = DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH;
+			}
+			
+			String dataSetId = dataSetResource.getLocalName();
+			
+			Model resultModel;
+			
+			try {
+				resultModel = dataSetObjectManager.getById(collectionId, dataSourceId, dataSetId, objectId);
+			} catch (NotFoundException e) {
+				resultModel = ModelFactory.createDefaultModel();
+			}
+			
+			switch (overwritingMethod) {
+			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH:
+				return resultModel;
+
+			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_OBJECTS:
+				if (!resultModel.isEmpty()) {
+					return resultModel;
+				}
+				break;
+
+			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_TRIPLES:
+			default:
+				throw new NotImplementedException(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_TRIPLES);
+			}
+			
+			dataSetResource = metaDataModel.getResource(overwrittenDataSetUri);	
 		}
 		
-		return resultModel;
+		
 	}
 	
 	
-	/**
-	 * Gets type of a specified object 
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param dataSetId
-	 * @return List of statements <<dataSet>> ?predicate ?object
-	 * @throws NotFoundException if the dataSet is not found
-	 * @throws DrumbeatException 
-	 */
-	public Model getObjectType(String collectionId, String dataSourceId, String dataSetId, String objectId)
-		throws NotFoundException, DrumbeatException
-	{
-		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
-		
-		Query query = new ParameterizedSparqlString() {{
-			setCommandText(
-					"SELECT (?objectUri AS ?subject) (rdf:type AS ?predicate) (?type AS ?object) { \n" + 
-					"	?objectUri a ?type . \n" +
-					"} \n" + 
-					"ORDER BY ?subject ?predicate ?object");
-			
-			fillParameterizedSparqlString(this);
-			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId));
-		}}.asQuery();
-		
-		Model resultModel = 
-				createQueryExecution(query, dataModel)
-					.execConstruct();
-		
-		if (resultModel.isEmpty()) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, dataSetId, objectId);
-		}
-		
-		return resultModel;
-	}
-	
+//	/**
+//	 * Gets type of a specified object 
+//	 * @param collectionId
+//	 * @param dataSourceId
+//	 * @return List of statements <<dataSet>> ?predicate ?object
+//	 * @throws NotFoundException if the dataSet is not found
+//	 * @throws DrumbeatException 
+//	 */
+//	public Model getObjectType(String collectionId, String dataSourceId, String objectId)
+//		throws NotFoundException, DrumbeatException
+//	{
+//		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
+//		
+//		Query query = new ParameterizedSparqlString() {{
+//			setCommandText(
+//					"SELECT (?objectUri AS ?subject) (rdf:type AS ?predicate) (?type AS ?object) { \n" + 
+//					"	?objectUri a ?type . \n" +
+//					"} \n" + 
+//					"ORDER BY ?subject ?predicate ?object");
+//			
+//			fillParameterizedSparqlString(this);
+//			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, objectId));
+//		}}.asQuery();
+//		
+//		Model resultModel = 
+//				createQueryExecution(query, dataModel)
+//					.execConstruct();
+//		
+//		if (resultModel.isEmpty()) {
+//			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);
+//		}
+//		
+//		return resultModel;
+//	}
+//	
 //	/**
 //	 * Gets type of a specified object 
 //	 * @param collectionId
@@ -237,6 +281,7 @@ public class ObjectManager extends DrumbeatManager {
 	 * @param dataSetId
 	 * @param dataType
 	 * @param dataFormat
+	 * @param overwritingMehod
 	 * @param in
 	 * @param saveFiles
 	 * @return
@@ -265,7 +310,7 @@ public class ObjectManager extends DrumbeatManager {
 		// Format graphUri
 		//		
 		String graphUri = formatGraphUri(collectionId, dataSourceId, dataSetId);
-		String graphBaseUri = formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
+		String graphBaseUri = formatObjectResourceBaseUri(collectionId, dataSourceId);
 		
 		//
 		// Read input stream to target model

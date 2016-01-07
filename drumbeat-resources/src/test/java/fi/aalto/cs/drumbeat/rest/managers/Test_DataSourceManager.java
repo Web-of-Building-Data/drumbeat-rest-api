@@ -109,7 +109,7 @@ public class Test_DataSourceManager extends DrumbeatTest {
 
 		Model model = dataSourceManager.getById("col-1", "dso-1-1");
 		
-		assertEquals(5L, model.size());
+		assertTrue(model.size() >= 5L);
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		Resource dataSourceResource = model.createResource(baseUri + "datasources/col-1/dso-1-1"); 

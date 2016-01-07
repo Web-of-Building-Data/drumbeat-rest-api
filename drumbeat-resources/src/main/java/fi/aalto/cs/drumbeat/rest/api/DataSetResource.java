@@ -24,9 +24,10 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication.RequestParams;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
@@ -108,13 +109,14 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("name") String name,
+			@DefaultValue(RequestParams.NONE) @FormParam("overwritingMethod") String overwritingMethod,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {
-			Model model = getDataSetManager().create(collectionId, dataSourceId, dataSetId, name);
+			Model model = getDataSetManager().create(collectionId, dataSourceId, dataSetId, name, overwritingMethod);
 			return DrumbeatResponseBuilder.build(
 					Status.CREATED,
 					model,
@@ -136,8 +138,8 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -166,8 +168,8 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -197,8 +199,8 @@ public class DataSetResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,			
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -221,11 +223,11 @@ public class DataSetResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
+			@FormDataParam("dataType") String dataType,
+			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
-			@FormDataParam("dataType") String dataType,
-			@FormDataParam("dataFormat") String dataFormat,
-			@FormDataParam("compressionFormat") String compressionFormat,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
@@ -253,7 +255,7 @@ public class DataSetResource {
 	{	
 		
 		try {
-			ObjectManager objectManager = new ObjectManager();
+			DataSourceObjectManager objectManager = new DataSourceObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			
 			Model dataSetInfoModel = objectManager.upload(

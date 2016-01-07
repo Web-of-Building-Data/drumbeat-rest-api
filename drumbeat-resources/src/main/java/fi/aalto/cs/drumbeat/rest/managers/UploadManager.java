@@ -30,18 +30,13 @@ import fi.aalto.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchemaPool;
 import fi.aalto.cs.drumbeat.ifc.processing.IfcModelAnalyser;
 
+import static fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary.*;
+
 
 
 public class UploadManager {
 	
-	private static final Logger logger = Logger.getLogger(ObjectManager.class);	
-
-	public static final String DATA_TYPE_IFC = "IFC";
-	public static final String DATA_TYPE_RDF = "RDF";
-	public static final String DATA_TYPE_CSV = "CSV";
-	
-	public static final String COMPRESSION_FORMAT_GZIP = "gzip";	
-	public static final String COMPRESSION_FORMAT_GZ = "gz";	
+	private static final Logger logger = Logger.getLogger(DataSourceObjectManager.class);	
 
 
 	/**
@@ -197,10 +192,10 @@ public class UploadManager {
 		logger.info("Uploading IFC model");
 		try {			
 			// loading schemas and config files
-			synchronized (ObjectManager.class) {
+			synchronized (DataSourceObjectManager.class) {
 				if (IfcSchemaPool.size() == 0) {
-					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.IFC2LD_CONFIG_FILE_PATH));				
-					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.IFC_SCHEMA_FOLDER_PATH));
+					ConfigurationDocument.load(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.IFC2LD_CONFIG_FILE_PATH));				
+					Ifc2RdfExporter.parseSchemas(DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.IFC_SCHEMA_FOLDER_PATH));
 				}			
 			}
 			
@@ -261,7 +256,7 @@ public class UploadManager {
 				graphUri.substring(baseUri.length()) : graphUri;
 		
 		String outputFilePath = String.format("%s/%s/%s/%sfile.gz",
-				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.Paths.UPLOADS_FOLDER_PATH),
+				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.UPLOADS_FOLDER_PATH),
 				graphName,
 				dataType.toUpperCase(),
 				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");

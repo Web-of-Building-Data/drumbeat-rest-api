@@ -218,17 +218,18 @@ public class MediaTypeConverter {
 					usedNsPrefixSet.add(nsPrefix.getKey());
 					useBrackets = false;
 
+					href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
+
 					String localName = node.asResource().getLocalName();
 					nodeString = nsPrefix.getKey() + ":" + localName;
 					
-					href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
 					break;
 				}
 			}
 			
 			if (useBrackets && nodeString.startsWith(baseUri)) {
-				nodeString = nodeString.substring(baseUri.length());
 				href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
+				nodeString = nodeString.substring(baseUri.length());
 				usedNsPrefixSet.add("");
 			}
 			

@@ -17,23 +17,23 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.managers.ObjectManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
-@Path("/objects")
-public class ObjectResource {
+@Path("/dsobjects")
+public class DataSetObjectResource {
 
-	private static final Logger logger = Logger.getLogger(ObjectResource.class);
+	private static final Logger logger = Logger.getLogger(DataSetObjectResource.class);
 
-	private ObjectManager getObjectManager() {
+	private DataSetObjectManager getDataSetObjectManager() {
 		try {
-			return new ObjectManager();
+			return new DataSetObjectManager();
 		} catch (DrumbeatException e) {
 			logger.error(e);
 			throw new DrumbeatWebException(
 					Status.INTERNAL_SERVER_ERROR,
-					"Error getting ObjectManager instance: " + e.getMessage(),
+					"Error getting DataSetObjectManager instance: " + e.getMessage(),
 					e);
 		}
 	}
@@ -50,8 +50,8 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getObjectManager().getAll(collectionId, dataSourceId, dataSetId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
+			Model model = getDataSetObjectManager().getAll(collectionId, dataSourceId, dataSetId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -77,8 +77,8 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
+			Model model = getDataSetObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -104,8 +104,8 @@ public class ObjectResource {
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceUri(collectionId, dataSourceId, dataSetId, "");
+			Model model = getDataSetObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);
+			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,

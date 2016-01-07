@@ -2,9 +2,13 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
@@ -15,6 +19,7 @@ import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSetManager extends DrumbeatManager {
@@ -70,6 +75,49 @@ public class DataSetManager extends DrumbeatManager {
 	
 	
 	/**
+	 * Gets last created dataSet that belong to the specified collection and datasource.
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @return List of statements <<dataSet>> rdf:type lbdho:DataSet
+//	 * @throws NotFoundException if the datasource is not found
+	 */
+	public Resource getLastDataSetResource(String collectionId, String dataSourceId)
+//		throws NotFoundException
+	{
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+					"SELECT \n" +
+					"	?dataSetUri \n" +
+					"WHERE { \n" + 
+					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri ; lbdho:hasLastDataSet ?dataSetUri . \n" +
+					"	?dataSetUri a lbdho:DataSet . \n" +
+					"} \n" + 
+					"ORDER BY ?dataSetUri");
+			
+			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			setIri("collectionUri", formatCollectionResourceUri(collectionId));
+			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
+		}}.asQuery();
+		
+		ResultSet result = 
+				createQueryExecution(query, getMetaDataModel())
+					.execSelect();
+		
+		if (!result.hasNext()) {
+			return null;
+//			DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel(), getJenaProvider()); 
+//			if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
+//				throw ErrorFactory.createDataSourceNotFoundException(collectionId, dataSourceId);
+//			}
+		}
+		
+		return result.next().getResource("dataSetUri");
+	}
+	
+	
+	
+	/**
 	 * Gets all properties of a specified dataSet 
 	 * @param collectionId
 	 * @param dataSourceId
@@ -114,22 +162,34 @@ public class DataSetManager extends DrumbeatManager {
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
+	 * @param overwritingMethod 
 	 * @return the recently created dataSet
 	 * @throws AlreadyExistsException if the dataSet already exists
 	 * @throws NotFoundException if the datasource is not found
 	 */
-	public Model create(String collectionId, String dataSourceId, String dataSetId, String name)
-		throws AlreadyExistsException, NotFoundException
+	public Model create(String collectionId, String dataSourceId, String dataSetId, String name, String overwritingMethod)
+		throws AlreadyExistsException, NotFoundException, IllegalArgumentException
 	{
+		if (!StringUtils.isEmptyOrNull(overwritingMethod)) {
+			switch (overwritingMethod) {
+			
+			}
+		}
+		
+		//
+		// check if the parent dataSource exists
+		//
 		DataSourceManager dataSourceManager = new DataSourceManager(getMetaDataModel(), getJenaProvider()); 
 		if (!dataSourceManager.checkExists(collectionId, dataSourceId)) {
 			throw ErrorFactory.createDataSourceNotFoundException(collectionId, dataSourceId);
 		}
 		
+		//
+		// check if there is another dataset in this datasource with the same dataSetId 
+		//
 		if (checkExists(collectionId, dataSourceId, dataSetId)) {
 			throw ErrorFactory.createDataSetAlreadyExistsException(collectionId, dataSourceId, dataSetId);
 		}
-		
 		
 		Model metaDataModel = getMetaDataModel();		
 
@@ -138,14 +198,28 @@ public class DataSetManager extends DrumbeatManager {
 		
 		Resource dataSetResource = metaDataModel 
 				.createResource(formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+
+		//
+		// check if there is another dataset in this datasource
+		//
+		Resource lastDataSetResource = getLastDataSetResource(collectionId, dataSourceId);
+		
+		if (lastDataSetResource != null) {
+			lastDataSetResource = lastDataSetResource.inModel(metaDataModel);
+			metaDataModel.remove(dataSourceResource, LinkedBuildingDataOntology.hasLastDataSet, lastDataSetResource);
+			dataSetResource
+				.addProperty(LinkedBuildingDataOntology.overwrites, lastDataSetResource)
+				.addProperty(LinkedBuildingDataOntology.overwritingMethod, overwritingMethod);
+		}
 		
 		dataSourceResource
+			.addProperty(LinkedBuildingDataOntology.hasLastDataSet, dataSetResource)
 			.addProperty(LinkedBuildingDataOntology.hasDataSet, dataSetResource);
 	
 		dataSetResource
 			.addProperty(RDF.type, LinkedBuildingDataOntology.DataSet)
 			.addLiteral(LinkedBuildingDataOntology.name, name)
-			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);		
+			.addProperty(LinkedBuildingDataOntology.inDataSource, dataSourceResource);
 		
 		return ModelFactory
 				.createDefaultModel()

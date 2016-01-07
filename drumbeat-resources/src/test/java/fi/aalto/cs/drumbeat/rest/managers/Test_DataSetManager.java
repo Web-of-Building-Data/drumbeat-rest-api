@@ -140,7 +140,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		if (!doTest()) {
 			return;
 		}
-		dataSetManager.create("col-1", "dso-1-999", "dse-1-999-1", "DataSet 1-999-1");
+		dataSetManager.create("col-1", "dso-1-999", "dse-1-999-1", "DataSet 1-999-1", null);
 	}
 	
 	@Test(expected=AlreadyExistsException.class)
@@ -148,7 +148,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		if (!doTest()) {
 			return;
 		}
-		dataSetManager.create("col-1", "dso-1-1", "dse-1-1-1", "DataSet 1-1-1");
+		dataSetManager.create("col-1", "dso-1-1", "dse-1-1-1", "DataSet 1-1-1", null);
 	}
 	
 	@Test
@@ -159,7 +159,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 		
-		Model model = dataSetManager.create("col-1", "dso-1-3", "dse-1-3-1", "DataSet 1-3-1");
+		Model model = dataSetManager.create("col-1", "dso-1-3", "dse-1-3-1", "DataSet 1-3-1", null);
 		assertEquals(1L,  model.size());
 		
 		Resource dataSetResource = model.listSubjects().next();
@@ -169,7 +169,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		dataSetResource = dataSetResource.inModel(metaDataModel);
 
-		assertEquals(oldSize + 4L, metaDataModel.size());
+		assertTrue(oldSize + 4L <= metaDataModel.size());
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(
@@ -206,7 +206,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		long oldSize = metaDataModel.size();
 
-		Model model = dataSetManager.create("col-1", "dso-1-4", "dse-1-4-1", "DataSet 1-4-1");
+		Model model = dataSetManager.create("col-1", "dso-1-4", "dse-1-4-1", "DataSet 1-4-1", null);
 		
 		assertEquals(1L,  model.size());
 		
@@ -221,7 +221,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(baseUri + "datasets/col-1/dso-1-4/dse-1-4-1", dataSetResource.getURI());
 
-		assertEquals(oldSize + 4L, metaDataModel.size());
+		assertTrue(oldSize + 4L <= metaDataModel.size());
 		
 		dataSetManager.delete("col-1", "dso-1-4", "dse-1-4-1");
 		

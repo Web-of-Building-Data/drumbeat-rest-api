@@ -19,11 +19,11 @@ import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
-public class Test_ObjectManager extends DrumbeatTest {
+public class Test_DataSetObjectManager extends DrumbeatTest {
 	
 	private static final boolean DO_TEST = true;
 	
-	private static ObjectManager objectManager;
+	private static DataSetObjectManager dataSetObjectManager;
 	private static Model metaDataModel;
 
 	@BeforeClass
@@ -34,10 +34,10 @@ public class Test_ObjectManager extends DrumbeatTest {
 		RdfUtils.importRdfFileToJenaModel(metaDataModel, testDataFilePath);
 		
 		
-		objectManager = new ObjectManager();
+		dataSetObjectManager = new DataSetObjectManager();
 	}
 
-	public Test_ObjectManager() {
+	public Test_DataSetObjectManager() {
 		super(DO_TEST);
 	}
 	
@@ -49,6 +49,6 @@ public class Test_ObjectManager extends DrumbeatTest {
 	 **************************************/
 //	@Test
 //	public void test_getAll() throws NotFoundException, DrumbeatException {
-//		objectManager.getAll("col-1", "dso-1-1", "dse-1-1-1");
+//		dataSetObjectManager.getAll("col-1", "dso-1-1", "dse-1-1-1");
 //	}
 }
