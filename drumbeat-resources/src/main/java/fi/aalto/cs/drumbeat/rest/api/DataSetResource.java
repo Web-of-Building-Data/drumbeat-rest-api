@@ -34,7 +34,8 @@ import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
-@Path("/datasets")
+@Path("/{elementType: datasets|linksets}")
+//@Path("/datasets")
 public class DataSetResource {
 
 	private static final Logger logger = Logger.getLogger(DataSetResource.class);
@@ -295,6 +296,27 @@ public class DataSetResource {
 		
 		
 	}
+	
+//	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/createLinkSet")
+//	@POST
+//	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response createLinkSet(
+//			@PathParam("collectionId") String collectionId,
+//			@PathParam("dataSourceId") String dataSourceId,
+//			@PathParam("dataSetId") String dataSetId,
+//			@FormParam("sourceUrl") String sourceUrl,
+//			@FormParam("targetUrl") String targetUrl,
+//			@Context UriInfo uriInfo,
+//			@Context HttpHeaders headers)
+//	{
+//		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+//
+//		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);
+//		logger.info(String.format("CreateLinkSet: Name=%s, Source=%s, Target=%s", graphName, sourceUrl, targetUrl));
+//		
+//		return getDataSetManager().createLinkSet(collectionId, dataSourceId, dataSetId, sourceUrl, targetUrl);
+//	}	
 	
 	
 	private DataSetManager getDataSetManager() {

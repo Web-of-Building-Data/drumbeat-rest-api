@@ -22,7 +22,8 @@ import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 
-@Path("/datasources")
+@Path("/{elementType: datasources|linksources}")
+//@Path("/datasources")
 public class DataSourceResource {
 
 	private static final Logger logger = Logger.getLogger(DataSourceResource.class);
