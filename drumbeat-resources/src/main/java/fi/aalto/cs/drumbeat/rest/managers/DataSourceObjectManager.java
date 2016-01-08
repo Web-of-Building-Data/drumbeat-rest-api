@@ -101,10 +101,12 @@ public class DataSourceObjectManager extends DrumbeatManager {
 
 		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
 		
-		Resource dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId).inModel(metaDataModel);
+		Resource dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId);
 		if (dataSetResource != null) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);
-		}		
+			dataSetResource = dataSetResource.inModel(metaDataModel);
+		} else {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);			
+		}
 		
 		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(metaDataModel, getJenaProvider());
 		
