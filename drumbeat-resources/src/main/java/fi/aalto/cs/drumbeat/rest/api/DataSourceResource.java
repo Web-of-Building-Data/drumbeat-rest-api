@@ -89,7 +89,7 @@ public class DataSourceResource {
 		}
 	}
 	
-	@POST
+	@PUT
 	@Path("/{collectionId}/{dataSourceId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(
