@@ -185,6 +185,7 @@ public class OntologyManager extends DrumbeatManager {
 			String dataType,
 			String dataFormat,
 			String compressionFormat,
+			boolean clearBefore,
 			InputStream in,
 			boolean saveToFiles)
 		throws NotFoundException, IllegalArgumentException, Exception
@@ -199,7 +200,7 @@ public class OntologyManager extends DrumbeatManager {
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = new UploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, in, saveToFiles);
+		Model targetModel = new UploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
 		
 		//
 		// Update meta data model

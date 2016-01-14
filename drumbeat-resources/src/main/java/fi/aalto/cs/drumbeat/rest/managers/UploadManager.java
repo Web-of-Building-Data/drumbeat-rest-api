@@ -57,6 +57,7 @@ public class UploadManager {
 			String dataType,
 			String dataFormat,
 			String compressionFormat,
+			boolean clearBefore,
 			InputStream in,
 			boolean saveToFiles)
 		throws NotFoundException, IllegalArgumentException, Exception
@@ -73,7 +74,7 @@ public class UploadManager {
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = internalUpload(graphUri, graphBaseUri, dataType, dataFormat, in);		
+		Model targetModel = internalUpload(graphUri, graphBaseUri, dataType, dataFormat, clearBefore, in);		
 		
 		return targetModel;
 	}
@@ -85,6 +86,7 @@ public class UploadManager {
 	 * @param dataType
 	 * @param dataFormat
 	 * @param compressionFormat
+	 * @param clearBefore
 	 * @param in
 	 * @param saveToFiles
 	 * @return
@@ -137,6 +139,7 @@ public class UploadManager {
 			String graphBaseUri,
 			String dataType,
 			String dataFormat,
+			boolean clearBefore,
 			InputStream in) throws Exception
 	{
 		//
@@ -154,7 +157,9 @@ public class UploadManager {
 				targetModel.begin();
 			}
 			
-			targetModel.removeAll();
+			if (clearBefore) {
+				targetModel.removeAll();
+			}
 		
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
 				internalUploadIfc(in, graphBaseUri, targetModel);

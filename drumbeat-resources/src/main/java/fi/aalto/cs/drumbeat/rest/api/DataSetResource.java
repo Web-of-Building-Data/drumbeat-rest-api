@@ -31,6 +31,7 @@ import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
@@ -140,6 +141,7 @@ public class DataSetResource {
 			@FormParam("dataType") String dataType,
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -156,7 +158,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadUrl")
@@ -169,6 +171,7 @@ public class DataSetResource {
 			@FormParam("dataType") String dataType,
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -185,7 +188,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 
 
@@ -199,6 +202,7 @@ public class DataSetResource {
 			@FormParam("dataType") String dataType,
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -209,7 +213,7 @@ public class DataSetResource {
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 
 	
@@ -223,6 +227,7 @@ public class DataSetResource {
 			@FormDataParam("dataType") String dataType,
 			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@Context UriInfo uriInfo,
@@ -237,7 +242,7 @@ public class DataSetResource {
 		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
 	private Response internalUploadDataSet(
@@ -247,6 +252,7 @@ public class DataSetResource {
 			String dataType,
 			String dataFormat,
 			String compressionFormat,
+			String clearBefore,
 			InputStream in,
 			HttpHeaders headers)
 	{	
@@ -255,6 +261,9 @@ public class DataSetResource {
 			DataSourceObjectManager objectManager = new DataSourceObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			
+			BooleanParam clearBeforeParam = new BooleanParam();
+			clearBeforeParam.setStringValue(clearBefore);
+
 			Model dataSetInfoModel = objectManager.upload(
 					collectionId,
 					dataSourceId,
@@ -262,6 +271,7 @@ public class DataSetResource {
 					dataType,
 					dataFormat,
 					compressionFormat,
+					clearBeforeParam.getValue(),
 					in,
 					saveToFiles);
 			

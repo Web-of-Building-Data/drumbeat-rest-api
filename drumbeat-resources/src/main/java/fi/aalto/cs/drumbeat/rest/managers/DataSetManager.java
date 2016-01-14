@@ -18,6 +18,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
+
+import javax.ws.rs.core.Response;
+
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
@@ -318,7 +321,36 @@ public class DataSetManager extends DrumbeatManager {
 		
 		return result;
 	}
-	
+
+//	public Response createLinkSet(String collectionId, String dataSourceId, String dataSetId, String sourceUrl, String targetUrl) {
+//		Query query = new ParameterizedSparqlString() {{
+//			setCommandText(
+//					"CONSTRUCT { \n" +
+//					"	?sourceUri ifc:implements ?targetUri \n" +
+//					"} WHERE { \n" + 
+//					"	?collectionUri a lbdho:Collection ; lbdho:hasDataSource ?dataSourceUri . \n" +
+//					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
+//					"	?dataSetUri a lbdho:DataSet ; ?predicate ?object . \n" +
+//					"} \n" + 
+//					"ORDER BY ?predicate ?object");
+//			
+//			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+//			setIri("collectionUri", formatCollectionResourceUri(collectionId));
+//			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
+//			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+//		}}.asQuery();
+//		
+//		Model result = 
+//				createQueryExecution(query, getMetaDataModel())
+//					.execConstruct();
+//		
+//		if (result.isEmpty()) {
+//			throw ErrorFactory.createDataSetNotFoundException(collectionId, dataSourceId, dataSetId);
+//		}
+//		
+//		return result;
+//	}
+//	
 	
 
 }

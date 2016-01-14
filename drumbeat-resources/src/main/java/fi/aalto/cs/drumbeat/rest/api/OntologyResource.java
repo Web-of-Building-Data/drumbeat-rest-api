@@ -30,6 +30,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.OntologyManager;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
@@ -141,12 +142,12 @@ public class OntologyResource {
 	@Path("/{ontologyId}/uploadServerFile")
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadServerFile(
 			@PathParam("ontologyId") String ontologyId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -163,18 +164,18 @@ public class OntologyResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
 	@Path("/{ontologyId}/uploadUrl")
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadUrl(
 			@PathParam("ontologyId") String ontologyId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -191,19 +192,19 @@ public class OntologyResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 
 
 	@Path("/{ontologyId}/uploadContent")
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadContent(
 			@PathParam("ontologyId") String ontologyId,
 			@FormParam("dataType") String dataType,
-			@FormParam("dataFormat") String dataFormat,			
-			@FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
+			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -214,21 +215,21 @@ public class OntologyResource {
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", ontologyUri, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 
 	
 	@Path("/{ontologyId}/uploadClientFile")
 	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadClientFile(
 			@PathParam("ontologyId") String ontologyId,
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@FormDataParam("dataType") String dataType,
-			@FormDataParam("dataFormat") String dataFormat,
-			@FormDataParam("compressionFormat") String compressionFormat,
+			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
+			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
+			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
@@ -241,7 +242,7 @@ public class OntologyResource {
 		String ontologyUri = LinkedBuildingDataOntology.formatOntologyUri(ontologyId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", ontologyUri, fileDetail.getFileName()));		
 
-		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, in, headers);
+		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
 	private Response internalUploadDataSet(
@@ -249,6 +250,7 @@ public class OntologyResource {
 			String dataType,
 			String dataFormat,
 			String compressionFormat,
+			String clearBefore,
 			InputStream in,
 			HttpHeaders headers)
 	{	
@@ -257,11 +259,15 @@ public class OntologyResource {
 			OntologyManager ontologyManager = new OntologyManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			
+			BooleanParam clearBeforeParam = new BooleanParam();
+			clearBeforeParam.setStringValue(clearBefore);
+
 			Model dataSetInfoModel = ontologyManager.upload(
 					ontologyId,
 					dataType,
 					dataFormat,
 					compressionFormat,
+					clearBeforeParam.getValue(),
 					in,
 					saveToFiles);
 			
