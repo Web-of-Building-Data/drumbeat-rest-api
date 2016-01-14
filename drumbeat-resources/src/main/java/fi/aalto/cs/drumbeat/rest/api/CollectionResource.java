@@ -96,7 +96,7 @@ public class CollectionResource {
 		}
 	}
 	
-	@POST
+	@PUT
 	@Path("/{collectionId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(			

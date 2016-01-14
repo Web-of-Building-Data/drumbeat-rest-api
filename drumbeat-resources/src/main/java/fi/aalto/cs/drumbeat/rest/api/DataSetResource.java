@@ -102,7 +102,7 @@ public class DataSetResource {
 		}
 	}
 	
-	@POST
+	@PUT
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(			
@@ -131,7 +131,7 @@ public class DataSetResource {
 	
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadServerFile")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadServerFile(
 			@PathParam("collectionId") String collectionId,
@@ -160,7 +160,7 @@ public class DataSetResource {
 	}
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadUrl")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadUrl(
 			@PathParam("collectionId") String collectionId,
@@ -190,7 +190,7 @@ public class DataSetResource {
 
 
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadContent")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadContent(
 			@PathParam("collectionId") String collectionId,
@@ -214,7 +214,7 @@ public class DataSetResource {
 
 	
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadClientFile")
-	@POST
+	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadClientFile(
 			@PathParam("collectionId") String collectionId,
@@ -294,7 +294,7 @@ public class DataSetResource {
 	}
 	
 //	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/createLinkSet")
-//	@POST
+//	@PUT
 //	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 //	@Produces(MediaType.APPLICATION_JSON)
 //	public Response createLinkSet(

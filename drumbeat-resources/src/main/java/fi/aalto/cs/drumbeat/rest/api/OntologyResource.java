@@ -107,7 +107,7 @@ public class OntologyResource {
 		}
 	}
 	
-	@POST
+	@PUT
 	@Path("/{ontologyId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(			
@@ -139,7 +139,7 @@ public class OntologyResource {
 	
 	
 	@Path("/{ontologyId}/uploadServerFile")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadServerFile(
@@ -167,7 +167,7 @@ public class OntologyResource {
 	}
 	
 	@Path("/{ontologyId}/uploadUrl")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadUrl(
@@ -196,7 +196,7 @@ public class OntologyResource {
 
 
 	@Path("/{ontologyId}/uploadContent")
-	@POST
+	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadContent(
@@ -219,7 +219,7 @@ public class OntologyResource {
 
 	
 	@Path("/{ontologyId}/uploadClientFile")
-	@POST
+	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response uploadClientFile(
