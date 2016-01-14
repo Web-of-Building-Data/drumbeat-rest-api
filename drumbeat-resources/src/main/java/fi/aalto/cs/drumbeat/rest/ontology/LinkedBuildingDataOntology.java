@@ -17,7 +17,7 @@ import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 public class LinkedBuildingDataOntology {
 	
 	public static final String ONTOLOGY_BASE_PREFIX = "lbdho";
-	public static final String ONTOLOGY_BASE_URI = "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#";
+	public static final String ONTOLOGY_BASE_URI = formatDrumbeatOntologyBaseUri("lbdho.ttl");
 	
 	public static final String GRAPH_NAME_IFC = "owl_ifc_ifc2x3";
 	
@@ -56,9 +56,9 @@ public class LinkedBuildingDataOntology {
 				put(RdfVocabulary.RDFS.BASE_PREFIX, RDFS.getURI());		
 				put(RdfVocabulary.XSD.BASE_PREFIX, XSD.getURI());
 				// TODO: get IFC URI from config file
-				put("expr", "http://drumbeat.cs.hut.fi/owl/EXPRESS#");
+				put("expr", formatDrumbeatOntologyBaseUri("EXPRESS"));
 //				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
-				put("ifc", formatOntologyBaseUri("ifc2x3"));
+				put("ifc", formatDrumbeatOntologyBaseUri("IFC2X3"));
 //				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
 			}};
 		return map;
@@ -115,7 +115,7 @@ public class LinkedBuildingDataOntology {
 		return formatObjectResourceBaseUri(collectionId, dataSourceId) + objectId;
 	}
 
-	public static String formatOntologyUri(String ontolgoyId)
+	public static String formatLocalOntologyUri(String ontolgoyId)
 	{
 		return String.format(
 				"%sowl/%s",
@@ -123,14 +123,18 @@ public class LinkedBuildingDataOntology {
 				ontolgoyId);
 	}
 
-	public static String formatOntologyBaseUri(String ontologyId)
+	public static String formatLocalOntologyBaseUri(String ontologyId)
 	{
-		return formatOntologyUri(ontologyId) + "#";
+		return formatLocalOntologyUri(ontologyId) + "#";
 	}
 
-	public static String formatGraphUri(String collectionId, String dataSourceId, String dataSetId)
+	public static String formatDataSetGraphUri(String collectionId, String dataSourceId, String dataSetId)
 	{
 		return formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
+	}
+	
+	public static String formatDrumbeatOntologyBaseUri(String ontologyId) {
+		return "http://drumbeat.cs.hut.fi/owl/" + ontologyId + "#";
 	}
 	
 }

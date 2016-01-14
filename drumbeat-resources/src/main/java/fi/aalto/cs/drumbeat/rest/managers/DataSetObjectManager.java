@@ -27,7 +27,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 	}	
 
 	public Model getDataModel(String collectionId, String dataSourceId, String dataSetId) throws DrumbeatException {
-		String graphName = formatGraphUri(collectionId, dataSourceId, dataSetId);
+		String graphName = formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		return DrumbeatApplication.getInstance().getDataModel(graphName);
 	}
 	
@@ -64,7 +64,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 			
 			fillParameterizedSparqlString(this);
 			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-			setIri("ifcOwlUri", formatOntologyUri("ifc2x3"));
+			setIri("ifcOwlUri", formatDrumbeatOntologyBaseUri("ifc2x3"));
 		}}.asQuery();
 		
 		Model resultModel = 
@@ -266,7 +266,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 		//
 		// Format graphUri
 		//		
-		String graphUri = formatGraphUri(collectionId, dataSourceId, dataSetId);
+		String graphUri = formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		String graphBaseUri = formatObjectResourceBaseUri(collectionId, dataSourceId);
 		
 		//

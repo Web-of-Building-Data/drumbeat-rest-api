@@ -76,7 +76,7 @@ public class OntologyManager extends DrumbeatManager {
 					"ORDER BY ?predicate ?object");
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("ontologyUri", formatOntologyUri(ontologyId));
+			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));
 		}}.asQuery();
 		
 		Model result =
@@ -108,7 +108,7 @@ public class OntologyManager extends DrumbeatManager {
 		Model metaDataModel = getMetaDataModel();		
 		
 		Resource ontologyResource = metaDataModel
-				.createResource(formatOntologyUri(ontologyId))
+				.createResource(formatLocalOntologyUri(ontologyId))
 				.addProperty(RDF.type, LinkedBuildingDataOntology.Ontology)
 				.addLiteral(LinkedBuildingDataOntology.name, name);
 		
@@ -137,7 +137,7 @@ public class OntologyManager extends DrumbeatManager {
 					"DELETE { ?ontologyUri ?p ?o } \n" +
 					"WHERE { ?ontologyUri ?p ?o }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("ontologyUri", formatOntologyUri(ontologyId));			
+			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));			
 		}}.asUpdate();
 		
 		UpdateAction.execute(updateRequest1, getMetaDataModel());
@@ -157,7 +157,7 @@ public class OntologyManager extends DrumbeatManager {
 					"	?ontologyUri a lbdho:Ontology . \n" + 
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("ontologyUri", formatOntologyUri(ontologyId));
+			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));
 		}}.asQuery();
 		
 		boolean result = 
@@ -193,9 +193,9 @@ public class OntologyManager extends DrumbeatManager {
 		//
 		// Format graphUri
 		//		
-		String ontologyUri = formatOntologyUri(ontologyId);
+		String ontologyUri = formatLocalOntologyUri(ontologyId);
 		String graphUri = ontologyUri;
-		String graphBaseUri = formatOntologyBaseUri(ontologyId);
+		String graphBaseUri = formatLocalOntologyBaseUri(ontologyId);
 		
 		//
 		// Read input stream to target model

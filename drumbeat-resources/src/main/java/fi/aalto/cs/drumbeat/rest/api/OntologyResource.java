@@ -154,7 +154,7 @@ public class OntologyResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String ontologyUri = LinkedBuildingDataOntology.formatOntologyUri(ontologyId);
+		String ontologyUri = LinkedBuildingDataOntology.formatLocalOntologyUri(ontologyId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", ontologyUri, filePath));
 		
 		InputStream in;
@@ -182,7 +182,7 @@ public class OntologyResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String ontologyUri = LinkedBuildingDataOntology.formatOntologyUri(ontologyId);			
+		String ontologyUri = LinkedBuildingDataOntology.formatLocalOntologyUri(ontologyId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", ontologyUri, url));
 		
 		InputStream in;
@@ -211,7 +211,7 @@ public class OntologyResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String ontologyUri = LinkedBuildingDataOntology.formatOntologyUri(ontologyId);			
+		String ontologyUri = LinkedBuildingDataOntology.formatLocalOntologyUri(ontologyId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", ontologyUri, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
@@ -239,7 +239,7 @@ public class OntologyResource {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
 		}
 	        
-		String ontologyUri = LinkedBuildingDataOntology.formatOntologyUri(ontologyId);
+		String ontologyUri = LinkedBuildingDataOntology.formatLocalOntologyUri(ontologyId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", ontologyUri, fileDetail.getFileName()));		
 
 		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);

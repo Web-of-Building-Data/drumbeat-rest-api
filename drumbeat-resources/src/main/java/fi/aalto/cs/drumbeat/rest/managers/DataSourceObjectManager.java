@@ -1,21 +1,17 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
-import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
 import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import java.io.InputStream;
 import java.util.Calendar;
-
-import javax.sound.midi.MetaMessage;
 
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -312,7 +308,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		//
 		// Format graphUri
 		//		
-		String graphUri = formatGraphUri(collectionId, dataSourceId, dataSetId);
+		String graphUri = formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		String graphBaseUri = formatObjectResourceBaseUri(collectionId, dataSourceId);
 		
 		//

@@ -98,7 +98,7 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"Ontology not found: <%s>",
-						formatOntologyUri(ontologyId)));
+						formatLocalOntologyUri(ontologyId)));
 	}
 	
 	
@@ -106,7 +106,7 @@ public class ErrorFactory {
 		return new AlreadyExistsException(
 				String.format(
 						"Ontology already exists: <%s>",
-						formatOntologyUri(ontologyId)));
+						formatLocalOntologyUri(ontologyId)));
 	}
 
 	public static IllegalArgumentException createInvalidOverwritingMethodException(String overwritingMethod) {
