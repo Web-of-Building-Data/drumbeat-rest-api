@@ -139,8 +139,8 @@ public class OntologyResource {
 	}
 	
 	
+	@POST
 	@Path("/{ontologyId}/uploadServerFile")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadServerFile(
 			@PathParam("ontologyId") String ontologyId,
@@ -167,8 +167,8 @@ public class OntologyResource {
 		return internalUploadDataSet(ontologyId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
+	@POST
 	@Path("/{ontologyId}/uploadUrl")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadUrl(
 			@PathParam("ontologyId") String ontologyId,
@@ -196,8 +196,8 @@ public class OntologyResource {
 	}
 
 
+	@POST
 	@Path("/{ontologyId}/uploadContent")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadContent(
 			@PathParam("ontologyId") String ontologyId,
@@ -219,8 +219,8 @@ public class OntologyResource {
 	}
 
 	
+	@POST
 	@Path("/{ontologyId}/uploadClientFile")
-	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadClientFile(
 			@PathParam("ontologyId") String ontologyId,

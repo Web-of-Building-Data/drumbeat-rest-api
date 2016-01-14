@@ -131,8 +131,8 @@ public class DataSetResource {
 	}	
 	
 	
+	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadServerFile")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadServerFile(
 			@PathParam("collectionId") String collectionId,
@@ -161,8 +161,8 @@ public class DataSetResource {
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
 	}
 	
+	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadUrl")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadUrl(
 			@PathParam("collectionId") String collectionId,
@@ -192,8 +192,8 @@ public class DataSetResource {
 	}
 
 
+	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadContent")
-	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response uploadContent(
 			@PathParam("collectionId") String collectionId,
@@ -217,8 +217,8 @@ public class DataSetResource {
 	}
 
 	
+	@POST
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/uploadClientFile")
-	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadClientFile(
 			@PathParam("collectionId") String collectionId,
