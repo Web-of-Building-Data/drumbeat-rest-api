@@ -59,7 +59,8 @@ public class LinkedBuildingDataOntology {
 				put("expr", formatDrumbeatOntologyBaseUri("EXPRESS"));
 //				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
 				put("ifc", formatDrumbeatOntologyBaseUri("ifc2x3"));
-//				put("ifc4", "http://drumbeat.cs.hut.fi/owl/IFC2X3#");				
+				put("ifc4", formatDrumbeatOntologyBaseUri("ifc4"));				
+				put("ifc4_add1", formatDrumbeatOntologyBaseUri("ifc4_add1"));				
 			}};
 		return map;
 	}
