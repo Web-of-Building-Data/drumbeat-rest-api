@@ -1,0 +1,3 @@
+project.version=${project.version}
+drumbeat.ifc2ld.verion=${drumbeat.ifc2ld.version}
+drumbeat.jena.verion=${drumbeat.jena.version}

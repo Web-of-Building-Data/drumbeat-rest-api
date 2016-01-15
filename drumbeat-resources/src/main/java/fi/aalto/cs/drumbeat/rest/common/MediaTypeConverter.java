@@ -218,7 +218,7 @@ public class MediaTypeConverter {
 					usedNsPrefixSet.add(nsPrefix.getKey());
 					useBrackets = false;
 
-					href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
+//					href = DrumbeatApplication.getInstance().getRealUri(nodeString, false);
 
 					String localName = node.asResource().getLocalName();
 					nodeString = nsPrefix.getKey() + ":" + localName;
