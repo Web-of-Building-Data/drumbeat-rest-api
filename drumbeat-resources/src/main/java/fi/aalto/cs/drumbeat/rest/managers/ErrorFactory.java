@@ -4,7 +4,7 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
-import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
+import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
 
 import org.apache.commons.codec.language.bm.Lang;
 
@@ -24,8 +24,14 @@ public class ErrorFactory {
 						formatCollectionResourceUri(collectionId)));
 	}
 	
+	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
+		return new DeleteDeniedException(
+			String.format(
+					"Collection has children: <%s>",
+					formatCollectionResourceUri(collectionId)));
+	}
 	
-
+	
 	
 	public static NotFoundException createDataSourceNotFoundException(String collectionId, String dataSourceId) {
 		return new NotFoundException(
@@ -41,13 +47,6 @@ public class ErrorFactory {
 						formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
-	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
-		return new DeleteDeniedException(
-			String.format(
-					"Collection has children: <%s>",
-					formatCollectionResourceUri(collectionId)));
-	}
-	
 	public static DeleteDeniedException createDataSourceHasChildrenException(String collectionId, String dataSourceId) {
 		return new DeleteDeniedException(
 			String.format(
@@ -57,6 +56,28 @@ public class ErrorFactory {
 	
 
 
+//	public static NotFoundException createLinkSourceNotFoundException(String collectionId, String linkSourceId) {
+//		return new NotFoundException(
+//				String.format(
+//						"LinkSource not found: <%s>",
+//						formatLinkSourceResourceUri(collectionId, linkSourceId)));
+//	}
+//	
+//	public static AlreadyExistsException createLinkSourceAlreadyExistsException(String collectionId, String linkSourceId) {
+//		return new AlreadyExistsException(
+//				String.format(
+//						"LinkSource already exists: <%s>",
+//						formatLinkSourceResourceUri(collectionId, linkSourceId)));
+//	}
+//	
+//	public static DeleteDeniedException createLinkSourceHasChildrenException(String collectionId, String linkSourceId) {
+//		return new DeleteDeniedException(
+//			String.format(
+//					"LinkSource has children: <%s>",
+//					formatLinkSourceResourceUri(collectionId, linkSourceId)));
+//	}
+	
+	
 	
 	public static NotFoundException createDataSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
 		return new NotFoundException(
@@ -73,13 +94,26 @@ public class ErrorFactory {
 	}
 	
 
+//	public static NotFoundException createLinkSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
+//		return new NotFoundException(
+//				String.format(
+//						"LinkSet not found: <%s>",
+//						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+//	}
+//	
+//	public static AlreadyExistsException createLinkSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
+//		return new AlreadyExistsException(
+//				String.format(
+//						"LinkSet already exists: <%s>",
+//						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+//	}
 
 	
-	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String objectId) {
+	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String objectUri) {
 		return new NotFoundException(
 				String.format(
 						"Object not found: <%s>",
-						formatObjectResourceUri(collectionId, dataSourceId, objectId)));
+						objectUri));
 	}
 	
 

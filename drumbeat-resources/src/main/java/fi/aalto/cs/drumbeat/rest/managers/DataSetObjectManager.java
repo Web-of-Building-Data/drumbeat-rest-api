@@ -7,15 +7,15 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+
+import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
 
 import java.io.InputStream;
 import java.util.Calendar;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
-
-import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 
 public class DataSetObjectManager extends DrumbeatManager {
 	
@@ -91,6 +91,22 @@ public class DataSetObjectManager extends DrumbeatManager {
 	public Model getById(String collectionId, String dataSourceId, String dataSetId, String objectId)
 		throws NotFoundException, DrumbeatException
 	{
+		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
+		return getByUri(collectionId, dataSourceId, dataSetId, objectUri);		
+	}
+	
+	/**
+	 * Gets all attributes of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getByUri(String collectionId, String dataSourceId, String dataSetId, String objectUri)
+		throws NotFoundException, DrumbeatException
+	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
 		Query query = new ParameterizedSparqlString() {{
@@ -103,7 +119,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					"ORDER BY ?predicate ?object");
 			
 			fillParameterizedSparqlString(this);
-			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, objectId));
+			setIri("objectUri", objectUri);
 		}}.asQuery();
 		
 		Model resultModel = 
@@ -111,7 +127,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					.execConstruct();
 		
 		if (resultModel.isEmpty()) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
 		}
 		
 		return resultModel;

@@ -12,14 +12,14 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
+import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
 
 import java.io.InputStream;
 import java.util.Calendar;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 
 public class OntologyManager extends DrumbeatManager {
 	

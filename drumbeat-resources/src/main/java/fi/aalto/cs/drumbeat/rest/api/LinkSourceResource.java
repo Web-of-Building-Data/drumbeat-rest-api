@@ -18,15 +18,14 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
+import fi.aalto.cs.drumbeat.rest.managers.LinkSourceManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 
-//@Path("/{elementType: datasources|linksources}")
-@Path("/datasources")
-public class DataSourceResource {
+@Path("/linksources")
+public class LinkSourceResource {
 
-	private static final Logger logger = Logger.getLogger(DataSourceResource.class);
+	private static final Logger logger = Logger.getLogger(LinkSourceResource.class);
 	
 	
 	@GET
@@ -39,7 +38,7 @@ public class DataSourceResource {
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getDataSourceManager().getAll(collectionId);
+			Model model = getLinkSourceManager().getAll(collectionId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -50,17 +49,17 @@ public class DataSourceResource {
 	}
 	
 	@GET
-	@Path("/{collectionId}/{dataSourceId}")
+	@Path("/{collectionId}/{linkSourceId}")
 	public Response getById(			
 			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("linkSourceId") String linkSourceId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getDataSourceManager().getById(collectionId, dataSourceId);
+			Model model = getLinkSourceManager().getById(collectionId, linkSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -71,17 +70,17 @@ public class DataSourceResource {
 	}
 	
 	@DELETE
-	@Path("/{collectionId}/{dataSourceId}")
+	@Path("/{collectionId}/{linkSourceId}")
 	public void delete(			
 			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("linkSourceId") String linkSourceId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			getDataSourceManager().delete(collectionId, dataSourceId);
+			getLinkSourceManager().delete(collectionId, linkSourceId);
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (DeleteDeniedException e) {
@@ -90,19 +89,20 @@ public class DataSourceResource {
 	}
 	
 	@PUT
-	@Path("/{collectionId}/{dataSourceId}")
+	@Path("/{collectionId}/{linkSourceId}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(
 			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("linkSourceId") String linkSourceId,
 			@FormParam("name") String name,
+			@FormParam("originalDataSourceId") String originalDataSourceId,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {
-			Model model = getDataSourceManager().create(collectionId, dataSourceId, name);
+			Model model = getLinkSourceManager().create(collectionId, linkSourceId, name, originalDataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.CREATED,
 					model,
@@ -115,14 +115,14 @@ public class DataSourceResource {
 	}	
 	
 	
-	private DataSourceManager getDataSourceManager() {
+	private LinkSourceManager getLinkSourceManager() {
 		try {
-			return new DataSourceManager();
+			return new LinkSourceManager();
 		} catch (DrumbeatException e) {
 			logger.error(e);
 			throw new DrumbeatWebException(
 					Status.INTERNAL_SERVER_ERROR,
-					"Error getting DataSourceManager instance: " + e.getMessage(),
+					"Error getting LinkSourceManager instance: " + e.getMessage(),
 					e);
 		}
 	}

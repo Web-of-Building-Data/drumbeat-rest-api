@@ -16,7 +16,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationParserException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;

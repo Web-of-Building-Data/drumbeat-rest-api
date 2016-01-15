@@ -1,4 +1,4 @@
-package fi.aalto.cs.drumbeat.rest.ontology;
+package fi.aalto.cs.drumbeat.rest.common;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,7 +11,6 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
 public class LinkedBuildingDataOntology {
@@ -31,14 +30,21 @@ public class LinkedBuildingDataOntology {
 	public static final Resource Collection = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "Collection");	
 	public static final Resource DataSet = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSet");	
 	public static final Resource DataSource = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "DataSource");	
+	public static final Resource LinkSet = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "LinkSet");	
+	public static final Resource LinkSource = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "LinkSource");	
 	public static final Resource Ontology = RdfVocabulary.DEFAULT_MODEL.createResource(ONTOLOGY_BASE_URI + "Ontology");	
 	
 	public static final Property graphName = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "graphName");	
 	public static final Property hasDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSet");	
 	public static final Property hasDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasDataSource");	
+//	public static final Property hasLinkSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasLinkSet");	
 	public static final Property hasLastDataSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasLastDataSet");
+//	public static final Property hasLastLinkSet = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasLastLinkSet");
+	public static final Property hasLinkSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasLinkSource");	
+	public static final Property hasOriginalDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasOriginalDataSource");	
 	public static final Property inCollection = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inCollection");	
 	public static final Property inDataSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inDataSource");
+//	public static final Property inLinkSource = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "inLinkSource");
 	public static final Property lastModified = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "lastModified");	
 	public static final Property name = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "name");	
 	public static final Property overwrites = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "overwrites");	
@@ -95,6 +101,10 @@ public class LinkedBuildingDataOntology {
 					dataSourceId);
 	}
 
+//	public static String formatLinkSourceResourceUri(String collectionId, String linkSourceId) {
+//		return formatDataSourceResourceUri(collectionId, linkSourceId);
+//	}
+
 	public static String formatDataSetResourceUri(String collectionId, String dataSourceId, String dataSetId) {
 		return String.format(
 				"%sdatasets/%s/%s/%s",
@@ -104,6 +114,10 @@ public class LinkedBuildingDataOntology {
 				dataSetId);
 	}
 		
+//	public static String formatLinkSetResourceUri(String collectionId, String linkSourceId, String linkSetId) {
+//		return formatDataSetResourceUri(collectionId, linkSourceId, linkSetId);
+//	}
+
 	public static String formatObjectResourceBaseUri(String collectionId, String dataSourceId) {
 		return String.format(
 				"%sobjects/%s/%s/",

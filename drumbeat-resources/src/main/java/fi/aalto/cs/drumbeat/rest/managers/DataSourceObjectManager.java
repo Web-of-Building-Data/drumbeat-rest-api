@@ -3,12 +3,15 @@ package fi.aalto.cs.drumbeat.rest.managers;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+
+import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -18,8 +21,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
-
-import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
 
 public class DataSourceObjectManager extends DrumbeatManager {
 	
@@ -93,6 +94,23 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	public Model getById(String collectionId, String dataSourceId, String objectId)
 		throws NotFoundException, DrumbeatException
 	{
+		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
+		return getByUri(collectionId, dataSourceId, objectUri);
+	}
+	
+	
+	
+	/**
+	 * Gets all attributes of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getByUri(String collectionId, String dataSourceId, String objectUri)
+		throws NotFoundException, DrumbeatException
+	{
 		Model metaDataModel = getMetaDataModel();
 
 		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
@@ -101,11 +119,13 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		if (dataSetResource != null) {
 			dataSetResource = dataSetResource.inModel(metaDataModel);
 		} else {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectId);			
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);			
 		}
 		
 		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(metaDataModel, getJenaProvider());
 		
+		Model resultModel;
+
 		for (;;) {
 			
 			String overwritingMethod = null;
@@ -131,33 +151,50 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			
 			String dataSetId = dataSetResource.getLocalName();
 			
-			Model resultModel;
-			
 			try {
-				resultModel = dataSetObjectManager.getById(collectionId, dataSourceId, dataSetId, objectId);
+				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri);
 			} catch (NotFoundException e) {
 				resultModel = ModelFactory.createDefaultModel();
 			}
 			
-			switch (overwritingMethod) {
-			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH:
-				return resultModel;
-
-			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_OBJECTS:
-				if (!resultModel.isEmpty()) {
-					return resultModel;
-				}
+			if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH)) {
 				break;
-
-			case DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_TRIPLES:
-			default:
+			} else if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_OBJECTS)) {
+				if (!resultModel.isEmpty()) {
+					break;
+				}
+			} else {
 				throw new NotImplementedException(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_TRIPLES);
 			}
 			
 			dataSetResource = metaDataModel.getResource(overwrittenDataSetUri);	
 		}
 		
+		if (resultModel == null) {
+			resultModel = ModelFactory.createDefaultModel();
+		}
 		
+		
+		LinkSourceManager linkSourceManager = new LinkSourceManager(metaDataModel, getJenaProvider());
+		Model linkSources = linkSourceManager.getAllLinkSourcesOfDataSource(collectionId, dataSourceId);
+		
+		if (linkSources != null) {
+			
+			ResIterator resIterator = linkSources.listSubjects();
+			
+			while (resIterator.hasNext()) {
+				Resource linkSourceResource = resIterator.next();
+				String linkSourceId = linkSourceResource.getLocalName();
+				try {
+					Model newResultModel = getByUri(collectionId, linkSourceId, objectUri);
+					resultModel.add(newResultModel);
+				} catch (NotFoundException e) {					
+				}
+			}
+			
+		}
+		
+		return resultModel;
 	}
 	
 	

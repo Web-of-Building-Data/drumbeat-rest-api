@@ -8,7 +8,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 
 import static javax.ws.rs.core.MediaType.*;
 

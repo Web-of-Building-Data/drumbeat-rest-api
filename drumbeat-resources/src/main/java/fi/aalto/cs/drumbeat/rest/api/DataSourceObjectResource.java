@@ -17,8 +17,8 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 @Path("/objects")

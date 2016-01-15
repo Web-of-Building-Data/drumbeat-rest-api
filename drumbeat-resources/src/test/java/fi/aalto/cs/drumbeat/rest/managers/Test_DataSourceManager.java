@@ -16,7 +16,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
 public class Test_DataSourceManager extends DrumbeatTest {

@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
+
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.ResultSet;
@@ -12,13 +14,10 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology;
-
-import static fi.aalto.cs.drumbeat.rest.ontology.LinkedBuildingDataOntology.*;
-
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
+import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 
 public class DataSetManager extends DrumbeatManager {
 	
