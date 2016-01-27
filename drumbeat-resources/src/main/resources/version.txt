@@ -1,3 +1,17 @@
-project.version=${project.version}
-drumbeat.ifc2ld.verion=${drumbeat.ifc2ld.version}
-drumbeat.jena.verion=${drumbeat.jena.version}
+# BASE <http://drumbeat.aalto.fi/>
+
+@prefix dcterms:	<http://purl.org/dc/terms/> .
+
+@prefix xsd:		<http://www.w3.org/2001/XMLSchema#> .  
+
+<>
+	dcterms:version "${project.version}" .
+	
+<rest-api>
+	dcterms:version "${project.version}"^^xsd:string .
+
+<ifc2ld>
+	dcterms:version "${drumbeat.ifc2ld.version}"^^xsd:string .
+	
+<jena>
+	dcterms:version "${drumbeat.jena.version}"^^xsd:string .
