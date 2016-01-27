@@ -67,6 +67,7 @@ public class LinkedBuildingDataOntology {
 				put("ifc", formatDrumbeatOntologyBaseUri("ifc2x3"));
 				put("ifc4", formatDrumbeatOntologyBaseUri("ifc4"));				
 				put("ifc4_add1", formatDrumbeatOntologyBaseUri("ifc4_add1"));				
+				put(BimLinkingOntology.ONTOLOGY_BASE_PREFIX, BimLinkingOntology.ONTOLOGY_BASE_URI);				
 			}};
 		return map;
 	}

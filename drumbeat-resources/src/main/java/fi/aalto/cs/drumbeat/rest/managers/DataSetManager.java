@@ -8,6 +8,8 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
@@ -17,6 +19,8 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
+import fi.aalto.cs.drumbeat.rest.common.BimLinkingOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 
 public class DataSetManager extends DrumbeatManager {
@@ -258,6 +262,26 @@ public class DataSetManager extends DrumbeatManager {
 		UpdateAction.execute(updateRequest1, getMetaDataModel());
 		UpdateAction.execute(updateRequest2, getMetaDataModel());		
 	}
+	
+	
+	public Model linkCreated(String dataSetUri, Model linksModel) throws DrumbeatException {
+		
+		Model backLinksModel = ModelFactory.createDefaultModel();
+		
+		StmtIterator stmtIterator = linksModel.listStatements();
+		while (stmtIterator.hasNext()) {
+			Statement statement = stmtIterator.next();
+			backLinksModel.add(statement.getObject().asResource(), BimLinkingOntology.implementedBy, statement.getSubject());
+		}
+		
+		Model targetModel = DrumbeatApplication.getInstance().getDataModel(dataSetUri);
+		targetModel.add(backLinksModel);
+		
+		return backLinksModel;
+		
+	}
+
+	
 	
 	
 	/**

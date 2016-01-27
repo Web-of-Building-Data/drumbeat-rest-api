@@ -352,8 +352,10 @@ public class DataSetResource {
 			
 			InputStream in = new ByteArrayInputStream(content.getBytes());			
 			
-			Model model = ModelFactory.createDefaultModel();
-			RDFDataMgr.read(model, in, Lang.TURTLE);
+			Model linksModel = ModelFactory.createDefaultModel();
+			RDFDataMgr.read(linksModel, in, Lang.TURTLE);
+			
+			Model model = getDataSetManager().linkCreated(localDataSourceUri, linksModel);
 			
 			return DrumbeatResponseBuilder.build(
 					Status.CREATED,
@@ -363,6 +365,8 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (AlreadyExistsException e) {
 			throw new DrumbeatWebException(Status.CONFLICT, e);
+		} catch (DrumbeatException e) {
+			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);
 		}
 	}	
 	
