@@ -94,19 +94,19 @@ public class ErrorFactory {
 	}
 	
 
-//	public static NotFoundException createLinkSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
-//		return new NotFoundException(
-//				String.format(
-//						"LinkSet not found: <%s>",
-//						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
-//	}
-//	
-//	public static AlreadyExistsException createLinkSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
-//		return new AlreadyExistsException(
-//				String.format(
-//						"LinkSet already exists: <%s>",
-//						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
-//	}
+	public static NotFoundException createLinkSetNotFoundException(String collectionId, String dataSourceId, String dataSetId) {
+		return new NotFoundException(
+				String.format(
+						"LinkSet not found: <%s>",
+						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+	}
+	
+	public static AlreadyExistsException createLinkSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
+		return new AlreadyExistsException(
+				String.format(
+						"LinkSet already exists: <%s>",
+						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+	}
 
 	
 	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId, String objectUri) {
@@ -145,6 +145,10 @@ public class ErrorFactory {
 
 	public static IllegalArgumentException createInvalidOverwritingMethodException(String overwritingMethod) {
 		return new IllegalArgumentException(String.format("Invalid overwriting method: %s", overwritingMethod));
+	}
+
+	public static IllegalArgumentException createInvalidLinkType(String linkType) {
+		return new IllegalArgumentException(String.format("Invalid link type: %s", linkType));
 	}
 	
 	

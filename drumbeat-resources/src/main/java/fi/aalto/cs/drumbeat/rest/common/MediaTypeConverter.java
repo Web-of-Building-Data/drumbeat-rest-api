@@ -87,7 +87,10 @@ public class MediaTypeConverter {
 			JenaJSONLD.init();
 		}
 		StringWriter writer = new StringWriter();
-		model.setNsPrefixes(LinkedBuildingDataOntology.getDefaultNsPrefixes());
+
+		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
+		nsPrefixMap.putAll(LinkedBuildingDataOntology.getDefaultNsPrefixes());
+		
 		if (StringUtils.isEmptyOrNull(baseUri)) {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		}
@@ -143,7 +146,10 @@ public class MediaTypeConverter {
 		if (StringUtils.isEmptyOrNull(baseUri)) {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		}
-		Map<String, String> nsPrefixMap = LinkedBuildingDataOntology.getDefaultNsPrefixes();
+		
+		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
+		nsPrefixMap.putAll(LinkedBuildingDataOntology.getDefaultNsPrefixes());
+		
 		Set<String> usedNsPrefixSet = new TreeSet<>();
 		
 		StmtIterator stmtIterator = model.listStatements();

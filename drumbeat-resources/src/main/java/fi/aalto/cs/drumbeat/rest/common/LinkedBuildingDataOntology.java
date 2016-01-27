@@ -101,9 +101,9 @@ public class LinkedBuildingDataOntology {
 					dataSourceId);
 	}
 
-//	public static String formatLinkSourceResourceUri(String collectionId, String linkSourceId) {
-//		return formatDataSourceResourceUri(collectionId, linkSourceId);
-//	}
+	public static String formatLinkSourceResourceUri(String collectionId, String linkSourceId) {
+		return formatDataSourceResourceUri(collectionId, linkSourceId);
+	}
 
 	public static String formatDataSetResourceUri(String collectionId, String dataSourceId, String dataSetId) {
 		return String.format(
@@ -114,9 +114,9 @@ public class LinkedBuildingDataOntology {
 				dataSetId);
 	}
 		
-//	public static String formatLinkSetResourceUri(String collectionId, String linkSourceId, String linkSetId) {
-//		return formatDataSetResourceUri(collectionId, linkSourceId, linkSetId);
-//	}
+	public static String formatLinkSetResourceUri(String collectionId, String linkSourceId, String linkSetId) {
+		return formatDataSetResourceUri(collectionId, linkSourceId, linkSetId);
+	}
 
 	public static String formatObjectResourceBaseUri(String collectionId, String dataSourceId) {
 		return String.format(
@@ -148,6 +148,11 @@ public class LinkedBuildingDataOntology {
 		return formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
 	}
 	
+	public static String formatLinkSetGraphUri(String collectionId, String dataSourceId, String dataSetId)
+	{
+		return formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId);
+	}
+
 	public static String formatDrumbeatOntologyBaseUri(String ontologyId) {
 		return "http://drumbeat.cs.hut.fi/owl/" + ontologyId + "#";
 	}

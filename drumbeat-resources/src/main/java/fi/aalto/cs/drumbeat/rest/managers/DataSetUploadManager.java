@@ -34,7 +34,7 @@ import static fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary.*;
 
 
 
-public class UploadManager {
+public class DataSetUploadManager {
 	
 	private static final Logger logger = Logger.getLogger(DataSourceObjectManager.class);	
 

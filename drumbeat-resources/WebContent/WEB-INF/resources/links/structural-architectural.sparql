@@ -1,0 +1,45 @@
+PREFIX expr: <http://drumbeat.cs.hut.fi/owl/express/>
+
+PREFIX ifc: <http://drumbeat.cs.hut.fi/owl/ifc2x3#>
+
+PREFIX blo: <http://drumbeat.cs.hut.fi/owl/blo#>
+
+PREFIX remote: <http://localhost:8080/drumbeat-resources/datasets/tekla/architectural/v1>
+
+PREFIX local: <http://localhost:8080/drumbeat-resources/datasets/tekla/structural/v1>
+
+
+
+CONSTRUCT { ?localElement blo:implements ?remoteElement }
+	#SELECT DISTINCT ?localElementType ?remoteElementType
+	#INSERT { ?localElement blo:implements ?remoteElement }
+
+FROM local:
+FROM remote:
+
+WHERE {
+   GRAPH local: {
+
+ #      ?localElement a ?localElementType .
+
+       _:relDefinesByProperties
+             ifc:relatedObjects_IfcRelDefines ?localElement ;
+             ifc:relatingPropertyDefinition_IfcRelDefinesByProperties _:propertySet .
+
+       _:propertySet
+             a ifc:IfcPropertySet ;
+             ifc:hasProperties_IfcPropertySet _:property .
+
+       _:property
+             ifc:name_IfcProperty / expr:hasString "initial_GUID"^^xsd:string ;
+             ifc:nominalValue_IfcPropertySingleValue / expr:hasValue / expr:hasString ?guid .
+
+   }
+
+   GRAPH remote: {
+      ?remoteElement
+             ifc:globalId_IfcRoot / expr:hasString ?guid .
+#             a ?remoteElementType .
+   }
+
+}

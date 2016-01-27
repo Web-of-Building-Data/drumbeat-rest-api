@@ -39,6 +39,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 		public static final String RESOURCES_FOLDER_PATH = "resources/";
 		public static final String IFC_SCHEMA_FOLDER_PATH = RESOURCES_FOLDER_PATH + "ifc/";
+		public static final String LINKS_FOLDER_PATH = RESOURCES_FOLDER_PATH + "links/";
 		public static final String UPLOADS_FOLDER_PATH = "uploads/";
 	}
 	

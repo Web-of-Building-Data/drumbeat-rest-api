@@ -351,7 +351,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = new UploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
+		Model targetModel = new DataSetUploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
 		
 		//
 		// Update meta data model

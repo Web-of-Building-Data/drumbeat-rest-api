@@ -85,7 +85,7 @@ public class LinkSourceManager extends DrumbeatManager {
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
-			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, originalDataSetId));
+			setIri("dataSourceUri", formatLinkSourceResourceUri(collectionId, originalDataSetId));
 		}}.asQuery();
 		
 		Model resultModel = 
@@ -117,7 +117,7 @@ public class LinkSourceManager extends DrumbeatManager {
 			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
-			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
+			setIri("linkSourceUri", formatLinkSourceResourceUri(collectionId, linkSourceId));
 		}}.asQuery();
 		
 		Model resultModel = 
@@ -158,10 +158,10 @@ public class LinkSourceManager extends DrumbeatManager {
 				.createResource(formatCollectionResourceUri(collectionId));
 		
 		Resource linkSourceResource = metaDataModel 
-				.createResource(formatDataSourceResourceUri(collectionId, linkSourceId));
+				.createResource(formatLinkSourceResourceUri(collectionId, linkSourceId));
 		
 		Resource originalDataSourceResource = metaDataModel 
-				.createResource(formatDataSourceResourceUri(collectionId, originalDataSourceId));
+				.createResource(formatLinkSourceResourceUri(collectionId, originalDataSourceId));
 		
 		collectionResource
 			.addProperty(LinkedBuildingDataOntology.hasDataSource, linkSourceResource);
@@ -206,7 +206,7 @@ public class LinkSourceManager extends DrumbeatManager {
 					"DELETE { ?linkSourceUri ?p ?o } \n" +
 					"WHERE { ?linkSourceUri ?p ?o }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));			
+			setIri("linkSourceUri", formatLinkSourceResourceUri(collectionId, linkSourceId));			
 		}}.asUpdate();
 		
 		UpdateRequest updateRequest2 = new ParameterizedSparqlString() {{
@@ -214,7 +214,7 @@ public class LinkSourceManager extends DrumbeatManager {
 					"DELETE { ?s ?p ?linkSourceUri } \n" +
 					"WHERE { ?s ?p ?linkSourceUri }");
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
-			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));			
+			setIri("linkSourceUri", formatLinkSourceResourceUri(collectionId, linkSourceId));			
 		}}.asUpdate();
 
 		UpdateAction.execute(updateRequest1, getMetaDataModel());
@@ -238,7 +238,7 @@ public class LinkSourceManager extends DrumbeatManager {
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
-			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
+			setIri("linkSourceUri", formatLinkSourceResourceUri(collectionId, linkSourceId));
 		}}.asQuery();
 		
 		boolean result = 
@@ -264,7 +264,7 @@ public class LinkSourceManager extends DrumbeatManager {
 					"}");			
 			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
-			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
+			setIri("linkSourceUri", formatLinkSourceResourceUri(collectionId, linkSourceId));
 		}}.asQuery();
 		
 		boolean result = 

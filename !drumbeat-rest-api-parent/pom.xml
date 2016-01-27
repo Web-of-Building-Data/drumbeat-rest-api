@@ -4,7 +4,7 @@
 
 	<groupId>fi.hut.cs.drumbeat</groupId>
 	<artifactId>drumbeat-rest-api</artifactId>
-	<version>0.7.5-SNAPSHOT</version>
+	<version>0.8.0-SNAPSHOT</version>
 	
 	<packaging>pom</packaging>
 
