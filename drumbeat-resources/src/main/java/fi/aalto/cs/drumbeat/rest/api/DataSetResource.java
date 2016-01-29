@@ -355,6 +355,8 @@ public class DataSetResource {
 			Model linksModel = ModelFactory.createDefaultModel();
 			RDFDataMgr.read(linksModel, in, Lang.TURTLE);
 			
+			logger.info(String.format("Number of links: %d", linksModel.size()));
+
 			Model model = getDataSetManager().linkCreated(localDataSourceUri, linksModel);
 			
 			return DrumbeatResponseBuilder.build(

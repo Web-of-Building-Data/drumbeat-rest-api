@@ -271,7 +271,9 @@ public class DataSetManager extends DrumbeatManager {
 		StmtIterator stmtIterator = linksModel.listStatements();
 		while (stmtIterator.hasNext()) {
 			Statement statement = stmtIterator.next();
-			backLinksModel.add(statement.getObject().asResource(), BimLinkingOntology.implementedBy, statement.getSubject());
+			if (statement.getPredicate().equals(BimLinkingOntology.implements1)) {
+				backLinksModel.add(statement.getObject().asResource(), BimLinkingOntology.implementedBy, statement.getSubject());
+			}
 		}
 		
 		Model targetModel = DrumbeatApplication.getInstance().getDataModel(dataSetUri);

@@ -1,6 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -9,6 +8,7 @@ import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.MediaTypeConverter;
 
 import static fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary.DATA_TYPE_IFC;
 import static fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary.DATA_TYPE_RDF;
@@ -34,6 +34,10 @@ import javax.ws.rs.core.Response;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
@@ -424,27 +428,35 @@ public class LinkSetObjectManager extends DrumbeatManager {
 				
 				StringWriter writer = new StringWriter();				
 				RDFDataMgr.write(writer, newModel, Lang.TURTLE);
-
-				Form form = new Form();
-				form.param("localDataSourceUri", localDataSourceUri);
-				form.param("remoteDataSourceUri", remoteDataSourceUri);
-				form.param("content", writer.toString());				
+				
+				FormDataMultiPart multiPart = new FormDataMultiPart();
+				multiPart
+					.field("localDataSourceUri", localDataSourceUri)
+					.field("remoteDataSourceUri", remoteDataSourceUri)
+					.field("content", writer.toString());
 				
 				Response result = null;
 				
-				try {		
+				try {
+					
+					
 					WebTarget target = 
 							ClientBuilder
 								.newClient()
+								.register(MultiPartFeature.class)
 								.target(remoteDataSourceUri)
 								.path("linkCreated");					
 
 					result = target
-								.request(MediaType.APPLICATION_JSON)
-								.put(Entity.entity(form, MediaType.MULTIPART_FORM_DATA));
+								.request(MediaTypeConverter.APPLICATION_LD_JSON)
+								.put(Entity.entity(multiPart, multiPart.getMediaType()));
+					
+					if (result.getStatus() != Response.Status.CREATED.getStatusCode()) {
+						logger.warn(String.format("LinkCreated processing error, status: %s, target: %s", result.getStatus(), target));
+					}
+					
 				} catch (WebApplicationException e) {
-					Response response = e.getResponse();
-					logger.error(e.getMessage());
+					logger.error(e.getMessage() + ": " + e.getResponse());
 				}
 				
 			}
