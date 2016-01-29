@@ -33,6 +33,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
@@ -357,7 +358,7 @@ public class DataSetResource {
 			
 			logger.info(String.format("Number of links: %d", linksModel.size()));
 
-			Model model = getDataSetManager().linkCreated(localDataSourceUri, linksModel);
+			Model model = new DataSetObjectManager().linkCreated(localDataSourceUri, linksModel);
 			
 			return DrumbeatResponseBuilder.build(
 					Status.CREATED,

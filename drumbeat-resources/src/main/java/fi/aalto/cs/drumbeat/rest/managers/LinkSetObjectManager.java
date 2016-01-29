@@ -426,37 +426,48 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			
 			if (notifyRemote) {
 				
-				StringWriter writer = new StringWriter();				
-				RDFDataMgr.write(writer, newModel, Lang.TURTLE);
-				
-				FormDataMultiPart multiPart = new FormDataMultiPart();
-				multiPart
-					.field("localDataSourceUri", localDataSourceUri)
-					.field("remoteDataSourceUri", remoteDataSourceUri)
-					.field("content", writer.toString());
-				
-				Response result = null;
-				
-				try {
+				if (remoteDataSourceUri.startsWith(DrumbeatApplication.getInstance().getBaseUri())) {
+					
+					DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(getMetaDataModel(), getJenaProvider());
+					
+					dataSetObjectManager.linkCreated(remoteDataSourceUri, newModel);
+					
+				} else {
 					
 					
-					WebTarget target = 
-							ClientBuilder
-								.newClient()
-								.register(MultiPartFeature.class)
-								.target(remoteDataSourceUri)
-								.path("linkCreated");					
+					StringWriter writer = new StringWriter();
+					RDFDataMgr.write(writer, newModel, Lang.TURTLE);
+					
+					FormDataMultiPart multiPart = new FormDataMultiPart();
+					multiPart
+						.field("localDataSourceUri", localDataSourceUri)
+						.field("remoteDataSourceUri", remoteDataSourceUri)
+						.field("content", writer.toString());
+					
+					Response result = null;
+					
+					try {
+						
+						WebTarget target = 
+								ClientBuilder
+									.newClient()
+									.register(MultiPartFeature.class)
+									.target(remoteDataSourceUri)
+									.path("linkCreated");					
 
-					result = target
-								.request(MediaTypeConverter.APPLICATION_LD_JSON)
-								.put(Entity.entity(multiPart, multiPart.getMediaType()));
-					
-					if (result.getStatus() != Response.Status.CREATED.getStatusCode()) {
-						logger.warn(String.format("LinkCreated processing error, status: %s, target: %s", result.getStatus(), target));
+						result = target
+									.request(MediaTypeConverter.APPLICATION_LD_JSON)
+									.put(Entity.entity(multiPart, multiPart.getMediaType()));
+						
+						if (result.getStatus() != Response.Status.CREATED.getStatusCode()) {
+							logger.warn(String.format("LinkCreated processing error, status: %s, target: %s", result.getStatus(), target));
+						}
+						
+					} catch (WebApplicationException e) {
+						logger.error(e.getMessage() + ": " + e.getResponse());
 					}
 					
-				} catch (WebApplicationException e) {
-					logger.error(e.getMessage() + ": " + e.getResponse());
+					
 				}
 				
 			}
