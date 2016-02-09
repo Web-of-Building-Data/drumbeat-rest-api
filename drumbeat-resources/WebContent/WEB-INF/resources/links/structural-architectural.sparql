@@ -4,9 +4,9 @@ PREFIX ifc: <http://drumbeat.cs.hut.fi/owl/ifc2x3#>
 
 PREFIX blo: <http://drumbeat.cs.hut.fi/owl/blo#>
 
-PREFIX remote: <http://localhost:8080/drumbeat-resources/datasets/tekla/architectural/v1>
+PREFIX remote: ?remoteDataSourceUri
 
-PREFIX local: <http://localhost:8080/drumbeat-resources/datasets/tekla/structural/v1>
+PREFIX local: ?localDataSourceUri
 
 
 

@@ -1,28 +1,49 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
+
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
-
-import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
+import fi.aalto.cs.drumbeat.rest.common.MediaTypeConverter;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Calendar;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSourceObjectManager extends DrumbeatManager {
+	
+	private static Logger logger = Logger.getLogger(DataSourceObjectManager.class);
 	
 	public DataSourceObjectManager() throws DrumbeatException {
 	}
@@ -131,15 +152,15 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String overwritingMethod = null;
 			String overwrittenDataSetUri = null;
 			
-			if (dataSetResource.hasProperty(LinkedBuildingDataOntology.overwritingMethod)) {
+			if (dataSetResource.hasProperty(DrumbeatOntology.LBDHO.overwritingMethod)) {
 				overwritingMethod = dataSetResource
-					.getProperty(LinkedBuildingDataOntology.overwritingMethod)
+					.getProperty(DrumbeatOntology.LBDHO.overwritingMethod)
 					.getObject()
 					.asLiteral()
 					.getString();
 				
 				overwrittenDataSetUri = dataSetResource
-						.getProperty(LinkedBuildingDataOntology.overwrites)
+						.getProperty(DrumbeatOntology.LBDHO.overwrites)
 						.getObject()
 						.asLiteral()
 						.getString();
@@ -330,6 +351,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String dataFormat,
 			String compressionFormat,
 			boolean clearBefore,
+			boolean notifyRemote,
 			InputStream in,
 			boolean saveToFiles)
 		throws NotFoundException, IllegalArgumentException, Exception
@@ -357,7 +379,73 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		// Update meta data model
 		//
 		String dataSetUri = formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
-		updateMetaModelAfterUploading(dataSetUri, graphUri, graphBaseUri, targetModel.size());		
+		updateMetaModelAfterUploading(dataSetUri, graphUri, graphBaseUri, targetModel.size());
+		
+		String applicationBaseUri = DrumbeatApplication.getInstance().getBaseUri();
+		
+		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(getMetaDataModel(), getJenaProvider());		
+		
+		if (notifyRemote) {
+			
+			StmtIterator stmtIterator = targetModel.listStatements();
+			
+			while (stmtIterator.hasNext()) {
+				
+				Statement statement = stmtIterator.next();
+				
+				RDFNode object = statement.getObject();
+				if (object.isURIResource()) {
+					
+					String objectUri = object.asResource().getURI();
+					
+					if (objectUri.startsWith(applicationBaseUri)) {
+						
+						onLinkCreated(statement);
+							
+					} else {
+						
+						String content = String.format("%s %s %s",
+								statement.getSubject().getURI(),
+								statement.getPredicate().getURI(),
+								objectUri);
+						
+						FormDataMultiPart multiPart = new FormDataMultiPart();
+						multiPart
+							.field("content", content);
+						
+						Response result = null;
+						
+						try {
+							
+							WebTarget target = 
+									ClientBuilder
+										.newClient()
+										.register(MultiPartFeature.class)
+										.target(objectUri)
+										.path("linkCreated");					
+		
+							result = target
+										.request(MediaTypeConverter.APPLICATION_LD_JSON)
+										.put(Entity.entity(multiPart, multiPart.getMediaType()));
+							
+							if (result.getStatus() != Response.Status.CREATED.getStatusCode()) {
+								logger.warn(String.format("LinkCreated processing error, status: %s, target: %s", result.getStatus(), target));
+							}
+							
+						} catch (WebApplicationException e) {
+							logger.error(e.getMessage() + ": " + e.getResponse());
+						}
+						
+						
+					}
+					
+				}
+				
+				
+			}
+			
+			
+		}
 		
 		return dataSetManager.getById(collectionId, dataSourceId, dataSetId);
 	}
@@ -378,7 +466,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:graphUri ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:graphUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -387,7 +475,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:graphUri ?graphUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("graphUri", metaDataModel.createLiteral(graphUri));
 					}}.asUpdate(),
@@ -398,7 +486,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:graphBaseUri ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:graphBaseUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -407,7 +495,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:graphBaseUri ?graphBaseUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("graphBaseUri", metaDataModel.createLiteral(graphBaseUri));
 					}}.asUpdate(),
@@ -418,7 +506,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:lastModified ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -427,7 +515,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("lastModified", Calendar.getInstance());
 					}}.asUpdate(),
@@ -438,7 +526,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -447,7 +535,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("sizeInTriples", sizeInTriples);
 					}}.asUpdate(),
@@ -466,5 +554,34 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	}
 	
 	
+	public void onLinksCreated(Model links) throws DrumbeatException {
+		
+		StmtIterator stmtIterator = links.listStatements();
+		
+		while (stmtIterator.hasNext()) {
+			onLinkCreated(stmtIterator.next());
+		}
+		
+	}
+	
+	
+	public void onLinkCreated(Statement linkStatement) throws DrumbeatException {
+		
+		if (linkStatement.getPredicate().equals(DrumbeatOntology.BLO.implements1)) {
+
+			String dataSourceUri = NameFormatter.getDataSourceUriFromObjectUri(linkStatement.getObject().asResource().getURI());
+			
+			String backLinkDataSetUri = NameFormatter.formatBackLinkSourceUri(dataSourceUri);
+			
+			Model targetModel = DrumbeatApplication.getInstance().getDataModel(backLinkDataSetUri);
+			
+			targetModel.add(
+					linkStatement.getObject().asResource(),
+					DrumbeatOntology.BLO.isImplementedBy,
+					linkStatement.getSubject());
+
+		}
+	}
+
 	
 }

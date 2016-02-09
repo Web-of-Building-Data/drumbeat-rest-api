@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
+
 import java.util.List;
 
 import com.hp.hpl.jena.query.Query;
@@ -13,7 +15,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
@@ -45,20 +48,20 @@ public abstract class DrumbeatManager {
 	
 	public Resource getCollectionResource(String collectionId) {
 		return metaDataModel.createResource(
-				LinkedBuildingDataOntology.formatCollectionResourceUri(
+				NameFormatter.formatCollectionResourceUri(
 						collectionId));
 	}
 	
 	public Resource getDataSourceResource(String collectionId, String dataSourceId) {
 		return metaDataModel.createResource(
-				LinkedBuildingDataOntology.formatDataSourceResourceUri(
+				NameFormatter.formatDataSourceResourceUri(
 						collectionId,
 						dataSourceId));
 	}
 
 	public Resource getDataSetResource(String collectionId, String dataSourceId, String dataSetId) {
 		return metaDataModel.createResource(
-				LinkedBuildingDataOntology.formatDataSetResourceUri(
+				NameFormatter.formatDataSetResourceUri(
 						collectionId,
 						dataSourceId,
 						dataSetId));

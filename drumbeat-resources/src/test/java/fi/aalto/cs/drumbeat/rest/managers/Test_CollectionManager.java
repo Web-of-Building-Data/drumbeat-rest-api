@@ -17,7 +17,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
@@ -64,25 +64,25 @@ public class Test_CollectionManager extends DrumbeatTest {
 				model.contains(
 						model.createResource(baseUri + "collections/col-1"),
 						RDF.type,
-						LinkedBuildingDataOntology.Collection));
+						DrumbeatOntology.LBDHO.Collection));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "collections/col-2"),
 						RDF.type,
-						LinkedBuildingDataOntology.Collection));
+						DrumbeatOntology.LBDHO.Collection));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "collections/col-3"),
 						RDF.type,
-						LinkedBuildingDataOntology.Collection));
+						DrumbeatOntology.LBDHO.Collection));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "collections/col-4"),
 						RDF.type,
-						LinkedBuildingDataOntology.Collection));
+						DrumbeatOntology.LBDHO.Collection));
 	}
 	
 
@@ -105,35 +105,35 @@ public class Test_CollectionManager extends DrumbeatTest {
 		Resource collectionResource = model.createResource(baseUri + "collections/col-1"); 
 		
 		assertEquals(
-				LinkedBuildingDataOntology.Collection,
+				DrumbeatOntology.LBDHO.Collection,
 				collectionResource.getProperty(RDF.type).getObject());
 
 		assertEquals(
 				"Collection 1",
-				collectionResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				collectionResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 
 		assertTrue(
 				model.contains(
 						collectionResource,
-						LinkedBuildingDataOntology.hasDataSource,
+						DrumbeatOntology.LBDHO.hasDataSource,
 						model.createResource(baseUri + "datasources/col-1/dso-1-1")));
 		
 		assertTrue(
 				model.contains(
 						collectionResource,
-						LinkedBuildingDataOntology.hasDataSource,
+						DrumbeatOntology.LBDHO.hasDataSource,
 						model.createResource(baseUri + "datasources/col-1/dso-1-2")));
 
 		assertTrue(
 				model.contains(
 						collectionResource,
-						LinkedBuildingDataOntology.hasDataSource,
+						DrumbeatOntology.LBDHO.hasDataSource,
 						model.createResource(baseUri + "datasources/col-1/dso-1-3")));
 
 		assertTrue(
 				model.contains(
 						collectionResource,
-						LinkedBuildingDataOntology.hasDataSource,
+						DrumbeatOntology.LBDHO.hasDataSource,
 						model.createResource(baseUri + "datasources/col-1/dso-1-4")));
 	}
 	
@@ -172,7 +172,7 @@ public class Test_CollectionManager extends DrumbeatTest {
 		
 		Resource collectionResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.Collection,
+				DrumbeatOntology.LBDHO.Collection,
 				collectionResource.getProperty(RDF.type).getObject());
 		
 
@@ -181,12 +181,12 @@ public class Test_CollectionManager extends DrumbeatTest {
 		collectionResource = collectionResource.inModel(metaDataModel);		
 		
 		assertEquals(
-				LinkedBuildingDataOntology.Collection,
+				DrumbeatOntology.LBDHO.Collection,
 				collectionResource.getProperty(RDF.type).getObject());
 
 		assertEquals(
 				"Collection 998",
-				collectionResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				collectionResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 		
 	}
 	
@@ -224,7 +224,7 @@ public class Test_CollectionManager extends DrumbeatTest {
 		
 		Resource collectionResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.Collection,
+				DrumbeatOntology.LBDHO.Collection,
 				collectionResource.getProperty(RDF.type).getObject());
 		
 		collectionResource = collectionResource.inModel(metaDataModel);

@@ -15,7 +15,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
 public class Test_DataSetManager extends DrumbeatTest {
@@ -83,13 +83,13 @@ public class Test_DataSetManager extends DrumbeatTest {
 				model.contains(
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSet));
+						DrumbeatOntology.LBDHO.DataSet));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-2"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSet));
+						DrumbeatOntology.LBDHO.DataSet));
 	}
 	
 
@@ -109,16 +109,16 @@ public class Test_DataSetManager extends DrumbeatTest {
 		Resource dataSetResource = model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1"); 
 		
 		assertEquals(
-				LinkedBuildingDataOntology.DataSet,
+				DrumbeatOntology.LBDHO.DataSet,
 				dataSetResource.getProperty(RDF.type).getObject());
 
 		assertEquals(
 				"DataSet 1-1-1",
-				dataSetResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				dataSetResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 
 		assertEquals(
 				model.createResource(baseUri + "datasources/col-1/dso-1-1"),
-				dataSetResource.getProperty(LinkedBuildingDataOntology.inDataSource).getObject());
+				dataSetResource.getProperty(DrumbeatOntology.LBDHO.inDataSource).getObject());
 	}
 	
 	
@@ -164,7 +164,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		Resource dataSetResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSet,
+				DrumbeatOntology.LBDHO.DataSet,
 				dataSetResource.getProperty(RDF.type).getObject());
 		
 		dataSetResource = dataSetResource.inModel(metaDataModel);
@@ -173,14 +173,14 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSet,
+				DrumbeatOntology.LBDHO.DataSet,
 				dataSetResource.getProperty(RDF.type).getObject());
 		assertEquals(
 				metaDataModel.createResource(baseUri + "datasources/col-1/dso-1-3"),
-				dataSetResource.getProperty(LinkedBuildingDataOntology.inDataSource).getObject());
+				dataSetResource.getProperty(DrumbeatOntology.LBDHO.inDataSource).getObject());
 		assertEquals(
 				"DataSet 1-3-1",
-				dataSetResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				dataSetResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 		
 	}
 	
@@ -212,7 +212,7 @@ public class Test_DataSetManager extends DrumbeatTest {
 		
 		Resource dataSetResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSet,
+				DrumbeatOntology.LBDHO.DataSet,
 				dataSetResource.getProperty(RDF.type).getObject());
 		
 		dataSetResource = dataSetResource.inModel(metaDataModel);

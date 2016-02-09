@@ -1,6 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
+import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
@@ -17,7 +17,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 
 public class LinkSetManager extends DrumbeatManager {
 	
@@ -51,7 +51,7 @@ public class LinkSetManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?linkSetUri");
 			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
 		}}.asQuery();
@@ -92,7 +92,7 @@ public class LinkSetManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?linkSetUri");
 			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
 		}}.asQuery();
@@ -136,7 +136,7 @@ public class LinkSetManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?predicate ?object");
 			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
 			setIri("linkSetUri", formatDataSetResourceUri(collectionId, linkSourceId, linkSetId));
@@ -203,25 +203,25 @@ public class LinkSetManager extends DrumbeatManager {
 		
 		if (lastLinkSetResource != null) {
 			lastLinkSetResource = lastLinkSetResource.inModel(metaDataModel);
-			metaDataModel.remove(linkSourceResource, LinkedBuildingDataOntology.hasLastDataSet, lastLinkSetResource);
+			metaDataModel.remove(linkSourceResource, DrumbeatOntology.LBDHO.hasLastDataSet, lastLinkSetResource);
 			linkSetResource
-				.addProperty(LinkedBuildingDataOntology.overwrites, lastLinkSetResource)
-				.addProperty(LinkedBuildingDataOntology.overwritingMethod, overwritingMethod);
+				.addProperty(DrumbeatOntology.LBDHO.overwrites, lastLinkSetResource)
+				.addProperty(DrumbeatOntology.LBDHO.overwritingMethod, overwritingMethod);
 		}
 		
 		linkSourceResource
-			.addProperty(LinkedBuildingDataOntology.hasLastDataSet, linkSetResource)
-			.addProperty(LinkedBuildingDataOntology.hasDataSet, linkSetResource);
+			.addProperty(DrumbeatOntology.LBDHO.hasLastDataSet, linkSetResource)
+			.addProperty(DrumbeatOntology.LBDHO.hasDataSet, linkSetResource);
 	
 		linkSetResource
-			.addProperty(RDF.type, LinkedBuildingDataOntology.DataSet)
-			.addProperty(RDF.type, LinkedBuildingDataOntology.LinkSet)
-			.addLiteral(LinkedBuildingDataOntology.name, name)
-			.addProperty(LinkedBuildingDataOntology.inDataSource, linkSourceResource);
+			.addProperty(RDF.type, DrumbeatOntology.LBDHO.DataSet)
+			.addProperty(RDF.type, DrumbeatOntology.LBDHO.LinkSet)
+			.addLiteral(DrumbeatOntology.LBDHO.name, name)
+			.addProperty(DrumbeatOntology.LBDHO.inDataSource, linkSourceResource);
 		
 		return ModelFactory
 				.createDefaultModel()
-				.add(linkSetResource, RDF.type, LinkedBuildingDataOntology.LinkSet);
+				.add(linkSetResource, RDF.type, DrumbeatOntology.LBDHO.LinkSet);
 	}
 	
 	
@@ -244,7 +244,7 @@ public class LinkSetManager extends DrumbeatManager {
 			setCommandText(
 					"DELETE { ?linkSetUri ?p ?o } \n" +
 					"WHERE { ?linkSetUri ?p ?o }");
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("linkSetUri", formatDataSetResourceUri(collectionId, linkSourceId, linkSetId));			
 		}}.asUpdate();
 		
@@ -252,7 +252,7 @@ public class LinkSetManager extends DrumbeatManager {
 			setCommandText(
 					"DELETE { ?s ?p ?linkSetUri } \n" +
 					"WHERE { ?s ?p ?linkSetUri }");
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("linkSetUri", formatDataSetResourceUri(collectionId, linkSourceId, linkSetId));			
 		}}.asUpdate();
 
@@ -277,7 +277,7 @@ public class LinkSetManager extends DrumbeatManager {
 					"	?linkSourceUri a lbdho:LinkSource ; lbdho:hasDataSet ?linkSetUri . \n" +
 					"	?linkSetUri a lbdho:LinkSet . \n" + 
 					"}");			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
 			setIri("linkSetUri", formatDataSetResourceUri(collectionId, linkSourceId, linkSetId));			
@@ -304,7 +304,7 @@ public class LinkSetManager extends DrumbeatManager {
 					"	?linkSourceUri a lbdho:LinkSource ; lbdho:hasDataSet ?linkSetUri . \n" +
 					"	?linkSetUri a lbdho:LinkSet . \n" + 
 					"}");			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("linkSourceUri", formatDataSourceResourceUri(collectionId, linkSourceId));
 			setIri("linkSetUri", formatDataSetResourceUri(collectionId, linkSourceId, linkSetId));			

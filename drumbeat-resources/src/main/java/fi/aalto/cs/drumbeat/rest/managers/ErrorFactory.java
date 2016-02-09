@@ -4,7 +4,7 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
-import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 
 import org.apache.commons.codec.language.bm.Lang;
 
@@ -14,21 +14,21 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"Collection not found: <%s>",
-						formatCollectionResourceUri(collectionId)));
+						NameFormatter.formatCollectionResourceUri(collectionId)));
 	}
 	
 	public static AlreadyExistsException createCollectionAlreadyExistsException(String collectionId) {
 		return new AlreadyExistsException(
 				String.format(
 						"Collection already exists: <%s>",
-						formatCollectionResourceUri(collectionId)));
+						NameFormatter.formatCollectionResourceUri(collectionId)));
 	}
 	
 	public static DeleteDeniedException createCollectionHasChildrenException(String collectionId) {
 		return new DeleteDeniedException(
 			String.format(
 					"Collection has children: <%s>",
-					formatCollectionResourceUri(collectionId)));
+					NameFormatter.formatCollectionResourceUri(collectionId)));
 	}
 	
 	
@@ -37,21 +37,21 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"DataSource not found: <%s>",
-						formatDataSourceResourceUri(collectionId, dataSourceId)));
+						NameFormatter.formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
 	public static AlreadyExistsException createDataSourceAlreadyExistsException(String collectionId, String dataSourceId) {
 		return new AlreadyExistsException(
 				String.format(
 						"DataSource already exists: <%s>",
-						formatDataSourceResourceUri(collectionId, dataSourceId)));
+						NameFormatter.formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
 	public static DeleteDeniedException createDataSourceHasChildrenException(String collectionId, String dataSourceId) {
 		return new DeleteDeniedException(
 			String.format(
 					"DataSource has children: <%s>",
-					formatDataSourceResourceUri(collectionId, dataSourceId)));
+					NameFormatter.formatDataSourceResourceUri(collectionId, dataSourceId)));
 	}
 	
 
@@ -83,14 +83,14 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"DataSet not found: <%s>",
-						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
+						NameFormatter.formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
 	public static AlreadyExistsException createDataSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
 		return new AlreadyExistsException(
 				String.format(
 						"DataSet already exists: <%s>",
-						formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
+						NameFormatter.formatDataSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
 
@@ -98,14 +98,14 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"LinkSet not found: <%s>",
-						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+						NameFormatter.formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 	
 	public static AlreadyExistsException createLinkSetAlreadyExistsException(String collectionId, String dataSourceId, String dataSetId) {
 		return new AlreadyExistsException(
 				String.format(
 						"LinkSet already exists: <%s>",
-						formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
+						NameFormatter.formatLinkSetResourceUri(collectionId, dataSourceId, dataSetId)));
 	}
 
 	
@@ -132,7 +132,7 @@ public class ErrorFactory {
 		return new NotFoundException(
 				String.format(
 						"Ontology not found: <%s>",
-						formatLocalOntologyUri(ontologyId)));
+						NameFormatter.formatLocalOntologyUri(ontologyId)));
 	}
 	
 	
@@ -140,7 +140,7 @@ public class ErrorFactory {
 		return new AlreadyExistsException(
 				String.format(
 						"Ontology already exists: <%s>",
-						formatLocalOntologyUri(ontologyId)));
+						NameFormatter.formatLocalOntologyUri(ontologyId)));
 	}
 
 	public static IllegalArgumentException createInvalidOverwritingMethodException(String overwritingMethod) {

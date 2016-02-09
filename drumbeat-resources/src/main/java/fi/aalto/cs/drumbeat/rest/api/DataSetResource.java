@@ -30,10 +30,9 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication.RequestParams;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
-import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
@@ -151,7 +150,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
+		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", graphName, filePath));
 		
 		InputStream in;
@@ -181,7 +180,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
+		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", graphName, url));
 		
 		InputStream in;
@@ -212,7 +211,7 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
+		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
@@ -242,7 +241,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
 		}
 	        
-		String graphName = LinkedBuildingDataOntology.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
+		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
 		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
@@ -275,6 +274,7 @@ public class DataSetResource {
 					dataFormat,
 					compressionFormat,
 					clearBeforeParam.getValue(),
+					false,
 					in,
 					saveToFiles);
 			
@@ -321,7 +321,7 @@ public class DataSetResource {
 //	{
 //		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 //
-//		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, dataSourceId, dataSetId);
+//		String graphName = NameFormatter.formatGraphUri(collectionId, dataSourceId, dataSetId);
 //		logger.info(String.format("CreateLinkSet: Name=%s, Source=%s, Target=%s", graphName, sourceUrl, targetUrl));
 //		
 //		return getDataSetManager().createLinkSet(collectionId, dataSourceId, dataSetId, sourceUrl, targetUrl);
@@ -331,7 +331,7 @@ public class DataSetResource {
 	@PUT
 	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/linkCreated")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response linkCreated(
+	public void linkCreated(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
@@ -358,12 +358,8 @@ public class DataSetResource {
 			
 			logger.info(String.format("Number of links: %d", linksModel.size()));
 
-			Model model = new DataSetObjectManager().linkCreated(localDataSourceUri, linksModel);
+			new DataSourceObjectManager().onLinksCreated(linksModel);
 			
-			return DrumbeatResponseBuilder.build(
-					Status.CREATED,
-					model,
-					headers.getAcceptableMediaTypes());			
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		} catch (AlreadyExistsException e) {

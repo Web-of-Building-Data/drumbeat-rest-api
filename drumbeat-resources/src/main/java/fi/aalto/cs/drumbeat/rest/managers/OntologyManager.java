@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
+
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -12,14 +14,12 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
-
 import java.io.InputStream;
 import java.util.Calendar;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 
 public class OntologyManager extends DrumbeatManager {
 	
@@ -46,7 +46,7 @@ public class OntologyManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?ontologyUri");
 			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 		}}.asQuery();
 	
 		Model result = 
@@ -75,7 +75,7 @@ public class OntologyManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?predicate ?object");
 			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));
 		}}.asQuery();
 		
@@ -109,12 +109,12 @@ public class OntologyManager extends DrumbeatManager {
 		
 		Resource ontologyResource = metaDataModel
 				.createResource(formatLocalOntologyUri(ontologyId))
-				.addProperty(RDF.type, LinkedBuildingDataOntology.Ontology)
-				.addLiteral(LinkedBuildingDataOntology.name, name);
+				.addProperty(RDF.type, DrumbeatOntology.LBDHO.Ontology)
+				.addLiteral(DrumbeatOntology.LBDHO.name, name);
 		
 		return ModelFactory
 				.createDefaultModel()
-				.add(ontologyResource, RDF.type, LinkedBuildingDataOntology.Ontology);
+				.add(ontologyResource, RDF.type, DrumbeatOntology.LBDHO.Ontology);
 	}
 	
 	
@@ -136,7 +136,7 @@ public class OntologyManager extends DrumbeatManager {
 			setCommandText(
 					"DELETE { ?ontologyUri ?p ?o } \n" +
 					"WHERE { ?ontologyUri ?p ?o }");
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));			
 		}}.asUpdate();
 		
@@ -156,7 +156,7 @@ public class OntologyManager extends DrumbeatManager {
 					"ASK { \n" + 
 					"	?ontologyUri a lbdho:Ontology . \n" + 
 					"}");			
-			LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("ontologyUri", formatLocalOntologyUri(ontologyId));
 		}}.asQuery();
 		
@@ -226,7 +226,7 @@ public class OntologyManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?ontologyUri lbdho:graphUri ?o } \n" +
 								"WHERE { ?ontologyUri lbdho:graphUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -235,7 +235,7 @@ public class OntologyManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?ontologyUri lbdho:graphUri ?graphUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 						setLiteral("graphUri", metaDataModel.createLiteral(graphUri));
 					}}.asUpdate(),
@@ -246,7 +246,7 @@ public class OntologyManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?ontologyUri lbdho:graphBaseUri ?o } \n" +
 								"WHERE { ?ontologyUri lbdho:graphBaseUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -255,7 +255,7 @@ public class OntologyManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?ontologyUri lbdho:graphBaseUri ?graphBaseUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 						setLiteral("graphBaseUri", metaDataModel.createLiteral(graphBaseUri));
 					}}.asUpdate(),
@@ -266,7 +266,7 @@ public class OntologyManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?ontologyUri lbdho:lastModified ?o } \n" +
 								"WHERE { ?ontologyUri lbdho:lastModified ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -275,7 +275,7 @@ public class OntologyManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?ontologyUri lbdho:lastModified ?lastModified }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 						setLiteral("lastModified", Calendar.getInstance());
 					}}.asUpdate(),
@@ -286,7 +286,7 @@ public class OntologyManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?ontologyUri lbdho:sizeInTriples ?o } \n" +
 								"WHERE { ?ontologyUri lbdho:sizeInTriples ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -295,7 +295,7 @@ public class OntologyManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?ontologyUri lbdho:sizeInTriples ?sizeInTriples }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("ontologyUri", ontologyUri);
 						setLiteral("sizeInTriples", sizeInTriples);
 					}}.asUpdate(),

@@ -16,7 +16,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
 public class Test_DataSourceManager extends DrumbeatTest {
@@ -76,25 +76,25 @@ public class Test_DataSourceManager extends DrumbeatTest {
 				model.contains(
 						model.createResource(baseUri + "datasources/col-1/dso-1-1"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSource));
+						DrumbeatOntology.LBDHO.DataSource));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "datasources/col-1/dso-1-2"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSource));
+						DrumbeatOntology.LBDHO.DataSource));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "datasources/col-1/dso-1-3"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSource));
+						DrumbeatOntology.LBDHO.DataSource));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "datasources/col-1/dso-1-4"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSource));
+						DrumbeatOntology.LBDHO.DataSource));
 	}
 	
 
@@ -115,28 +115,28 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		Resource dataSourceResource = model.createResource(baseUri + "datasources/col-1/dso-1-1"); 
 		
 		assertEquals(
-				LinkedBuildingDataOntology.DataSource,
+				DrumbeatOntology.LBDHO.DataSource,
 				dataSourceResource.getProperty(RDF.type).getObject());
 
 		assertEquals(
 				"DataSource 1-1",
-				dataSourceResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				dataSourceResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 
 		assertEquals(
 				model.createResource(baseUri + "collections/col-1"),
-				dataSourceResource.getProperty(LinkedBuildingDataOntology.inCollection).getObject());
+				dataSourceResource.getProperty(DrumbeatOntology.LBDHO.inCollection).getObject());
 		
 		assertTrue(
 				model.contains(
 						dataSourceResource,
-						LinkedBuildingDataOntology.hasDataSet,
+						DrumbeatOntology.LBDHO.hasDataSet,
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1")));
 				
 		
 		assertTrue(
 				model.contains(
 						dataSourceResource,
-						LinkedBuildingDataOntology.hasDataSet,
+						DrumbeatOntology.LBDHO.hasDataSet,
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-2")));
 	}
 	
@@ -184,7 +184,7 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		
 		Resource dataSourceResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSource,
+				DrumbeatOntology.LBDHO.DataSource,
 				dataSourceResource.getProperty(RDF.type).getObject());
 		
 		dataSourceResource = dataSourceResource.inModel(metaDataModel);
@@ -194,14 +194,14 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSource,
+				DrumbeatOntology.LBDHO.DataSource,
 				dataSourceResource.getProperty(RDF.type).getObject());
 		assertEquals(
 				metaDataModel.createResource(baseUri + "collections/col-3"),
-				dataSourceResource.getProperty(LinkedBuildingDataOntology.inCollection).getObject());
+				dataSourceResource.getProperty(DrumbeatOntology.LBDHO.inCollection).getObject());
 		assertEquals(
 				"DataSource 3-1",
-				dataSourceResource.getProperty(LinkedBuildingDataOntology.name).getLiteral().getValue());
+				dataSourceResource.getProperty(DrumbeatOntology.LBDHO.name).getLiteral().getValue());
 		
 	}
 	
@@ -240,7 +240,7 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		
 		Resource dataSourceResource = model.listSubjects().next();
 		assertEquals(
-				LinkedBuildingDataOntology.DataSource,
+				DrumbeatOntology.LBDHO.DataSource,
 				dataSourceResource.getProperty(RDF.type).getObject());
 		
 		dataSourceResource = dataSourceResource.inModel(metaDataModel);

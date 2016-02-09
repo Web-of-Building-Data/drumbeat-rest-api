@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
+
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -9,11 +11,9 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
-import fi.aalto.cs.drumbeat.rest.common.BimLinkingOntology;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
-
-import static fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology.*;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -66,9 +66,9 @@ public class DataSetObjectManager extends DrumbeatManager {
 						"} \n "
 					);
 			
-			fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-			setIri("ifcOwlUri", formatDrumbeatOntologyBaseUri("ifc2x3"));
+			setIri("ifcOwlUri", DrumbeatOntology.formatDrumbeatOntologyBaseUri("ifc2x3"));
 		}}.asQuery();
 		
 		Model resultModel = 
@@ -122,7 +122,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?predicate ?object");
 			
-			fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("objectUri", objectUri);
 		}}.asQuery();
 		
@@ -159,7 +159,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					"} \n" + 
 					"ORDER BY ?subject ?predicate ?object");
 			
-			fillParameterizedSparqlString(this);
+			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, objectId));
 		}}.asQuery();
 		
@@ -319,7 +319,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:graphUri ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:graphUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -328,7 +328,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:graphUri ?graphUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("graphUri", metaDataModel.createLiteral(graphUri));
 					}}.asUpdate(),
@@ -339,7 +339,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:graphBaseUri ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:graphBaseUri ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -348,7 +348,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:graphBaseUri ?graphBaseUri }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("graphBaseUri", metaDataModel.createLiteral(graphBaseUri));
 					}}.asUpdate(),
@@ -359,7 +359,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:lastModified ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -368,7 +368,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("lastModified", Calendar.getInstance());
 					}}.asUpdate(),
@@ -379,7 +379,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 						setCommandText(
 								"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
 								"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 					}}.asUpdate(),
 					metaDataModel);
@@ -388,7 +388,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 					new ParameterizedSparqlString() {{
 						setCommandText(
 								"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
-						LinkedBuildingDataOntology.fillParameterizedSparqlString(this);
+						DrumbeatOntology.fillParameterizedSparqlString(this);
 						setIri("dataSetUri", dataSetUri);
 						setLiteral("sizeInTriples", sizeInTriples);
 					}}.asUpdate(),
@@ -405,25 +405,5 @@ public class DataSetObjectManager extends DrumbeatManager {
 		}
 		
 	}
-	
-	public Model linkCreated(String dataSetUri, Model linksModel) throws DrumbeatException {
-		
-		Model backLinksModel = ModelFactory.createDefaultModel();
-		
-		StmtIterator stmtIterator = linksModel.listStatements();
-		while (stmtIterator.hasNext()) {
-			Statement statement = stmtIterator.next();
-			if (statement.getPredicate().equals(BimLinkingOntology.implements1)) {
-				backLinksModel.add(statement.getObject().asResource(), BimLinkingOntology.implementedBy, statement.getSubject());
-			}
-		}
-		
-		Model targetModel = DrumbeatApplication.getInstance().getDataModel(dataSetUri);
-		targetModel.add(backLinksModel);
-		
-		return backLinksModel;
-		
-	}
-	
 	
 }

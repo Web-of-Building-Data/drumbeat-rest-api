@@ -3,10 +3,8 @@ package fi.aalto.cs.drumbeat.rest.api;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URL;
 
 import javax.ws.rs.*;
@@ -29,7 +27,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication.RequestParams;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSetManager;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSetObjectManager;
@@ -144,13 +142,14 @@ public class LinkSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);
+		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);
 		logger.info(String.format("UploadServerFile: LinkSet=%s, ServerFilePath=%s", graphName, filePath));
 		
 		InputStream in;
@@ -160,7 +159,7 @@ public class LinkSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	@POST
@@ -174,13 +173,14 @@ public class LinkSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
+		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
 		logger.info(String.format("UploadUrl: LinkSet=%s, Url=%s", graphName, url));
 		
 		InputStream in;
@@ -190,7 +190,7 @@ public class LinkSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 
@@ -205,17 +205,18 @@ public class LinkSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
+		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
 		logger.info(String.format("UploadContent: LinkSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
-		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 	
@@ -230,6 +231,7 @@ public class LinkSetResource {
 			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormDataParam("notifyRemote") String notifyRemote,
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@Context UriInfo uriInfo,
@@ -241,10 +243,10 @@ public class LinkSetResource {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
 		}
 	        
-		String graphName = LinkedBuildingDataOntology.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);
+		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);
 		logger.info(String.format("UploadContent: LinkSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
-		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadLinkSet(collectionId, linkSourceId, linkSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	private Response internalUploadLinkSet(
@@ -255,6 +257,7 @@ public class LinkSetResource {
 			String dataFormat,
 			String compressionFormat,
 			String clearBefore,
+			String notifyRemote,
 			InputStream in,
 			HttpHeaders headers)
 	{	
@@ -266,6 +269,9 @@ public class LinkSetResource {
 			BooleanParam clearBeforeParam = new BooleanParam();
 			clearBeforeParam.setStringValue(clearBefore);
 
+			BooleanParam notifyRemoteParam = new BooleanParam();
+			notifyRemoteParam.setStringValue(notifyRemote);
+
 			Model linkSetInfoModel = objectManager.upload(
 					collectionId,
 					linkSourceId,
@@ -274,6 +280,7 @@ public class LinkSetResource {
 					dataFormat,
 					compressionFormat,
 					clearBeforeParam.getValue(),
+					notifyRemoteParam.getValue(),
 					in,
 					saveToFiles);
 			
@@ -320,7 +327,7 @@ public class LinkSetResource {
 //	{
 //		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 //
-//		String graphName = LinkedBuildingDataOntology.formatGraphUri(collectionId, linkSourceId, linkSetId);
+//		String graphName = NameFormatter.formatGraphUri(collectionId, linkSourceId, linkSetId);
 //		logger.info(String.format("CreateLinkSet: Name=%s, Source=%s, Target=%s", graphName, sourceUrl, targetUrl));
 //		
 //		return getLinkSetManager().createLinkSet(collectionId, linkSourceId, linkSetId, sourceUrl, targetUrl);
@@ -344,7 +351,7 @@ public class LinkSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
-		String graphName = LinkedBuildingDataOntology.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
+		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
 		logger.info(String.format("UpdateSparql: LinkSet=%s, LinkType=%s", graphName, linkType));
 		
 		try {

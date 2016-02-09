@@ -89,7 +89,7 @@ public class MediaTypeConverter {
 		StringWriter writer = new StringWriter();
 
 		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
-		nsPrefixMap.putAll(LinkedBuildingDataOntology.getDefaultNsPrefixes());
+		nsPrefixMap.putAll(DrumbeatOntology.getDefaultNsPrefixes());
 		
 		if (StringUtils.isEmptyOrNull(baseUri)) {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
@@ -148,7 +148,7 @@ public class MediaTypeConverter {
 		}
 		
 		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
-		nsPrefixMap.putAll(LinkedBuildingDataOntology.getDefaultNsPrefixes());
+		nsPrefixMap.putAll(DrumbeatOntology.getDefaultNsPrefixes());
 		
 		Set<String> usedNsPrefixSet = new TreeSet<>();
 		

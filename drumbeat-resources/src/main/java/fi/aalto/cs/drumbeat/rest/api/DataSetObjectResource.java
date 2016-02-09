@@ -17,7 +17,7 @@ import com.hp.hpl.jena.shared.NotFoundException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
@@ -51,7 +51,7 @@ public class DataSetObjectResource {
 		
 		try {		
 			Model model = getDataSetObjectManager().getAll(collectionId, dataSourceId, dataSetId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
+			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -78,7 +78,7 @@ public class DataSetObjectResource {
 		
 		try {		
 			Model model = getDataSetObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
+			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -105,7 +105,7 @@ public class DataSetObjectResource {
 		
 		try {		
 			Model model = getDataSetObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);
-			String modelBaseUri = LinkedBuildingDataOntology.formatObjectResourceBaseUri(collectionId, dataSourceId);
+			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
 					model,
@@ -116,6 +116,8 @@ public class DataSetObjectResource {
 		} catch (DrumbeatException e) {
 			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
 		}
-	}		
+	}
+	
+	
 
 }

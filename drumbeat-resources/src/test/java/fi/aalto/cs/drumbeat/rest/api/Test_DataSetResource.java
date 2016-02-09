@@ -30,7 +30,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.LinkedBuildingDataOntology;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.RdfUtils;
 
@@ -128,13 +128,13 @@ public class Test_DataSetResource extends DrumbeatTest {
 				model.contains(
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-1"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSet));
+						DrumbeatOntology.LBDHO.DataSet));
 
 		assertTrue(
 				model.contains(
 						model.createResource(baseUri + "datasets/col-1/dso-1-1/dse-1-1-2"),
 						RDF.type,
-						LinkedBuildingDataOntology.DataSet));
+						DrumbeatOntology.LBDHO.DataSet));
 	}	
 	
 	

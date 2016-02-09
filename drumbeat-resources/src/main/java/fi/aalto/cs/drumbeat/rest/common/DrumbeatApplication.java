@@ -226,7 +226,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	public Model getOwlModel(String name, boolean ontModel) throws DrumbeatException {
 		try {
-			Model ifcModel = getJenaProvider().openModel(LinkedBuildingDataOntology.GRAPH_NAME_IFC);
+			Model ifcModel = getJenaProvider().openModel(DrumbeatOntology.GRAPH_NAME_IFC);
 			if (ontModel) {
 				return ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ifcModel);
 			}
