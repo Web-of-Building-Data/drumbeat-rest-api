@@ -37,7 +37,15 @@ public class DrumbeatResponseBuilder {
 						.type(mediaType)
 						.build();
 				
-			}catch (NotSupportedException e) {				
+			} catch (NotSupportedException e) {
+				// do nothing
+			} catch (Exception e) {
+				throw new DrumbeatWebException(
+						Response.Status.INTERNAL_SERVER_ERROR,
+						String.format(
+								"Unexpected error: %s",
+								e.getMessage()),
+						null);
 			}
 			
 		}

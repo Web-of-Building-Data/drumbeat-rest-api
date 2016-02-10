@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fi.hut.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.8.1-SNAPSHOT</version>
+		<version>0.8.2-SNAPSHOT</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 
@@ -45,7 +45,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Drumbeat IFC2LD -->
+		<!-- Drumbeat IFC2LD -->		
 		<dependency>
 			<groupId>${drumbeat.groupId}</groupId>
 			<artifactId>drumbeat-ifc.convert.ifc2ld.cli</artifactId>
@@ -97,6 +97,15 @@
 		</dependency>
 
 		<!-- JSONLD -->
+		
+		<!--
+		<dependency>
+		    <groupId>com.github.jsonld-java</groupId>
+		    <artifactId>jsonld-java</artifactId>
+		    <version>0.7.0</version>
+		</dependency>
+		-->
+		
 		<dependency>
 			<groupId>com.github.jsonld-java</groupId>
 			<artifactId>jsonld-java-jena</artifactId>

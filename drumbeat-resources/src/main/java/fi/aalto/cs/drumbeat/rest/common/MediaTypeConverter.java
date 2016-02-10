@@ -1,6 +1,13 @@
 package fi.aalto.cs.drumbeat.rest.common;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.github.jsonldjava.core.JsonLdApi;
+import com.github.jsonldjava.core.JsonLdError;
+import com.github.jsonldjava.core.JsonLdOptions;
+import com.github.jsonldjava.core.JsonLdProcessor;
+import com.github.jsonldjava.core.JsonLdUtils;
 import com.github.jsonldjava.jena.JenaJSONLD;
+import com.github.jsonldjava.utils.JsonUtils;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -11,7 +18,9 @@ import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 import static javax.ws.rs.core.MediaType.*;
 
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -20,6 +29,9 @@ import java.util.TreeSet;
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RIOT;
+
 
 public class MediaTypeConverter {
 	
@@ -27,26 +39,26 @@ public class MediaTypeConverter {
 	public static final String APPLICATION_LD_JSON = "application/ld+json";
 	public static final String TEXT_TURTLE = "text/turtle";	
 
-	public static String convertModel(Model model, MediaType mediaType, String baseUri) throws NotSupportedException {
+	public static String convertModel(Model model, MediaType mediaType, String baseUri) throws Exception {
 		return convertModel(model, mediaType.getType() + "/" + mediaType.getSubtype(), baseUri);
 	}
 		
 	public static String convertModel(Model model, String mediaTypeString, String baseUri)
-		throws NotSupportedException
+		throws Exception
 	{
 		switch (mediaTypeString) {
 		
 		case APPLICATION_JSON:
 		case APPLICATION_LD_JSON:			
-			return convertModelToRdf(model, "JSON-LD", baseUri);
+			return convertModelToRdf(model, Lang.JSONLD, baseUri);
 			
 		case TEXT_PLAIN:
 		case TEXT_TURTLE:
-			return convertModelToRdf(model, "TURTLE", baseUri);
+			return convertModelToRdf(model, Lang.TURTLE, baseUri);
 
 		case APPLICATION_RDF_XML:
 		case APPLICATION_XML:
-			return convertModelToRdf(model, "RDF/XML", baseUri);
+			return convertModelToRdf(model, Lang.RDFXML, baseUri);
 
 		case TEXT_HTML:
 		case WILDCARD:
@@ -82,19 +94,36 @@ public class MediaTypeConverter {
 //		return out.toString();
 //	}
 	
-	public static String convertModelToRdf(Model model, String lang, String baseUri) {
-		if (lang.equalsIgnoreCase("JSON-LD")) {
+	public static String convertModelToRdf(Model model, Lang lang, String baseUri) throws JsonParseException, IOException, JsonLdError {
+		
+		if (lang.equals(Lang.JSONLD)) {
 			JenaJSONLD.init();
-		}
+			baseUri = null;
+		} else if (lang.equals(Lang.RDFJSON)) {
+			RIOT.init();			
+		}		
+		
 		StringWriter writer = new StringWriter();
 
 		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
 		nsPrefixMap.putAll(DrumbeatOntology.getDefaultNsPrefixes());
 		
-		if (StringUtils.isEmptyOrNull(baseUri)) {
+		if (StringUtils.isEmptyOrNull(baseUri) && !lang.equals(Lang.JSONLD)) {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		}
-		model.write(writer, lang, baseUri);
+		
+		model.write(writer, lang.getName(), baseUri);
+		
+//		if (lang.equals(Lang.JSONLD)) {
+//			assert(tempLang.equals(Lang.RDFJSON));
+//			
+//			Object jsonObject = JsonUtils.fromString(writer.toString());
+//			JsonLdOptions options = new JsonLdOptions(baseUri);
+//			Map<Object, Object> context = new HashMap<>();
+//			Object jsonCompact = JsonLdProcessor.compact(jsonObject, context, options);
+//			return JsonUtils.toPrettyString(jsonCompact);
+//		}
+		
 		return writer.toString();
 	}
 
