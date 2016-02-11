@@ -28,7 +28,6 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication.RequestParams;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
-import fi.aalto.cs.drumbeat.rest.managers.LinkSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSetManager;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
@@ -263,7 +262,7 @@ public class LinkSetResource {
 	{	
 		
 		try {
-			LinkSourceObjectManager objectManager = new LinkSourceObjectManager();
+			LinkSetObjectManager objectManager = new LinkSetObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			
 			BooleanParam clearBeforeParam = new BooleanParam();

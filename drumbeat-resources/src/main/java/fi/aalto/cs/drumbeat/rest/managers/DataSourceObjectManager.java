@@ -6,6 +6,7 @@ import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -196,6 +197,9 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		}
 		
 		
+		//
+		// get data from link sources
+		//
 		LinkSourceManager linkSourceManager = new LinkSourceManager(metaDataModel, getJenaProvider());
 		Model linkSources = linkSourceManager.getAllLinkSourcesOfDataSource(collectionId, dataSourceId);
 		
@@ -214,6 +218,24 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			}
 			
 		}
+		
+		
+		//
+		// get data from back-linking dataset
+		//
+		String backLinkSourceUri = NameFormatter.formatBackLinkSourceUri(collectionId, dataSourceId);
+		Model backLinkSourceModel = DrumbeatApplication.getInstance().getDataModel(backLinkSourceUri);
+		
+		if (backLinkSourceModel != null) {
+			try {
+				Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri);
+				if (newResultModel != null) {
+					resultModel.add(newResultModel);
+				}
+			} catch (NotFoundException e) {				
+			}
+		}
+		
 		
 		return resultModel;
 	}
@@ -329,258 +351,33 @@ public class DataSourceObjectManager extends DrumbeatManager {
 //	}
 	
 	
-	
-	/**
-	 * Imports data set from an input stream
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param dataSetId
-	 * @param dataType
-	 * @param dataFormat
-	 * @param overwritingMehod
-	 * @param in
-	 * @param saveFiles
-	 * @return
-	 * @throws NotFoundException
-	 */
-	public Model upload(
-			String collectionId,
-			String dataSourceId,
-			String dataSetId,
-			String dataType,
-			String dataFormat,
-			String compressionFormat,
-			boolean clearBefore,
-			boolean notifyRemote,
-			InputStream in,
-			boolean saveToFiles)
-		throws NotFoundException, IllegalArgumentException, Exception
-	{
-		//
-		// Checking if dataSet exists
-		//		
-		DataSetManager dataSetManager = new DataSetManager();
-		if (!dataSetManager.checkExists(collectionId, dataSourceId, dataSetId)) {
-			throw ErrorFactory.createDataSetNotFoundException(collectionId, dataSourceId, dataSetId);
-		}
+	public boolean onLinkCreated(String subjectUri, String predicateUri, String objectUri) throws DrumbeatException {
 		
-		//
-		// Format graphUri
-		//		
-		String graphUri = formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
-		String graphBaseUri = formatObjectResourceBaseUri(collectionId, dataSourceId);
+		Property inversePredicateUri = null;
 		
-		//
-		// Read input stream to target model
-		//
-		Model targetModel = new DataSetUploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
-		
-		//
-		// Update meta data model
-		//
-		String dataSetUri = formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
-		updateMetaModelAfterUploading(dataSetUri, graphUri, graphBaseUri, targetModel.size());
-		
-		String applicationBaseUri = DrumbeatApplication.getInstance().getBaseUri();
-		
-		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(getMetaDataModel(), getJenaProvider());		
-		
-		if (notifyRemote) {
+		if (predicateUri.equals(DrumbeatOntology.BLO.implements1.getURI())) {
 			
-			StmtIterator stmtIterator = targetModel.listStatements();
-			
-			while (stmtIterator.hasNext()) {
-				
-				Statement statement = stmtIterator.next();
-				
-				RDFNode object = statement.getObject();
-				if (object.isURIResource()) {
-					
-					String objectUri = object.asResource().getURI();
-					
-					if (objectUri.startsWith(applicationBaseUri)) {
-						
-						onLinkCreated(statement);
-							
-					} else {
-						
-						String content = String.format("%s %s %s",
-								statement.getSubject().getURI(),
-								statement.getPredicate().getURI(),
-								objectUri);
-						
-						FormDataMultiPart multiPart = new FormDataMultiPart();
-						multiPart
-							.field("content", content);
-						
-						Response result = null;
-						
-						try {
-							
-							WebTarget target = 
-									ClientBuilder
-										.newClient()
-										.register(MultiPartFeature.class)
-										.target(objectUri)
-										.path("linkCreated");					
-		
-							result = target
-										.request(MediaTypeConverter.APPLICATION_LD_JSON)
-										.put(Entity.entity(multiPart, multiPart.getMediaType()));
-							
-							if (result.getStatus() != Response.Status.CREATED.getStatusCode()) {
-								logger.warn(String.format("LinkCreated processing error, status: %s, target: %s", result.getStatus(), target));
-							}
-							
-						} catch (WebApplicationException e) {
-							logger.error(e.getMessage() + ": " + e.getResponse());
-						}
-						
-						
-					}
-					
-				}
-				
-				
-			}
-			
+			inversePredicateUri = DrumbeatOntology.BLO.isImplementedBy;
 			
 		}
 		
-		return dataSetManager.getById(collectionId, dataSourceId, dataSetId);
-	}
-	
-	
-	private void updateMetaModelAfterUploading(String dataSetUri, String graphUri, String graphBaseUri, long sizeInTriples) {
-		
-		Model metaDataModel = getMetaDataModel();
+		if (inversePredicateUri != null) {
 
-		try {
-		
-			if (metaDataModel.supportsTransactions()) {
-				metaDataModel.begin();
-			}		
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"DELETE { ?dataSetUri lbdho:graphUri ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:graphUri ?o }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-					}}.asUpdate(),
-					metaDataModel);
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:graphUri ?graphUri }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-						setLiteral("graphUri", metaDataModel.createLiteral(graphUri));
-					}}.asUpdate(),
-					metaDataModel);
-	
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"DELETE { ?dataSetUri lbdho:graphBaseUri ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:graphBaseUri ?o }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-					}}.asUpdate(),
-					metaDataModel);
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:graphBaseUri ?graphBaseUri }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-						setLiteral("graphBaseUri", metaDataModel.createLiteral(graphBaseUri));
-					}}.asUpdate(),
-					metaDataModel);
-	
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"DELETE { ?dataSetUri lbdho:lastModified ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:lastModified ?o }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-					}}.asUpdate(),
-					metaDataModel);
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:lastModified ?lastModified }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-						setLiteral("lastModified", Calendar.getInstance());
-					}}.asUpdate(),
-					metaDataModel);
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"DELETE { ?dataSetUri lbdho:sizeInTriples ?o } \n" +
-								"WHERE { ?dataSetUri lbdho:sizeInTriples ?o }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-					}}.asUpdate(),
-					metaDataModel);
-			
-			UpdateAction.execute(
-					new ParameterizedSparqlString() {{
-						setCommandText(
-								"INSERT DATA { ?dataSetUri lbdho:sizeInTriples ?sizeInTriples }");
-						DrumbeatOntology.fillParameterizedSparqlString(this);
-						setIri("dataSetUri", dataSetUri);
-						setLiteral("sizeInTriples", sizeInTriples);
-					}}.asUpdate(),
-					metaDataModel);
-			
-			if (metaDataModel.supportsTransactions()) {
-				metaDataModel.commit();
-			}
-			
-		} catch (Exception exception) {
-			if (metaDataModel.supportsTransactions()) {
-				metaDataModel.abort();
-			}						
-		}
-		
-	}
-	
-	
-	public void onLinksCreated(Model links) throws DrumbeatException {
-		
-		StmtIterator stmtIterator = links.listStatements();
-		
-		while (stmtIterator.hasNext()) {
-			onLinkCreated(stmtIterator.next());
-		}
-		
-	}
-	
-	
-	public void onLinkCreated(Statement linkStatement) throws DrumbeatException {
-		
-		if (linkStatement.getPredicate().equals(DrumbeatOntology.BLO.implements1)) {
-
-			String dataSourceUri = NameFormatter.getDataSourceUriFromObjectUri(linkStatement.getObject().asResource().getURI());
+			String dataSourceUri = NameFormatter.getDataSourceUriFromObjectUri(objectUri);
 			
 			String backLinkDataSetUri = NameFormatter.formatBackLinkSourceUri(dataSourceUri);
 			
 			Model targetModel = DrumbeatApplication.getInstance().getDataModel(backLinkDataSetUri);
 			
 			targetModel.add(
-					linkStatement.getObject().asResource(),
-					DrumbeatOntology.BLO.isImplementedBy,
-					linkStatement.getSubject());
-
+					targetModel.createResource(objectUri),
+					inversePredicateUri,
+					targetModel.createResource(subjectUri));
+			
+			return true;
 		}
+		
+		return false;
 	}
 
 	

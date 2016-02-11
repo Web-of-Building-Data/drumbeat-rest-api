@@ -5,15 +5,11 @@ import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
-import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -113,6 +109,28 @@ public class DataSetObjectManager extends DrumbeatManager {
 	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
+		Model resultModel = getByUri(dataModel, objectUri);
+		
+		if (resultModel.isEmpty()) {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
+		}
+		
+		return resultModel;
+	}
+	
+	
+	/**
+	 * Gets all attributes of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getByUri(Model dataModel, String objectUri)
+		throws DrumbeatException
+	{
 		Query query = new ParameterizedSparqlString() {{
 			setCommandText(
 					"CONSTRUCT { \n" +
@@ -130,14 +148,9 @@ public class DataSetObjectManager extends DrumbeatManager {
 				createQueryExecution(query, dataModel)
 					.execConstruct();
 		
-		if (resultModel.isEmpty()) {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
-		}
-		
 		return resultModel;
 	}
-	
-	
+
 	/**
 	 * Gets type of a specified object 
 	 * @param collectionId
@@ -248,8 +261,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 //		
 //	}
 	
-	
-	
+
 	/**
 	 * Imports data set from an input stream
 	 * @param collectionId
@@ -257,7 +269,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSetId
 	 * @param dataType
 	 * @param dataFormat
-	 * @param clearBefore
+	 * @param overwritingMehod
 	 * @param in
 	 * @param saveFiles
 	 * @return
@@ -298,7 +310,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 		// Update meta data model
 		//
 		String dataSetUri = formatDataSetResourceUri(collectionId, dataSourceId, dataSetId);
-		updateMetaModelAfterUploading(dataSetUri, graphUri, graphBaseUri, targetModel.size());		
+		updateMetaModelAfterUploading(dataSetUri, graphUri, graphBaseUri, targetModel.size());
 		
 		return dataSetManager.getById(collectionId, dataSourceId, dataSetId);
 	}
@@ -405,5 +417,8 @@ public class DataSetObjectManager extends DrumbeatManager {
 		}
 		
 	}
+		
+	
+	
 	
 }

@@ -93,11 +93,6 @@ public class LinkSourceManager extends DrumbeatManager {
 				createQueryExecution(query, getMetaDataModel())
 					.execConstruct();
 		
-		resultModel.add(
-				resultModel.createResource(NameFormatter.formatBackLinkSourceUri(collectionId, originalDataSetId)),
-				RDF.type,
-				DrumbeatOntology.LBDHO.LinkSource);
-		
 		return resultModel;
 	}
 	

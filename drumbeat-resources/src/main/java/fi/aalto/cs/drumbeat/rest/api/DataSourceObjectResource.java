@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -33,6 +34,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 @Path("/objects")
 public class DataSourceObjectResource {
@@ -131,12 +133,14 @@ public class DataSourceObjectResource {
 	
 	@PUT
 	@Path("/{collectionId}/{dataSourceId}/{objectId}/linkCreated")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void linkCreated(
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("objectId") String objectId,
-			@FormDataParam("content") String content,
+			@FormParam("subject") String subjectUri,
+			@FormParam("predicate") String predicateUri,
+			@FormParam("object") String objectUri,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
@@ -144,29 +148,28 @@ public class DataSourceObjectResource {
 		
 		try {
 			
-			logger.info(String.format("linkCreated: %s", uriInfo.getAbsolutePath()));
+			logger.info(String.format("linkCreated: <%s> <%s> <%s>",
+					//uriInfo.getAbsolutePath(),
+					subjectUri,
+					predicateUri,
+					objectUri
+					));
 			
-			if (content == null) {
-				content = "";
+			if (StringUtils.isEmptyOrNull(subjectUri)) {
+				throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined subject", null);
 			}
 			
-			InputStream in = new ByteArrayInputStream(content.getBytes());			
-			
-			Model linksModel = ModelFactory.createDefaultModel();
-			RDFDataMgr.read(linksModel, in, Lang.TURTLE);
-			
-			logger.info(String.format("Number of links: %d", linksModel.size()));
-			
-			StmtIterator stmtIterator = linksModel.listStatements();
-			
+			if (StringUtils.isEmptyOrNull(predicateUri)) {
+				throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined predicate", null);
+			}
+
+			if (StringUtils.isEmptyOrNull(objectUri)) {
+				throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined object", null);
+			}
+
 			DataSourceObjectManager dataSourceObjectManager = new DataSourceObjectManager();
 
-			while (stmtIterator.hasNext()) {
-				
-				Statement statement = stmtIterator.next();
-				
-				dataSourceObjectManager.onLinkCreated(statement);			
-			}
+			dataSourceObjectManager.onLinkCreated(subjectUri, predicateUri, objectUri);			
 			
 		} catch (NotFoundException e) {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);

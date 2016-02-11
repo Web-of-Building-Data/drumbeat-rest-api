@@ -15,14 +15,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
@@ -31,8 +28,8 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication.RequestParams;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
-import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
+import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
@@ -260,7 +257,7 @@ public class DataSetResource {
 	{	
 		
 		try {
-			DataSourceObjectManager objectManager = new DataSourceObjectManager();
+			DataSetObjectManager objectManager = new DataSetObjectManager();
 			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
 			
 			BooleanParam clearBeforeParam = new BooleanParam();
@@ -274,7 +271,6 @@ public class DataSetResource {
 					dataFormat,
 					compressionFormat,
 					clearBeforeParam.getValue(),
-					false,
 					in,
 					saveToFiles);
 			
@@ -328,46 +324,46 @@ public class DataSetResource {
 //	}	
 	
 	
-	@PUT
-	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/linkCreated")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void linkCreated(
-			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
-			@PathParam("dataSetId") String dataSetId,
-			@FormDataParam("localDataSourceUri") String localDataSourceUri,
-			@FormDataParam("remoteDataSourceUri") String remoteDataSourceUri,
-			@FormDataParam("content") String content,
-			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
-	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
-		
-		try {
-			
-			logger.info(String.format("linkCreated: %s", uriInfo.getAbsolutePath()));
-			
-			if (content == null) {
-				content = "";
-			}
-			
-			InputStream in = new ByteArrayInputStream(content.getBytes());			
-			
-			Model linksModel = ModelFactory.createDefaultModel();
-			RDFDataMgr.read(linksModel, in, Lang.TURTLE);
-			
-			logger.info(String.format("Number of links: %d", linksModel.size()));
-
-			new DataSourceObjectManager().onLinksCreated(linksModel);
-			
-		} catch (NotFoundException e) {
-			throw new DrumbeatWebException(Status.NOT_FOUND, e);
-		} catch (AlreadyExistsException e) {
-			throw new DrumbeatWebException(Status.CONFLICT, e);
-		} catch (DrumbeatException e) {
-			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);
-		}
-	}	
+//	@PUT
+//	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/linkCreated")
+//	@Consumes(MediaType.MULTIPART_FORM_DATA)
+//	public void linkCreated(
+//			@PathParam("collectionId") String collectionId,
+//			@PathParam("dataSourceId") String dataSourceId,
+//			@PathParam("dataSetId") String dataSetId,
+//			@FormDataParam("localDataSourceUri") String localDataSourceUri,
+//			@FormDataParam("remoteDataSourceUri") String remoteDataSourceUri,
+//			@FormDataParam("content") String content,
+//			@Context UriInfo uriInfo,
+//			@Context HttpHeaders headers)
+//	{
+//		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+//		
+//		try {
+//			
+//			logger.info(String.format("linkCreated: %s", uriInfo.getAbsolutePath()));
+//			
+//			if (content == null) {
+//				content = "";
+//			}
+//			
+//			InputStream in = new ByteArrayInputStream(content.getBytes());			
+//			
+//			Model linksModel = ModelFactory.createDefaultModel();
+//			RDFDataMgr.read(linksModel, in, Lang.TURTLE);
+//			
+//			logger.info(String.format("Number of links: %d", linksModel.size()));
+//
+//			new DataSourceObjectManager().onLinksCreated(linksModel);
+//			
+//		} catch (NotFoundException e) {
+//			throw new DrumbeatWebException(Status.NOT_FOUND, e);
+//		} catch (AlreadyExistsException e) {
+//			throw new DrumbeatWebException(Status.CONFLICT, e);
+//		} catch (DrumbeatException e) {
+//			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);
+//		}
+//	}	
 	
 
 	private DataSetManager getDataSetManager() {
