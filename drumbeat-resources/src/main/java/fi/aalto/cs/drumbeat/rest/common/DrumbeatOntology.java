@@ -67,6 +67,16 @@ public class DrumbeatOntology {
 		
 	}
 	
+	public static class SEO {
+		
+		public static final String ONTOLOGY_BASE_PREFIX = "seo";
+		public static final String ONTOLOGY_BASE_URI = formatDrumbeatOntologyBaseUri("seo");
+		
+		public static final Property object = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "object");	
+		public static final Property event = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "event");	
+		
+	}
+
 	@SuppressWarnings("serial")
 	public static Map<String, String> getDefaultNsPrefixes() {
 		final Map<String, String> map =
