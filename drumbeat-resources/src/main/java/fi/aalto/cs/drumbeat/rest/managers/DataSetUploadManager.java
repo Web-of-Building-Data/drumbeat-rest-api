@@ -5,8 +5,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import virtuoso.jena.driver.VirtBulkUpdateHandler;
-import virtuoso.jena.driver.VirtGraph;
 
 import java.io.File;
 import java.io.FileInputStream;
