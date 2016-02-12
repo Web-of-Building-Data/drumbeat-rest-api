@@ -46,8 +46,11 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	public static class ConfigParams {
 		public static final String WEB_BASE_URI = "web.baseUri";		
 		public static final String WEB_BASE_URI_FIXED = "web.baseUri.fixed";		
+		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
+
 		public static final String UPLOADS_SAVE = "uploads.save";
+		public static final String UPLOADS_DIR_PATH = "uploads.dir.path";
 	}
 	
 	public static class Resources {
@@ -71,6 +74,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	private String realBaseUri;
 	private Boolean isBaseUriFixed;
 	private Boolean saveUploads;
+	private String uploadsDirPath;
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
 
@@ -162,6 +166,16 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		}
 	}
 		
+	public String getUploadsDirPath() {
+		if (uploadsDirPath == null) {
+			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH);
+			if (uploadsDirPath == null) {
+				uploadsDirPath = getRealServerPath(ResourcePaths.UPLOADS_FOLDER_PATH);
+			}
+		}
+		return uploadsDirPath;
+	}
+	
 	/**
 	 * Gets value indicating whether uploaded files must be saved
 	 * @return

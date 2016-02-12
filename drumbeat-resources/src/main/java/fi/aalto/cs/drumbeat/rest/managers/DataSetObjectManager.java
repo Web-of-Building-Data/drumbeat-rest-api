@@ -5,6 +5,8 @@ import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
 import com.hp.hpl.jena.update.UpdateAction;
 
@@ -14,11 +16,21 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.log4j.Logger;
+
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSetObjectManager extends DrumbeatManager {
 	
+	private static final Logger logger = Logger.getLogger(DataSetObjectManager.class);	
+
 	public DataSetObjectManager() throws DrumbeatException {
 	}
 	
@@ -283,6 +295,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 			String dataFormat,
 			String compressionFormat,
 			boolean clearBefore,
+			boolean notifyRemote,
 			InputStream in,
 			boolean saveToFiles)
 		throws NotFoundException, IllegalArgumentException, Exception
@@ -306,6 +319,10 @@ public class DataSetObjectManager extends DrumbeatManager {
 		//
 		Model targetModel = new DataSetUploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
 		
+		if (notifyRemote) {
+			notifyRemote(targetModel);
+		}		
+		
 		//
 		// Update meta data model
 		//
@@ -316,6 +333,58 @@ public class DataSetObjectManager extends DrumbeatManager {
 	}
 	
 	
+	private void notifyRemote(Model modelWithLinks) throws DrumbeatException {
+		
+		DataSourceObjectManager dataSourceObjectManager = new DataSourceObjectManager(getMetaDataModel(), getJenaProvider());
+		
+		StmtIterator stmtIterator = modelWithLinks.listStatements();
+		
+		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		
+		if (stmtIterator != null) {
+		
+			while (stmtIterator.hasNext()) {
+				Statement statement = stmtIterator.next();
+				if (!statement.getObject().isResource()) {
+					continue;
+				}
+				
+				String subjectUri = statement.getSubject().getURI();
+				String predicateUri = statement.getPredicate().getURI();
+				String objectUri = statement.getObject().asResource().getURI();
+				
+				if (objectUri.startsWith(baseUri)) {
+					dataSourceObjectManager.onLinkCreated(subjectUri, predicateUri, objectUri);				
+				} else {
+					
+					Form form = new Form();
+					form.param("subject", subjectUri);
+					form.param("predicate", predicateUri);
+					form.param("object", objectUri);
+					
+					WebTarget target = 
+						ClientBuilder
+							.newClient()
+							.target(objectUri)
+							.path("linkCreated");
+					
+					try {
+	
+						target
+								.request()
+								.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+						
+					} catch (Exception e) {
+						logger.warn(String.format("Link-created notification error <%s>: %s", target.getUri(), e.getMessage()));
+					}
+					
+				}
+			}
+		}
+		
+	}
+	
+
 	private void updateMetaModelAfterUploading(String dataSetUri, String graphUri, String graphBaseUri, long sizeInTriples) {
 		
 		Model metaDataModel = getMetaDataModel();

@@ -141,6 +141,7 @@ public class DataSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -157,7 +158,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	@POST
@@ -171,6 +172,7 @@ public class DataSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -187,7 +189,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 
@@ -202,6 +204,7 @@ public class DataSetResource {
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
 			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
@@ -212,7 +215,7 @@ public class DataSetResource {
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 	
@@ -227,6 +230,7 @@ public class DataSetResource {
 			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
 			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
+			@DefaultValue("false") @FormDataParam("notifyRemote") String notifyRemote,
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@Context UriInfo uriInfo,
@@ -241,7 +245,7 @@ public class DataSetResource {
 		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	private Response internalUploadDataSet(
@@ -252,6 +256,7 @@ public class DataSetResource {
 			String dataFormat,
 			String compressionFormat,
 			String clearBefore,
+			String notifyRemote,
 			InputStream in,
 			HttpHeaders headers)
 	{	
@@ -263,6 +268,9 @@ public class DataSetResource {
 			BooleanParam clearBeforeParam = new BooleanParam();
 			clearBeforeParam.setStringValue(clearBefore);
 
+			BooleanParam notifyRemoteParam = new BooleanParam();
+			notifyRemoteParam.setStringValue(notifyRemote);
+
 			Model dataSetInfoModel = objectManager.upload(
 					collectionId,
 					dataSourceId,
@@ -271,6 +279,7 @@ public class DataSetResource {
 					dataFormat,
 					compressionFormat,
 					clearBeforeParam.getValue(),
+					notifyRemoteParam.getValue(),
 					in,
 					saveToFiles);
 			
@@ -278,6 +287,7 @@ public class DataSetResource {
 					Status.CREATED,
 					dataSetInfoModel,
 					headers.getAcceptableMediaTypes());
+			
 		} catch (DrumbeatWebException drumbeatWebException) {
 			throw drumbeatWebException;
 		} catch (NotFoundException e) {

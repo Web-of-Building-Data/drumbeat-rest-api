@@ -1,11 +1,16 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import virtuoso.jena.driver.VirtBulkUpdateHandler;
+import virtuoso.jena.driver.VirtGraph;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +34,7 @@ import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 import fi.aalto.cs.drumbeat.ifc.data.model.IfcModel;
 import fi.aalto.cs.drumbeat.ifc.data.schema.IfcSchemaPool;
 import fi.aalto.cs.drumbeat.ifc.processing.IfcModelAnalyser;
+import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 import static fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary.*;
 
@@ -69,12 +75,16 @@ public class DataSetUploadManager {
 		//
 		// Save and uncompress input stream
 		//
-		in = processInputStream(graphUri, dataType, dataFormat, compressionFormat, in, saveToFiles);
+		File inputFile = processInputStream(graphUri, dataType, dataFormat, compressionFormat, in);
 		
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = internalUpload(graphUri, graphBaseUri, dataType, dataFormat, clearBefore, in);		
+		Model targetModel = internalUpload(graphUri, graphBaseUri, dataType, dataFormat, clearBefore, inputFile);
+		
+		if (!saveToFiles) {
+			inputFile.delete();
+		}
 		
 		return targetModel;
 	}
@@ -92,13 +102,12 @@ public class DataSetUploadManager {
 	 * @return
 	 * @throws IOException
 	 */
-	private InputStream processInputStream(
+	private File processInputStream(
 			String graphUri,
 			String dataType,
 			String dataFormat,
 			String compressionFormat,
-			InputStream in,
-			boolean saveToFiles)
+			InputStream in)
 			throws IOException
 	{
 		//
@@ -113,25 +122,12 @@ public class DataSetUploadManager {
 			}
 		}
 		
-		
-		
 		//
 		// Save to file (if needed)
 		//
-		if (saveToFiles) {
-			in = saveToGzippedFile(graphUri, dataType, dataFormat, inputStreamGzipped, in);
-			inputStreamGzipped = true;
-		}
+		File inputFile = saveInputStreamToGzippedFile(in, graphUri, dataType, dataFormat, inputStreamGzipped);
 		
-
-		//
-		// Uncompress input stream (if needed)
-		//
-		if (inputStreamGzipped) {
-			in = new GZIPInputStream(in);
-		}
-		
-		return in;
+		return inputFile;
 	}
 	
 	private Model internalUpload(
@@ -140,7 +136,7 @@ public class DataSetUploadManager {
 			String dataType,
 			String dataFormat,
 			boolean clearBefore,
-			InputStream in) throws Exception
+			File inputFile) throws Exception
 	{
 		//
 		// Open target model and begin transactions (if supported)
@@ -153,28 +149,21 @@ public class DataSetUploadManager {
 		try {
 			long oldSize = targetModel.size();		
 			
-			if (targetModel.supportsTransactions()) {
-				targetModel.begin();
-			}
-			
 			if (clearBefore) {
 				targetModel.removeAll();
 			}
 		
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {
-				internalUploadIfc(in, graphBaseUri, targetModel);
+				// TODO: restore this code
+				internalUploadIfc(inputFile, graphBaseUri, graphUri);
 			} else if (dataType.equalsIgnoreCase(DATA_TYPE_RDF)) {
-				internalUploadRdf(in, dataFormat, graphBaseUri, targetModel);
+				internalUploadRdf(inputFile, dataFormat, graphBaseUri, graphUri);
 			} else {
 				throw new IllegalArgumentException(String.format("Unknown data type=%s", dataType));
 			}
 			
 			long newSize = targetModel.size();
 				
-			if (targetModel.supportsTransactions()) {
-				targetModel.commit();
-			}
-			
 			logger.info(String.format("Uploaded data to graph '%s': oldSize=%d, newSize=%d", graphUri, oldSize, newSize));
 			
 		} catch (Exception e) {
@@ -190,11 +179,12 @@ public class DataSetUploadManager {
 	}
 	
 	private void internalUploadIfc(
-			InputStream in,
+			File inputFile,
 			String graphBaseUri,
-			Model targetModel) throws Exception 
+			String graphUri) throws Exception 
 	{
 		logger.info("Uploading IFC model");
+		InputStream in = new GZIPInputStream(new FileInputStream(inputFile));			
 		try {			
 			// loading schemas and config files
 			synchronized (DataSourceObjectManager.class) {
@@ -219,8 +209,14 @@ public class DataSetUploadManager {
 			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
 			conversionContext.setModelNamespaceUriFormat(graphBaseUri);
 			
-			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, targetModel);
+			Model targetModel = ModelFactory.createDefaultModel();
+			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, targetModel);			
 			targetModel = modelExporter.export();
+			
+			File outputFile = saveModelToGzippedFile(targetModel, graphBaseUri);
+			
+			internalUploadRdf(outputFile, "TURTLE", graphBaseUri, graphUri);
+			
 			logger.info("Uploading IFC model completed successfully");
 			
 		} catch (IfcParserException e) {
@@ -229,15 +225,17 @@ public class DataSetUploadManager {
 		} catch (Exception e) {
 			logger.error("Uploading IFC model failed", e);
 			throw e;			
+		} finally {
+			in.close();
 		}		
 	}	
 	
 	
 	private void internalUploadRdf(
-			InputStream in,
+			File inputFile,
 			String dataFormat,
 			String graphBaseUri,
-			Model targetModel) throws Exception
+			String graphUri) throws Exception
 	{		
 		logger.info("Uploading RDF model");
 		
@@ -248,38 +246,94 @@ public class DataSetUploadManager {
 		} catch (Exception e) {
 			throw ErrorFactory.createRdfLangNotFoundException(dataFormat);
 		}
+		
+		JenaProvider jenaProvider = DrumbeatApplication.getInstance().getJenaProvider();
+		
+//		if (jenaProvider.supportsBulkLoading()) {
+//			
+//			jenaProvider.bulkLoad(inputFile.getParentFile().getCanonicalPath(), inputFile.getName(), graphUri);
+//			
+//		} else {
 
-		RDFDataMgr.read(targetModel, in, graphBaseUri, lang);
+			Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);		
+
+			if (targetModel.supportsTransactions()) {
+				targetModel.begin();
+			}
+			
+			InputStream in = new GZIPInputStream(new FileInputStream(inputFile));
+			
+			try {
+				RDFDataMgr.read(targetModel, in, graphBaseUri, lang);
+			} finally {
+				in.close();
+			}
+			
+			if (targetModel.supportsTransactions()) {
+				targetModel.commit();
+			}			
+
+//		}
+
 		
 		logger.info("Uploading RDF model completed successfully");			
 	}	
 
-	private InputStream saveToGzippedFile(String graphUri, String dataType, String dataFormat, boolean inputStreamGzipped, InputStream in) throws IOException {
+	private File saveInputStreamToGzippedFile(InputStream in, String graphUri, String dataType, String dataFormat, boolean inputStreamGzipped) throws IOException {
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		String graphName = graphUri.startsWith(baseUri) ?
 				graphUri.substring(baseUri.length()) : graphUri;
 		
-		String outputFilePath = String.format("%s/%s/%s/%sfile.gz",
-				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.UPLOADS_FOLDER_PATH),
-				graphName,
-				dataType.toUpperCase(),
-				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
+//		String outputFilePath = String.format("%s/%s/%s/%sfile.gz",
+//				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.UPLOADS_FOLDER_PATH),
+//				graphName,
+//				dataType.toUpperCase(),
+//				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
 		
+		String outputFilePath = String.format("%sfile-1.ttl.gz",
+				DrumbeatApplication.getInstance().getUploadsDirPath());
+
 		logger.info("Saving data to file: " + outputFilePath);
 		
-		OutputStream out = FileManager.createFileOutputStream(outputFilePath);
-		if (!inputStreamGzipped) {
-			out = new GZIPOutputStream(out);
-		}
+		File outputFile = FileManager.createFile(outputFilePath);		
+		OutputStream out = new FileOutputStream(outputFile);
+		out = new GZIPOutputStream(out);
 		
 		IOUtils.copy(in, out);
 		in.close();
 		out.close();
 		
-		return new FileInputStream(outputFilePath);
+		return outputFile;
 	}
 	
+	private File saveModelToGzippedFile(Model model, String graphUri) throws IOException {
+		
+		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
+		String graphName = graphUri.startsWith(baseUri) ?
+				graphUri.substring(baseUri.length()) : graphUri;
+		
+//		String outputFilePath = String.format("%s/%s/%s/%sfile.gz",
+//				DrumbeatApplication.getInstance().getRealServerPath(DrumbeatApplication.ResourcePaths.UPLOADS_FOLDER_PATH),
+//				graphName,
+//				dataType.toUpperCase(),
+//				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
+		
+		String outputFilePath = String.format("%sfile-2.ttl.gz",
+				DrumbeatApplication.getInstance().getUploadsDirPath());
+
+		logger.info("Saving data to file: " + outputFilePath);
+		
+		File outputFile = FileManager.createFile(outputFilePath);		
+		OutputStream out = new FileOutputStream(outputFile);
+		out = new GZIPOutputStream(out);
+		
+		RDFDataMgr.write(out, model, Lang.TURTLE);
+		
+		out.close();
+		
+		return outputFile;
+	}
 	
 
 }

@@ -463,41 +463,44 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		
 		String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		
-		while (stmtIterator.hasNext()) {
-			Statement statement = stmtIterator.next();
-			if (!statement.getObject().isResource()) {
-				continue;
-			}
-			
-			String subjectUri = statement.getSubject().getURI();
-			String predicateUri = statement.getPredicate().getURI();
-			String objectUri = statement.getObject().asResource().getURI();
-			
-			if (objectUri.startsWith(baseUri)) {
-				dataSourceObjectManager.onLinkCreated(subjectUri, predicateUri, objectUri);				
-			} else {
-				
-				Form form = new Form();
-				form.param("subject", subjectUri);
-				form.param("predicate", predicateUri);
-				form.param("object", objectUri);
-				
-				WebTarget target = 
-					ClientBuilder
-						.newClient()
-						.target(objectUri)
-						.path("linkCreated");
-				
-				try {
-
-					target
-							.request()
-							.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
-					
-				} catch (Exception e) {
-					logger.warn(String.format("Link-created notification error <%s>: %s", target.getUri(), e.getMessage()));
+		if (stmtIterator != null) {
+		
+			while (stmtIterator.hasNext()) {
+				Statement statement = stmtIterator.next();
+				if (!statement.getObject().isResource()) {
+					continue;
 				}
 				
+				String subjectUri = statement.getSubject().getURI();
+				String predicateUri = statement.getPredicate().getURI();
+				String objectUri = statement.getObject().asResource().getURI();
+				
+				if (objectUri.startsWith(baseUri)) {
+					dataSourceObjectManager.onLinkCreated(subjectUri, predicateUri, objectUri);				
+				} else {
+					
+					Form form = new Form();
+					form.param("subject", subjectUri);
+					form.param("predicate", predicateUri);
+					form.param("object", objectUri);
+					
+					WebTarget target = 
+						ClientBuilder
+							.newClient()
+							.target(objectUri)
+							.path("linkCreated");
+					
+					try {
+	
+						target
+								.request()
+								.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+						
+					} catch (Exception e) {
+						logger.warn(String.format("Link-created notification error <%s>: %s", target.getUri(), e.getMessage()));
+					}
+					
+				}
 			}
 		}
 		
