@@ -2,6 +2,7 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
@@ -165,10 +166,6 @@ public class DataSetUploadManager {
 			logger.info(String.format("Uploaded data to graph '%s': oldSize=%d, newSize=%d", graphUri, oldSize, newSize));
 			
 		} catch (Exception e) {
-			if (targetModel.supportsTransactions()) {
-				targetModel.abort();
-			}	
-			
 			logger.error(e);
 			throw e;			
 		}
@@ -247,17 +244,16 @@ public class DataSetUploadManager {
 		
 		JenaProvider jenaProvider = DrumbeatApplication.getInstance().getJenaProvider();
 		
-//		if (jenaProvider.supportsBulkLoading()) {
-//			
-//			jenaProvider.bulkLoad(inputFile.getParentFile().getCanonicalPath(), inputFile.getName(), graphUri);
-//			
-//		} else {
-
-			Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);		
-
-			if (targetModel.supportsTransactions()) {
-				targetModel.begin();
+		if (jenaProvider.supportsBulkLoading() && DrumbeatApplication.getInstance().isRdfBulkUploadEnabled()) {
+			
+			boolean loaded = jenaProvider.bulkLoadFile(inputFile.getCanonicalPath(), graphUri);
+			if (!loaded) {
+				throw new JenaException("File is not loaded: " + inputFile.getCanonicalPath());
 			}
+			
+		} else {
+
+			Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);
 			
 			InputStream in = new GZIPInputStream(new FileInputStream(inputFile));
 			
@@ -266,12 +262,8 @@ public class DataSetUploadManager {
 			} finally {
 				in.close();
 			}
-			
-			if (targetModel.supportsTransactions()) {
-				targetModel.commit();
-			}			
-
-//		}
+				
+		}
 
 		
 		logger.info("Uploading RDF model completed successfully");			

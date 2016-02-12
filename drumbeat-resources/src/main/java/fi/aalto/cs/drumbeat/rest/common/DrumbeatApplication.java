@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.common;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -49,7 +50,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
 
-		public static final String UPLOADS_SAVE = "uploads.save";
+		public static final String UPLOADS_SAVE_ENALBED = "uploads.save.enabled";
+		public static final String UPLOADS_RDF_BULK_ENALBED = "uploads.rdf.bulk.enabled";
 		public static final String UPLOADS_DIR_PATH = "uploads.dir.path";
 	}
 	
@@ -73,7 +75,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	private String baseUri;
 	private String realBaseUri;
 	private Boolean isBaseUriFixed;
-	private Boolean saveUploads;
+	private Boolean isSavingUploadEnabled;
+	private Boolean isRdfBulkUploadEnabled;
 	private String uploadsDirPath;
 	private Ifc2RdfConversionContext defaultConversionContext;
 	private String workingFolderPath;
@@ -168,10 +171,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 	public String getUploadsDirPath() {
 		if (uploadsDirPath == null) {
-			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH);
-			if (uploadsDirPath == null) {
-				uploadsDirPath = getRealServerPath(ResourcePaths.UPLOADS_FOLDER_PATH);
-			}
+			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH, ResourcePaths.UPLOADS_FOLDER_PATH);
+			uploadsDirPath = getRealServerPath(uploadsDirPath);
 		}
 		return uploadsDirPath;
 	}
@@ -180,16 +181,29 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 * Gets value indicating whether uploaded files must be saved
 	 * @return
 	 */
-	public boolean getSaveUploads() {
-		if (saveUploads == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE, "false");
+	public boolean isSavingUploadEnabled() {
+		if (isSavingUploadEnabled == null) {
+			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE_ENALBED, "false");
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
-			saveUploads = param.getValue();
+			isSavingUploadEnabled = param.getValue();
 		}
-		return saveUploads;
+		return isSavingUploadEnabled;
 	}
 	
+	/**
+	 * Gets value indicating whether bulk upload is allowed
+	 * @return
+	 */
+	public boolean isRdfBulkUploadEnabled() {
+		if (isRdfBulkUploadEnabled == null) {
+			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_RDF_BULK_ENALBED, "false");
+			BooleanParam param = new BooleanParam();
+			param.setStringValue(value);
+			isRdfBulkUploadEnabled = param.getValue();
+		}
+		return isRdfBulkUploadEnabled;
+	}
 	
 	
 	public String getBaseUri(String path) {
@@ -254,6 +268,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	public String getRealServerPath(String path) {
+		File file = new File(path);
+		if (file.isAbsolute()) {
+			return path;
+		}
 		return workingFolderPath + path;
 	}
 	

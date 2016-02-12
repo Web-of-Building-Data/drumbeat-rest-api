@@ -263,7 +263,7 @@ public class LinkSetResource {
 		
 		try {
 			LinkSetObjectManager objectManager = new LinkSetObjectManager();
-			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
+			boolean saveToFiles = DrumbeatApplication.getInstance().isSavingUploadEnabled();
 			
 			BooleanParam clearBeforeParam = new BooleanParam();
 			clearBeforeParam.setStringValue(clearBefore);

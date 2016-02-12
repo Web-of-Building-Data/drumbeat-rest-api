@@ -263,7 +263,7 @@ public class DataSetResource {
 		
 		try {
 			DataSetObjectManager objectManager = new DataSetObjectManager();
-			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
+			boolean saveToFiles = DrumbeatApplication.getInstance().isSavingUploadEnabled();
 			
 			BooleanParam clearBeforeParam = new BooleanParam();
 			clearBeforeParam.setStringValue(clearBefore);

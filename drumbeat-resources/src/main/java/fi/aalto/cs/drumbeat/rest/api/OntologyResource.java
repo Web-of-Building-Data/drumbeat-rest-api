@@ -257,7 +257,7 @@ public class OntologyResource {
 		
 		try {
 			OntologyManager ontologyManager = new OntologyManager();
-			boolean saveToFiles = DrumbeatApplication.getInstance().getSaveUploads();
+			boolean saveToFiles = DrumbeatApplication.getInstance().isSavingUploadEnabled();
 			
 			BooleanParam clearBeforeParam = new BooleanParam();
 			clearBeforeParam.setStringValue(clearBefore);
