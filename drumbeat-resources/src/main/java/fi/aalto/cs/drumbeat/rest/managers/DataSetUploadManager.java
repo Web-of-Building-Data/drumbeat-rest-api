@@ -281,7 +281,7 @@ public class DataSetUploadManager {
 //				dataType.toUpperCase(),
 //				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
 		
-		String outputFilePath = String.format("%sfile-1.ttl.gz",
+		String outputFilePath = String.format("%s\\file-1.ttl.gz",
 				DrumbeatApplication.getInstance().getUploadsDirPath());
 
 		logger.info("Saving data to file: " + outputFilePath);
@@ -309,7 +309,7 @@ public class DataSetUploadManager {
 //				dataType.toUpperCase(),
 //				!StringUtils.isEmptyOrNull(dataFormat) ? dataFormat + "/" : "");
 		
-		String outputFilePath = String.format("%sfile-2.ttl.gz",
+		String outputFilePath = String.format("%s\\file-2.ttl.gz",
 				DrumbeatApplication.getInstance().getUploadsDirPath());
 
 		logger.info("Saving data to file: " + outputFilePath);

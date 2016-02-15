@@ -32,6 +32,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		public static final String NONE = "NONE";
 	}
 	
+	public static class SystemEnvironment {
+		public static final String DRUMBEAT_SHARE_FOLDER = "DRUMBEAT_SHARE_FOLDER";
+	}
+	
 	public static class ResourcePaths {	
 		public static final String CONFIG_FOLDER_PATH = "config/";
 		public static final String COMMON_CONFIG_FILE_PATH = CONFIG_FOLDER_PATH + "config.properties";
@@ -128,14 +132,14 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	public String getBaseUri() {
 		if (baseUri == null) {
-			baseUri = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI); 
+			baseUri = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI).trim(); 
 		}
 		return baseUri;
 	}
 	
 	public boolean isBaseUriFixed() {
 		if (isBaseUriFixed == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI_FIXED, "true");
+			String value = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI_FIXED, "true").trim();
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isBaseUriFixed = param.getValue();
@@ -171,8 +175,18 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 	public String getUploadsDirPath() {
 		if (uploadsDirPath == null) {
-			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH, ResourcePaths.UPLOADS_FOLDER_PATH);
-			uploadsDirPath = getRealServerPath(uploadsDirPath);
+			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH);
+			if (uploadsDirPath != null) {				
+				uploadsDirPath = getRealServerPath(uploadsDirPath);
+			} else {
+				uploadsDirPath = System.getenv(SystemEnvironment.DRUMBEAT_SHARE_FOLDER).trim();
+			}
+			
+			if (uploadsDirPath == null) {
+				throw new RuntimeException(
+						"The upload folder is not specified neither in config.properties file, nor as system environment variable " + 
+								SystemEnvironment.DRUMBEAT_SHARE_FOLDER);
+			}
 		}
 		return uploadsDirPath;
 	}
@@ -183,7 +197,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean isSavingUploadEnabled() {
 		if (isSavingUploadEnabled == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE_ENALBED, "false");
+			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE_ENALBED, "false").trim();
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isSavingUploadEnabled = param.getValue();
@@ -197,7 +211,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean isRdfBulkUploadEnabled() {
 		if (isRdfBulkUploadEnabled == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_RDF_BULK_ENALBED, "false");
+			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_RDF_BULK_ENALBED, "false").trim();
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isRdfBulkUploadEnabled = param.getValue();
@@ -213,8 +227,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	public JenaProvider getJenaProvider() throws DrumbeatException {
 		
 		if (jenaProvider == null) {		
-			String providerName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME);
-			String providerClassName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS);
+			String providerName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_NAME).trim();
+			String providerClassName = getConfigurationProperties().getProperty(ConfigParams.JENA_PROVIDER_PREFIX + AbstractJenaProvider.ARGUMENT_PROVIDER_CLASS).trim();
 			try {
 				jenaProvider = AbstractJenaProvider.getFactory(providerName, providerClassName, getConfigurationProperties(), ConfigParams.JENA_PROVIDER_PREFIX);
 			} catch (JenaProviderException e) {
