@@ -179,7 +179,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 			if (uploadsDirPath != null) {				
 				uploadsDirPath = getRealServerPath(uploadsDirPath);
 			} else {
-				uploadsDirPath = System.getenv(SystemEnvironment.DRUMBEAT_SHARE_FOLDER).trim();
+				uploadsDirPath = System.getenv(SystemEnvironment.DRUMBEAT_SHARE_FOLDER);
 			}
 			
 			if (uploadsDirPath == null) {
@@ -187,6 +187,8 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 						"The upload folder is not specified neither in config.properties file, nor as system environment variable " + 
 								SystemEnvironment.DRUMBEAT_SHARE_FOLDER);
 			}
+			
+			uploadsDirPath = uploadsDirPath.trim();
 		}
 		return uploadsDirPath;
 	}
