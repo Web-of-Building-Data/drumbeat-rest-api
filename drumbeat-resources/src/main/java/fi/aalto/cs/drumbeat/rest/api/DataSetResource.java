@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 
 import javax.ws.rs.*;
@@ -297,9 +299,12 @@ public class DataSetResource {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			
+			StringWriter writer = new StringWriter();
+			e.printStackTrace(new PrintWriter(writer));
+			
 			throw new DrumbeatWebException(
 					Status.INTERNAL_SERVER_ERROR,
-					String.format("Unexpected error: %s", e.getMessage()),
+					String.format("Unexpected error: %s%n%s", e, writer.toString()),
 					e);
 		} finally {
 			try {
