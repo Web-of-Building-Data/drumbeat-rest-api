@@ -149,7 +149,8 @@ public class DataSetUploadManager {
 			long oldSize = targetModel.size();		
 			
 			if (clearBefore) {
-				targetModel.removeAll();
+				DrumbeatApplication.getInstance().getJenaProvider().deleteModel(graphUri);
+//				targetModel.removeAll();
 			}
 		
 			if (dataType.equalsIgnoreCase(DATA_TYPE_IFC)) {

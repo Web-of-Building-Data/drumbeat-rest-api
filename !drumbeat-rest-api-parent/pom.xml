@@ -4,7 +4,7 @@
 
 	<groupId>fi.hut.cs.drumbeat</groupId>
 	<artifactId>drumbeat-rest-api</artifactId>
-	<version>0.8.8-SNAPSHOT</version>
+	<version>0.8.9-SNAPSHOT</version>
 	
 	<packaging>pom</packaging>
 
@@ -17,7 +17,7 @@
 		<!-- All versions updated on 17.11.2015 -->
 		<drumbeat.groupId>${project.groupId}</drumbeat.groupId>
 		<drumbeat.ifc2ld.version>0.9.1-SNAPSHOT</drumbeat.ifc2ld.version>
-		<drumbeat.jena.version>0.7.6-SNAPSHOT</drumbeat.jena.version>
+		<drumbeat.jena.version>0.7.7-SNAPSHOT</drumbeat.jena.version>
 		<commons-cli.version>1.2</commons-cli.version>
 		<commons-codec.version>1.10</commons-codec.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
