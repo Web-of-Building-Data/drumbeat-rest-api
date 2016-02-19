@@ -27,7 +27,6 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 public class VersionResource {
 	
 	@GET
-	@Path("/")
 	public Response getVersion(
 		@Context UriInfo uriInfo,
 		@Context HttpHeaders headers)

@@ -40,7 +40,6 @@ public class OntologyResource {
 	private static final Logger logger = Logger.getLogger(OntologyResource.class);
 
 	@GET
-	@Path("/")
 	public Response getAll(			
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)

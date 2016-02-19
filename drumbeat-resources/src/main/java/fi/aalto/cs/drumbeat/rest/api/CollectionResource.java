@@ -28,7 +28,6 @@ public class CollectionResource {
 	private static final Logger logger = Logger.getLogger(CollectionResource.class);
 
 	@GET
-	@Path("/")
 	public Response getAll(			
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
