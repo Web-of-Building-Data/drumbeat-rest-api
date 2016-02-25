@@ -4,7 +4,7 @@ package fi.aalto.cs.drumbeat.rest.common;
 public class DrumbeatWebApplication extends DrumbeatApplication {
 
 	public DrumbeatWebApplication() {
-		super(DrumbeatWebApplication.class.getResource("/").getPath().replaceAll("classes/$", ""));
+		super(DrumbeatWebApplication.class.getResource("/").getPath().replaceAll("classes/$", "").replaceAll("%20", " "));
 	}
 
 }

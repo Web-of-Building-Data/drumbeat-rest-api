@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fi.hut.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.8.9-SNAPSHOT</version>
+		<version>0.8.10-SNAPSHOT</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 
