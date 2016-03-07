@@ -5,13 +5,10 @@
 @prefix xsd:		<http://www.w3.org/2001/XMLSchema#> .  
 
 <>
-	dcterms:version "${project.version}" .
+	dcterms:version "drumbeat-resources/${project.version}" .
 	
-<rest-api>
-	dcterms:version "${project.version}"^^xsd:string .
-
-<ifc2ld>
-	dcterms:version "${drumbeat.ifc2ld.version}"^^xsd:string .
+<>
+	dcterms:dependsOn "drumbeat-ifc2ld/${drumbeat.ifc2ld.version}"^^xsd:string .
 	
-<jena>
-	dcterms:version "${drumbeat.jena.version}"^^xsd:string .
+<>
+	dcterms:dependsOn "drumbeat-jena/${drumbeat.jena.version}"^^xsd:string .
