@@ -17,7 +17,7 @@ import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
-import fi.aalto.cs.drumbeat.rdf.RdfUtils;
+import fi.aalto.cs.drumbeat.rdf.utils.RdfIOUtils;
 
 public class Test_DataSourceManager extends DrumbeatTest {
 	
@@ -31,7 +31,7 @@ public class Test_DataSourceManager extends DrumbeatTest {
 		DrumbeatTest.setUpBeforeClass();
 		metaDataModel = getApplication().getMetaDataModel();		
 		String testDataFilePath = getApplication().getRealServerPath(TestApplication.TEST_RDF_META_DATA_FILE_PATH);
-		RdfUtils.importRdfFileToJenaModel(metaDataModel, testDataFilePath);
+		RdfIOUtils.importRdfFileToJenaModel(metaDataModel, testDataFilePath);
 		dataSourceManager = new DataSourceManager();
 	}
 

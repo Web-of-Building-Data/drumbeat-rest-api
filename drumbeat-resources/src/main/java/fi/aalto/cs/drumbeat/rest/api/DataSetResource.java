@@ -33,7 +33,9 @@ import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetManager;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.file.FileManager;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
@@ -150,6 +152,10 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
+		if (StringUtils.isEmptyOrNull(dataFormat)) {
+			dataFormat = FileManager.getFileName(filePath);
+		}		
+
 		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadServerFile: DataSet=%s, ServerFilePath=%s", graphName, filePath));
 		
@@ -160,7 +166,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	@POST
@@ -172,7 +178,6 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,
-			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("url") String url,
@@ -180,6 +185,10 @@ public class DataSetResource {
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+
+		if (StringUtils.isEmptyOrNull(dataFormat)) {
+			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
+		}
 
 		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadUrl: DataSet=%s, Url=%s", graphName, url));
@@ -191,7 +200,7 @@ public class DataSetResource {
 			throw new DrumbeatWebException(Status.NOT_FOUND, e);
 		}
 		
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 
@@ -204,7 +213,6 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormParam("dataType") String dataType,
 			@DefaultValue("") @FormParam("dataFormat") String dataFormat,			
-			@DefaultValue("") @FormParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("content") String content,
@@ -213,11 +221,15 @@ public class DataSetResource {
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 
+		if (StringUtils.isEmptyOrNull(dataFormat)) {
+			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
+		}
+
 		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);			
 		logger.info(String.format("UploadContent: DataSet=%s, Content=%s", graphName, content));
 		
 		InputStream in = new ByteArrayInputStream(content.getBytes());
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, clearBefore, notifyRemote, in, headers);
 	}
 
 	
@@ -230,7 +242,6 @@ public class DataSetResource {
 			@PathParam("dataSetId") String dataSetId,
 			@FormDataParam("dataType") String dataType,
 			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
-			@DefaultValue("") @FormDataParam("compressionFormat") String compressionFormat,
 			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
 			@DefaultValue("false") @FormDataParam("notifyRemote") String notifyRemote,
 			@FormDataParam("file") InputStream in,
@@ -243,11 +254,15 @@ public class DataSetResource {
 		if (fileDetail == null || in == null) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
 		}
+		
+		if (StringUtils.isEmptyOrNull(dataFormat)) {
+			dataFormat = fileDetail.getFileName();
+		}
 	        
 		String graphName = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
 		logger.info(String.format("UploadContent: DataSet=%s, FileName=%s", graphName, fileDetail.getFileName()));		
 
-		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, compressionFormat, clearBefore, notifyRemote, in, headers);
+		return internalUploadDataSet(collectionId, dataSourceId, dataSetId, dataType, dataFormat, clearBefore, notifyRemote, in, headers);
 	}
 	
 	private Response internalUploadDataSet(
@@ -256,7 +271,6 @@ public class DataSetResource {
 			String dataSetId,
 			String dataType,
 			String dataFormat,
-			String compressionFormat,
 			String clearBefore,
 			String notifyRemote,
 			InputStream in,
@@ -279,7 +293,6 @@ public class DataSetResource {
 					dataSetId,
 					dataType,
 					dataFormat,
-					compressionFormat,
 					clearBeforeParam.getValue(),
 					notifyRemoteParam.getValue(),
 					in,

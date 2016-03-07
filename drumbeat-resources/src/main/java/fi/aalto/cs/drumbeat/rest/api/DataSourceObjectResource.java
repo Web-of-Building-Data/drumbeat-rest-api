@@ -1,7 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -16,15 +14,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 

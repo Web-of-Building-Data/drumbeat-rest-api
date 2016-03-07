@@ -6,6 +6,7 @@ import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
@@ -14,12 +15,16 @@ import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
+import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadManager;
+import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadOptions;
 
 public class OntologyManager extends DrumbeatManager {
 	
@@ -184,7 +189,6 @@ public class OntologyManager extends DrumbeatManager {
 			String ontologyId,
 			String dataType,
 			String dataFormat,
-			String compressionFormat,
 			boolean clearBefore,
 			InputStream in,
 			boolean saveToFiles)
@@ -197,21 +201,25 @@ public class OntologyManager extends DrumbeatManager {
 		String graphUri = ontologyUri;
 		String graphBaseUri = formatLocalOntologyBaseUri(ontologyId);
 		
+		deleteCachedRdfFile(ontologyId);
+		
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = new DataSetUploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
+		DataSetUploadOptions options = new DataSetUploadOptions(graphUri, graphBaseUri, dataType, dataFormat,  clearBefore, saveToFiles);		
+		File savedRdfFile = new DataSetUploadManager().upload(in, options);
+		Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);
 		
 		//
 		// Update meta data model
 		//
-		updateMetaModelAfterUploading(graphUri, graphUri, graphBaseUri, targetModel.size());		
+		updateMetaModelAfterUploading(graphUri, graphUri, graphBaseUri, targetModel.size(), savedRdfFile);		
 		
 		return getById(ontologyId);
 	}
 	
 	
-	private void updateMetaModelAfterUploading(String ontologyUri, String graphUri, String graphBaseUri, long sizeInTriples) {
+	private void updateMetaModelAfterUploading(String ontologyUri, String graphUri, String graphBaseUri, long sizeInTriples, File savedRdfFile) {
 		
 		Model metaDataModel = getMetaDataModel();
 
@@ -301,6 +309,29 @@ public class OntologyManager extends DrumbeatManager {
 					}}.asUpdate(),
 					metaDataModel);
 			
+			UpdateAction.execute(
+					new ParameterizedSparqlString() {{
+						setCommandText(
+								"DELETE { ?ontologyUri lbdho:cachedInRdfFile ?o } \n" +
+								"WHERE { ?ontologyUri lbdho:cachedInRdfFile ?o }");
+						DrumbeatOntology.fillParameterizedSparqlString(this);
+						setIri("ontologyUri", ontologyUri);
+					}}.asUpdate(),
+					metaDataModel);
+			
+			if (savedRdfFile != null) {
+				UpdateAction.execute(
+						new ParameterizedSparqlString() {{
+							setCommandText(
+									"INSERT DATA { ?ontologyUri lbdho:cachedInRdfFile ?cachedInRdfFile }");
+							DrumbeatOntology.fillParameterizedSparqlString(this);
+							setIri("ontologyUri", ontologyUri);
+							setLiteral("cachedInRdfFile", savedRdfFile.getName());
+						}}.asUpdate(),
+						metaDataModel);
+			}
+			
+			
 			if (metaDataModel.supportsTransactions()) {
 				metaDataModel.commit();
 			}
@@ -310,6 +341,52 @@ public class OntologyManager extends DrumbeatManager {
 				metaDataModel.abort();
 			}						
 		}
+		
+	}
+	
+	
+	public Model getCachedRdfFile(String ontologyId) {
+		
+		String ontologyUri = formatLocalOntologyUri(ontologyId);		
+		
+		Query query =
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"CONSTRUCT { \n" +
+									"	?ontologyUri lbdho:cachedInRdfFile ?cachedInRdfFile \n" +
+									"} WHERE { \n" + 
+									"	?ontologyUri lbdho:cachedInRdfFile ?cachedInRdfFile . \n" +
+									"} \n");							
+					DrumbeatOntology.fillParameterizedSparqlString(this);
+					setIri("ontologyUri", ontologyUri);
+				}}.asQuery();
+		
+		Model result =
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
+		
+		return result;
+	}
+	
+	
+	public void deleteCachedRdfFile(String ontologyId) {
+		Model cachedRdfFile = getCachedRdfFile(ontologyId);
+		NodeIterator it = cachedRdfFile.listObjects();
+		while (it.hasNext()) {
+			String fileName = it.next().asLiteral().getString();
+			new DataSetUploadManager().deleteCachedRdfFile(fileName);
+		}
+		
+		String ontologyUri = formatLocalOntologyUri(ontologyId);		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"DELETE { ?ontologyUri lbdho:cachedInRdfFile ?o } \n" +
+							"WHERE { ?ontologyUri lbdho:cachedInRdfFile ?o }");
+					DrumbeatOntology.fillParameterizedSparqlString(this);
+					setIri("ontologyUri", ontologyUri);
+				}}.asUpdate(),
+				getMetaDataModel());
 		
 	}
 	

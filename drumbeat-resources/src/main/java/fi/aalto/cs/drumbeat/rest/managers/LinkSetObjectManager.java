@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.rest.managers;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
@@ -10,29 +11,24 @@ import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
-import fi.aalto.cs.drumbeat.rest.common.MediaTypeConverter;
+import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadManager;
+import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadOptions;
 
 import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.Calendar;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
@@ -287,7 +283,6 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			String linkSetId,
 			String dataType,
 			String dataFormat,
-			String compressionFormat,
 			boolean clearBefore,
 			boolean notifyRemote,
 			InputStream in,
@@ -302,6 +297,8 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			throw ErrorFactory.createLinkSetNotFoundException(collectionId, linkSourceId, linkSetId);
 		}
 		
+		deleteCachedRdfFile(collectionId, linkSourceId, linkSetId);
+		
 		//
 		// Format graphUri
 		//		
@@ -311,7 +308,9 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		//
 		// Read input stream to target model
 		//
-		Model targetModel = new DataSetUploadManager().upload(graphUri, graphBaseUri, dataType, dataFormat, compressionFormat, clearBefore, in, saveToFiles);
+		DataSetUploadOptions options = new DataSetUploadOptions(graphUri, graphBaseUri, dataType, dataFormat,  clearBefore, saveToFiles);		
+		File savedRdfFile = new DataSetUploadManager().upload(in, options);
+		Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);
 		
 		if (notifyRemote) {
 			notifyRemote(targetModel);
@@ -321,7 +320,7 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		// Update meta data model
 		//
 		String linkSetUri = formatLinkSetResourceUri(collectionId, linkSourceId, linkSetId);
-		updateMetaModelAfterUploading(linkSetUri, graphUri, graphBaseUri, targetModel.size());		
+		updateMetaModelAfterUploading(linkSetUri, graphUri, graphBaseUri, targetModel.size(), savedRdfFile);		
 		
 		return linkSetManager.getById(collectionId, linkSourceId, linkSetId);
 	}
@@ -448,7 +447,7 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		//
 		// Update meta data model
 		//
-		updateMetaModelAfterUploading(linkSetUri, graphUri, graphBaseUri, targetModel.size());		
+		updateMetaModelAfterUploading(linkSetUri, graphUri, graphBaseUri, targetModel.size(), null);		
 		
 		return linkSetManager.getById(collectionId, linkSourceId, linkSetId);
 		
@@ -509,7 +508,7 @@ public class LinkSetObjectManager extends DrumbeatManager {
 	
 	
 	
-	private void updateMetaModelAfterUploading(String linkSetUri, String graphUri, String graphBaseUri, long sizeInTriples) {
+	private void updateMetaModelAfterUploading(String linkSetUri, String graphUri, String graphBaseUri, long sizeInTriples, File savedRdfFile) {
 		
 		Model metaDataModel = getMetaDataModel();
 
@@ -599,6 +598,29 @@ public class LinkSetObjectManager extends DrumbeatManager {
 					}}.asUpdate(),
 					metaDataModel);
 			
+			UpdateAction.execute(
+					new ParameterizedSparqlString() {{
+						setCommandText(
+								"DELETE { ?linkSetUri lbdho:cachedInRdfFile ?o } \n" +
+								"WHERE { ?linkSetUri lbdho:cachedInRdfFile ?o }");
+						DrumbeatOntology.fillParameterizedSparqlString(this);
+						setIri("linkSetUri", linkSetUri);
+					}}.asUpdate(),
+					metaDataModel);
+			
+			if (savedRdfFile != null) {
+				UpdateAction.execute(
+						new ParameterizedSparqlString() {{
+							setCommandText(
+									"INSERT DATA { ?linkSetUri lbdho:cachedInRdfFile ?cachedInRdfFile }");
+							DrumbeatOntology.fillParameterizedSparqlString(this);
+							setIri("linkSetUri", linkSetUri);
+							setLiteral("cachedInRdfFile", savedRdfFile.getName());
+						}}.asUpdate(),
+						metaDataModel);
+			}
+			
+			
 			if (metaDataModel.supportsTransactions()) {
 				metaDataModel.commit();
 			}
@@ -611,6 +633,51 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		
 	}
 	
+	
+	public Model getCachedRdfFile(String collectionId, String linkSourceId, String linkSetId) {
+		
+		String linkSetUri = formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);		
+		
+		Query query =
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"CONSTRUCT { \n" +
+									"	?linkSetUri lbdho:cachedInRdfFile ?cachedInRdfFile \n" +
+									"} WHERE { \n" + 
+									"	?linkSetUri lbdho:cachedInRdfFile ?cachedInRdfFile . \n" +
+									"} \n");							
+					DrumbeatOntology.fillParameterizedSparqlString(this);
+					setIri("linkSetUri", linkSetUri);
+				}}.asQuery();
+		
+		Model result =
+				createQueryExecution(query, getMetaDataModel())
+					.execConstruct();
+		
+		return result;
+	}
+	
+	
+	public void deleteCachedRdfFile(String collectionId, String linkSourceId, String linkSetId) {
+		Model cachedRdfFile = getCachedRdfFile(collectionId, linkSourceId, linkSetId);
+		NodeIterator it = cachedRdfFile.listObjects();
+		while (it.hasNext()) {
+			String fileName = it.next().asLiteral().getString();
+			new DataSetUploadManager().deleteCachedRdfFile(fileName);
+		}
+		
+		String linkSetUri = formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);		
+		UpdateAction.execute(
+				new ParameterizedSparqlString() {{
+					setCommandText(
+							"DELETE { ?linkSetUri lbdho:cachedInRdfFile ?o } \n" +
+							"WHERE { ?linkSetUri lbdho:cachedInRdfFile ?o }");
+					DrumbeatOntology.fillParameterizedSparqlString(this);
+					setIri("linkSetUri", linkSetUri);
+				}}.asUpdate(),
+				getMetaDataModel());
+		
+	}
 	
 	
 	
