@@ -100,15 +100,16 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
+	 * @param excludeProperties
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getById(String collectionId, String dataSourceId, String dataSetId, String objectId)
+	public Model getById(String collectionId, String dataSourceId, String dataSetId, String objectId, boolean excludeProperties)
 		throws NotFoundException, DrumbeatException
 	{
 		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return getByUri(collectionId, dataSourceId, dataSetId, objectUri);		
+		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);		
 	}
 	
 	/**
@@ -116,16 +117,17 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
+	 * @param excludeProperties
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(String collectionId, String dataSourceId, String dataSetId, String objectUri)
+	public Model getByUri(String collectionId, String dataSourceId, String dataSetId, String objectUri, boolean excludeProperties)
 		throws NotFoundException, DrumbeatException
 	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
-		Model resultModel = getByUri(dataModel, objectUri);
+		Model resultModel = getByUri(dataModel, objectUri, excludeProperties);
 		
 		if (resultModel.isEmpty()) {
 			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
@@ -140,25 +142,47 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param collectionId
 	 * @param dataSourceId
 	 * @param dataSetId
+	 * @param excludeProperties
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(Model dataModel, String objectUri)
+	public Model getByUri(Model dataModel, String objectUri, boolean excludeProperties)
 		throws DrumbeatException
 	{
-		Query query = new ParameterizedSparqlString() {{
-			setCommandText(
-					"CONSTRUCT { \n" +
-					"	?objectUri ?predicate ?object \n" +
-					"} WHERE { \n" + 
-					"	?objectUri ?predicate ?object . \n" +
-					"} \n" + 
-					"ORDER BY ?predicate ?object");
+		Query query;
+		
+		if (!excludeProperties) {
+		
+			query = new ParameterizedSparqlString() {{
+				setCommandText(
+						"CONSTRUCT { \n" +
+						"	?objectUri ?predicate ?object \n" +
+						"} WHERE { \n" + 
+						"	?objectUri ?predicate ?object . \n" +
+						"} \n" + 
+						"ORDER BY ?predicate ?object");
+				
+				DrumbeatOntology.fillParameterizedSparqlString(this);
+				setIri("objectUri", objectUri);
+			}}.asQuery();
 			
-			DrumbeatOntology.fillParameterizedSparqlString(this);
-			setIri("objectUri", objectUri);
-		}}.asQuery();
+		} else {
+			
+			query = new ParameterizedSparqlString() {{
+				setCommandText(
+						"CONSTRUCT { \n" +
+						"	?objectUri a ?object \n" +
+						"} WHERE { \n" + 
+						"	?objectUri a ?object . \n" +
+						"} \n" + 
+						"ORDER BY ?object");
+				
+				DrumbeatOntology.fillParameterizedSparqlString(this);
+				setIri("objectUri", objectUri);
+			}}.asQuery();
+			
+		}
 		
 		Model resultModel = 
 				createQueryExecution(query, dataModel)

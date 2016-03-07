@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +27,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 @Path("/objects")
@@ -76,13 +78,21 @@ public class DataSourceObjectResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("objectId") String objectId,
+			@QueryParam("excludeProperties") String excludeProperties,
+			@QueryParam("excludeLinks") String excludeLinks,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
+		BooleanParam excludePropertiesParam = new BooleanParam();
+		excludePropertiesParam.setStringValue(excludeProperties);		
+
+		BooleanParam excludeLinksParam = new BooleanParam();
+		excludeLinksParam.setStringValue(excludeLinks);		
+		
 		try {		
-			Model model = getObjectManager().getById(collectionId, dataSourceId, objectId);
+			Model model = getObjectManager().getById(collectionId, dataSourceId, objectId, excludePropertiesParam.getValue(), excludeLinksParam.getValue());
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,

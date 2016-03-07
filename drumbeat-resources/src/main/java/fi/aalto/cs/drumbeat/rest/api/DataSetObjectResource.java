@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.rest.api;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -20,6 +21,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.DataSetObjectManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 
 @Path("/dsobjects")
 public class DataSetObjectResource {
@@ -71,13 +73,17 @@ public class DataSetObjectResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@PathParam("objectId") String objectId,
+			@QueryParam("excludeProperties") String excludeProperties,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
+		BooleanParam excludePropertiesParam = new BooleanParam();
+		excludePropertiesParam.setStringValue(excludeProperties);
+		
 		try {		
-			Model model = getDataSetObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId);
+			Model model = getDataSetObjectManager().getById(collectionId, dataSourceId, dataSetId, objectId, excludePropertiesParam.getValue());
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,

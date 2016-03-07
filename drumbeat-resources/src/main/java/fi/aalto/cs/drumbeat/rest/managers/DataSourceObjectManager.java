@@ -2,41 +2,19 @@ package fi.aalto.cs.drumbeat.rest.managers;
 
 import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
 
-import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.NotFoundException;
-import com.hp.hpl.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
-import fi.aalto.cs.drumbeat.rest.common.MediaTypeConverter;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.Calendar;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
@@ -44,7 +22,7 @@ import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSourceObjectManager extends DrumbeatManager {
 	
-	private static Logger logger = Logger.getLogger(DataSourceObjectManager.class);
+//	private static Logger logger = Logger.getLogger(DataSourceObjectManager.class);
 	
 	public DataSourceObjectManager() throws DrumbeatException {
 	}
@@ -109,15 +87,17 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
 	 * @param dataSourceId
+	 * @param excludeProperties 
+	 * @param excludeLinks 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getById(String collectionId, String dataSourceId, String objectId)
+	public Model getById(String collectionId, String dataSourceId, String objectId, boolean excludeProperties, boolean excludeLinks)
 		throws NotFoundException, DrumbeatException
 	{
 		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return getByUri(collectionId, dataSourceId, objectUri);
+		return getByUri(collectionId, dataSourceId, objectUri, excludeProperties, excludeLinks);
 	}
 	
 	
@@ -126,11 +106,13 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
 	 * @param dataSourceId
+	 * @param excludeProperties 
+	 * @param excludeLinks 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(String collectionId, String dataSourceId, String objectUri)
+	public Model getByUri(String collectionId, String dataSourceId, String objectUri, boolean excludeProperties, boolean excludeLinks)
 		throws NotFoundException, DrumbeatException
 	{
 		Model metaDataModel = getMetaDataModel();
@@ -174,7 +156,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String dataSetId = dataSetResource.getLocalName();
 			
 			try {
-				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri);
+				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);
 			} catch (NotFoundException e) {
 				resultModel = ModelFactory.createDefaultModel();
 			}
@@ -197,42 +179,45 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		}
 		
 		
-		//
-		// get data from link sources
-		//
-		LinkSourceManager linkSourceManager = new LinkSourceManager(metaDataModel, getJenaProvider());
-		Model linkSources = linkSourceManager.getAllLinkSourcesOfDataSource(collectionId, dataSourceId);
+		if (!excludeLinks) {		
 		
-		if (linkSources != null) {
+			//
+			// get data from link sources
+			//
+			LinkSourceManager linkSourceManager = new LinkSourceManager(metaDataModel, getJenaProvider());
+			Model linkSources = linkSourceManager.getAllLinkSourcesOfDataSource(collectionId, dataSourceId);
 			
-			ResIterator resIterator = linkSources.listSubjects();
-			
-			while (resIterator.hasNext()) {
-				Resource linkSourceResource = resIterator.next();
-				String linkSourceId = linkSourceResource.getLocalName();
-				try {
-					Model newResultModel = getByUri(collectionId, linkSourceId, objectUri);
-					resultModel.add(newResultModel);
-				} catch (NotFoundException e) {					
+			if (linkSources != null) {
+				
+				ResIterator resIterator = linkSources.listSubjects();
+				
+				while (resIterator.hasNext()) {
+					Resource linkSourceResource = resIterator.next();
+					String linkSourceId = linkSourceResource.getLocalName();
+					try {
+						Model newResultModel = getByUri(collectionId, linkSourceId, objectUri, false, true);
+						resultModel.add(newResultModel);
+					} catch (NotFoundException e) {					
+					}
 				}
+				
 			}
 			
-		}
-		
-		
-		//
-		// get data from back-linking dataset
-		//
-		String backLinkSourceUri = NameFormatter.formatBackLinkSourceUri(collectionId, dataSourceId);
-		Model backLinkSourceModel = DrumbeatApplication.getInstance().getDataModel(backLinkSourceUri);
-		
-		if (backLinkSourceModel != null) {
-			try {
-				Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri);
-				if (newResultModel != null) {
-					resultModel.add(newResultModel);
+			
+			//
+			// get data from back-linking dataset
+			//
+			String backLinkSourceUri = NameFormatter.formatBackLinkSourceUri(collectionId, dataSourceId);
+			Model backLinkSourceModel = DrumbeatApplication.getInstance().getDataModel(backLinkSourceUri);
+			
+			if (backLinkSourceModel != null) {
+				try {
+					Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri, false);
+					if (newResultModel != null) {
+						resultModel.add(newResultModel);
+					}
+				} catch (NotFoundException e) {				
 				}
-			} catch (NotFoundException e) {				
 			}
 		}
 		

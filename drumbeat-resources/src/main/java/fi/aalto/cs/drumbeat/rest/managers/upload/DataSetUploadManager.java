@@ -2,7 +2,6 @@ package fi.aalto.cs.drumbeat.rest.managers.upload;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
@@ -144,12 +143,7 @@ public class DataSetUploadManager {
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, targetModel);			
 			targetModel = modelExporter.export();
 			
-			File outputFile = saveModelToGzippedFile(targetModel);
-			options.setDataType(DATA_TYPE_RDF);
-			String outputFileName = Paths.get(outputFile.getAbsolutePath()).getFileName().toString();
-			options.setDataFormat(outputFileName);
-			
-			File savedRdfFile = internalUploadRdf(null, options, outputFile);
+			File savedRdfFile = internalUploadJenaModel(targetModel, options);
 			
 			logger.info("Uploading IFC model completed successfully");
 			
@@ -164,7 +158,18 @@ public class DataSetUploadManager {
 		} finally {
 			in.close();
 		}		
-	}	
+	}
+	
+	public File internalUploadJenaModel(Model model, DataSetUploadOptions options) throws Exception {
+		
+		File outputFile = saveModelToGzippedFile(model);
+		options.setDataType(DATA_TYPE_RDF);
+		String outputFileName = Paths.get(outputFile.getAbsolutePath()).getFileName().toString();
+		options.setDataFormat(outputFileName);
+		
+		return internalUploadRdf(null, options, outputFile);
+		
+	}
 	
 	private File internalUploadRdf(InputStream in, DataSetUploadOptions options, File rdfCacheFile) throws Exception
 	{		
@@ -222,6 +227,11 @@ public class DataSetUploadManager {
 			
 		} finally {
 			in.close();
+		}
+		
+		if (rdfCacheFile != null && !options.isSaveToFiles()) {
+			rdfCacheFile.delete();
+			return null;
 		}
 		
 		return rdfCacheFile;
