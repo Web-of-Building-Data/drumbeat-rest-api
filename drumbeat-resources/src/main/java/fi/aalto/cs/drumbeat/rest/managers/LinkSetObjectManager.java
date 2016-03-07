@@ -335,7 +335,7 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			String localDataSourceUri,
 			String remoteDataSourceUri,
 			boolean notifyRemote)
-					throws DrumbeatException, IllegalArgumentException
+					throws Exception
 	{
 		//
 		// Checking if linkSet exists
@@ -399,7 +399,8 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			}
 			
 			if (clearBefore) {
-				targetModel.removeAll();
+				DrumbeatApplication.getInstance().getJenaProvider().deleteModel(graphUri);
+//				targetModel.removeAll();
 			}
 			
 //			UpdateAction.execute(
@@ -421,7 +422,11 @@ public class LinkSetObjectManager extends DrumbeatManager {
 			Model modelWithLinks = createQueryExecution(query, targetModel)
 				.execConstruct();
 			
-			targetModel.add(modelWithLinks);
+//			targetModel.add(modelWithLinks);
+			
+			
+			DataSetUploadOptions options = new DataSetUploadOptions(linkSetUri, linkSetUri, "RDF", null, clearBefore, false);
+			new DataSetUploadManager().internalUploadJenaModel(modelWithLinks, options );
 			
 			if (notifyRemote) {
 				notifyRemote(modelWithLinks);
