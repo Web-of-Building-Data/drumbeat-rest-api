@@ -83,6 +83,77 @@ public class DataSourceObjectManager extends DrumbeatManager {
 //	}
 	
 	
+	public Model getAllNonBlank(String collectionId, String dataSourceId) throws DrumbeatException {
+		Model metaDataModel = getMetaDataModel();
+
+		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
+		
+		Resource dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId);
+		if (dataSetResource != null) {
+			dataSetResource = dataSetResource.inModel(metaDataModel);
+		} else {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId);			
+		}
+		
+		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(metaDataModel, getJenaProvider());
+		
+		Model resultModel;
+
+		for (;;) {
+			
+			String overwritingMethod = null;
+			String overwrittenDataSetUri = null;
+			
+			if (dataSetResource.hasProperty(DrumbeatOntology.LBDHO.overwritingMethod)) {
+				overwritingMethod = dataSetResource
+					.getProperty(DrumbeatOntology.LBDHO.overwritingMethod)
+					.getObject()
+					.asLiteral()
+					.getString();
+				
+				overwrittenDataSetUri = dataSetResource
+						.getProperty(DrumbeatOntology.LBDHO.overwrites)
+						.getObject()
+						.asLiteral()
+						.getString();
+			}
+			
+			if (StringUtils.isEmptyOrNull(overwritingMethod)) {
+				overwritingMethod = DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH;
+			}
+			
+			String dataSetId = dataSetResource.getLocalName();
+			
+			try {
+				resultModel = dataSetObjectManager.getAllNonBlank(collectionId, dataSourceId, dataSetId);
+			} catch (NotFoundException e) {
+				resultModel = ModelFactory.createDefaultModel();
+			}
+			
+			if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH)) {
+				break;
+			} else if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_OBJECTS)) {
+				if (!resultModel.isEmpty()) {
+					break;
+				}
+			} else {
+				throw new NotImplementedException(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_TRIPLES);
+			}
+			
+			dataSetResource = metaDataModel.getResource(overwrittenDataSetUri);	
+		}
+		
+		if (resultModel == null) {
+			resultModel = ModelFactory.createDefaultModel();
+		}
+		
+		
+		
+		return resultModel;
+	}	
+	
+	
+	
 	/**
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
@@ -175,7 +246,8 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		}
 		
 		if (resultModel == null) {
-			resultModel = ModelFactory.createDefaultModel();
+			//resultModel = ModelFactory.createDefaultModel();
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
 		}
 		
 		
@@ -365,5 +437,4 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		return false;
 	}
 
-	
 }

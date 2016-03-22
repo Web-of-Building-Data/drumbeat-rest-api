@@ -95,6 +95,57 @@ public class DataSetObjectManager extends DrumbeatManager {
 	}
 	
 	
+	
+	/**
+	 * Gets all attributes of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model getAllNonBlank(String collectionId, String dataSourceId, String dataSetId)
+		throws NotFoundException, DrumbeatException
+	{
+		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
+
+		Query query = new ParameterizedSparqlString() {{
+			setCommandText(
+						"CONSTRUCT { \n" +
+						"	?o rdf:type ?type \n" +
+						"} \n " +
+//						"FROM NAMED ?dataSetUri \n " +
+//						"FROM NAMED ?ifcOwlUri \n " +
+						"WHERE { \n " +
+						"	GRAPH ?dataSetUri { \n " +
+						"		?o a ?type . \n " +
+						"		FILTER ( !regex (str(?o), \"^.*/" + DrumbeatOntology.BLANK_NODE_PATH + "/.*$\" ) )" +
+						"	} \n " +
+//						"	GRAPH ?ifcOwlUri { \n " +
+//						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
+//						"	} \n " +
+						"} \n "
+					);
+			
+			DrumbeatOntology.fillParameterizedSparqlString(this);
+			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+			setIri("ifcOwlUri", DrumbeatOntology.formatDrumbeatOntologyBaseUri("ifc2x3"));
+		}}.asQuery();
+		
+		Model resultModel = 
+				createQueryExecution(query, dataModel)
+					.execConstruct();
+		
+		if (resultModel.isEmpty()) {
+			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, "");
+		}
+		
+		return resultModel;
+	}
+		
+	
+	
 	/**
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
@@ -112,6 +163,8 @@ public class DataSetObjectManager extends DrumbeatManager {
 		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);		
 	}
 	
+	
+
 	/**
 	 * Gets all attributes of a specified object 
 	 * @param collectionId
@@ -588,8 +641,6 @@ public class DataSetObjectManager extends DrumbeatManager {
 				getMetaDataModel());
 		
 	}
-	
-	
-	
+
 	
 }

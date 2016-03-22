@@ -22,6 +22,7 @@ import com.hp.hpl.jena.shared.AlreadyExistsException;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
+import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
@@ -70,7 +71,35 @@ public class DataSourceObjectResource {
 //		} catch (DrumbeatException e) {
 //			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
 //		}
-//	}		
+//	}
+	
+	
+	@GET
+	@Path("/{collectionId}/{dataSourceId}")
+	public Response getAllNonBlank(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		try {		
+			Model model = getObjectManager().getAllNonBlank(collectionId, dataSourceId);
+			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
+			return DrumbeatResponseBuilder.build(
+					Status.OK,
+					model,
+					modelBaseUri,
+					headers.getAcceptableMediaTypes());			
+		} catch (NotFoundException e) {
+			throw new DrumbeatWebException(Status.NOT_FOUND, e);
+		} catch (DrumbeatException e) {
+			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
+		}
+	}
+	
+	
 
 	@GET
 	@Path("/{collectionId}/{dataSourceId}/{objectId}")
@@ -104,7 +133,32 @@ public class DataSourceObjectResource {
 		} catch (DrumbeatException e) {
 			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
 		}
-	}		
+	}
+	
+	
+	@GET
+	@Path("/{collectionId}/{dataSourceId}/" + DrumbeatOntology.BLANK_NODE_PATH + "/{objectId}")
+	public Response getBlankById(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("objectId") String objectId,
+			@QueryParam("excludeProperties") String excludeProperties,
+			@QueryParam("excludeLinks") String excludeLinks,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		return getById(
+				collectionId,
+				dataSourceId,
+				DrumbeatOntology.BLANK_NODE_PATH + "/" + objectId,
+				excludeProperties,
+				excludeLinks,
+				uriInfo,
+				headers);
+	}
+	
+	
+	
 
 //	@GET
 //	@Path("/{collectionId}/{dataSourceId}/{objectId}/type")

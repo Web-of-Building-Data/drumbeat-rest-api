@@ -117,6 +117,12 @@ public class ErrorFactory {
 	}
 	
 
+	public static NotFoundException createObjectNotFoundException(String collectionId, String dataSourceId) {
+		return new NotFoundException(
+				String.format(
+						"Object not found: <%s>",
+						NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId)));
+	}
 
 	
 	public static NotFoundException createRdfLangNotFoundException(String lang) {
