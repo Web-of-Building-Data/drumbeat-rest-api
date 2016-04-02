@@ -12,9 +12,9 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;

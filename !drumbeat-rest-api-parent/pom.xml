@@ -4,7 +4,7 @@
 
 	<groupId>fi.hut.cs.drumbeat</groupId>
 	<artifactId>drumbeat-rest-api</artifactId>
-	<version>0.8.12</version>
+	<version>0.8.14</version>
 	
 	<packaging>pom</packaging>
 
@@ -14,16 +14,19 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<!-- All versions updated on 17.11.2015 -->
 		<drumbeat.groupId>${project.groupId}</drumbeat.groupId>
-		<drumbeat.ifc2ld.version>0.10.3</drumbeat.ifc2ld.version>
-		<drumbeat.jena.version>0.7.7-SNAPSHOT</drumbeat.jena.version>
+		<drumbeat.ifc2ld.version>0.10.5</drumbeat.ifc2ld.version>
+		<drumbeat.jena.version>0.8.0</drumbeat.jena.version>
+
+		<!-- All versions updated on 17.11.2015 -->
 		<commons-cli.version>1.2</commons-cli.version>
 		<commons-codec.version>1.10</commons-codec.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<httpcomponents.version>4.4</httpcomponents.version>
 		<jackson.version>2.5.1</jackson.version>
-		<jena.version>2.13.0</jena.version>
+		<jena.version>3.0.0</jena.version>
+		
+		<!-- 
 		<jena-iri.version>1.1.1</jena-iri.version>
 		<jsonld-java.version>0.5.1</jsonld-java.version>
 		<log4j.version>1.2.17</log4j.version>
@@ -31,6 +34,7 @@
 		<xercesImpl.version>2.11.0</xercesImpl.version>
 		<xml-apis.version>1.4.01</xml-apis.version>
 		<javax-api.version>2.2.12</javax-api.version>
+		 -->
 		
 		<junit.version>4.12</junit.version>
 

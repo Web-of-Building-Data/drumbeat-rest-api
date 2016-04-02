@@ -1,18 +1,12 @@
 package fi.aalto.cs.drumbeat.rest.common;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.github.jsonldjava.core.JsonLdApi;
 import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.JsonLdOptions;
-import com.github.jsonldjava.core.JsonLdProcessor;
-import com.github.jsonldjava.core.JsonLdUtils;
-import com.github.jsonldjava.jena.JenaJSONLD;
-import com.github.jsonldjava.utils.JsonUtils;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.XSD;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
@@ -20,25 +14,23 @@ import static javax.ws.rs.core.MediaType.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RIOT;
 
 
 public class MediaTypeConverter {
 	
-	public static final String APPLICATION_RDF_XML = "application/rdf+xml";
-	public static final String APPLICATION_LD_JSON = "application/ld+json";
-	public static final String TEXT_TURTLE = "text/turtle";	
-
 	public static String convertModel(Model model, MediaType mediaType, String baseUri) throws Exception {
 		return convertModel(model, mediaType.getType() + "/" + mediaType.getSubtype(), baseUri);
 	}
@@ -46,44 +38,47 @@ public class MediaTypeConverter {
 	public static String convertModel(Model model, String mediaTypeString, String baseUri)
 		throws Exception
 	{
+		
 		switch (mediaTypeString) {
 		
-		case APPLICATION_JSON:
-		case APPLICATION_LD_JSON:			
-			return convertModelToRdf(model, Lang.JSONLD, baseUri);
+//		case APPLICATION_JSON:
+//			return convertModelToRdf(model, Lang.JSONLD, baseUri);
 			
-		case TEXT_PLAIN:
-		case TEXT_TURTLE:
-			return convertModelToRdf(model, Lang.TURTLE, baseUri);
-
-		case APPLICATION_RDF_XML:
-		case APPLICATION_XML:
-			return convertModelToRdf(model, Lang.RDFXML, baseUri);
+//		case APPLICATION_XML:
+//			return convertModelToRdf(model, Lang.RDFXML, baseUri);
 
 		case TEXT_HTML:
 		case WILDCARD:
 			return convertModelToHtml(model, baseUri);
 			
 		default:
-			throw new NotSupportedException(
-					String.format("Use one of following media types: %s", getSupportedMediaTypes().toString()));
+			Lang lang = RDFLanguages.contentTypeToLang(mediaTypeString);
+			if (lang != null) {
+				return convertModelToRdf(model, lang, baseUri);
+			} else {
+				throw new NotSupportedException(
+						"Unsupported media type: " + mediaTypeString);
+			}
 		}
 		
 	}
 	
 	public static String[] getSupportedMediaTypes() {
 		
-		return 
-			new String[]{
-					APPLICATION_JSON,
-					APPLICATION_LD_JSON,			
-					TEXT_PLAIN,
-					TEXT_TURTLE,
-					APPLICATION_RDF_XML,
-					APPLICATION_XML,
-					TEXT_HTML,
-					WILDCARD
-				};
+		List<String> mediaTypes = 
+				RDFLanguages
+					.getRegisteredLanguages()
+					.stream()
+					.map(x -> x.getContentType().toHeaderString())
+					.distinct()
+					.sorted()
+					.collect(Collectors.toList());
+		
+		mediaTypes.add(0, TEXT_HTML);
+		mediaTypes.add(0, WILDCARD);
+		
+		String[] result = new String[mediaTypes.size()];		
+		return mediaTypes.toArray(result);
 		
 	}
 	
@@ -96,21 +91,27 @@ public class MediaTypeConverter {
 	
 	public static String convertModelToRdf(Model model, Lang lang, String baseUri) throws JsonParseException, IOException, JsonLdError {
 		
-		if (lang.equals(Lang.JSONLD)) {
-			JenaJSONLD.init();
-			baseUri = null;
-		} else if (lang.equals(Lang.RDFJSON)) {
+//		if (lang.equals(Lang.JSONLD)) {
+//			JenaJSONLD.init();
+//			baseUri = null;
+//		} else
+		if (lang.equals(Lang.RDFJSON)) {
 			RIOT.init();			
 		}		
 		
 		StringWriter writer = new StringWriter();
 
-		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
-		nsPrefixMap.putAll(DrumbeatOntology.getDefaultNsPrefixes());
+		model.setNsPrefixes(DrumbeatOntology.getDefaultNsPrefixes());
 		
-		if (StringUtils.isEmptyOrNull(baseUri) && !lang.equals(Lang.JSONLD)) {
+		//if (StringUtils.isEmptyOrNull(baseUri) && !lang.equals(Lang.JSONLD)) {
+		if (StringUtils.isEmptyOrNull(baseUri)) {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		}
+		
+		if (Lang.JSONLD.getAltNames().contains(lang.getName())) {
+			model.setNsPrefix("base", baseUri);
+			baseUri = null;
+		}	
 		
 		model.write(writer, lang.getName(), baseUri);
 		

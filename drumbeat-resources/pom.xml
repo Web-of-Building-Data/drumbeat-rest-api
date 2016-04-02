@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fi.hut.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.8.12</version>
+		<version>0.8.14</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 
@@ -52,16 +52,11 @@
 			<version>${drumbeat.ifc2ld.version}</version>
 		</dependency>
 
-		<!-- Apache Jena Core -->
+		<!-- Apache Jena (Core, ARQ, IRI, TDB) -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>${jena.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
+			<artifactId>apache-jena-libs</artifactId>
+			<type>pom</type>
 			<version>${jena.version}</version>
 		</dependency>
 
@@ -104,13 +99,13 @@
 		    <artifactId>jsonld-java</artifactId>
 		    <version>0.7.0</version>
 		</dependency>
-		-->
 		
 		<dependency>
 			<groupId>com.github.jsonld-java</groupId>
 			<artifactId>jsonld-java-jena</artifactId>
 			<version>0.4.1</version>
 		</dependency>
+		-->
 
 		<!-- Jersey test -->
 		<dependency>

@@ -8,7 +8,7 @@
 	dcterms:version "drumbeat-resources/${project.version}" .
 	
 <>
-	dcterms:dependsOn "drumbeat-ifc2ld/${drumbeat.ifc2ld.version}"^^xsd:string .
+	dcterms:dependsOn "drumbeat-ifc2ld/${drumbeat.ifc2ld.version}" .
 	
 <>
-	dcterms:dependsOn "drumbeat-jena/${drumbeat.jena.version}"^^xsd:string .
+	dcterms:dependsOn "drumbeat-jena/${drumbeat.jena.version}" .

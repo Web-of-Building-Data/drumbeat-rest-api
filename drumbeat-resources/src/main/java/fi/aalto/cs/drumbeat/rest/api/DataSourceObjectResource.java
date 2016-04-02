@@ -17,9 +17,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.shared.AlreadyExistsException;
-import com.hp.hpl.jena.shared.NotFoundException;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.shared.AlreadyExistsException;
+import org.apache.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
@@ -113,7 +113,39 @@ public class DataSourceObjectResource {
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
-		
+		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
+		return internalGetByUri(collectionId, dataSourceId, null, objectUri, excludeProperties, excludeLinks, headers);
+	}
+	
+	
+	@GET
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/" + DrumbeatOntology.BLANK_NODE_PATH + "/{objectId}")
+//	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/{objectId}")
+	public Response getBlankById(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("dataSetId") String dataSetId,
+			@PathParam("objectId") String objectId,
+			@QueryParam("excludeProperties") String excludeProperties,
+			@QueryParam("excludeLinks") String excludeLinks,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		String objectUri = NameFormatter.formatBlankObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId);
+		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, headers);
+	}
+	
+	
+	private Response internalGetByUri(
+			String collectionId,
+			String dataSourceId,
+			String dataSetId,
+			String objectUri,
+			String excludeProperties,
+			String excludeLinks,
+			HttpHeaders headers)
+	{
 		BooleanParam excludePropertiesParam = new BooleanParam();
 		excludePropertiesParam.setStringValue(excludeProperties);		
 
@@ -121,7 +153,13 @@ public class DataSourceObjectResource {
 		excludeLinksParam.setStringValue(excludeLinks);		
 		
 		try {		
-			Model model = getObjectManager().getById(collectionId, dataSourceId, objectId, excludePropertiesParam.getValue(), excludeLinksParam.getValue());
+			Model model = getObjectManager().getByUri(
+					collectionId,
+					dataSourceId,
+					null,
+					objectUri,
+					excludePropertiesParam.getValue(),
+					excludeLinksParam.getValue());
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
@@ -133,28 +171,7 @@ public class DataSourceObjectResource {
 		} catch (DrumbeatException e) {
 			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
 		}
-	}
-	
-	
-	@GET
-	@Path("/{collectionId}/{dataSourceId}/" + DrumbeatOntology.BLANK_NODE_PATH + "/{objectId}")
-	public Response getBlankById(			
-			@PathParam("collectionId") String collectionId,
-			@PathParam("dataSourceId") String dataSourceId,
-			@PathParam("objectId") String objectId,
-			@QueryParam("excludeProperties") String excludeProperties,
-			@QueryParam("excludeLinks") String excludeLinks,
-			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
-	{
-		return getById(
-				collectionId,
-				dataSourceId,
-				DrumbeatOntology.BLANK_NODE_PATH + "/" + objectId,
-				excludeProperties,
-				excludeLinks,
-				uriInfo,
-				headers);
+		
 	}
 	
 	

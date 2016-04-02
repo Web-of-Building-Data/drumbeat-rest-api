@@ -47,6 +47,20 @@ public class NameFormatter {
 		return formatObjectResourceBaseUri(collectionId, dataSourceId) + objectId;
 	}
 
+	public static String formatBlankObjectResourceBaseUri(String collectionId, String dataSourceId, String dataSetId) {
+		return String.format(
+				"%sobjects/%s/%s/%s/%s/",
+				DrumbeatApplication.getInstance().getBaseUri(),
+				collectionId,
+				dataSourceId,
+				dataSetId,
+				DrumbeatOntology.BLANK_NODE_PATH);
+	}
+
+	public static String formatBlankObjectResourceUri(String collectionId, String dataSourceId, String dataSetId, String objectId) {
+		return formatBlankObjectResourceBaseUri(collectionId, dataSourceId, dataSetId) + objectId;
+	}
+
 	public static String formatLocalOntologyUri(String ontolgoyId)
 	{
 		return String.format(

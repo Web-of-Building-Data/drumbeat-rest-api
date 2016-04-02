@@ -1,13 +1,13 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import com.hp.hpl.jena.query.ParameterizedSparqlString;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.shared.NotFoundException;
-import com.hp.hpl.jena.update.UpdateAction;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.Query;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.shared.NotFoundException;
+import org.apache.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
@@ -308,7 +308,17 @@ public class LinkSetObjectManager extends DrumbeatManager {
 		//
 		// Read input stream to target model
 		//
-		DataSetUploadOptions options = new DataSetUploadOptions(graphUri, graphBaseUri, dataType, dataFormat,  clearBefore, saveToFiles);		
+		DataSetUploadOptions options = new DataSetUploadOptions(
+				collectionId,
+				linkSourceId,
+				linkSetId,
+				graphUri,
+				graphBaseUri,
+				graphBaseUri,
+				dataType,
+				dataFormat,
+				clearBefore,
+				saveToFiles);		
 		File savedRdfFile = new DataSetUploadManager().upload(in, options);
 		Model targetModel = DrumbeatApplication.getInstance().getDataModel(graphUri);
 		
@@ -425,7 +435,17 @@ public class LinkSetObjectManager extends DrumbeatManager {
 //			targetModel.add(modelWithLinks);
 			
 			
-			DataSetUploadOptions options = new DataSetUploadOptions(linkSetUri, linkSetUri, "RDF", null, clearBefore, false);
+			DataSetUploadOptions options = new DataSetUploadOptions(
+					collectionId,
+					linkSourceId,
+					linkSetId,
+					linkSetUri,
+					linkSetUri,
+					linkSetUri,				// there should not be no blank nodes
+					"RDF",
+					null,
+					clearBefore,
+					false);
 			new DataSetUploadManager().internalUploadJenaModel(modelWithLinks, options );
 			
 			if (notifyRemote) {

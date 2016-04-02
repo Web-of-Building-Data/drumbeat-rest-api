@@ -1,9 +1,9 @@
 package fi.aalto.cs.drumbeat.rest.managers.upload;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.shared.JenaException;
-import com.hp.hpl.jena.shared.NotFoundException;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.shared.JenaException;
+import org.apache.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 
@@ -138,6 +138,8 @@ public class DataSetUploadManager {
 			logger.debug("exporting model");
 			Ifc2RdfConversionContext conversionContext = DrumbeatApplication.getInstance().getDefaultIfc2RdfConversionContext();
 			conversionContext.setModelNamespaceUriFormat(options.getDataSourceObjectBaseUri());
+			
+			conversionContext.setModelBlankNodeNamespaceUriFormat(options.getDataSetBlankObjectBaseUri());
 			
 			Model targetModel = ModelFactory.createDefaultModel();
 			Ifc2RdfModelExporter modelExporter = new Ifc2RdfModelExporter(ifcModel, conversionContext, targetModel);			

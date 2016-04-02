@@ -3,13 +3,13 @@ package fi.aalto.cs.drumbeat.rest.common;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.hp.hpl.jena.query.ParameterizedSparqlString;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
-import com.hp.hpl.jena.vocabulary.XSD;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
+import org.apache.jena.vocabulary.XSD;
 
 import fi.aalto.cs.drumbeat.rdf.RdfVocabulary;
 
@@ -93,8 +93,8 @@ public class DrumbeatOntology {
 				put("expr", formatDrumbeatOntologyBaseUri("EXPRESS"));
 //				put("step", "http://drumbeat.cs.hut.fi/owl/STEP#");
 				put("ifc", formatDrumbeatOntologyBaseUri("ifc2x3"));
-				put("ifc4", formatDrumbeatOntologyBaseUri("ifc4"));				
-				put("ifc4_add1", formatDrumbeatOntologyBaseUri("ifc4_add1"));				
+//				put("ifc4", formatDrumbeatOntologyBaseUri("ifc4"));				
+				put("ifc4", formatDrumbeatOntologyBaseUri("ifc4_add1"));				
 			}};
 		return map;
 	}

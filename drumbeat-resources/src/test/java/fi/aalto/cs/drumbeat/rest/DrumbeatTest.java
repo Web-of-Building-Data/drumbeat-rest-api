@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
 

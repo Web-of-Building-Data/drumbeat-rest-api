@@ -18,7 +18,7 @@
 //import org.junit.BeforeClass;
 //import org.junit.Test;
 //
-//import com.hp.hpl.jena.rdf.model.Model;
+//import org.apache.jena.rdf.model.Model;
 //
 //import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 //import fi.aalto.cs.drumbeat.rest.application.TestApplication;

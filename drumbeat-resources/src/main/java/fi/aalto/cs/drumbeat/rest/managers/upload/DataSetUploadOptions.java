@@ -1,13 +1,14 @@
 package fi.aalto.cs.drumbeat.rest.managers.upload;
 
-import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.formatObjectResourceBaseUri;
-
-import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
-
 public class DataSetUploadOptions {
+	
+	private final String collectionId;
+	private final String dataSourceId;
+	private final String dataSetId;
 	
 	private String dataSetGraphUri;
 	private String dataSourceObjectBaseUri;
+	private String dataSetBlankObjectBaseUri;
 
 	private String dataType;
 	private String dataFormat;
@@ -15,19 +16,41 @@ public class DataSetUploadOptions {
 	private boolean saveToFiles;
 	
 	public DataSetUploadOptions(
+		String collectionId,
+		String dataSourceId,
+		String dataSetId,
 		String dataSetGraphUri,
 		String dataSourceObjectBaseUri,
+		String dataSetBlankObjectBaseUri,
 		String dataType,
 		String dataFormat,
 		boolean clearBefore,
 		boolean saveToFiles)
 	{
+		this.collectionId = collectionId;
+		this.dataSourceId = dataSourceId;
+		this.dataSetId = dataSetId;
+		
 		this.dataSetGraphUri = dataSetGraphUri;
 		this.dataSourceObjectBaseUri = dataSourceObjectBaseUri;
+		this.dataSetBlankObjectBaseUri = dataSetBlankObjectBaseUri;
+		
 		this.dataType = dataType;
 		this.dataFormat = dataFormat;
 		this.clearBefore = clearBefore;
 		this.saveToFiles = saveToFiles;
+	}
+	
+	public String getCollectionId() {
+		return collectionId;
+	}
+	
+	public String getDataSourceId() {
+		return dataSourceId;
+	}
+	
+	public String getDataSetId() {
+		return dataSetId;
 	}
 
 	public String getDataType() {
@@ -77,6 +100,15 @@ public class DataSetUploadOptions {
 	public void setDataSourceObjectBaseUri(String dataSourceObjectBaseUri) {
 		this.dataSourceObjectBaseUri = dataSourceObjectBaseUri;
 	}
+
+	public String getDataSetBlankObjectBaseUri() {
+		return dataSetBlankObjectBaseUri;
+	}
+
+	public void setDataSetBlankObjectBaseUri(String dataSetBlankObjectBaseUri) {
+		this.dataSetBlankObjectBaseUri = dataSetBlankObjectBaseUri;
+	}
+	
 	
 //	public String getDataSetUri() {
 //		return NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);

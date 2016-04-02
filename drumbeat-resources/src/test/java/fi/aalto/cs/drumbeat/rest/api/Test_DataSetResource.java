@@ -22,9 +22,9 @@ import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.cs.drumbeat.rest.DrumbeatTest;
 import fi.aalto.cs.drumbeat.rest.application.TestApplication;
@@ -69,7 +69,7 @@ public class Test_DataSetResource extends DrumbeatTest {
 			String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 			String expectedMessage = String.format(
 					"%s: DataSource not found: <%sdatasources/col-999/dso-1-1>",
-					com.hp.hpl.jena.shared.NotFoundException.class,
+					org.apache.jena.shared.NotFoundException.class,
 					baseUri);
 
 			String actualMessage = response.readEntity(String.class);
@@ -95,7 +95,7 @@ public class Test_DataSetResource extends DrumbeatTest {
 			String baseUri = DrumbeatApplication.getInstance().getBaseUri();
 			String expectedMessage = String.format(
 					"%s: DataSource not found: <%sdatasources/col-1/dso-1-999>",
-					com.hp.hpl.jena.shared.NotFoundException.class, 
+					org.apache.jena.shared.NotFoundException.class, 
 					baseUri);
 
 			String actualMessage = response.readEntity(String.class);

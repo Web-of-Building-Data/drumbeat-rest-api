@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.common;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
@@ -7,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 
 public class DrumbeatResponseBuilder {
 	
@@ -54,7 +55,7 @@ public class DrumbeatResponseBuilder {
 				Response.Status.UNSUPPORTED_MEDIA_TYPE,
 				String.format(
 						"Use supported media types: %s",
-						MediaTypeConverter.getSupportedMediaTypes().toString()),
+						Arrays.toString(MediaTypeConverter.getSupportedMediaTypes())),
 				null);
 	}
 	

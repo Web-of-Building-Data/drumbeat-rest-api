@@ -1,13 +1,11 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.shared.NotFoundException;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.shared.NotFoundException;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
@@ -154,22 +152,28 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	
 	
 	
-	/**
-	 * Gets all attributes of a specified object 
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param excludeProperties 
-	 * @param excludeLinks 
-	 * @return List of statements <<dataSet>> ?predicate ?object
-	 * @throws NotFoundException if the dataSet is not found
-	 * @throws DrumbeatException 
-	 */
-	public Model getById(String collectionId, String dataSourceId, String objectId, boolean excludeProperties, boolean excludeLinks)
-		throws NotFoundException, DrumbeatException
-	{
-		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return getByUri(collectionId, dataSourceId, objectUri, excludeProperties, excludeLinks);
-	}
+//	/**
+//	 * Gets all attributes of a specified object 
+//	 * @param collectionId
+//	 * @param dataSourceId
+//	 * @param excludeProperties 
+//	 * @param excludeLinks 
+//	 * @return List of statements <<dataSet>> ?predicate ?object
+//	 * @throws NotFoundException if the dataSet is not found
+//	 * @throws DrumbeatException 
+//	 */
+//	public Model getById(
+//			String collectionId,
+//			String dataSourceId,
+//			String dataSetId,
+//			String objectId,
+//			boolean excludeProperties,
+//			boolean excludeLinks)
+//		throws NotFoundException, DrumbeatException
+//	{
+//		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, dataSetId != null ? dataSetId + "/" + objectId : objectId);
+//		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks);
+//	}
 	
 	
 	
@@ -183,23 +187,40 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(String collectionId, String dataSourceId, String objectUri, boolean excludeProperties, boolean excludeLinks)
+	public Model getByUri(
+			String collectionId,
+			String dataSourceId,
+			String dataSetId,
+			String objectUri,
+			boolean excludeProperties,
+			boolean excludeLinks)
 		throws NotFoundException, DrumbeatException
 	{
 		Model metaDataModel = getMetaDataModel();
 
 		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
 		
-		Resource dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId);
-		if (dataSetResource != null) {
-			dataSetResource = dataSetResource.inModel(metaDataModel);
+		boolean loadFromAllDataSets = dataSetId == null;
+
+		Resource dataSetResource;
+		
+		if (loadFromAllDataSets) {		
+			dataSetResource = dataSetManager.getLastDataSetResource(collectionId, dataSourceId);
+			if (dataSetResource != null) {
+				dataSetResource = dataSetResource.inModel(metaDataModel);
+			} else {
+				throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);			
+			}
 		} else {
-			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);			
+			String dataSetUri = NameFormatter.formatDataSetGraphUri(collectionId, dataSourceId, dataSetId);
+			dataSetResource = ModelFactory.createDefaultModel().createResource(dataSetUri) ;
 		}
 		
 		DataSetObjectManager dataSetObjectManager = new DataSetObjectManager(metaDataModel, getJenaProvider());
 		
 		Model resultModel;
+		
+
 
 		for (;;) {
 			
@@ -224,7 +245,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 				overwritingMethod = DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH;
 			}
 			
-			String dataSetId = dataSetResource.getLocalName();
+			dataSetId = dataSetResource.getLocalName();
 			
 			try {
 				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);
@@ -232,7 +253,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 				resultModel = ModelFactory.createDefaultModel();
 			}
 			
-			if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH)) {
+			if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_GRAPH) || !loadFromAllDataSets) {
 				break;
 			} else if (overwritingMethod.equals(DrumbeatVocabulary.OVERWRITING_METHOD_OVERWRITE_OBJECTS)) {
 				if (!resultModel.isEmpty()) {
@@ -267,7 +288,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					Resource linkSourceResource = resIterator.next();
 					String linkSourceId = linkSourceResource.getLocalName();
 					try {
-						Model newResultModel = getByUri(collectionId, linkSourceId, objectUri, false, true);
+						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true);
 						resultModel.add(newResultModel);
 					} catch (NotFoundException e) {					
 					}
