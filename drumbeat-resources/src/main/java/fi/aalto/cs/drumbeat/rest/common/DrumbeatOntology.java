@@ -17,8 +17,6 @@ public class DrumbeatOntology {
 	
 	public static final String GRAPH_NAME_IFC = "owl_ifc_ifc2x3";
 	
-	public static final String BLANK_NODE_PATH = "BLANK";
-
 	//	public static final String COLLECTION_OWL = "owl";
 //	public static final String DATASOURCE_IFC = "ifc";
 //	public static final String DATASET_IFC2X3 = "ifc2x3";

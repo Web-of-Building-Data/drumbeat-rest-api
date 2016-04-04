@@ -2,6 +2,8 @@ package fi.aalto.cs.drumbeat.rest.common;
 
 public class NameFormatter {
 	
+	public static final String BLANK_NODE_PATH = "_BLANK";
+	
 	
 	public static String formatCollectionResourceUri(String collectionId) {
 		return String.format(
@@ -54,7 +56,7 @@ public class NameFormatter {
 				collectionId,
 				dataSourceId,
 				dataSetId,
-				DrumbeatOntology.BLANK_NODE_PATH);
+				BLANK_NODE_PATH);
 	}
 
 	public static String formatBlankObjectResourceUri(String collectionId, String dataSourceId, String dataSetId, String objectId) {
@@ -110,6 +112,11 @@ public class NameFormatter {
 		String collectionId = tokens[0];
 		
 		return formatDataSourceResourceUri(collectionId, dataSourceId);
+	}
+
+	public static boolean isBlankNode(String newBlankObjectUri) {
+		newBlankObjectUri = newBlankObjectUri.substring(0, newBlankObjectUri.lastIndexOf('/'));
+		return newBlankObjectUri.endsWith("/" + BLANK_NODE_PATH);
 	}
 	
 	

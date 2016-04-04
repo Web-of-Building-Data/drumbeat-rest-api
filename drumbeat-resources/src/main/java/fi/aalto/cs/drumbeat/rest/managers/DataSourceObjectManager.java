@@ -183,6 +183,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param excludeProperties 
 	 * @param excludeLinks 
+	 * @param expandBlanks 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
@@ -193,7 +194,8 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String dataSetId,
 			String objectUri,
 			boolean excludeProperties,
-			boolean excludeLinks)
+			boolean excludeLinks,
+			boolean expandBlanks)
 		throws NotFoundException, DrumbeatException
 	{
 		Model metaDataModel = getMetaDataModel();
@@ -248,7 +250,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			dataSetId = dataSetResource.getLocalName();
 			
 			try {
-				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);
+				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlanks);
 			} catch (NotFoundException e) {
 				resultModel = ModelFactory.createDefaultModel();
 			}
@@ -288,7 +290,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					Resource linkSourceResource = resIterator.next();
 					String linkSourceId = linkSourceResource.getLocalName();
 					try {
-						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true);
+						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true, expandBlanks);
 						resultModel.add(newResultModel);
 					} catch (NotFoundException e) {					
 					}
@@ -305,7 +307,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			
 			if (backLinkSourceModel != null) {
 				try {
-					Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri, false);
+					Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri, false, expandBlanks);
 					if (newResultModel != null) {
 						resultModel.add(newResultModel);
 					}

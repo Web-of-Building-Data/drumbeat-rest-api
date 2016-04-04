@@ -109,17 +109,18 @@ public class DataSourceObjectResource {
 			@PathParam("objectId") String objectId,
 			@QueryParam("excludeProperties") String excludeProperties,
 			@QueryParam("excludeLinks") String excludeLinks,
+			@QueryParam("expandBlanks") String expandBlanks,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return internalGetByUri(collectionId, dataSourceId, null, objectUri, excludeProperties, excludeLinks, headers);
+		return internalGetByUri(collectionId, dataSourceId, null, objectUri, excludeProperties, excludeLinks, expandBlanks, headers);
 	}
 	
 	
 	@GET
-	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/" + DrumbeatOntology.BLANK_NODE_PATH + "/{objectId}")
+	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/" + NameFormatter.BLANK_NODE_PATH + "/{objectId}")	
 //	@Path("/{collectionId}/{dataSourceId}/{dataSetId}/{objectId}")
 	public Response getBlankById(			
 			@PathParam("collectionId") String collectionId,
@@ -128,12 +129,13 @@ public class DataSourceObjectResource {
 			@PathParam("objectId") String objectId,
 			@QueryParam("excludeProperties") String excludeProperties,
 			@QueryParam("excludeLinks") String excludeLinks,
+			@QueryParam("expandBlanks") String expandBlanks,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		String objectUri = NameFormatter.formatBlankObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId);
-		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, headers);
+		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, expandBlanks, headers);
 	}
 	
 	
@@ -144,6 +146,7 @@ public class DataSourceObjectResource {
 			String objectUri,
 			String excludeProperties,
 			String excludeLinks,
+			String expandBlanks,
 			HttpHeaders headers)
 	{
 		BooleanParam excludePropertiesParam = new BooleanParam();
@@ -152,6 +155,9 @@ public class DataSourceObjectResource {
 		BooleanParam excludeLinksParam = new BooleanParam();
 		excludeLinksParam.setStringValue(excludeLinks);		
 		
+		BooleanParam expandBlanksParam = new BooleanParam();
+		expandBlanksParam.setStringValue(expandBlanks);		
+
 		try {		
 			Model model = getObjectManager().getByUri(
 					collectionId,
@@ -159,7 +165,8 @@ public class DataSourceObjectResource {
 					null,
 					objectUri,
 					excludePropertiesParam.getValue(),
-					excludeLinksParam.getValue());
+					excludeLinksParam.getValue(),
+					expandBlanksParam.getValue());
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,

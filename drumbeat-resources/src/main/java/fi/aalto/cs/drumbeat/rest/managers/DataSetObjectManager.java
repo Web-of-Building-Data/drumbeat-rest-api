@@ -6,6 +6,7 @@ import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.shared.NotFoundException;
@@ -13,12 +14,15 @@ import org.apache.jena.update.UpdateAction;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
+import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadManager;
 import fi.aalto.cs.drumbeat.rest.managers.upload.DataSetUploadOptions;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -120,7 +124,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 						"WHERE { \n " +
 						"	GRAPH ?dataSetUri { \n " +
 						"		?o a ?type . \n " +
-						"		FILTER ( !regex (str(?o), \"^.*/" + DrumbeatOntology.BLANK_NODE_PATH + "/.*$\" ) )" +
+						"		FILTER ( !regex (str(?o), \"^.*/" + NameFormatter.BLANK_NODE_PATH + "/.*$\" ) )" +
 						"	} \n " +
 //						"	GRAPH ?ifcOwlUri { \n " +
 //						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
@@ -156,11 +160,17 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getById(String collectionId, String dataSourceId, String dataSetId, String objectId, boolean excludeProperties)
+	public Model getById(
+			String collectionId,
+			String dataSourceId,
+			String dataSetId, 
+			String objectId,
+			boolean excludeProperties,
+			boolean expandBlanks)
 		throws NotFoundException, DrumbeatException
 	{
 		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties);		
+		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlanks);		
 	}
 	
 	
@@ -171,16 +181,23 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param dataSetId
 	 * @param excludeProperties
+	 * @param expandBlanks
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(String collectionId, String dataSourceId, String dataSetId, String objectUri, boolean excludeProperties)
+	public Model getByUri(
+			String collectionId,
+			String dataSourceId,
+			String dataSetId,
+			String objectUri,
+			boolean excludeProperties,
+			boolean expandBlanks)
 		throws NotFoundException, DrumbeatException
 	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
-		Model resultModel = getByUri(dataModel, objectUri, excludeProperties);
+		Model resultModel = getByUri(dataModel, objectUri, excludeProperties, expandBlanks);
 		
 		if (resultModel.isEmpty()) {
 			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
@@ -196,18 +213,19 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param dataSetId
 	 * @param excludeProperties
+	 * @param expandBlanks 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(Model dataModel, String objectUri, boolean excludeProperties)
+	public Model getByUri(Model dataModel, String objectUri, boolean excludeProperties, boolean expandBlanks)
 		throws DrumbeatException
 	{
-		Query query;
+		ParameterizedSparqlString sparql;
 		
 		if (!excludeProperties) {
 		
-			query = new ParameterizedSparqlString() {{
+			sparql = new ParameterizedSparqlString() {{
 				setCommandText(
 						"CONSTRUCT { \n" +
 						"	?objectUri ?predicate ?object \n" +
@@ -218,11 +236,11 @@ public class DataSetObjectManager extends DrumbeatManager {
 				
 				DrumbeatOntology.fillParameterizedSparqlString(this);
 				setIri("objectUri", objectUri);
-			}}.asQuery();
+			}};
 			
 		} else {
 			
-			query = new ParameterizedSparqlString() {{
+			sparql = new ParameterizedSparqlString() {{
 				setCommandText(
 						"CONSTRUCT { \n" +
 						"	?objectUri a ?object \n" +
@@ -233,16 +251,75 @@ public class DataSetObjectManager extends DrumbeatManager {
 				
 				DrumbeatOntology.fillParameterizedSparqlString(this);
 				setIri("objectUri", objectUri);
-			}}.asQuery();
+			}};
 			
 		}
 		
+		return internalGetByUri(dataModel, objectUri, sparql, expandBlanks, null);
+		
+		
+	}
+	
+	
+	/**
+	 * Gets all attributes of a specified object 
+	 * @param collectionId
+	 * @param dataSourceId
+	 * @param dataSetId
+	 * @param excludeProperties
+	 * @param expandBlanks 
+	 * @return List of statements <<dataSet>> ?predicate ?object
+	 * @throws NotFoundException if the dataSet is not found
+	 * @throws DrumbeatException 
+	 */
+	public Model internalGetByUri(
+			Model dataModel,
+			String objectUri,
+			ParameterizedSparqlString sparql,
+			boolean expandBlanks,
+			Set<String> blankObjectUris)
+		throws DrumbeatException
+	{
+		sparql.setIri("objectUri", objectUri);
+		
 		Model resultModel = 
-				createQueryExecution(query, dataModel)
+				createQueryExecution(sparql.asQuery(), dataModel)
 					.execConstruct();
 		
+		if (expandBlanks) {
+			
+			if (blankObjectUris == null) {
+				blankObjectUris = new HashSet<>();
+			}
+		
+			Set<String> newBlankObjectUris = new HashSet<>();
+			NodeIterator nodeIterator = resultModel.listObjects();
+			
+			while (nodeIterator.hasNext()) {
+				RDFNode node = nodeIterator.nextNode();
+				if (node.isURIResource()) {
+					String newBlankObjectUri = node.asResource().getURI();
+					if (!blankObjectUris.contains(newBlankObjectUri) && NameFormatter.isBlankNode(newBlankObjectUri)) {
+						newBlankObjectUris.add(node.asResource().getURI());
+					}
+				}
+			}
+			
+			blankObjectUris.addAll(newBlankObjectUris);
+			
+			for (String newBlankObjectUri : newBlankObjectUris) {
+				Model newResultModel = internalGetByUri(dataModel, newBlankObjectUri, sparql, expandBlanks, blankObjectUris);
+				resultModel.add(newResultModel);
+			}
+			
+		}
+		
 		return resultModel;
+		
 	}
+	
+	
+	
 
 	/**
 	 * Gets type of a specified object 
