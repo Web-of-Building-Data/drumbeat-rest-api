@@ -32,31 +32,33 @@ public class AppTest
     /**
      * Rigourous Test :-)
      */
-//    public void testApp()
+    public void testApp()
+    {
+    	LinkManager linkManager = new LinkManager(
+    			"http://structural.drb.cs.hut.fi/linksets/hackathon-solibri-sample/hvac-arc/v1", 
+    			"http://structural.drb.cs.hut.fi/datasources/hackathon-solibri-sample/hvac",
+    			"http://architect.drb.cs.hut.fi/datasources/hackathon-solibri-sample/arc");
+    	
+    	String linkUri = "http://drumbeat.cs.hut.fi/owl/blo#hasNearSpace";
+    	String fromObjectId = "006D901C-91A2-4B3B-B81B-2C9E2DDCB87F";
+    	String toObjectId = "000DE351-9CB1-A7D9-894E-EAE77EDE0479";
+    	
+    	linkManager.createLinks(linkUri, fromObjectId, toObjectId);
+    	linkManager.commit();
+    }
+    
+    
+//    public void testApp2()
 //    {
 //    	LinkManager linkManager = new LinkManager(
-//    			"http://structural.drb.cs.hut.fi/linksets/hackathon-solibri-sample/hvac-arc/v1", 
-//    			"http://structural.drb.cs.hut.fi/datasources/hackathon-solibri-sample/hvac",
-//    			"http://architect.drb.cs.hut.fi/datasources/hackathon-solibri-sample/arc");
+//    			"http://localhost:8080/drumbeat/linksets/hackathon-solibri-sample/hvac-arc/v1", 
+//    			"http://localhost:8080/drumbeat/datasources/hackathon-solibri-sample/hvac",
+//    			"http://localhost:8080/drumbeat/datasources/hackathon-solibri-sample/arc");
 //    	
 //    	String linkUri = "http://drumbeat.cs.hut.fi/owl/blo#hasNearSpace";
 //    	
 //    	linkManager.createLinks(linkUri, "fromGuid", "toGuid1", "toGuid2");
 //    	linkManager.commit();
 //    }
-    
-    
-    public void testApp2()
-    {
-    	LinkManager linkManager = new LinkManager(
-    			"http://localhost:8080/drumbeat/linksets/hackathon-solibri-sample/hvac-arc/v1", 
-    			"http://localhost:8080/drumbeat/datasources/hackathon-solibri-sample/hvac",
-    			"http://localhost:8080/drumbeat/datasources/hackathon-solibri-sample/arc");
-    	
-    	String linkUri = "http://drumbeat.cs.hut.fi/owl/blo#hasNearSpace";
-    	
-    	linkManager.createLinks(linkUri, "fromGuid", "toGuid1", "toGuid2");
-    	linkManager.commit();
-    }
     
 }

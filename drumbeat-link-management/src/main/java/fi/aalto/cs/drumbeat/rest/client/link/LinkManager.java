@@ -31,7 +31,7 @@ public class LinkManager
 	public static final String PARAM_CONTENT = "content";
 	
 	public static final String DATA_TYPE_RDF = "RDF";
-	public static final String RDF_LANG = Lang.NTRIPLES.getName();
+	public static final Lang RDF_LANG = Lang.NTRIPLES;
 	
 	private final String linkSetUri;
 	
@@ -115,19 +115,19 @@ public class LinkManager
 		
 		Form form = new Form();
 		form.param(PARAM_DATA_TYPE, DATA_TYPE_RDF);
-		form.param(PARAM_DATA_FORMAT, RDF_LANG);
+		form.param(PARAM_DATA_FORMAT, "." + RDF_LANG.getFileExtensions().get(0));
 		form.param(PARAM_CLEAR_BEFORE, Boolean.toString(clearBefore));		
 		form.param(PARAM_NOTIFY_REMOTE, Boolean.toString(notifyRemote));
 
 		
 		StringWriter writer = new StringWriter();
-		changeModel.write(writer, RDF_LANG);		
+		changeModel.write(writer, RDF_LANG.getName());		
 		form.param(PARAM_CONTENT, writer.toString());
 		
 		final Response response =
 				target
 					.request()
-					.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), Response.class);
+					.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), Response.class);
 		
 		if (response.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
 			throw new RuntimeException(String.format("Error %d (%s): %s", response.getStatus(), response.getStatusInfo(), response.getEntity()));			
