@@ -11,6 +11,8 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<drumbeat.groupId>fi.hut.cs.drumbeat</drumbeat.groupId>
+		<drumbeat.version>0.10.6</drumbeat.version>
 		<jersey.version>2.22.2</jersey.version>
 		<jena.version>3.0.0</jena.version>
 		<junit.version>4.12</junit.version>
@@ -37,8 +39,14 @@
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-
-
+		
+		<!-- Drumbeat Utils -->
+		<dependency>
+			<groupId>${drumbeat.groupId}</groupId>
+			<artifactId>drumbeat-ifc.common</artifactId>
+			<version>${drumbeat.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- JUnit -->
 		<dependency>
@@ -61,5 +69,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>in-project-drumbeat</id>
+			<name>Drumbeat libs</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
 
 </project>

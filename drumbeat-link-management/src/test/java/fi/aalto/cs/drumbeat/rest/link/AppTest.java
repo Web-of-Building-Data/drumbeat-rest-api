@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.link;
 
+import fi.aalto.cs.drumbeat.ifc.common.guid.GuidCompressor;
 import fi.aalto.cs.drumbeat.rest.client.link.LinkManager;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -40,8 +41,8 @@ public class AppTest
     			"http://architect.drb.cs.hut.fi/datasources/hackathon-solibri-sample/arc");
     	
     	String linkUri = "http://drumbeat.cs.hut.fi/owl/blo#hasNearSpace";
-    	String fromObjectId = "006D901C-91A2-4B3B-B81B-2C9E2DDCB87F";
-    	String toObjectId = "000DE351-9CB1-A7D9-894E-EAE77EDE0479";
+    	String fromObjectId = GuidCompressor.uncompressGuidString("0$rWkzvfL5gxBCd8kW$iSz");
+    	String toObjectId = GuidCompressor.uncompressGuidString("0bAQOfU7n9K8EKNIrzc81X");
     	
     	linkManager.createLinks(linkUri, fromObjectId, toObjectId);
     	linkManager.commit();
