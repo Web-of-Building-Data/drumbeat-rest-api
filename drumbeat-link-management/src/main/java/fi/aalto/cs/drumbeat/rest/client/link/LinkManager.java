@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.client.link;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.Lang;
 
 public class LinkManager 
 {
@@ -27,6 +29,9 @@ public class LinkManager
 	public static final String PARAM_CLEAR_BEFORE = "clearBefore";
 	public static final String PARAM_NOTIFY_REMOTE = "notifyRemote";
 	public static final String PARAM_CONTENT = "content";
+	
+	public static final String DATA_TYPE_RDF = "RDF";
+	public static final String RDF_LANG = Lang.NTRIPLES.getName();
 	
 	private final String linkSetUri;
 	
@@ -95,10 +100,9 @@ public class LinkManager
 	}
 	
 	public synchronized void createLinks(String linkUri, Collection<Entry<String, String>> objectMapping) {
-		objectMapping
-			.stream()
-			.forEach(
-					pair -> createLinks(linkUri, pair.getKey(), pair.getValue()));
+		for (Entry<String, String> pair : objectMapping) {
+			createLinks(linkUri, pair.getKey(), pair.getValue());
+		}
 	}
 	
 	public synchronized void commit() {
@@ -110,14 +114,20 @@ public class LinkManager
 					.path(PATH_UPLOAD_CONTENT);
 		
 		Form form = new Form();
+		form.param(PARAM_DATA_TYPE, DATA_TYPE_RDF);
+		form.param(PARAM_DATA_FORMAT, RDF_LANG);
 		form.param(PARAM_CLEAR_BEFORE, Boolean.toString(clearBefore));		
 		form.param(PARAM_NOTIFY_REMOTE, Boolean.toString(notifyRemote));
-		form.param(PARAM_CONTENT, null);
+
+		
+		StringWriter writer = new StringWriter();
+		changeModel.write(writer, RDF_LANG);		
+		form.param(PARAM_CONTENT, writer.toString());
 		
 		final Response response =
 				target
 					.request()
-					.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
+					.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), Response.class);
 		
 		if (response.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
 			throw new RuntimeException(String.format("Error %d (%s): %s", response.getStatus(), response.getStatusInfo(), response.getEntity()));			
