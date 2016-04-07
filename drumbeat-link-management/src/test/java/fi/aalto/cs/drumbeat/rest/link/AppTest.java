@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.link;
 
+import fi.aalto.cs.drumbeat.rest.client.link.LinkManager;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +34,14 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+    	LinkManager linkManager = new LinkManager(
+    			"http://structural.drb.cs.hut.fi/linksets/hackathon-solibri-sample/hvac-arc/v1", 
+    			"http://structural.drb.cs.hut.fi/datasources/hackathon-solibri-sample/hvac",
+    			"http://architect.drb.cs.hut.fi/datasources/hackathon-solibri-sample/arc");
+    	
+    	String linkUri = "http://drumbeat.cs.hut.fi/owl/blo#hasNearSpace";
+    	
+    	linkManager.createLinks(linkUri, "fromGuid", "toGuid1", "toGuid2");
+    	linkManager.commit();
     }
 }
