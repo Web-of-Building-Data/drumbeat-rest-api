@@ -39,13 +39,22 @@
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		
+
 		<!-- Drumbeat Utils -->
 		<dependency>
 			<groupId>${drumbeat.groupId}</groupId>
 			<artifactId>drumbeat-ifc.common</artifactId>
 			<version>${drumbeat.version}</version>
-			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>${drumbeat.groupId}</groupId>
+					<artifactId>drumbeat-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- JUnit -->

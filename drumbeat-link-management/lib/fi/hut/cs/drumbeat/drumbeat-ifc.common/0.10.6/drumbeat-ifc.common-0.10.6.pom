@@ -2,18 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>fi.hut.cs.drumbeat</groupId>
-		<artifactId>drumbeat-ifc2ld-parent</artifactId>
-		<version>0.10.6</version>
-		<relativePath>../!drumbeat-ifc2ld-parent/pom.xml</relativePath>
-	</parent>
-
+	<groupId>fi.hut.cs.drumbeat</groupId>
 	<artifactId>drumbeat-ifc.common</artifactId>
+	<version>0.10.6</version>
 	<packaging>jar</packaging>
 
 	<name>drumbeat-ifc.common</name>
 	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<commons-codec.version>1.10</commons-codec.version>
+	</properties>
+
 
 	<dependencies>
 
