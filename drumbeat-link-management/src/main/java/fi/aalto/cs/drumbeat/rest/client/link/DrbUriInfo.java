@@ -69,8 +69,13 @@ public class DrbUriInfo {
 		
 	}
 	
+	public String getBaseObjectUri() {
+		return baseUri + OBJECTS + collectionId + "/" + dataSourceId + "/";
+	}
+	
+	
 	public String formatObjectUri(String objectId) {
-		return baseUri + OBJECTS + collectionId + "/" + dataSourceId + "/" + objectId; 
+		return getBaseObjectUri() + objectId; 
 	}
 
 	public String getUri() {

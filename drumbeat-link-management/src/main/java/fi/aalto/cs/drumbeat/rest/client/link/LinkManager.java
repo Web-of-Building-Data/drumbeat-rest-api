@@ -1,9 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.client.link;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map.Entry;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -29,9 +27,16 @@ public class LinkManager
 	public static final String PARAM_CLEAR_BEFORE = "clearBefore";
 	public static final String PARAM_NOTIFY_REMOTE = "notifyRemote";
 	public static final String PARAM_CONTENT = "content";
+	public static final String PARAM_ONTOLOGY_URI = "ontologyUri";
+	
+	public static final String NAMESPACE_PREFIX_FROM = "from";
+	public static final String NAMESPACE_PREFIX_TO = "to";
 	
 	public static final String DATA_TYPE_RDF = "RDF";
-	public static final Lang RDF_LANG = Lang.NTRIPLES;
+	public static final Lang RDF_LANG = Lang.TURTLE;
+	
+	public static final boolean PARAM_CLEAR_BEFORE_DEFAULT_VALUE = false; 
+	public static final boolean PARAM_NOTIFY_REMOTE_DEFAULT_VALUE = true; 
 	
 	private final String linkSetUri;
 	
@@ -47,10 +52,13 @@ public class LinkManager
 		this.linkSetUri = linkSetUri;
 		this.fromDataSourceUriInfo = new DrbUriInfo(fromDataSourceUri);
 		this.toDataSourceUriInfo = new DrbUriInfo(toDataSourceUri);
-		changeModel = ModelFactory.createDefaultModel();
 		
-		clearBefore = true;
-		notifyRemote = true;
+		changeModel = ModelFactory.createDefaultModel();
+		changeModel.setNsPrefix(NAMESPACE_PREFIX_FROM, fromDataSourceUriInfo.getBaseObjectUri());
+		changeModel.setNsPrefix(NAMESPACE_PREFIX_TO, toDataSourceUriInfo.getBaseObjectUri());
+		
+		clearBefore = PARAM_CLEAR_BEFORE_DEFAULT_VALUE;
+		notifyRemote = PARAM_NOTIFY_REMOTE_DEFAULT_VALUE;
 	}
 
 	public String getLocalDataSourceUri() {
@@ -84,6 +92,10 @@ public class LinkManager
 	public void setNotifyRemote(boolean notifyRemote) {
 		this.notifyRemote = notifyRemote;
 	}
+	
+	public void defineOntology(String prefix, String uri) {
+		changeModel.setNsPrefix(prefix, uri);
+	}	
 
 	public synchronized void createLinks(String linkUri, String fromObjectId, String... toObjectIds) {
 		
@@ -124,6 +136,22 @@ public class LinkManager
 		changeModel.write(writer, RDF_LANG.getName());		
 		form.param(PARAM_CONTENT, writer.toString());
 		
+//		System.out.println(writer.toString());
+		
+		StringBuilder ontologyUriBuilder = new StringBuilder();
+
+		for (Entry<String, String> namespace : changeModel.getNsPrefixMap().entrySet()) {
+			String prefix = namespace.getKey();
+			if (!prefix.equals(NAMESPACE_PREFIX_FROM) && !prefix.equals(NAMESPACE_PREFIX_TO)) {
+				String uri = namespace.getValue();
+				ontologyUriBuilder
+					.append(uri)
+					.append(';');
+			}			
+		}
+		
+		form.param(PARAM_ONTOLOGY_URI, ontologyUriBuilder.toString());
+		
 		final Response response =
 				target
 					.request()
@@ -133,12 +161,11 @@ public class LinkManager
 			throw new RuntimeException(String.format("Error %d (%s): %s", response.getStatus(), response.getStatusInfo(), response.getEntity()));			
 		}		
 		
-		
+		changeModel.removeAll();
 	}
 	
 	public synchronized void rollBack() {
-		changeModel = ModelFactory.createDefaultModel();
+		changeModel.removeAll();
 	}
-	
 	
 }
