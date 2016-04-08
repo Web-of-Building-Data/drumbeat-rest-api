@@ -437,6 +437,8 @@ public class DataSourceObjectManager extends DrumbeatManager {
 		
 		if (predicateUri.equals(DrumbeatOntology.BLO.implements1.getURI())) {			
 			inversePredicateUri = DrumbeatOntology.BLO.isImplementedBy;			
+		} else if (predicateUri.equals(DrumbeatOntology.BLO.hasNearSpace.getURI())) {			
+			inversePredicateUri = DrumbeatOntology.BLO.isNearSpaceOf;			
 		} else if (predicateUri.equals(DrumbeatOntology.SEO.object.getURI())) {			
 			inversePredicateUri = DrumbeatOntology.SEO.event;			
 		}  

@@ -63,7 +63,10 @@ public class DrumbeatOntology {
 		public static final String ONTOLOGY_BASE_URI = formatDrumbeatOntologyBaseUri("blo");
 		
 		public static final Property implements1 = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "implements");	
-		public static final Property isImplementedBy = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "isImplementedBy");	
+		public static final Property isImplementedBy = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "isImplementedBy");
+		
+		public static final Property hasNearSpace = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "hasNearSpace");	
+		public static final Property isNearSpaceOf = RdfVocabulary.DEFAULT_MODEL.createProperty(ONTOLOGY_BASE_URI + "isNearSpaceOf");
 		
 	}
 	

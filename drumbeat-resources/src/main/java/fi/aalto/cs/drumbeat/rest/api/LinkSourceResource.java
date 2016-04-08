@@ -20,6 +20,7 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSourceManager;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 
 @Path("/linksources")
@@ -100,6 +101,14 @@ public class LinkSourceResource {
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		
+		if (StringUtils.isEmptyOrNull(name)) {
+			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'name'", null);
+		}
+		
+		if (StringUtils.isEmptyOrNull(originalDataSourceId)) {
+			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'originalDataSourceId'", null);
+		}
 		
 		try {
 			Model model = getLinkSourceManager().create(collectionId, linkSourceId, name, originalDataSourceId);

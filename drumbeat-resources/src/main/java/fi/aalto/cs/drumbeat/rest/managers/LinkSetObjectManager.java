@@ -500,6 +500,7 @@ public class LinkSetObjectManager extends DrumbeatManager {
 				String objectUri = statement.getObject().asResource().getURI();
 				
 				if (objectUri.startsWith(baseUri)) {
+					// the same server
 					dataSourceObjectManager.onLinkCreated(subjectUri, predicateUri, objectUri);				
 				} else {
 					

@@ -188,7 +188,15 @@ public class DataSetUploadManager {
 				
 				SerializedInputStream sis = SerializedInputStream.getUncompressedInputStream(in, options.getDataFormat());
 				in = sis.getInputStream();
-				rdfLang = RDFLanguages.filenameToLang(sis.getSerializationInfo()); 
+				String fileExtension = sis.getSerializationInfo();
+				if (!fileExtension.contains(".")) {
+					fileExtension = "." + fileExtension;
+				}
+				rdfLang = RDFLanguages.filenameToLang(fileExtension); 
+				
+				if (rdfLang == null) {
+					throw new JenaException("Error retrieving RDF lang from file name: " + sis.getSerializationInfo());
+				}
 
 				if (options.isSaveToFiles() || useBulkLoading) {
 					rdfCacheFile = saveInputStreamToGzippedFile(sis.getInputStream(), rdfLang);
