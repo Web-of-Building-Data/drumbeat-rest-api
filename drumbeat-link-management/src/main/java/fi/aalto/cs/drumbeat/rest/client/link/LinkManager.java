@@ -1,22 +1,29 @@
 package fi.aalto.cs.drumbeat.rest.client.link;
 
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map.Entry;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+//import javax.ws.rs.client.ClientBuilder;
+//import javax.ws.rs.client.Entity;
+//import javax.ws.rs.client.WebTarget;
+//import javax.ws.rs.core.Form;
+//import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.Response;
+//import javax.ws.rs.core.Response.Status;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.Lang;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 public class LinkManager 
 {
@@ -117,28 +124,27 @@ public class LinkManager
 		}
 	}
 	
-	public synchronized void commit() {
+	private void commitWithSpringWeb() {
 		
-		WebTarget target = 
-				ClientBuilder
-					.newClient()
-					.target(linkSetUri)
-					.path(PATH_UPLOAD_CONTENT);
+		final RestTemplate rest = new RestTemplate();
 		
-		Form form = new Form();
-		form.param(PARAM_DATA_TYPE, DATA_TYPE_RDF);
-		form.param(PARAM_DATA_FORMAT, "." + RDF_LANG.getFileExtensions().get(0));
-		form.param(PARAM_CLEAR_BEFORE, Boolean.toString(clearBefore));		
-		form.param(PARAM_NOTIFY_REMOTE, Boolean.toString(notifyRemote));
+		final HttpMessageConverter<MultiValueMap<String, ?>> formHttpMessageConverter = new FormHttpMessageConverter();
+		final HttpMessageConverter<String> stringHttpMessageConverternew = new StringHttpMessageConverter();
+		rest.setMessageConverters(Arrays.asList(formHttpMessageConverter, stringHttpMessageConverternew));		
 
+		final MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();	
+		params.add(PARAM_DATA_TYPE, DATA_TYPE_RDF);
+		params.add(PARAM_DATA_FORMAT, "." + RDF_LANG.getFileExtensions().get(0));
+		params.add(PARAM_CLEAR_BEFORE, Boolean.toString(clearBefore));		
+		params.add(PARAM_NOTIFY_REMOTE, Boolean.toString(notifyRemote));
 		
-		StringWriter writer = new StringWriter();
+		final StringWriter writer = new StringWriter();
 		changeModel.write(writer, RDF_LANG.getName());		
-		form.param(PARAM_CONTENT, writer.toString());
+		params.add(PARAM_CONTENT, writer.toString());
 		
 //		System.out.println(writer.toString());
 		
-		StringBuilder ontologyUriBuilder = new StringBuilder();
+		final StringBuilder ontologyUriBuilder = new StringBuilder();
 
 		for (Entry<String, String> namespace : changeModel.getNsPrefixMap().entrySet()) {
 			String prefix = namespace.getKey();
@@ -150,18 +156,68 @@ public class LinkManager
 			}			
 		}
 		
-		form.param(PARAM_ONTOLOGY_URI, ontologyUriBuilder.toString());
+		params.add(PARAM_ONTOLOGY_URI, ontologyUriBuilder.toString());
 		
-		final Response response =
-				target
-					.request()
-					.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), Response.class);
 		
-		if (response.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
-			throw new RuntimeException(String.format("Error %d (%s): %s", response.getStatus(), response.getStatusInfo(), response.getEntity()));			
-		}		
+		final String url = linkSetUri + "/" + PATH_UPLOAD_CONTENT;
+		
+		
+		rest.postForObject(url, params, String.class);
+		
 		
 		changeModel.removeAll();
+	}
+	
+	
+//	private void commitWithJavax() {
+//		
+//		WebTarget target = 
+//				ClientBuilder
+//					.newClient()
+//					.target(linkSetUri)
+//					.path(PATH_UPLOAD_CONTENT);
+//		
+//		Form form = new Form();
+//		form.param(PARAM_DATA_TYPE, DATA_TYPE_RDF);
+//		form.param(PARAM_DATA_FORMAT, "." + RDF_LANG.getFileExtensions().get(0));
+//		form.param(PARAM_CLEAR_BEFORE, Boolean.toString(clearBefore));		
+//		form.param(PARAM_NOTIFY_REMOTE, Boolean.toString(notifyRemote));
+//
+//		
+//		StringWriter writer = new StringWriter();
+//		changeModel.write(writer, RDF_LANG.getName());		
+//		form.param(PARAM_CONTENT, writer.toString());
+//		
+////		System.out.println(writer.toString());
+//		
+//		StringBuilder ontologyUriBuilder = new StringBuilder();
+//
+//		for (Entry<String, String> namespace : changeModel.getNsPrefixMap().entrySet()) {
+//			String prefix = namespace.getKey();
+//			if (!prefix.equals(NAMESPACE_PREFIX_FROM) && !prefix.equals(NAMESPACE_PREFIX_TO)) {
+//				String uri = namespace.getValue();
+//				ontologyUriBuilder
+//					.append(uri)
+//					.append(';');
+//			}			
+//		}
+//		
+//		form.param(PARAM_ONTOLOGY_URI, ontologyUriBuilder.toString());
+//		
+//		final Response response =
+//				target
+//					.request()
+//					.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), Response.class);
+//		
+//		if (response.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
+//			throw new RuntimeException(String.format("Error %d (%s): %s", response.getStatus(), response.getStatusInfo(), response.getEntity()));			
+//		}		
+//		
+//		changeModel.removeAll();
+//	}
+	
+	public synchronized void commit() {
+		commitWithSpringWeb();
 	}
 	
 	public synchronized void rollBack() {

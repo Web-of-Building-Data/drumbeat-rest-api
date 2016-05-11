@@ -4,7 +4,7 @@
 
 	<groupId>fi.aalto.cs.drumbeat</groupId>
 	<artifactId>drumbeat-link-management</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>drumbeat-link-management</name>
@@ -33,12 +33,22 @@
 			<version>2.13.0</version> </dependency> <dependency> <groupId>org.apache.jena</groupId> 
 			<artifactId>jena-arq</artifactId> <version>2.13.0</version> </dependency> -->
 
+		<!--  Spring-Web for REST client -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>4.2.2.RELEASE</version>
+		</dependency>
+
+
 		<!-- Jersey -->
+		<!-- 
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
+		 -->
 
 		<!-- Drumbeat Utils -->
 		<dependency>

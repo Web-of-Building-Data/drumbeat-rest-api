@@ -18,7 +18,7 @@ public class DrbUriInfo {
 		this.uri = uri;
 		
 		int index;
-		String tail;
+//		String tail;
 		String tokens[];
 		
 		if ((index = uri.indexOf(COLLECTIONS)) != -1) {
