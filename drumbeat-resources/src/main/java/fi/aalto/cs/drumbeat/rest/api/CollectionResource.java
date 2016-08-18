@@ -1,25 +1,31 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
-import javax.ws.rs.*;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
-
-import org.apache.log4j.Logger;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.shared.AlreadyExistsException;
 import org.apache.jena.shared.DeleteDeniedException;
 import org.apache.jena.shared.NotFoundException;
+import org.apache.log4j.Logger;
 
+import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
-import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 
 @Path("/collections")
@@ -27,6 +33,7 @@ public class CollectionResource {
 
 	private static final Logger logger = Logger.getLogger(CollectionResource.class);
 
+	@RolesAllowed("all")
 	@GET
 	public Response getAll(			
 			@Context UriInfo uriInfo,
@@ -71,6 +78,7 @@ public class CollectionResource {
 		}
 	}
 	
+	@RolesAllowed("architect")
 	@DELETE
 	@Path("/{collectionId}")
 	public void delete(			

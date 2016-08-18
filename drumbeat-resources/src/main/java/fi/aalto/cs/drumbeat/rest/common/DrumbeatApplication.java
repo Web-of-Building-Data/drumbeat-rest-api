@@ -7,16 +7,15 @@ import java.util.Properties;
 
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-
-import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationParserException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
@@ -25,6 +24,7 @@ import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.config.Ifc2RdfConversionContextLo
 import fi.aalto.cs.drumbeat.rdf.jena.provider.AbstractJenaProvider;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProviderException;
+import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
 
 public abstract class DrumbeatApplication extends ResourceConfig {
 	
@@ -86,6 +86,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	private String workingFolderPath;
 
 	protected DrumbeatApplication(String workingFolderPath) {
+		register(RolesAllowedDynamicFeature.class);  // Security addition: 18.8.2016
 		
 		applicationId = nextApplicationId++;
 		

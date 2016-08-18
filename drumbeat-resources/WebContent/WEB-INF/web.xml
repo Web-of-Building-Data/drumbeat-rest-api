@@ -27,4 +27,29 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+
+        <auth-constraint>
+			<role-name>architect</role-name>
+			<role-name>engineer</role-name>
+			<role-name>guest</role-name>
+			<role-name>all</role-name>
+		</auth-constraint>
+		
+	</security-constraint>
+	<login-config>
+        <auth-method>DRUMBEAT</auth-method>
+    </login-config>
+	<session-config>
+    <session-timeout>525600</session-timeout> 
+    <cookie-config>
+        <max-age>31536000</max-age>
+    </cookie-config>
+</session-config>
+
+
 </web-app>
