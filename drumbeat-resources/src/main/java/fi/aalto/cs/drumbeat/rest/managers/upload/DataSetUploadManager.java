@@ -188,12 +188,7 @@ public class DataSetUploadManager {
 				
 				SerializedInputStream sis = SerializedInputStream.getUncompressedInputStream(in, options.getDataFormat());
 				in = sis.getInputStream();
-				String fileExtension = sis.getSerializationInfo();
-				if (!fileExtension.contains(".")) {
-					fileExtension = "." + fileExtension;
-				}
-				rdfLang = RDFLanguages.filenameToLang(fileExtension); 
-				
+				rdfLang = outputFormatToRdfLang(sis.getSerializationInfo());
 				if (rdfLang == null) {
 					throw new JenaException("Error retrieving RDF lang from file name: " + sis.getSerializationInfo());
 				}
@@ -246,7 +241,32 @@ public class DataSetUploadManager {
 		
 		return rdfCacheFile;
 		
-	}	
+	}
+	
+	
+	private static Lang outputFormatToRdfLang(String outputFormat) {
+		Lang lang = RDFLanguages.nameToLang(outputFormat);
+		if (lang != null) {
+			return lang;
+		}
+		
+		lang = RDFLanguages.shortnameToLang(outputFormat);
+		if (lang != null) {
+			return lang;
+		}
+		
+		lang = RDFLanguages.fileExtToLang(outputFormat);
+		if (lang != null) {
+			return lang;
+		}
+		
+		lang = RDFLanguages.filenameToLang(outputFormat);
+		if (lang != null) {
+			return lang;
+		}
+		
+		return null;
+	}
 	
 
 	private File saveInputStreamToGzippedFile(InputStream in, Lang lang) throws IOException {

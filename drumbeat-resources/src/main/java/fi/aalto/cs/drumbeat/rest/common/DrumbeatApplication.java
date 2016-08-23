@@ -18,6 +18,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 
 import fi.aalto.cs.drumbeat.rest.api.DataSetResource;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.config.document.ConfigurationDocument;
 import fi.aalto.cs.drumbeat.common.config.document.ConfigurationParserException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.ifc.convert.ifc2ld.Ifc2RdfConversionContext;
@@ -53,10 +54,20 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		public static final String WEB_BASE_URI_FIXED = "web.baseUri.fixed";		
 		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
+		
+		public static class Uploads {
+			public static final String SAVE_ENALBED = "uploads.save.enabled";
+			public static final String RDF_BULK_ENALBED = "uploads.rdf.bulk.enabled";
+			public static final String DIR_PATH = "uploads.dir.path";
+			
+			public static final class BimServer {
+				public static final String SAVE_ENABLED = "uploads.save.bimserver.enabled";
+				public static final String URL = "uploads.save.bimserver.url";
+				public static final String TOKEN = "uploads.save.bimserver.token";
+			}
+		}
 
-		public static final String UPLOADS_SAVE_ENALBED = "uploads.save.enabled";
-		public static final String UPLOADS_RDF_BULK_ENALBED = "uploads.rdf.bulk.enabled";
-		public static final String UPLOADS_DIR_PATH = "uploads.dir.path";
+//		public static final String UPLOADS_
 	}
 	
 	public static class Resources {
@@ -175,7 +186,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 		
 	public String getUploadsDirPath() {
 		if (uploadsDirPath == null) {
-			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_DIR_PATH);
+			uploadsDirPath = getConfigurationProperties().getProperty(ConfigParams.Uploads.DIR_PATH);
 			if (uploadsDirPath != null) {				
 				uploadsDirPath = getRealServerPath(uploadsDirPath);
 			} else {
@@ -199,7 +210,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean isSavingUploadEnabled() {
 		if (isSavingUploadEnabled == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_SAVE_ENALBED, "false").trim();
+			String value = getConfigurationProperties().getProperty(ConfigParams.Uploads.SAVE_ENALBED, "false").trim();
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isSavingUploadEnabled = param.getValue();
@@ -213,7 +224,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public boolean isRdfBulkUploadEnabled() {
 		if (isRdfBulkUploadEnabled == null) {
-			String value = getConfigurationProperties().getProperty(ConfigParams.UPLOADS_RDF_BULK_ENALBED, "false").trim();
+			String value = getConfigurationProperties().getProperty(ConfigParams.Uploads.RDF_BULK_ENALBED, "false").trim();
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isRdfBulkUploadEnabled = param.getValue();
@@ -300,7 +311,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	 */
 	public Ifc2RdfConversionContext getDefaultIfc2RdfConversionContext() throws ConfigurationParserException {
 		if (defaultConversionContext == null) {
-			defaultConversionContext = Ifc2RdfConversionContextLoader.loadFromDefaultConfigurationFile(null); 
+			defaultConversionContext = Ifc2RdfConversionContextLoader.loadFromConfigurationDocument(ConfigurationDocument.getInstance(), null); 
 		}
 		return defaultConversionContext;
 	}
