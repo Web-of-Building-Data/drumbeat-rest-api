@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fi.hut.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.8.17</version>
+		<version>0.8.20</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 
@@ -33,9 +33,9 @@
 
 		<!-- Drumbeat Jena Provider -->
 		<dependency>
-			<groupId>${drumbeat.groupId}</groupId>
-			<artifactId>drumbeat-rdf.jena.provider</artifactId>
-			<version>${drumbeat.jena.version}</version>
+			<groupId>fi.aalto.cs.drumbeat</groupId>
+			<artifactId>drumbeat-common</artifactId>
+			<version>0.11.0</version>
 		</dependency>
 
 		<dependency>
@@ -150,7 +150,7 @@
 				</excludes>
 			</resource>
 		</resources>
-
+		
 		<pluginManagement>
 
 			<plugins>
@@ -188,5 +188,14 @@
 		</pluginManagement>
 
 	</build>
+
+	<repositories>
+		<repository>
+			<id>in-project-lib</id>
+			<name>Internal lib</name>
+			<url>file://${project.basedir}/../lib</url>
+		</repository>
+	</repositories>
+		
 
 </project>

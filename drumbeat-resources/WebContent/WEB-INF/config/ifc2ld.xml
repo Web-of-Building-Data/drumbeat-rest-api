@@ -64,7 +64,7 @@
 				<param name="Options.ExportDebugInfo" value="false" />
 
 				<!-- Options.ExportPropertyDomainsAndRanges: None (default)  -->
-				<param name="Options.ExportPropertyDomainsAndRanges" value="None" />
+				<!--  <param name="Options.ExportPropertyDomainsAndRanges" value="None" />  -->
 				
 				<!-- Options.ConvertBooleansTo: owl:NamedIndividual (default), xsd:string, xsd:boolean  -->
 				<param name="Options.ConvertBooleansTo" value="owl:NamedIndividual" />
