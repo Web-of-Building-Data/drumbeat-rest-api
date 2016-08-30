@@ -33,7 +33,7 @@ public class CollectionResource {
 
 	private static final Logger logger = Logger.getLogger(CollectionResource.class);
 
-	@RolesAllowed("all")
+//	@RolesAllowed("all")
 	@GET
 	public Response getAll(			
 			@Context UriInfo uriInfo,
@@ -78,7 +78,7 @@ public class CollectionResource {
 		}
 	}
 	
-	@RolesAllowed("architect")
+//	@RolesAllowed("architect")
 	@DELETE
 	@Path("/{collectionId}")
 	public void delete(			
