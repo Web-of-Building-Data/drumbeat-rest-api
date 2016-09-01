@@ -31,7 +31,7 @@
 		<web-resource-collection>
 			<web-resource-name>all</web-resource-name>
 			<url-pattern>/*</url-pattern>
-			<http-method-omission>get</http-method-omission>
+			<http-method-omission>GET</http-method-omission>
 		</web-resource-collection>
 
         <auth-constraint>
@@ -42,12 +42,4 @@
 	<login-config>
         <auth-method>DRUMBEAT</auth-method>
     </login-config>
-	<session-config>
-    <session-timeout>525600</session-timeout> 
-    <cookie-config>
-        <max-age>31536000</max-age>
-    </cookie-config>
-</session-config>
-
-
 </web-app>
