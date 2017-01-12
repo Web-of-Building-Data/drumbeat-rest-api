@@ -12,9 +12,6 @@ Step-by-step run the following commands:
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-jena.git
 
-if you are working with feature-nam-impl branch
-> git checkout feature-nam-impl
-
 >cd !drumbeat-jena
 
 >mvn clean install
@@ -22,9 +19,6 @@ if you are working with feature-nam-impl branch
 2) Compiling drumbeat-ifc2ld
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-ifc2ld.git
-
-if you are working with feature-nam-impl branch
->git checkout feature-nam-impl
 
 >cd !drumbeat-ifc2ld-parent
 
@@ -34,9 +28,6 @@ if you are working with feature-nam-impl branch
 3) Compiling drumbeat-rest-api
 
 >git clone https://github.com/Web-of-Building-Data/drumbeat-rest-api.git
-
-if you are working with feature-nam-impl branch
->git checkout feature-nam-impl
 
 >cd !drumbeat-rest-api-parent
 
