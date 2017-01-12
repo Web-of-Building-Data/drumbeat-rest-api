@@ -93,6 +93,8 @@ public class DataSetUploadManager {
 				savedRdfFile = internalUploadIfc(in, options);
 			} else if (options.getDataType().equalsIgnoreCase(DATA_TYPE_RDF)) {
 				savedRdfFile = internalUploadRdf(in, options, null);
+			} else if (options.getDataType().equalsIgnoreCase(DATA_TYPE_XML)) {
+				savedRdfFile = internalUploadXml(in, options);
 			} else {
 				throw new IllegalArgumentException(String.format("Unknown data type=%s", options.getDataType()));
 			}
@@ -267,6 +269,30 @@ public class DataSetUploadManager {
 		
 		return null;
 	}
+	
+	
+	private File internalUploadXml(InputStream in, DataSetUploadOptions options) throws Exception 
+	{
+		logger.info("Uploading xml model");
+		try {			
+			// parse model
+			logger.debug("Parsing model");
+			
+			Model targetModel = new Xml2RdfConverter().convertXml2Rdf(in, options);
+			
+			File savedRdfFile = internalUploadJenaModel(targetModel, options);
+			
+			logger.info("Uploading XML model completed successfully");
+			
+			return savedRdfFile;
+			
+		} catch (Exception e) {
+			logger.error("Uploading XML model failed", e);
+			throw e;			
+		} finally {
+			in.close();
+		}		
+	}	
 	
 
 	private File saveInputStreamToGzippedFile(InputStream in, Lang lang) throws IOException {
