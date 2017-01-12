@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>fi.hut.cs.drumbeat</groupId>
+		<groupId>fi.aalto.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.8.24</version>
+		<version>0.9.0</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 

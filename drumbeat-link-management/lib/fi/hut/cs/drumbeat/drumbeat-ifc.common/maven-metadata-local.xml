@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-  <groupId>fi.hut.cs.drumbeat</groupId>
+  <groupId>fi.aalto.cs.drumbeat</groupId>
   <artifactId>drumbeat-ifc.common</artifactId>
   <versioning>
     <release>0.10.6</release>

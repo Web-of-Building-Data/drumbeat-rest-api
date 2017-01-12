@@ -1,7 +1,5 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
-import static fi.aalto.cs.drumbeat.rest.common.NameFormatter.*;
-
 import java.util.List;
 
 import org.apache.jena.query.Query;
@@ -15,7 +13,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
