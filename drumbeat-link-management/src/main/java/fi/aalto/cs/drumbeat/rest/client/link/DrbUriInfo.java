@@ -1,5 +1,11 @@
 package fi.aalto.cs.drumbeat.rest.client.link;
 
+/**
+ * Information about a DRUMBEAT URI defined in format: baseUri/interface/collectionId/dataSourceId/dataSetId 
+ * 
+ * @author vuhoan1
+ *
+ */
 public class DrbUriInfo {
 	
 	public static final String COLLECTIONS = "/collections/";

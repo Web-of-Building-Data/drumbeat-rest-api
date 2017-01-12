@@ -25,6 +25,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Link Manager 
+ * 
+ *
+ */
 public class LinkManager 
 {
 	
@@ -55,6 +60,13 @@ public class LinkManager
 	
 	private Model changeModel;
 	
+	/**
+	 * Creates a link manager
+	 * 
+	 * @param linkSetUri the URI of the link set
+	 * @param fromDataSourceUri the URI of the data source to link objects from
+	 * @param toDataSourceUri the URI of the data source to links objects to
+	 */
 	public LinkManager(String linkSetUri, String fromDataSourceUri, String toDataSourceUri) {
 		this.linkSetUri = linkSetUri;
 		this.fromDataSourceUriInfo = new DrbUriInfo(fromDataSourceUri);
@@ -68,19 +80,11 @@ public class LinkManager
 		notifyRemote = PARAM_NOTIFY_REMOTE_DEFAULT_VALUE;
 	}
 
-	public String getLocalDataSourceUri() {
-		return fromDataSourceUriInfo.getUri();
-	}
-
-	public String getRemoteDataSourceUri() {
-		return toDataSourceUriInfo.getUri();
-	}
-
-	public DrbUriInfo getLocalDataSourceUriInfo() {
+	public DrbUriInfo getFromDataSourceUriInfo() {
 		return fromDataSourceUriInfo;
 	}
 
-	public DrbUriInfo getRemoteDataSourceUriInfo() {
+	public DrbUriInfo getToDataSourceUriInfo() {
 		return toDataSourceUriInfo;
 	}
 	
