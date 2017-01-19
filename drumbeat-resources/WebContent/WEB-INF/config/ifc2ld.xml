@@ -3,8 +3,8 @@
 
 	<!-- common properties -->
 	<properties>
-		<express.baseuri>http://drumbeat.cs.hut.fi/owl/express/</express.baseuri>
-		<step.baseuri>http://drumbeat.cs.hut.fi/owl/step#</step.baseuri>
+		<express.baseuri>http://drumbeat.cs.hut.fi/owl/EXPRESS#</express.baseuri>
+		<step.baseuri>http://drumbeat.cs.hut.fi/owl/STEP#</step.baseuri>
 		<ifc.baseuri>http://drumbeat.cs.hut.fi/owl/%s#</ifc.baseuri>
 
 		<!--  <express.baseuri>http://drumbeat.cs.hut.fi/owl/EXPRESS#</express.baseuri>
