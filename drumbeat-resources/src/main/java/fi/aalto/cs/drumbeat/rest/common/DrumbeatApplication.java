@@ -317,6 +317,4 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	
-	
-	
 }

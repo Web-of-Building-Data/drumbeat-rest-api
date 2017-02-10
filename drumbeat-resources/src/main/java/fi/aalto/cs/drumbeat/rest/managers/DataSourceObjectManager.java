@@ -1,11 +1,14 @@
 package fi.aalto.cs.drumbeat.rest.managers;
 
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.Query;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.shared.NotFoundException;
+import org.apache.log4j.Logger;
 
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatVocabulary;
@@ -20,7 +23,7 @@ import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSourceObjectManager extends DrumbeatManager {
 	
-//	private static Logger logger = Logger.getLogger(DataSourceObjectManager.class);
+	private static Logger logger = Logger.getLogger(DataSourceObjectManager.class);
 	
 	public DataSourceObjectManager() throws DrumbeatException {
 	}
@@ -81,7 +84,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 //	}
 	
 	
-	public Model getAllNonBlank(String collectionId, String dataSourceId) throws DrumbeatException {
+	public Model getAllNonBlank(String collectionId, String dataSourceId, String filterType) throws DrumbeatException {
 		Model metaDataModel = getMetaDataModel();
 
 		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
@@ -123,7 +126,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String dataSetId = dataSetResource.getLocalName();
 			
 			try {
-				resultModel = dataSetObjectManager.getAllNonBlank(collectionId, dataSourceId, dataSetId);
+				resultModel = dataSetObjectManager.getAllNonBlank(collectionId, dataSourceId, dataSetId, filterType);
 			} catch (NotFoundException e) {
 				resultModel = ModelFactory.createDefaultModel();
 			}
@@ -183,7 +186,9 @@ public class DataSourceObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param excludeProperties 
 	 * @param excludeLinks 
-	 * @param expandBlanks 
+	 * @param expandBlankObjects 
+	 * @param filterObjectTypes 
+	 * @param filterProperties 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
@@ -195,7 +200,9 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			String objectUri,
 			boolean excludeProperties,
 			boolean excludeLinks,
-			boolean expandBlanks)
+			boolean expandBlankObjects,
+			String filterProperties,
+			String filterObjectTypes)
 		throws NotFoundException, DrumbeatException
 	{
 		Model metaDataModel = getMetaDataModel();
@@ -250,7 +257,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			dataSetId = dataSetResource.getLocalName();
 			
 			try {
-				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlanks);
+				resultModel = dataSetObjectManager.getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlankObjects, filterProperties, filterObjectTypes);
 			} catch (NotFoundException e) {
 				resultModel = ModelFactory.createDefaultModel();
 			}
@@ -266,9 +273,11 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			}
 			
 			dataSetResource = metaDataModel.getResource(overwrittenDataSetUri);	
-		}
+		} // end for
 		
-		if (resultModel == null) {
+		logger.debug(String.format("%s: Model size (before linking): %d", LoggerUtil.getMethodName(0), resultModel.size()));		
+		
+		if (resultModel.isEmpty()) {
 			//resultModel = ModelFactory.createDefaultModel();
 			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
 		}
@@ -290,13 +299,15 @@ public class DataSourceObjectManager extends DrumbeatManager {
 					Resource linkSourceResource = resIterator.next();
 					String linkSourceId = linkSourceResource.getLocalName();
 					try {
-						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true, expandBlanks);
+						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true, expandBlankObjects, filterProperties, filterObjectTypes);
 						resultModel.add(newResultModel);
 					} catch (NotFoundException e) {					
 					}
 				}
 				
 			}
+			
+			logger.debug(String.format("%s: Model size (after adding direct links): %d", LoggerUtil.getMethodName(0), resultModel.size()));
 			
 			
 			//
@@ -307,13 +318,15 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			
 			if (backLinkSourceModel != null) {
 				try {
-					Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri, false, expandBlanks);
+					Model newResultModel = dataSetObjectManager.getByUri(backLinkSourceModel, objectUri, false, expandBlankObjects, filterProperties, filterObjectTypes);
 					if (newResultModel != null) {
 						resultModel.add(newResultModel);
 					}
 				} catch (NotFoundException e) {				
 				}
 			}
+			
+			logger.debug(String.format("%s: Model size (after adding back links): %d", LoggerUtil.getMethodName(0), resultModel.size()));			
 		}
 		
 		
@@ -332,6 +345,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 //	public Model getObjectType(String collectionId, String dataSourceId, String objectId)
 //		throws NotFoundException, DrumbeatException
 //	{
+//		
 //		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 //		
 //		Query query = new ParameterizedSparqlString() {{

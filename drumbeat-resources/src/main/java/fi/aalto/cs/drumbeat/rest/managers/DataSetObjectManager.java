@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
+import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 
 public class DataSetObjectManager extends DrumbeatManager {
@@ -87,6 +88,8 @@ public class DataSetObjectManager extends DrumbeatManager {
 			setIri("ifcOwlUri", DrumbeatOntology.formatDrumbeatOntologyBaseUri("ifc2x3"));
 		}}.asQuery();
 		
+		logger.debug(String.format("%s.%s() is running query\n%s", getClass().getName(), LoggerUtil.getMethodName(1), query));
+
 		Model resultModel = 
 				createQueryExecution(query, dataModel)
 					.execConstruct();
@@ -109,36 +112,40 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getAllNonBlank(String collectionId, String dataSourceId, String dataSetId)
+	public Model getAllNonBlank(String collectionId, String dataSourceId, String dataSetId, String filterType)
 		throws NotFoundException, DrumbeatException
 	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
-
-		Query query = new ParameterizedSparqlString() {{
-			setCommandText(
-						"CONSTRUCT { \n" +
-						"	?o rdf:type ?type \n" +
-						"} \n " +
-//						"FROM NAMED ?dataSetUri \n " +
-//						"FROM NAMED ?ifcOwlUri \n " +
-						"WHERE { \n " +
-						"	GRAPH ?dataSetUri { \n " +
-						"		?o a ?type . \n " +
-						"		FILTER ( !regex (str(?o), \"^.*/" + NameFormatter.BLANK_NODE_PATH + "/.*$\" ) )" +
-						"	} \n " +
-//						"	GRAPH ?ifcOwlUri { \n " +
-//						"   	?type rdfs:subClassOf* ifc:IfcRoot . \n " +
-//						"	} \n " +
-						"} \n "
-					);
-			
-			DrumbeatOntology.fillParameterizedSparqlString(this);
-			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
-			setIri("ifcOwlUri", DrumbeatOntology.formatDrumbeatOntologyBaseUri("ifc2x3"));
-		}}.asQuery();
 		
-		Model resultModel = 
-				createQueryExecution(query, dataModel)
+		String filter = "";
+		if (!StringUtils.isEmptyOrNull(filterType)) {
+			filter +=
+				"		FILTER REGEX( ?type , ?typeFilter ) . \n";				
+		}
+		
+		String command = 
+				"CONSTRUCT { \n" +
+				"	?o rdf:type ?type \n" +
+				"} \n " +
+				"WHERE { \n " +
+				"	GRAPH ?dataSetUri { \n " +
+				"		?o a ?type . \n " +
+				"		FILTER ( !regex (str(?o), \"^.*/" + NameFormatter.BLANK_NODE_PATH + "/.*$\" ) ) \n" +
+				filter +
+				"	} \n " +
+				"} \n ";
+
+		ParameterizedSparqlString sparql = new ParameterizedSparqlString();
+		sparql.setCommandText(command);
+		DrumbeatOntology.fillParameterizedSparqlString(sparql);
+		sparql.setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
+		sparql.setIri("ifcOwlUri", DrumbeatOntology.formatDrumbeatOntologyBaseUri("ifc2x3"));
+		if (!StringUtils.isEmptyOrNull(filterType)) {
+			sparql.setLiteral("typeFilter", filterType);
+		}
+		
+		Model resultModel =
+				createQueryExecution(sparql.asQuery(), dataModel)
 					.execConstruct();
 		
 		if (resultModel.isEmpty()) {
@@ -166,11 +173,13 @@ public class DataSetObjectManager extends DrumbeatManager {
 			String dataSetId, 
 			String objectId,
 			boolean excludeProperties,
-			boolean expandBlanks)
+			boolean expandBlankObjects,
+			String filterProperties,
+			String filterObjectTypes)			
 		throws NotFoundException, DrumbeatException
 	{
 		String objectUri = formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlanks);		
+		return getByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, expandBlankObjects, filterProperties, filterObjectTypes);		
 	}
 	
 	
@@ -181,7 +190,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param dataSetId
 	 * @param excludeProperties
-	 * @param expandBlanks
+	 * @param expandBlankObjects
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
@@ -192,12 +201,14 @@ public class DataSetObjectManager extends DrumbeatManager {
 			String dataSetId,
 			String objectUri,
 			boolean excludeProperties,
-			boolean expandBlanks)
+			boolean expandBlankObjects,
+			String filterProperties,
+			String filterObjectTypes)
 		throws NotFoundException, DrumbeatException
 	{
 		Model dataModel = getDataModel(collectionId, dataSourceId, dataSetId);
 		
-		Model resultModel = getByUri(dataModel, objectUri, excludeProperties, expandBlanks);
+		Model resultModel = getByUri(dataModel, objectUri, excludeProperties, expandBlankObjects, filterProperties, filterObjectTypes);
 		
 		if (resultModel.isEmpty()) {
 			throw ErrorFactory.createObjectNotFoundException(collectionId, dataSourceId, objectUri);
@@ -213,51 +224,75 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param dataSetId
 	 * @param excludeProperties
-	 * @param expandBlanks 
+	 * @param expandBlankObjects 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
 	 */
-	public Model getByUri(Model dataModel, String objectUri, boolean excludeProperties, boolean expandBlanks)
+	public Model getByUri(
+			Model dataModel,
+			String objectUri,
+			boolean excludeProperties,
+			boolean expandBlankObjects,
+			String filterProperties,
+			String filterObjectTypes)
 		throws DrumbeatException
 	{
 		ParameterizedSparqlString sparql;
 		
-		if (!excludeProperties) {
-		
-			sparql = new ParameterizedSparqlString() {{
-				setCommandText(
-						"CONSTRUCT { \n" +
-						"	?objectUri ?predicate ?object \n" +
-						"} WHERE { \n" + 
-						"	?objectUri ?predicate ?object . \n" +
-						"} \n" + 
-						"ORDER BY ?predicate ?object");
-				
-				DrumbeatOntology.fillParameterizedSparqlString(this);
-				setIri("objectUri", objectUri);
-			}};
-			
-		} else {
-			
-			sparql = new ParameterizedSparqlString() {{
-				setCommandText(
-						"CONSTRUCT { \n" +
-						"	?objectUri a ?object \n" +
-						"} WHERE { \n" + 
-						"	?objectUri a ?object . \n" +
-						"} \n" + 
-						"ORDER BY ?object");
-				
-				DrumbeatOntology.fillParameterizedSparqlString(this);
-				setIri("objectUri", objectUri);
-			}};
-			
+		String filter = "";
+		if (!StringUtils.isEmptyOrNull(filterProperties)) {
+			filter +=
+					"	FILTER REGEX( ?predicate , ?predicateFilter ) . \n";				
 		}
 		
-		return internalGetByUri(dataModel, objectUri, sparql, expandBlanks, null);
+		if (!StringUtils.isEmptyOrNull(filterObjectTypes)) {
+			filter +=
+					"	?objet a ?objectType . \n" +
+					"	FILTER REGEX( ?objectType , ?objectTypeFilter ) . \n";				
+		}
 		
+		String command;
 		
+
+		
+		if (!excludeProperties) {
+			
+			command = 
+					"CONSTRUCT { \n" +
+					"	?objectUri ?predicate ?object \n" +
+					"} WHERE { \n" + 
+					"	?objectUri ?predicate ?object . \n" +
+					filter +
+					"} \n" + 
+					"ORDER BY ?predicate ?object";
+			
+		} else {
+			command = 
+					"CONSTRUCT { \n" +
+					"	?objectUri a ?object \n" +
+					"} WHERE { \n" + 
+					"	?objectUri a ?object . \n" +
+					filter +
+					"} \n" + 
+					"ORDER BY ?object";
+		}
+		
+		sparql = new ParameterizedSparqlString();
+		
+		sparql.setCommandText(command);
+		DrumbeatOntology.fillParameterizedSparqlString(sparql);
+		sparql.setIri("objectUri", objectUri);
+
+		if (!StringUtils.isEmptyOrNull(filterProperties)) {
+			sparql.setLiteral("predicateFilter", filterProperties);			
+		}
+		
+		if (!StringUtils.isEmptyOrNull(filterObjectTypes)) {
+			sparql.setLiteral("objectTypeFilter", filterObjectTypes);			
+		}
+		
+		return internalGetByUri(dataModel, objectUri, sparql, expandBlankObjects, null);
 	}
 	
 	
@@ -267,7 +302,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 	 * @param dataSourceId
 	 * @param dataSetId
 	 * @param excludeProperties
-	 * @param expandBlanks 
+	 * @param expandBlankObjects 
 	 * @return List of statements <<dataSet>> ?predicate ?object
 	 * @throws NotFoundException if the dataSet is not found
 	 * @throws DrumbeatException 
@@ -276,17 +311,21 @@ public class DataSetObjectManager extends DrumbeatManager {
 			Model dataModel,
 			String objectUri,
 			ParameterizedSparqlString sparql,
-			boolean expandBlanks,
+			boolean expandBlankObjects,
 			Set<String> blankObjectUris)
 		throws DrumbeatException
 	{
-		sparql.setIri("objectUri", objectUri);
+		logger.debug(String.format("%s() is running query\n%s", LoggerUtil.getMethodName(1), sparql));
+
+		sparql.setIri("objectUri", objectUri);		
 		
 		Model resultModel = 
 				createQueryExecution(sparql.asQuery(), dataModel)
 					.execConstruct();
 		
-		if (expandBlanks) {
+		logger.debug(String.format("%s(): Query result: %d", LoggerUtil.getMethodName(1), resultModel.size()));		
+
+		if (expandBlankObjects) {
 			
 			if (blankObjectUris == null) {
 				blankObjectUris = new HashSet<>();
@@ -308,11 +347,13 @@ public class DataSetObjectManager extends DrumbeatManager {
 			blankObjectUris.addAll(newBlankObjectUris);
 			
 			for (String newBlankObjectUri : newBlankObjectUris) {
-				Model newResultModel = internalGetByUri(dataModel, newBlankObjectUri, sparql, expandBlanks, blankObjectUris);
+				Model newResultModel = internalGetByUri(dataModel, newBlankObjectUri, sparql, expandBlankObjects, blankObjectUris);
 				resultModel.add(newResultModel);
 			}
 			
 		}
+		
+		logger.debug(String.format("%s() returning: %d", LoggerUtil.getMethodName(1), resultModel.size()));		
 		
 		return resultModel;
 		
@@ -345,6 +386,8 @@ public class DataSetObjectManager extends DrumbeatManager {
 			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("objectUri", formatObjectResourceUri(collectionId, dataSourceId, objectId));
 		}}.asQuery();
+		
+		logger.debug("getObjectType() is running query\n" + query);
 		
 		Model resultModel = 
 				createQueryExecution(query, dataModel)

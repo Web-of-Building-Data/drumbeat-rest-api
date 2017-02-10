@@ -79,13 +79,14 @@ public class DataSourceObjectResource {
 	public Response getAllNonBlank(			
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
+			@QueryParam("filterType") String filterType,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		
 		try {		
-			Model model = getObjectManager().getAllNonBlank(collectionId, dataSourceId);
+			Model model = getObjectManager().getAllNonBlank(collectionId, dataSourceId, filterType);
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
@@ -109,13 +110,25 @@ public class DataSourceObjectResource {
 			@PathParam("objectId") String objectId,
 			@QueryParam("excludeProperties") String excludeProperties,
 			@QueryParam("excludeLinks") String excludeLinks,
-			@QueryParam("expandBlanks") String expandBlanks,
+			@QueryParam("expandBlankObjects") String expandBlankObjects,
+			@QueryParam("filterProperties") String filterProperties,
+			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
-		return internalGetByUri(collectionId, dataSourceId, null, objectUri, excludeProperties, excludeLinks, expandBlanks, headers);
+		return internalGetByUri(
+				collectionId,
+				dataSourceId,
+				null,
+				objectUri,
+				excludeProperties,
+				excludeLinks,
+				expandBlankObjects,				
+				filterProperties,
+				filterObjectTypes,
+				headers);
 	}
 	
 	
@@ -129,13 +142,15 @@ public class DataSourceObjectResource {
 			@PathParam("objectId") String objectId,
 			@QueryParam("excludeProperties") String excludeProperties,
 			@QueryParam("excludeLinks") String excludeLinks,
-			@QueryParam("expandBlanks") String expandBlanks,
+			@QueryParam("expandBlankObjects") String expandBlankObjects,
+			@QueryParam("filterProperties") String filterProperties,
+			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
 		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
 		String objectUri = NameFormatter.formatBlankObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId);
-		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, expandBlanks, headers);
+		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, expandBlankObjects, filterProperties, filterObjectTypes, headers);
 	}
 	
 	
@@ -146,7 +161,9 @@ public class DataSourceObjectResource {
 			String objectUri,
 			String excludeProperties,
 			String excludeLinks,
-			String expandBlanks,
+			String expandBlankObjects,
+			String filterProperties,
+			String filterObjectTypes,
 			HttpHeaders headers)
 	{
 		BooleanParam excludePropertiesParam = new BooleanParam();
@@ -155,8 +172,8 @@ public class DataSourceObjectResource {
 		BooleanParam excludeLinksParam = new BooleanParam();
 		excludeLinksParam.setStringValue(excludeLinks);		
 		
-		BooleanParam expandBlanksParam = new BooleanParam();
-		expandBlanksParam.setStringValue(expandBlanks);		
+		BooleanParam expandBlankObjectsParam = new BooleanParam();
+		expandBlankObjectsParam.setStringValue(expandBlankObjects);		
 
 		try {		
 			Model model = getObjectManager().getByUri(
@@ -166,7 +183,9 @@ public class DataSourceObjectResource {
 					objectUri,
 					excludePropertiesParam.getValue(),
 					excludeLinksParam.getValue(),
-					expandBlanksParam.getValue());
+					expandBlankObjectsParam.getValue(),
+					filterProperties,
+					filterObjectTypes);
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
@@ -184,31 +203,19 @@ public class DataSourceObjectResource {
 	
 	
 
-//	@GET
-//	@Path("/{collectionId}/{dataSourceId}/{objectId}/type")
-//	public Response getType(			
-//			@PathParam("collectionId") String collectionId,
-//			@PathParam("dataSourceId") String dataSourceId,
-//			@PathParam("objectId") String objectId,
-//			@Context UriInfo uriInfo,
-//			@Context HttpHeaders headers)
-//	{
-//		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
-//		
-//		try {		
-//			Model model = getObjectManager().getObjectType(collectionId, dataSourceId, objectId);
-//			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
-//			return DrumbeatResponseBuilder.build(
-//					Status.OK,
-//					model,
-//					modelBaseUri,
-//					headers.getAcceptableMediaTypes());			
-//		} catch (NotFoundException e) {
-//			throw new DrumbeatWebException(Status.NOT_FOUND, e);
-//		} catch (DrumbeatException e) {
-//			throw new DrumbeatWebException(Status.INTERNAL_SERVER_ERROR, e);			
-//		}
-//	}
+	@GET
+	@Path("/{collectionId}/{dataSourceId}/{objectId}/type")
+	public Response getType(			
+			@PathParam("collectionId") String collectionId,
+			@PathParam("dataSourceId") String dataSourceId,
+			@PathParam("objectId") String objectId,
+			@Context UriInfo uriInfo,
+			@Context HttpHeaders headers)
+	{
+		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
+		return internalGetByUri(collectionId, dataSourceId, null, objectUri, "true", "true", "false", null, null, headers);
+	}
 	
 	
 	@PUT

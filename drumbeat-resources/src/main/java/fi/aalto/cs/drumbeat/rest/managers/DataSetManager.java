@@ -13,15 +13,16 @@ import org.apache.jena.shared.NotFoundException;
 import org.apache.jena.update.UpdateAction;
 import org.apache.jena.update.UpdateRequest;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.log4j.Logger;
 
 import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 import fi.aalto.cs.drumbeat.rdf.jena.provider.JenaProvider;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 
-public class DataSetManager extends DrumbeatManager {
+public class DataSetManager extends DrumbeatManager {	
 	
-//	private static final Logger logger = Logger.getLogger(DataSetManager.class);	
+	private static final Logger logger = Logger.getLogger(DataSetManager.class);	
 	
 	public DataSetManager() throws DrumbeatException {
 	}
@@ -56,6 +57,8 @@ public class DataSetManager extends DrumbeatManager {
 			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
+		logger.debug("Running query \n" + query);
+
 		Model result = 
 				createQueryExecution(query, getMetaDataModel())
 					.execConstruct();
@@ -97,6 +100,8 @@ public class DataSetManager extends DrumbeatManager {
 			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 		}}.asQuery();
 		
+		logger.debug("Running query \n" + query);
+		
 		ResultSet result = 
 				createQueryExecution(query, getMetaDataModel())
 					.execSelect();
@@ -134,14 +139,16 @@ public class DataSetManager extends DrumbeatManager {
 					"	?dataSourceUri a lbdho:DataSource ; lbdho:hasDataSet ?dataSetUri . \n" +
 					"	?dataSetUri a lbdho:DataSet ; ?predicate ?object . \n" +
 					"} \n" + 
-					"ORDER BY ?predicate ?object");
-			
+					"ORDER BY ?predicate ?object");			
+
 			DrumbeatOntology.fillParameterizedSparqlString(this);
 			setIri("collectionUri", formatCollectionResourceUri(collectionId));
 			setIri("dataSourceUri", formatDataSourceResourceUri(collectionId, dataSourceId));
 			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));
 		}}.asQuery();
 		
+		logger.debug("Running query \n" + query);
+
 		Model result = 
 				createQueryExecution(query, getMetaDataModel())
 					.execConstruct();
@@ -282,6 +289,8 @@ public class DataSetManager extends DrumbeatManager {
 			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));			
 		}}.asQuery();
 		
+		logger.debug("Running query \n" + query);
+
 		boolean result = createQueryExecution(query, getMetaDataModel())
 					.execAsk();
 		
@@ -309,6 +318,8 @@ public class DataSetManager extends DrumbeatManager {
 			setIri("dataSetUri", formatDataSetResourceUri(collectionId, dataSourceId, dataSetId));			
 		}}.asQuery();
 		
+		logger.debug("Running query \n" + query);
+
 		boolean result = 
 				createQueryExecution(query, getMetaDataModel())
 					.execAsk();

@@ -74,7 +74,9 @@ public class DataSetObjectResource {
 			@PathParam("dataSetId") String dataSetId,
 			@PathParam("objectId") String objectId,
 			@QueryParam("excludeProperties") String excludeProperties,
-			@QueryParam("expandBlanks") String expandBlanks,
+			@QueryParam("expandBlankObjects") String expandBlankObjects,
+			@QueryParam("filterProperties") String filterProperties,
+			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
 			@Context HttpHeaders headers)
 	{
@@ -83,8 +85,8 @@ public class DataSetObjectResource {
 		BooleanParam excludePropertiesParam = new BooleanParam();
 		excludePropertiesParam.setStringValue(excludeProperties);
 		
-		BooleanParam expandBlanksParam = new BooleanParam();
-		expandBlanksParam.setStringValue(expandBlanks);
+		BooleanParam expandBlankObjectsParam = new BooleanParam();
+		expandBlankObjectsParam.setStringValue(expandBlankObjects);
 
 		try {		
 			Model model = getDataSetObjectManager().getById(
@@ -93,7 +95,9 @@ public class DataSetObjectResource {
 					dataSetId,
 					objectId,
 					excludePropertiesParam.getValue(),
-					expandBlanksParam.getValue());
+					expandBlankObjectsParam.getValue(),
+					filterProperties,
+					filterObjectTypes);
 			String modelBaseUri = NameFormatter.formatObjectResourceBaseUri(collectionId, dataSourceId);
 			return DrumbeatResponseBuilder.build(
 					Status.OK,
