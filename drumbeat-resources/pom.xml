@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fi.aalto.cs.drumbeat</groupId>
 		<artifactId>drumbeat-rest-api</artifactId>
-		<version>0.9.1</version>
+		<version>0.9.5</version>
 		<relativePath>../!drumbeat-rest-api-parent</relativePath>
 	</parent>
 

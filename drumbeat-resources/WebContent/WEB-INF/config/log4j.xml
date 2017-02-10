@@ -14,23 +14,23 @@
 			<param name="ConversionPattern" value="--&gt; %-5r %-5p %m%n"/>
 		</layout>
 	</appender>
-	<appender class="org.apache.log4j.FileAppender" name="FILE_ANALYSER">
+	<appender class="org.apache.log4j.FileAppender" name="FILE_IFC">
 		<param name="append" value="false"/>
-		<param name="file" value="${CATALINA_HOME}/logs/IfcAnalysis_ANALYSER.log"/>
+		<param name="file" value="logs/DRUMBEAT_IFC.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-4r %-5p [%-25c{1}] %m%n"/>
 		</layout>
 	</appender>
 	<appender class="org.apache.log4j.FileAppender" name="FILE_COMMON">
 		<param name="append" value="false"/>
-		<param name="file" value="${CATALINA_HOME}/logs/IfcAnalysis_COMMON.log"/>
+		<param name="file" value="logs/DRUMBEAT_COMMON.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-4r %-5p [%-25c{1}] %m%n"/>
 		</layout>
 	</appender>
-	<appender class="org.apache.log4j.FileAppender" name="FILE_PARSER">
+	<appender class="org.apache.log4j.FileAppender" name="FILE_REST_API">
 		<param name="append" value="false"/>
-		<param name="file" value="${CATALINA_HOME}/logs/IfcAnalysis_PARSER.log"/>
+		<param name="file" value="logs/DRUMBEAT_REST_API.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-4r %-5p [%-25c{1}] %m%n"/>
 		</layout>
@@ -42,17 +42,17 @@
 	</logger>	
 	<logger name="fi.aalto.cs.drumbeat.ifc.convert">
 		<level value="info"/>
-		<appender-ref ref="FILE_PARSER"/>
+		<appender-ref ref="FILE_IFC"/>
 	</logger>
 	<logger name="fi.aalto.cs.drumbeat.ifc.util">
 		<level value="info"/>
 		<appender-ref ref="CONSOLE"/>
-		<appender-ref ref="FILE_ANALYSER"/>
+		<appender-ref ref="FILE_IFC"/>
 	</logger>	
 	<logger name="fi.aalto.cs.drumbeat.ifc.processing">
 		<level value="info"/>
 		<appender-ref ref="CONSOLE"/>
-		<appender-ref ref="FILE_ANALYSER"/>
+		<appender-ref ref="FILE_IFC"/>
 	</logger>	
 	<logger name="com.hp.hpl.jena">
 		<level value="warn"/>
@@ -75,13 +75,11 @@
 	<logger name="org.openjena">
 		<level value="warn"/>
 	</logger>
-	<logger name="fi.aalto.cs.drumbeat.rest" additivity="false">
-		<level value="debug"/>
-		<appender-ref ref="CONSOLE"/>
-		<appender-ref ref="FILE_COMMON"/>
+	<logger name="fi.aalto.cs.drumbeat.rest">
+		<level value="info"/>
+		<appender-ref ref="CONSOLE_HIGHLIGHT"/>
+		<appender-ref ref="FILE_REST_API"/>
 	</logger>
-	
-	
 	<root>
 		<level value="info"/>
 		<appender-ref ref="CONSOLE_HIGHLIGHT"/>

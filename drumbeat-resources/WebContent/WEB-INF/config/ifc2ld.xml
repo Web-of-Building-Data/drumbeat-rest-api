@@ -75,7 +75,10 @@
 				<!-- Options.ConvertDoublesTo: xsd:decimal (default), AutoMostEfficient (=xsd:double or owl:real), xsd:decimal, xsd:double, owl:real, xsd:string -->
 				<param name="Options.ConvertDoublesTo" value="xsd:decimal" />
 				
-				<!-- Options.Options.NameAllBlankNodes: true, false -->
+				<!-- Options.ConvertCollectionsTo: DrummondList (default), OloSimilarList -->
+				<param name="Options.ConvertCollectionsTo" value="OloSimilarList" />
+
+				<!-- Options.NameAllBlankNodes: true, false -->
 				<param name="Options.NameAllBlankNodes" value="true" />
 
 				<!--
@@ -93,7 +96,7 @@
 				<param name="Ontology.NamespaceFormat" value="http://drumbeat.cs.hut.fi/owl/$Schema.Version$#" />
 				<param name="Model.Prefix" value="model" />
 				<param name="Model.NamespaceFormat" value="http://drumbeat.cs.hut.fi/tomcat/marmotta/resource/" />								
-				<param name="Model.BlankNodeNameFormat" value="BLANK/%s" />								
+				<param name="Model.BlankNodeNameFormat" value="_BLANK/%s" />								
 			</params>
 		</converter>	
 		
