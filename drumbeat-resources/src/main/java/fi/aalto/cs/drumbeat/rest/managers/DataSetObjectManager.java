@@ -219,15 +219,15 @@ public class DataSetObjectManager extends DrumbeatManager {
 	
 	
 	/**
-	 * Gets all attributes of a specified object 
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param dataSetId
+	 * Gets all attributes of a specified object
+	 * @param dataModel
+	 * @param objectUri
 	 * @param excludeProperties
-	 * @param expandBlankObjects 
-	 * @return List of statements <<dataSet>> ?predicate ?object
-	 * @throws NotFoundException if the dataSet is not found
-	 * @throws DrumbeatException 
+	 * @param expandBlankObjects
+	 * @param filterProperties
+	 * @param filterObjectTypes
+	 * @return
+	 * @throws DrumbeatException
 	 */
 	public Model getByUri(
 			Model dataModel,
@@ -297,15 +297,15 @@ public class DataSetObjectManager extends DrumbeatManager {
 	
 	
 	/**
-	 * Gets all attributes of a specified object 
-	 * @param collectionId
-	 * @param dataSourceId
-	 * @param dataSetId
-	 * @param excludeProperties
-	 * @param expandBlankObjects 
-	 * @return List of statements <<dataSet>> ?predicate ?object
-	 * @throws NotFoundException if the dataSet is not found
-	 * @throws DrumbeatException 
+	 * Gets all attributes of a specified object
+	 * @param graphUri
+	 * @param dataModel
+	 * @param objectUri
+	 * @param sparql
+	 * @param expandBlankObjects
+	 * @param blankObjectUris
+	 * @return
+	 * @throws DrumbeatException
 	 */
 	public Model internalGetByUri(
 			Model dataModel,
@@ -314,7 +314,7 @@ public class DataSetObjectManager extends DrumbeatManager {
 			boolean expandBlankObjects,
 			Set<String> blankObjectUris)
 		throws DrumbeatException
-	{
+	{		
 		logger.debug(String.format("%s() is running query\n%s", LoggerUtil.getMethodName(1), sparql));
 
 		sparql.setIri("objectUri", objectUri);		

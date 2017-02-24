@@ -270,6 +270,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	public Model getDataModel(String name) throws DrumbeatException {
+		logger.debug("Getting data model: " + name);
 		try {
 			return getJenaProvider().openModel(name);
 		} catch (JenaProviderException e) {

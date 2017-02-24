@@ -291,20 +291,23 @@ public class DataSourceObjectManager extends DrumbeatManager {
 			LinkSourceManager linkSourceManager = new LinkSourceManager(metaDataModel, getJenaProvider());
 			Model linkSources = linkSourceManager.getAllLinkSourcesOfDataSource(collectionId, dataSourceId);
 			
-			if (linkSources != null) {
-				
+			if (linkSources != null) {				
+
 				ResIterator resIterator = linkSources.listSubjects();
 				
 				while (resIterator.hasNext()) {
 					Resource linkSourceResource = resIterator.next();
 					String linkSourceId = linkSourceResource.getLocalName();
 					try {
+						logger.debug("Getting links from link source: " + NameFormatter.formatDataSourceResourceUri(collectionId, linkSourceId));
 						Model newResultModel = getByUri(collectionId, linkSourceId, null, objectUri, false, true, expandBlankObjects, filterProperties, filterObjectTypes);
 						resultModel.add(newResultModel);
 					} catch (NotFoundException e) {					
 					}
 				}
 				
+			} else {
+				logger.debug("No link source found for data source: " + NameFormatter.formatDataSourceResourceUri(collectionId, dataSourceId));				
 			}
 			
 			logger.debug(String.format("%s: Model size (after adding direct links): %d", LoggerUtil.getMethodName(0), resultModel.size()));
