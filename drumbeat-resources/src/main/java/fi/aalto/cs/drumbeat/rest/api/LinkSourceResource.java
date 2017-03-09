@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -15,7 +16,6 @@ import org.apache.jena.shared.AlreadyExistsException;
 import org.apache.jena.shared.DeleteDeniedException;
 import org.apache.jena.shared.NotFoundException;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.LinkSourceManager;
@@ -24,7 +24,7 @@ import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 
 @Path("/linksources")
-public class LinkSourceResource {
+public class LinkSourceResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(LinkSourceResource.class);
 	
@@ -34,9 +34,10 @@ public class LinkSourceResource {
 	public Response getAll(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getLinkSourceManager().getAll(collectionId);
@@ -55,9 +56,10 @@ public class LinkSourceResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("linkSourceId") String linkSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getLinkSourceManager().getById(collectionId, linkSourceId);
@@ -76,9 +78,10 @@ public class LinkSourceResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("linkSourceId") String linkSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			getLinkSourceManager().delete(collectionId, linkSourceId);
@@ -98,9 +101,10 @@ public class LinkSourceResource {
 			@FormParam("name") String name,
 			@FormParam("originalDataSourceId") String originalDataSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		if (StringUtils.isEmptyOrNull(name)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'name'", null);

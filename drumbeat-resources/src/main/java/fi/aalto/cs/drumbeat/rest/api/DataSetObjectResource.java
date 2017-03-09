@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -15,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.shared.NotFoundException;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
@@ -24,7 +24,7 @@ import fi.aalto.cs.drumbeat.common.DrumbeatException;
 import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 
 @Path("/dsobjects")
-public class DataSetObjectResource {
+public class DataSetObjectResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(DataSetObjectResource.class);
 
@@ -47,9 +47,10 @@ public class DataSetObjectResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("dataSetId") String dataSetId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getDataSetObjectManager().getAll(collectionId, dataSourceId, dataSetId);
@@ -78,9 +79,10 @@ public class DataSetObjectResource {
 			@QueryParam("filterProperties") String filterProperties,
 			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		BooleanParam excludePropertiesParam = new BooleanParam();
 		excludePropertiesParam.setStringValue(excludeProperties);
@@ -119,9 +121,10 @@ public class DataSetObjectResource {
 			@PathParam("dataSetId") String dataSetId,
 			@PathParam("objectId") String objectId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getDataSetObjectManager().getObjectType(collectionId, dataSourceId, dataSetId, objectId);

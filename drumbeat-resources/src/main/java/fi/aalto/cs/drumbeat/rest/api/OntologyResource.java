@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -37,16 +38,17 @@ import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
 @Path("/owl")
-public class OntologyResource {
+public class OntologyResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(OntologyResource.class);
 
 	@GET
 	public Response getAll(			
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getOntologyManager().getAll();
@@ -67,9 +69,10 @@ public class OntologyResource {
 	public Response getById(			
 			@PathParam("ontologyId") String ontologyId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getOntologyManager().getById(ontologyId);
@@ -90,9 +93,10 @@ public class OntologyResource {
 	public void delete(			
 			@PathParam("ontologyId") String ontologyId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			getOntologyManager().delete(ontologyId);
@@ -116,9 +120,10 @@ public class OntologyResource {
 			@PathParam("ontologyId") String ontologyId,
 			@FormParam("name") String name,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {
 			Model model = getOntologyManager().create(ontologyId, name);
@@ -150,9 +155,10 @@ public class OntologyResource {
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			dataFormat = FileManager.getFileName(filePath);
@@ -181,9 +187,10 @@ public class OntologyResource {
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
@@ -213,9 +220,10 @@ public class OntologyResource {
 			@DefaultValue("false") @FormParam("clearBefore") String clearBefore,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
@@ -240,9 +248,10 @@ public class OntologyResource {
 			@DefaultValue("") @FormDataParam("dataFormat") String dataFormat,
 			@DefaultValue("false") @FormDataParam("clearBefore") String clearBefore,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		if (fileDetail == null || in == null) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			

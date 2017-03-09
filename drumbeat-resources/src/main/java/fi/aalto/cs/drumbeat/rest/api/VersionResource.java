@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -24,15 +25,16 @@ import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 
 @Path("/version")
-public class VersionResource {
+public class VersionResource extends DrumbeatApiBase {
 	
 	@GET
 	public Response getVersion(
 		@Context UriInfo uriInfo,
-		@Context HttpHeaders headers)
+		@Context HttpHeaders headers,
+		@Context HttpServletRequest request)
 				throws IOException
 	{		
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		InputStream in = null;		
 		
@@ -43,7 +45,7 @@ public class VersionResource {
 			
 			RDFDataMgr.read(model, in, uriInfo.getBaseUri() + "apps/", Lang.TURTLE);
 			
-			model.getNsPrefixMap().put("dcterms", "http://purl.org/dc/terms/");
+			model.setNsPrefix("dcterms", "http://purl.org/dc/terms/");
 			
 			return DrumbeatResponseBuilder.build(
 					Status.OK,

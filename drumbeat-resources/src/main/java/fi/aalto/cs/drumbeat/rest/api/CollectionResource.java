@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -15,7 +16,6 @@ import org.apache.jena.shared.AlreadyExistsException;
 import org.apache.jena.shared.DeleteDeniedException;
 import org.apache.jena.shared.NotFoundException;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.CollectionManager;
@@ -23,16 +23,17 @@ import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 
 @Path("/collections")
-public class CollectionResource {
+public class CollectionResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(CollectionResource.class);
 
 	@GET
 	public Response getAll(			
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getCollectionManager().getAll();
@@ -53,9 +54,10 @@ public class CollectionResource {
 	public Response getById(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getCollectionManager().getById(collectionId);
@@ -76,9 +78,10 @@ public class CollectionResource {
 	public void delete(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			getCollectionManager().delete(collectionId);
@@ -102,9 +105,10 @@ public class CollectionResource {
 			@PathParam("collectionId") String collectionId,
 			@FormParam("name") String name,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {
 			Model model = getCollectionManager().create(collectionId, name);

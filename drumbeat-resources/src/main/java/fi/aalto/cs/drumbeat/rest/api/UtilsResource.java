@@ -14,7 +14,7 @@ import fi.aalto.cs.drumbeat.ifc.common.guid.GuidCompressor;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 
 @Path("/utils")
-public class UtilsResource {
+public class UtilsResource extends DrumbeatApiBase {
 	
 	public static final String IFC_GUID_ACTION_COMPRESS = "compress";
 	public static final String IFC_GUID_ACTION_DECOMPRESS = "decompress";
@@ -25,7 +25,7 @@ public class UtilsResource {
 	public String compressIfcGuid(
 			@FormParam("action") String action,
 			@FormParam("guid") String guid)
-	{
+	{		
 		if (StringUtils.isEmptyOrNull(action)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Param 'action' is required", null);
 		}

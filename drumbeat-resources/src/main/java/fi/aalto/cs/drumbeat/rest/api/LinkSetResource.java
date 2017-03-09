@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -38,7 +39,7 @@ import fi.aalto.cs.drumbeat.ifc.convert.stff2ifc.IfcParserException;
 
 
 @Path("/linksets")
-public class LinkSetResource {
+public class LinkSetResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(LinkSetResource.class);
 	
@@ -49,9 +50,10 @@ public class LinkSetResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("linkSourceId") String linkSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getLinkSetManager().getAll(collectionId, linkSourceId);
@@ -71,9 +73,10 @@ public class LinkSetResource {
 			@PathParam("linkSourceId") String linkSourceId,
 			@PathParam("linkSetId") String linkSetId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getLinkSetManager().getById(collectionId, linkSourceId, linkSetId);
@@ -93,9 +96,10 @@ public class LinkSetResource {
 			@PathParam("linkSourceId") String linkSourceId,
 			@PathParam("linkSetId") String linkSetId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			getLinkSetManager().delete(collectionId, linkSourceId, linkSetId);
@@ -114,9 +118,10 @@ public class LinkSetResource {
 			@FormParam("name") String name,
 			@DefaultValue(RequestParams.NONE) @FormParam("overwritingMethod") String overwritingMethod,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {
 			Model model = getLinkSetManager().create(collectionId, linkSourceId, linkSetId, name, overwritingMethod);
@@ -145,9 +150,10 @@ public class LinkSetResource {
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("filePath") String filePath,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			dataFormat = FileManager.getFileName(filePath);
@@ -179,9 +185,10 @@ public class LinkSetResource {
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("url") String url,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
@@ -214,9 +221,10 @@ public class LinkSetResource {
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@FormParam("content") String content,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		if (StringUtils.isEmptyOrNull(dataFormat)) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Undefined param 'dataFormat'", null);
@@ -245,9 +253,10 @@ public class LinkSetResource {
 			@FormDataParam("file") InputStream in,
 	        @FormDataParam("file") FormDataContentDisposition fileDetail,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		if (fileDetail == null || in == null) {
 			throw new DrumbeatWebException(Status.BAD_REQUEST, "Client file is unavailable", null);			
@@ -337,7 +346,7 @@ public class LinkSetResource {
 //			@Context UriInfo uriInfo,
 //			@Context HttpHeaders headers)
 //	{
-//		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+//		onRequest(uriInfo, headers, request);
 //
 //		String graphName = NameFormatter.formatGraphUri(collectionId, linkSourceId, linkSetId);
 //		logger.info(String.format("CreateLinkSet: Name=%s, Source=%s, Target=%s", graphName, sourceUrl, targetUrl));
@@ -359,9 +368,10 @@ public class LinkSetResource {
 			@FormParam("remoteDataSourceUri") String remoteDataSourceUri,
 			@DefaultValue("false") @FormParam("notifyRemote") String notifyRemote,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 
 		String graphName = NameFormatter.formatLinkSetGraphUri(collectionId, linkSourceId, linkSetId);			
 		logger.info(String.format("UpdateSparql: LinkSet=%s, LinkType=%s", graphName, linkType));

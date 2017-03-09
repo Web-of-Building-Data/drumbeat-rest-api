@@ -209,7 +209,7 @@ public class DataSourceObjectManager extends DrumbeatManager {
 
 		DataSetManager dataSetManager = new DataSetManager(metaDataModel, getJenaProvider());
 		
-		boolean loadFromAllDataSets = dataSetId == null;
+		boolean loadFromAllDataSets = (dataSetId == null);
 
 		Resource dataSetResource;
 		

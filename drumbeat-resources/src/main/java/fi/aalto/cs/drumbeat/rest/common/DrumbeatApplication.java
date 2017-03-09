@@ -50,7 +50,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	}
 	
 	public static class ConfigParams {
-		public static final String WEB_BASE_URI = "web.baseUri";		
+		public static final String WEB_BASE_URI = "web.baseUri.default";		
 		public static final String WEB_BASE_URI_FIXED = "web.baseUri.fixed";		
 		
 		public static final String JENA_PROVIDER_PREFIX = "jena.provider.";
@@ -143,7 +143,10 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 	
 	public String getBaseUri() {
 		if (baseUri == null) {
-			baseUri = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI).trim(); 
+			baseUri = getConfigurationProperties().getProperty(ConfigParams.WEB_BASE_URI);
+			if (baseUri != null) {
+				baseUri = baseUri.trim();
+			}
 		}
 		return baseUri;
 	}
@@ -154,6 +157,7 @@ public abstract class DrumbeatApplication extends ResourceConfig {
 			BooleanParam param = new BooleanParam();
 			param.setStringValue(value);
 			isBaseUriFixed = param.getValue();
+			logger.info("IsBaseUriFixed: " + isBaseUriFixed);
 		}
 		return isBaseUriFixed;		
 	}

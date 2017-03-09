@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -15,7 +16,6 @@ import org.apache.jena.shared.AlreadyExistsException;
 import org.apache.jena.shared.DeleteDeniedException;
 import org.apache.jena.shared.NotFoundException;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.managers.DataSourceManager;
@@ -24,7 +24,7 @@ import fi.aalto.cs.drumbeat.common.DrumbeatException;
 
 //@Path("/{elementType: datasources|linksources}")
 @Path("/datasources")
-public class DataSourceResource {
+public class DataSourceResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(DataSourceResource.class);
 	
@@ -34,9 +34,10 @@ public class DataSourceResource {
 	public Response getAll(			
 			@PathParam("collectionId") String collectionId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getDataSourceManager().getAll(collectionId);
@@ -55,9 +56,10 @@ public class DataSourceResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getDataSourceManager().getById(collectionId, dataSourceId);
@@ -76,9 +78,10 @@ public class DataSourceResource {
 			@PathParam("collectionId") String collectionId,
 			@PathParam("dataSourceId") String dataSourceId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			getDataSourceManager().delete(collectionId, dataSourceId);
@@ -97,9 +100,10 @@ public class DataSourceResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@FormParam("name") String name,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {
 			Model model = getDataSourceManager().create(collectionId, dataSourceId, name);

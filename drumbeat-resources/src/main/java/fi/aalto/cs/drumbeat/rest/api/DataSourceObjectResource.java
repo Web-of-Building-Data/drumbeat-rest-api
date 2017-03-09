@@ -1,6 +1,7 @@
 package fi.aalto.cs.drumbeat.rest.api;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -21,8 +22,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.shared.AlreadyExistsException;
 import org.apache.jena.shared.NotFoundException;
 
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatApplication;
-import fi.aalto.cs.drumbeat.rest.common.DrumbeatOntology;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatResponseBuilder;
 import fi.aalto.cs.drumbeat.rest.common.DrumbeatWebException;
 import fi.aalto.cs.drumbeat.rest.common.NameFormatter;
@@ -32,7 +31,7 @@ import fi.aalto.cs.drumbeat.common.params.BooleanParam;
 import fi.aalto.cs.drumbeat.common.string.StringUtils;
 
 @Path("/objects")
-public class DataSourceObjectResource {
+public class DataSourceObjectResource extends DrumbeatApiBase {
 
 	private static final Logger logger = Logger.getLogger(DataSourceObjectResource.class);
 
@@ -56,7 +55,7 @@ public class DataSourceObjectResource {
 //			@Context UriInfo uriInfo,
 //			@Context HttpHeaders headers)
 //	{
-//		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+//		onRequest(uriInfo, headers, request);
 //		
 //		try {		
 //			Model model = getObjectManager().getAll(collectionId, dataSourceId);
@@ -81,9 +80,10 @@ public class DataSourceObjectResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@QueryParam("filterType") String filterType,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {		
 			Model model = getObjectManager().getAllNonBlank(collectionId, dataSourceId, filterType);
@@ -114,9 +114,10 @@ public class DataSourceObjectResource {
 			@QueryParam("filterProperties") String filterProperties,
 			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
 		return internalGetByUri(
 				collectionId,
@@ -146,9 +147,10 @@ public class DataSourceObjectResource {
 			@QueryParam("filterProperties") String filterProperties,
 			@QueryParam("filterObjectTypes") String filterObjectTypes,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		String objectUri = NameFormatter.formatBlankObjectResourceUri(collectionId, dataSourceId, dataSetId, objectId);
 		return internalGetByUri(collectionId, dataSourceId, dataSetId, objectUri, excludeProperties, excludeLinks, expandBlankObjects, filterProperties, filterObjectTypes, headers);
 	}
@@ -210,9 +212,10 @@ public class DataSourceObjectResource {
 			@PathParam("dataSourceId") String dataSourceId,
 			@PathParam("objectId") String objectId,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		String objectUri = NameFormatter.formatObjectResourceUri(collectionId, dataSourceId, objectId);
 		return internalGetByUri(collectionId, dataSourceId, null, objectUri, "true", "true", "false", null, null, headers);
 	}
@@ -229,9 +232,10 @@ public class DataSourceObjectResource {
 			@FormParam("predicate") String predicateUri,
 			@FormParam("object") String objectUri,
 			@Context UriInfo uriInfo,
-			@Context HttpHeaders headers)
+			@Context HttpHeaders headers,
+			@Context HttpServletRequest request)
 	{
-		DrumbeatApplication.getInstance().notifyRequest(uriInfo);
+		notifyRequest(uriInfo, headers, request);
 		
 		try {
 			

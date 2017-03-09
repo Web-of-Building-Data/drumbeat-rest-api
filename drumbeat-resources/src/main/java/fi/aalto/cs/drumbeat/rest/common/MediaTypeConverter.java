@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RIOT;
+import org.apache.jena.riot.system.PrefixMap;
 
 
 public class MediaTypeConverter {
@@ -177,8 +178,8 @@ public class MediaTypeConverter {
 			baseUri = DrumbeatApplication.getInstance().getBaseUri();
 		}
 		
+		model.setNsPrefixes(DrumbeatOntology.getDefaultNsPrefixes());
 		Map<String, String> nsPrefixMap = model.getNsPrefixMap();
-		nsPrefixMap.putAll(DrumbeatOntology.getDefaultNsPrefixes());
 		
 		Set<String> usedNsPrefixSet = new TreeSet<>();
 		
