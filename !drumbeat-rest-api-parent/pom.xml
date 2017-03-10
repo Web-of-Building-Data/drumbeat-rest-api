@@ -4,7 +4,7 @@
 
 	<groupId>fi.aalto.cs.drumbeat</groupId>
 	<artifactId>drumbeat-rest-api</artifactId>
-	<version>0.9.8</version>
+	<version>0.10.0</version>
 
 	<packaging>pom</packaging>
 
