@@ -15,7 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<drumbeat.groupId>${project.groupId}</drumbeat.groupId>
-		<drumbeat.ifc2ld.version>0.11.1</drumbeat.ifc2ld.version>
+		<drumbeat.ifc2ld.version>0.12.0</drumbeat.ifc2ld.version>
 		<drumbeat.jena.version>0.9.1</drumbeat.jena.version>
 
 		<!-- All versions updated on 17.11.2015 -->
